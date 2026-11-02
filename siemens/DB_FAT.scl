@@ -1,0 +1,38 @@
+// FAT Studio exchange DB. Import only into an approved development copy.
+// These 13 names match fat_studio/demo.py. OPC UA NodeIds are configured in TIA.
+DATA_BLOCK "DB_FAT"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+NON_RETAIN
+   VAR
+      // Outputs of the PLC: FAT Studio reads these values.
+      PumpCmd : Bool;
+      InletCmd : Bool;
+      OutletCmd : Real;
+      // Simulated process inputs: FAT Studio is their only writer.
+      LevelPct : Real;
+      VolumeL : Real;
+      PumpRunning : Bool;
+      PumpFault : Bool;
+      InletPosition : Real;
+      InletOpen : Bool;
+      InletClosed : Bool;
+      OutletPosition : Real;
+      LevelHigh : Bool;
+      LevelLow : Bool;
+   END_VAR
+BEGIN
+   PumpCmd := FALSE;
+   InletCmd := FALSE;
+   OutletCmd := 0.0;
+   LevelPct := 25.0;
+   VolumeL := 250.0;
+   PumpRunning := FALSE;
+   PumpFault := FALSE;
+   InletPosition := 0.0;
+   InletOpen := FALSE;
+   InletClosed := TRUE;
+   OutletPosition := 0.0;
+   LevelHigh := FALSE;
+   LevelLow := FALSE;
+END_DATA_BLOCK

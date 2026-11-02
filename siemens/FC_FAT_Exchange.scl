@@ -1,0 +1,53 @@
+// Interface helper, not a PLC control program. No hardware access or CPU command.
+// Call only in the approved simulation copy. Connect outputs only when EnableFAT.
+FUNCTION "FC_FAT_Exchange" : Void
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT
+      EnableFAT : Bool;
+      PlantPumpCmd : Bool;
+      PlantInletCmd : Bool;
+      PlantOutletCmd : Real;
+   END_VAR
+   VAR_OUTPUT
+      SimLevelPct : Real;
+      SimVolumeL : Real;
+      SimPumpRunning : Bool;
+      SimPumpFault : Bool;
+      SimInletPosition : Real;
+      SimInletOpen : Bool;
+      SimInletClosed : Bool;
+      SimOutletPosition : Real;
+      SimLevelHigh : Bool;
+      SimLevelLow : Bool;
+   END_VAR
+BEGIN
+   // Always mirror the tested controller's commands, never compute them here.
+   "DB_FAT".PumpCmd := #PlantPumpCmd;
+   "DB_FAT".InletCmd := #PlantInletCmd;
+   "DB_FAT".OutletCmd := #PlantOutletCmd;
+   IF #EnableFAT THEN
+      #SimLevelPct := "DB_FAT".LevelPct;
+      #SimVolumeL := "DB_FAT".VolumeL;
+      #SimPumpRunning := "DB_FAT".PumpRunning;
+      #SimPumpFault := "DB_FAT".PumpFault;
+      #SimInletPosition := "DB_FAT".InletPosition;
+      #SimInletOpen := "DB_FAT".InletOpen;
+      #SimInletClosed := "DB_FAT".InletClosed;
+      #SimOutletPosition := "DB_FAT".OutletPosition;
+      #SimLevelHigh := "DB_FAT".LevelHigh;
+      #SimLevelLow := "DB_FAT".LevelLow;
+   ELSE
+      // Deterministic function outputs; the caller MUST ignore these in real mode.
+      #SimLevelPct := 0.0;
+      #SimVolumeL := 0.0;
+      #SimPumpRunning := FALSE;
+      #SimPumpFault := FALSE;
+      #SimInletPosition := 0.0;
+      #SimInletOpen := FALSE;
+      #SimInletClosed := FALSE;
+      #SimOutletPosition := 0.0;
+      #SimLevelHigh := FALSE;
+      #SimLevelLow := FALSE;
+   END_IF;
+END_FUNCTION

@@ -1,0 +1,33 @@
+{
+  "executed_at_utc": "2026-11-02T11:50:23.239260+00:00",
+  "status": "passed",
+  "installation": "pip --no-index --no-deps --target, imported outside source tree",
+  "wheel": "local_fat_studio-0.1.0-py3-none-any.whl",
+  "wheel_sha256": "2caed442fd0e8f9d6fd78ae3eb4cf1f314e2985469ef545bf4fa573d18617014",
+  "platform": "Linux x86_64; this does not execute Windows or Siemens",
+  "checks": [
+    "isolated package import",
+    "doctor exit 0",
+    "single production JS bundle",
+    "bundled licence notices",
+    "HTTP HTML/JS/CSS",
+    "demo project 8 equipment and 13 tags",
+    "start and pause real runtime",
+    "consistent JSON evidence",
+    "HTML and CSV exports",
+    "stop"
+  ],
+  "samples_recorded": 4,
+  "web_assets": [
+    "/assets/index-DmSFx8Xz.js",
+    "/assets/index-8uu7ywok.css"
+  ],
+  "dependencies": {
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "pydantic": "2.14.2",
+    "asyncua": "1.1.8"
+  },
+  "wheel_sha256_before_documentation_refresh": "ad9c7efc363eec0be3698c4f6c2677da512d812b408d75671b81064923ea38d9",
+  "documentation_refresh": "README installation instructions updated after smoke check; package code and assets unchanged, verified by archive comparison."
+}

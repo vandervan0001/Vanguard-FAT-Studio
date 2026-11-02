@@ -1,0 +1,500 @@
+{
+  "$defs": {
+    "Connection": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Target",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Label",
+          "type": "string"
+        },
+        "directed": {
+          "default": true,
+          "title": "Directed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target"
+      ],
+      "title": "Connection",
+      "type": "object"
+    },
+    "Equipment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "tank",
+            "pump",
+            "valve_onoff",
+            "valve_control",
+            "analog_sensor",
+            "digital_sensor",
+            "indicator"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Description",
+          "type": "string"
+        },
+        "unit": {
+          "default": "",
+          "maxLength": 40,
+          "title": "Unit",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "params": {
+          "additionalProperties": true,
+          "maxProperties": 30,
+          "title": "Params",
+          "type": "object"
+        },
+        "bindings": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "maxProperties": 16,
+          "title": "Bindings",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ],
+      "title": "Equipment",
+      "type": "object"
+    },
+    "PLCConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "demo",
+          "enum": [
+            "demo",
+            "opcua"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "endpoint": {
+          "default": "opc.tcp://127.0.0.1:4840",
+          "maxLength": 512,
+          "title": "Endpoint",
+          "type": "string"
+        },
+        "expected_application_uri": {
+          "default": "",
+          "maxLength": 512,
+          "title": "Expected Application Uri",
+          "type": "string"
+        },
+        "namespace_uri": {
+          "default": "",
+          "maxLength": 512,
+          "title": "Namespace Uri",
+          "type": "string"
+        },
+        "security_policy": {
+          "default": "None",
+          "enum": [
+            "None",
+            "Basic256Sha256"
+          ],
+          "title": "Security Policy",
+          "type": "string"
+        },
+        "server_certificate_sha256": {
+          "default": "",
+          "maxLength": 95,
+          "title": "Server Certificate Sha256",
+          "type": "string"
+        },
+        "client_certificate": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Client Certificate",
+          "type": "string"
+        },
+        "client_private_key": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Client Private Key",
+          "type": "string"
+        },
+        "username_env": {
+          "default": "",
+          "maxLength": 128,
+          "title": "Username Env",
+          "type": "string"
+        },
+        "password_env": {
+          "default": "",
+          "maxLength": 128,
+          "title": "Password Env",
+          "type": "string"
+        },
+        "approved_virtual_target": {
+          "default": "",
+          "maxLength": 512,
+          "title": "Approved Virtual Target",
+          "type": "string"
+        },
+        "timeout_s": {
+          "default": 3,
+          "maximum": 30,
+          "minimum": 0.2,
+          "title": "Timeout S",
+          "type": "number"
+        }
+      },
+      "title": "PLCConfig",
+      "type": "object"
+    },
+    "Position": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "default": 0,
+          "maximum": 100000,
+          "minimum": -100000,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "maximum": 100000,
+          "minimum": -100000,
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "title": "Position",
+      "type": "object"
+    },
+    "Scenario": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Description",
+          "type": "string"
+        },
+        "duration_s": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "maximum": 86400,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/ScenarioStep"
+          },
+          "maxItems": 2000,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Scenario",
+      "type": "object"
+    },
+    "ScenarioStep": {
+      "additionalProperties": false,
+      "properties": {
+        "at_s": {
+          "maximum": 86400,
+          "minimum": 0,
+          "title": "At S",
+          "type": "number"
+        },
+        "action": {
+          "enum": [
+            "force",
+            "release",
+            "fault",
+            "clear_fault",
+            "marker",
+            "expect"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Target",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "operator": {
+          "default": "eq",
+          "enum": [
+            "eq",
+            "ne",
+            "gt",
+            "ge",
+            "lt",
+            "le"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "tolerance": {
+          "default": 0.001,
+          "maximum": 1000000000.0,
+          "minimum": 0,
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "message": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "at_s",
+        "action"
+      ],
+      "title": "ScenarioStep",
+      "type": "object"
+    },
+    "SimulationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "step_ms": {
+          "default": 100,
+          "maximum": 2000,
+          "minimum": 20,
+          "title": "Step Ms",
+          "type": "integer"
+        },
+        "speed": {
+          "default": 1.0,
+          "maximum": 20,
+          "minimum": 0.1,
+          "title": "Speed",
+          "type": "number"
+        }
+      },
+      "title": "SimulationConfig",
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "input",
+            "output"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "data_type": {
+          "enum": [
+            "BOOL",
+            "INT",
+            "DINT",
+            "REAL"
+          ],
+          "title": "Data Type",
+          "type": "string"
+        },
+        "unit": {
+          "default": "",
+          "maxLength": 40,
+          "title": "Unit",
+          "type": "string"
+        },
+        "initial_value": {
+          "default": 0.0,
+          "title": "Initial Value"
+        },
+        "min": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min"
+        },
+        "max": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max"
+        },
+        "node_id": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Node Id",
+          "type": "string"
+        },
+        "writable": {
+          "default": false,
+          "title": "Writable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "direction",
+        "data_type"
+      ],
+      "title": "Tag",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "default": "",
+      "maxLength": 10000,
+      "title": "Description",
+      "type": "string"
+    },
+    "simulation": {
+      "$ref": "#/$defs/SimulationConfig"
+    },
+    "equipment": {
+      "items": {
+        "$ref": "#/$defs/Equipment"
+      },
+      "maxItems": 50,
+      "title": "Equipment",
+      "type": "array"
+    },
+    "connections": {
+      "items": {
+        "$ref": "#/$defs/Connection"
+      },
+      "maxItems": 200,
+      "title": "Connections",
+      "type": "array"
+    },
+    "tags": {
+      "items": {
+        "$ref": "#/$defs/Tag"
+      },
+      "maxItems": 200,
+      "title": "Tags",
+      "type": "array"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/Scenario"
+      },
+      "maxItems": 100,
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "plc": {
+      "$ref": "#/$defs/PLCConfig"
+    }
+  },
+  "required": [
+    "id",
+    "name"
+  ],
+  "title": "Project",
+  "type": "object"
+}

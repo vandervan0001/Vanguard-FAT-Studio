@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-11-02T11:45:18.695986+00:00",
+  "system": {
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "python": "3.12.14",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "logical_cpus": 9,
+    "affinity_cpu_count": 9,
+    "sqlite": "3.53.1",
+    "dependencies": {
+      "pydantic": "2.14.2",
+      "asyncua": "1.1.8"
+    }
+  },
+  "workload": {
+    "equipment": 50,
+    "tags": 200,
+    "plc_commands": 40,
+    "modeled_inputs": 160,
+    "unmapped_tags": 0,
+    "description": "10 cuves, 40 vannes modulantes ; tous les ports associés",
+    "step_ms": 100,
+    "cycles": 1000,
+    "warmup_cycles": 50,
+    "simulated_time_s": 100.0,
+    "sqlite_commit": "un commit réel par échantillon",
+    "storage_location": "répertoire temporaire système",
+    "project_sha256": "3086de7cbb56b7275a255be8aa7865899762e91b45f3eff661e081d29a3ab5e4"
+  },
+  "source_sha256": {
+    "fat_studio/engine.py": "d32552a35d0fa14045df1d684f5e05ba82d9211ea742d19f493599e8c40bbd35",
+    "fat_studio/models.py": "88037bc529a0ee2f8872f2e670061ae1bc1a3140257c322bc934972bcc55f077",
+    "fat_studio/storage.py": "384963efe6809c5d9b32ef3b462380ffb7c3d69fdcddfd50e0ce79102b464fcd",
+    "scripts/benchmark.py": "02e145bb820561c7d050dacee9e1b6b3c2e2a1580b2ca4340ccec5974fa39ffb"
+  },
+  "limitations": [
+    "Mesure sur cet environnement uniquement ; refaire sur le poste Windows cible et son disque.",
+    "OPC UA, PLCSIM, navigateur, rendu HTTP, ordonnancement et latence réseau exclus.",
+    "Une latence de modèle faible ne constitue pas une garantie temps réel ou de déterminisme PLC.",
+    "La phase SQLite seule réécrit une image de 200 valeurs afin d'isoler sérialisation, insertion et commit.",
+    "Aucun seuil de succès de performance n'est imposé ; les objectifs du site restent à qualifier."
+  ],
+  "phases": {
+    "plant_only": {
+      "cycles": 1000,
+      "unit": "ms",
+      "p50": 0.215636,
+      "p95": 0.305159,
+      "max": 1.41712,
+      "min": 0.207794,
+      "mean": 0.234397,
+      "elapsed_wall_s": 0.242302
+    },
+    "sqlite_only": {
+      "cycles": 1000,
+      "unit": "ms",
+      "p50": 0.298616,
+      "p95": 0.627025,
+      "max": 3.108223,
+      "min": 0.186491,
+      "mean": 0.361642,
+      "elapsed_wall_s": 0.374881,
+      "sample_count": 1000,
+      "sqlite_journal_mode": "wal",
+      "sqlite_synchronous": 2,
+      "db_and_journal_bytes": 13483656
+    },
+    "plant_and_sqlite": {
+      "cycles": 1000,
+      "unit": "ms",
+      "p50": 0.666336,
+      "p95": 1.045417,
+      "max": 4.293256,
+      "min": 0.468507,
+      "mean": 0.730835,
+      "elapsed_wall_s": 0.743771,
+      "sample_count": 1000,
+      "sqlite_journal_mode": "wal",
+      "sqlite_synchronous": 2,
+      "db_and_journal_bytes": 15560280
+    }
+  },
+  "deterministic_final_values_sha256": "65cd9e1ead4b1843c86aa715f60bd7bab40c9c7988d912ea4d387da5d60cae03"
+}

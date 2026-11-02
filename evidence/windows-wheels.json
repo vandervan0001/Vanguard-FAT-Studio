@@ -1,0 +1,164 @@
+{
+  "verified_at_utc": "2026-11-02T11:51:00.496917+00:00",
+  "target": "CPython 3.12 Windows x64",
+  "status": "passed",
+  "wheel_count": 29,
+  "total_bytes": 10898112,
+  "active_dependency_constraints_checked": 33,
+  "checks": [
+    "all runtime pins present",
+    "compatible wheel tags",
+    "transitive Requires-Dist version constraints with Windows markers"
+  ],
+  "limitations": [
+    "Downloaded and inspected on Linux; no Windows process executed",
+    "No Siemens, Python interpreter or engineering MCP runtime bundled"
+  ],
+  "files": [
+    {
+      "filename": "aiofiles-25.1.0-py3-none-any.whl",
+      "bytes": 14668,
+      "sha256": "abe311e527c862958650f9438e859c1fa7568a141b22abcd015e120e86a85695"
+    },
+    {
+      "filename": "aiosqlite-0.22.1-py3-none-any.whl",
+      "bytes": 17405,
+      "sha256": "21c002eb13823fad740196c5a2e9d8e62f6243bd9e7e4a1f87fb5e44ecb4fceb"
+    },
+    {
+      "filename": "annotated_doc-0.0.5-py3-none-any.whl",
+      "bytes": 5302,
+      "sha256": "117bac03a25ede5df5440e855b32d556049ca169ead221505badf432fed4b101"
+    },
+    {
+      "filename": "annotated_types-0.8.0-py3-none-any.whl",
+      "bytes": 13427,
+      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0"
+    },
+    {
+      "filename": "anyio-4.16.0-py3-none-any.whl",
+      "bytes": 134521,
+      "sha256": "c66ae634e0b8228396b801741beb3294326d4b6102f7bba4041c0dfb58c29026"
+    },
+    {
+      "filename": "asyncua-1.1.8-py3-none-any.whl",
+      "bytes": 1129163,
+      "sha256": "40c57151b93537beb77cb3f1a0190d75cef5326e8c40978de28b69e5b41e6ede"
+    },
+    {
+      "filename": "cffi-2.1.1-cp312-cp312-win_amd64.whl",
+      "bytes": 185919,
+      "sha256": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a"
+    },
+    {
+      "filename": "click-8.5.0-py3-none-any.whl",
+      "bytes": 125251,
+      "sha256": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360"
+    },
+    {
+      "filename": "colorama-0.4.6-py2.py3-none-any.whl",
+      "bytes": 25335,
+      "sha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"
+    },
+    {
+      "filename": "cryptography-50.0.2-cp311-abi3-win_amd64.whl",
+      "bytes": 3824692,
+      "sha256": "7afa5a6602a9f29af1f3a2965f831bae7c9d5d597b7cbb716d41ab3b7d89879c"
+    },
+    {
+      "filename": "fastapi-0.162.0-py3-none-any.whl",
+      "bytes": 148912,
+      "sha256": "3785963de305dd09912426cb81f2d230fce98ab3521cdfe97265c8d14983128c"
+    },
+    {
+      "filename": "h11-0.16.0-py3-none-any.whl",
+      "bytes": 37515,
+      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"
+    },
+    {
+      "filename": "idna-3.20-py3-none-any.whl",
+      "bytes": 69583,
+      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c"
+    },
+    {
+      "filename": "opentelemetry_api-1.45.2-py3-none-any.whl",
+      "bytes": 60335,
+      "sha256": "2cbd737377e710ee740d261c94e93fa0f08e6d037c18f17513cc0a2d94479a34"
+    },
+    {
+      "filename": "packaging-26.3-py3-none-any.whl",
+      "bytes": 129956,
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
+    },
+    {
+      "filename": "pycparser-3.12-py3-none-any.whl",
+      "bytes": 62600,
+      "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+    },
+    {
+      "filename": "pydantic-2.14.2-py3-none-any.whl",
+      "bytes": 490403,
+      "sha256": "7efbf7507b937931cd32a5755acb00ea1cf5ccb1d4e8067a5850d5069e382118"
+    },
+    {
+      "filename": "pydantic_core-2.50.2-cp312-cp312-win_amd64.whl",
+      "bytes": 2252238,
+      "sha256": "b381574614245f18fdb2d6d1aa8f149e225869c47b5ee7f81812de8977817314"
+    },
+    {
+      "filename": "pyopenssl-26.4.0-py3-none-any.whl",
+      "bytes": 56026,
+      "sha256": "f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c"
+    },
+    {
+      "filename": "python_dateutil-4.0.0-py3-none-any.whl",
+      "bytes": 92853,
+      "sha256": "a5e246f79eb80475e691bf93862cead98decd8a498cf53ba0516fcdc0f50dc1c"
+    },
+    {
+      "filename": "pytz-2026.6-py2.py3-none-any.whl",
+      "bytes": 506321,
+      "sha256": "7fed3fee8fd6bd4a2b7b75a8d56021d0624127bf69bd5691f115db929ac570b3"
+    },
+    {
+      "filename": "setuptools-84.2.1-py3-none-any.whl",
+      "bytes": 876263,
+      "sha256": "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2"
+    },
+    {
+      "filename": "sortedcontainers-2.4.0-py2.py3-none-any.whl",
+      "bytes": 29575,
+      "sha256": "a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"
+    },
+    {
+      "filename": "starlette-1.10.0-py3-none-any.whl",
+      "bytes": 80571,
+      "sha256": "478c0ab3b4ced6e82719849c118fa406f0278a3499c1a898cd15cd31bdc38ce4"
+    },
+    {
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "bytes": 45571,
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+    },
+    {
+      "filename": "typing_inspection-0.4.4-py3-none-any.whl",
+      "bytes": 14750,
+      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147"
+    },
+    {
+      "filename": "tzdata-2026.6-py2.py3-none-any.whl",
+      "bytes": 348210,
+      "sha256": "0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec"
+    },
+    {
+      "filename": "uvicorn-0.54.0-py3-none-any.whl",
+      "bytes": 87427,
+      "sha256": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+    },
+    {
+      "filename": "wheel-0.48.0-py3-none-any.whl",
+      "bytes": 33320,
+      "sha256": "3217dcc807155e45db462d7ef2431f5ddda0d7273b700d05a67b271ceb1287ab"
+    }
+  ]
+}

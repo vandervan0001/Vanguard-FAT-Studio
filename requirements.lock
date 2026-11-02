@@ -1,0 +1,30 @@
+# Resolved and tested on Python 3.12, 2026-11-02. Windows marker dependency included.
+aiofiles==25.1.0
+aiosqlite==0.22.1
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.16.0
+asyncua==1.1.8
+cffi==2.1.1
+click==8.5.0
+cryptography==50.0.2
+fastapi==0.162.0
+h11==0.16.0
+idna==3.20
+opentelemetry-api==1.45.2
+packaging==26.3
+pycparser==3.12
+pydantic==2.14.2
+pydantic-core==2.50.2
+pyopenssl==26.4.0
+python-dateutil==4.0.0
+pytz==2026.6
+setuptools==84.2.1
+sortedcontainers==2.4.0
+starlette==1.10.0
+typing-extensions==4.16.0
+typing-inspection==0.4.4
+tzdata==2026.6
+uvicorn==0.54.0
+wheel==0.48.0
+colorama==0.4.6; sys_platform == "win32"

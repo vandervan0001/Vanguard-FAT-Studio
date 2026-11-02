@@ -1,0 +1,2 @@
+# Optional extra; the project's lockfile resolves transitive dependencies.
+mcp==2.3.0

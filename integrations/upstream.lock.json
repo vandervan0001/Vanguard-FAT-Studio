@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-11-02",
+  "components": [
+    {
+      "name": "TiaMcpServer",
+      "repository": "https://github.com/Czarnak/tia-portal-mcp",
+      "tag": "v4.3.0",
+      "commit": "10c5de2eb44c0362792cd141370b3f42f92f6ecd",
+      "observed_main_commit": "f4e48f6775918fa25419327ab2f65591ad0042af",
+      "license": "MIT",
+      "decision": "Optional separately installed engineering server; pinned 4.3.0 contracts inspected. Read-only AI client, interactive Python CLI for reviewed writes.",
+      "live_siemens_qualification": false
+    },
+    {
+      "name": "tiaportal-mcp alternative",
+      "repository": "https://github.com/heilingbrunner/tiaportal-mcp",
+      "commit": "fdec356bf4f23031c44015ad72856bafc475d555",
+      "license": "MIT",
+      "decision": "Inspected, not bundled or selected; its read-only surface includes lifecycle/compile tools with different semantics."
+    },
+    {
+      "name": "HistorianSim",
+      "repository": "https://github.com/ScottDuncanAI/HistorianSim",
+      "commit": "14e616c382a9db8026cbb4ab86bdd803d56ca72e",
+      "license": "MIT",
+      "decision": "core/valve.py vendored under fat_studio/vendor/historiansim with MIT license and provenance; complete batch/controller pipeline not imported."
+    },
+    {
+      "name": "HistorianRCA",
+      "repository": "https://github.com/ScottDuncanAI/HistorianRCA",
+      "commit": "8d12a821395ce5f72e464dc78cc2c10d05cbb9ed",
+      "license": "CC-BY-4.0",
+      "decision": "Documentation/reference only; no dataset or diagram redistributed."
+    },
+    {
+      "name": "MCP Python SDK",
+      "repository": "https://github.com/modelcontextprotocol/python-sdk",
+      "package": "mcp",
+      "version": "2.3.0",
+      "license": "MIT",
+      "decision": "Optional engineering dependency; official stdio transport and elicitation reused."
+    },
+    {
+      "name": "asyncua",
+      "repository": "https://github.com/FreeOpcUa/opcua-asyncio",
+      "license": "LGPL-3.0-or-later",
+      "decision": "Existing OPC UA client/server library; exact installed version in the Python lockfile."
+    }
+  ]
+}

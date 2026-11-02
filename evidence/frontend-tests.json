@@ -1,0 +1,92 @@
+{
+  "source": "frontend/test-results/results.json",
+  "framework": "Playwright 1.56.1",
+  "browser": "Chromium 141, installed Playwright distribution",
+  "backend": "real FastAPI application and temporary SQLite data",
+  "stats": {
+    "startTime": "2026-11-02T11:44:40.130Z",
+    "duration": 10138.057,
+    "expected": 12,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "suite": "api-errors.spec.ts",
+      "title": "une erreur non JSON ou un corps null reste une erreur lisible",
+      "status": "expected",
+      "duration_ms": 15
+    },
+    {
+      "suite": "api-errors.spec.ts",
+      "title": "un jeton expiré est renouvelé une seule fois et conserve le contexte projet",
+      "status": "expected",
+      "duration_ms": 8
+    },
+    {
+      "suite": "scenario-format.spec.ts",
+      "title": "refuse des objets à la place du texte avant de les exposer à React",
+      "status": "expected",
+      "duration_ms": 4
+    },
+    {
+      "suite": "scenario-format.spec.ts",
+      "title": "refuse un temps infini et une séquence hors ordre ou durée",
+      "status": "expected",
+      "duration_ms": 3
+    },
+    {
+      "suite": "scenario-format.spec.ts",
+      "title": "préserve les vrais booléens, les valeurs négatives et les étapes au même instant",
+      "status": "expected",
+      "duration_ms": 3
+    },
+    {
+      "suite": "scenario-format.spec.ts",
+      "title": "signale champs inconnus et mauvaises valeurs de défaut sans les supprimer",
+      "status": "expected",
+      "duration_ms": 3
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "éditer un vrai P&ID, sauvegarder puis recharger conserve les propriétés",
+      "status": "expected",
+      "duration_ms": 1226
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "essai réel : boucle fermée, défaut, forçage, pause/reprise et exports",
+      "status": "expected",
+      "duration_ms": 3357
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "un JSON de scénario invalide reste un brouillon et ne casse pas React",
+      "status": "expected",
+      "duration_ms": 806
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "un import invalide préserve le projet affiché et enregistré",
+      "status": "expected",
+      "duration_ms": 523
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "un autre onglet change de projet : commandes bloquées et brouillon récupérable",
+      "status": "expected",
+      "duration_ms": 1421
+    },
+    {
+      "suite": "workbench.spec.ts",
+      "title": "une nouvelle révision du même projet ne remplace pas silencieusement le brouillon",
+      "status": "expected",
+      "duration_ms": 976
+    }
+  ],
+  "limitations": [
+    "Executed on Linux, not Windows",
+    "Browser screenshots are inspection artefacts, not included in this evidence file"
+  ]
+}
