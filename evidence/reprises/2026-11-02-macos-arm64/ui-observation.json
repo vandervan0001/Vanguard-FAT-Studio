@@ -1,0 +1,20 @@
+{
+  "observed_at_utc": "2026-11-02T13:52:32.531510+00:00",
+  "url": "http://127.0.0.1:8765/",
+  "method": "in-app browser screenshot and read-only DOM inspection",
+  "viewport": [
+    1440,
+    1000
+  ],
+  "visibility": "visible",
+  "stylesheet": "/assets/index-BnIYMUrX.css",
+  "font_family": "Inter, -apple-system, \"system-ui\", \"Segoe UI\", sans-serif",
+  "font_loading_status": "loaded",
+  "canvas_bounds_px": {
+    "width": 972,
+    "height": 708
+  },
+  "equipment_nodes": 8,
+  "state": "idle demo; no PLC connected",
+  "temporary_viewport_override": "reset after observation"
+}

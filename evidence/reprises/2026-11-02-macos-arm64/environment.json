@@ -1,0 +1,33 @@
+{
+  "observed_at_utc": "2026-11-02T13:46:45.253056+00:00",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.12.12",
+  "node": "v25.1.0",
+  "npm": "11.6.2",
+  "git_head": "486d8180508a014fe4791d19bc13b59ecdc61146",
+  "git_status": "",
+  "source_copy": "git clone FAT-Studio.bundle ../fat-studio-source",
+  "kit_check": {
+    "wheels": 29,
+    "integrity": "passed",
+    "target": "Windows-x64",
+    "executed_on_windows": false
+  },
+  "dependencies": {
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "pydantic": "2.14.2",
+    "asyncua": "1.1.8",
+    "pytest": "9.2.0",
+    "ruff": "0.17.3",
+    "mcp": "2.3.0"
+  },
+  "web_assets_sha256": {
+    "fat_studio/web/index.html": "f3129a8b943691705b0a054cd7a8dc4dc72979702aefe8b9026a8905f3aa3867",
+    "fat_studio/web/favicon.svg": "e013914710fcece72e3aedcd142e86b3358866c5531766e655b0b1d97837d304",
+    "fat_studio/web/assets/index-Cb2RHDue.js": "3091ff06ae7653087e451bef483fc99deed157defe71e714df567f2ba78dc4a4",
+    "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt": "9de548bc9136893a9ed1c509fe1c2d615e70e2f21d348281dfdb708dfb27ec91",
+    "fat_studio/web/assets/index-BnIYMUrX.css": "f611c35e6338ea4b66dfc5d783c487cec4218ddcac2c0a5487df06b4df9a2e56"
+  }
+}

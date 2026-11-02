@@ -1,0 +1,19 @@
+{
+  "application": "FAT Studio",
+  "version": "0.1.1",
+  "python": "3.12.12",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "dependencies": {
+    "fastapi": "0.162.0",
+    "uvicorn": "0.54.0",
+    "pydantic": "2.14.2",
+    "asyncua": "1.1.8"
+  },
+  "missing_dependencies": [],
+  "web_ready": true,
+  "web_path": "/Volumes/Tai_SSD/dev/Projects/TIA_Sim/fat-studio-source/fat_studio/web",
+  "data_dir": "/Volumes/Tai_SSD/dev/Projects/TIA_Sim/work/2026-11-02-macos-reprise/demo-data",
+  "authorized_target_count": 0,
+  "policy_error": null,
+  "siemens_validation": "Non vérifiée par doctor : effectuer la qualification sur le poste cible."
+}

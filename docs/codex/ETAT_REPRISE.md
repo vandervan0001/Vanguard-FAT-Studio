@@ -2,6 +2,24 @@
 
 Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain agent et à l'ingénieur qui reprend le projet. Les sections historiques ci-dessous décrivent la livraison ; inscrire les développements ultérieurs dans la section « État courant » et les notes de session.
 
+## État courant après reprise — 2 novembre 2026, macOS ARM64
+
+Le kit extrait dans `../fat-studio` est resté intact ; ses empreintes et ses 29 wheels Windows ont été vérifiées. Le travail se poursuit dans le clone source `fat-studio-source`, branche `codex/macos-validation`, créé depuis le bundle au commit `486d8180508a014fe4791d19bc13b59ecdc61146`. Le runtime reste celui de la version **0.1.1** : les assets reconstruits et les 30 fichiers applicatifs de la wheel sont identiques à la référence.
+
+Contrôles exécutés sur ce poste : **289 tests Python**, **31 tests frontend**, **3 scénarios et 12 assertions de démonstration** réussis ; Ruff et `pip check` réussis. Une seconde installation runtime dans une `.venv` neuve, depuis 28 wheels macOS et sans index pip ni cache pip, a passé `scripts/smoke-installed.py` : service hors sources, exports CSV/HTML/JSON, historique après reset et redémarrage. Les conclusions humaines restent `not_evaluated`. Aucun correctif du runtime n'a été nécessaire. Voir le [rapport et les preuves macOS](../../evidence/reprises/2026-11-02-macos-arm64/VERIFICATION.md).
+
+Le service de démonstration est laissé actif sur **http://127.0.0.1:8765**, sans cible PLC autorisée. Ses données isolées sont dans `../work/2026-11-02-macos-reprise/demo-data`, hors du dépôt. Pour le redémarrer depuis la copie source si nécessaire :
+
+```bash
+bash scripts/start.sh --no-browser --data-dir "$PWD/../work/2026-11-02-macos-reprise/demo-data"
+```
+
+Vérifier d'abord si le service répond ; ne pas lancer une seconde instance sur le même port. La dernière note décrit le processus laissé actif et son arrêt. Le remote `origin` reste le bundle local du kit ; aucune publication GitHub ni exécution de CI distante n'a été faite.
+
+**Prochaine qualification :** utiliser un poste Windows avec Python 3.12 x64 pour le premier lancement du kit intact et le contrôle installé, puis une copie TIA/PLCSIM autorisée pour [ACCEPTANCE.md](../ACCEPTANCE.md). TIA Portal, PLCSIM, .NET et PowerShell n'ont pas été exécutés ici. Les essais OPC UA locaux et les doubles MCP ne ferment pas cette qualification Siemens.
+
+Dernière session : [validation macOS du 2 novembre 2026](sessions/2026-11-02-macos-validation.md).
+
 ## 1. État courant à la remise
 
 | Point | État |
@@ -130,6 +148,7 @@ Pop-Location
 & $FatPython -m pytest
 
 Push-Location frontend
+$env:PLAYWRIGHT_SKIP_BROWSER_GC = '1'
 npx playwright install chromium
 npm test
 Pop-Location
@@ -150,11 +169,13 @@ python3.12 -m venv .venv
 .venv/bin/python -m fat_studio doctor --json
 .venv/bin/python -m ruff check fat_studio integrations tests scripts
 .venv/bin/python -m pytest
-(cd frontend && npx playwright install chromium && npm test)
+(cd frontend && PLAYWRIGHT_SKIP_BROWSER_GC=1 npx playwright install chromium && npm test)
 .venv/bin/python -m build --wheel --no-isolation
 ```
 
 Sous Linux, si les bibliothèques système du navigateur manquent, l'installation CI utilise `npx playwright install --with-deps chromium` ; appliquer les permissions de la machine. Les tests E2E ont besoin d'ouvrir des sockets loopback et de lancer des sous-processus. Un environnement qui l'interdit doit être signalé, pas contourné par la désactivation des tests.
+
+Sur un poste partagé, conserver `PLAYWRIGHT_SKIP_BROWSER_GC=1` lors de l'installation des navigateurs : le nettoyage automatique peut supprimer des builds utilisées par d'autres projets dont le lien de cache manque. Durant cette reprise, trois builds supprimées automatiquement ont été restaurées et lancées depuis leur client réel ; aucun autre dépôt n'a été modifié.
 
 Les tests Playwright utilisent par défaut leur serveur temporaire sur 8766. `npm test` couvre toute la suite ; `npm run test:e2e` cible uniquement `workbench.spec.ts`. Ne pas définir `FAT_E2E_BASE_URL` vers une instance contenant des essais utilisateur. `FAT_E2E_PYTHON` permet de préciser le Python si nécessaire.
 
@@ -201,7 +222,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note à la remise : [2026-11-02 — passation](sessions/2026-11-02-passation.md). Aucune session Codex sur le poste cible n'a encore eu lieu. La prochaine action est celle de la première ligne du tableau des priorités.
+Dernière note : [2026-11-02 — validation macOS](sessions/2026-11-02-macos-validation.md). La [passation initiale](sessions/2026-11-02-passation.md) reste conservée. Les contrôles locaux accessibles ont été exécutés ; la prochaine qualification requiert le poste Windows, puis Siemens, selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

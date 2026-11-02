@@ -1,6 +1,6 @@
 # Installer et démarrer FAT Studio
 
-**État de vérification : les essais de livraison ont été exécutés sous Linux. Les scripts PowerShell ont été relus, mais leur exécution sous Windows, l'installation Windows hors ligne et les échanges avec TIA Portal/PLCSIM Advanced restent à qualifier sur le poste cible.** L'exécution sous macOS n'a pas été vérifiée. Les résultats disponibles figurent dans [VERIFICATION.md](../evidence/VERIFICATION.md) ; le protocole du poste est dans [ACCEPTANCE.md](ACCEPTANCE.md).
+**État de vérification : les essais de livraison ont été exécutés sous Linux. La reprise du 2 novembre 2026 a aussi vérifié la démonstration, les suites Python/frontend et une installation runtime neuve sous macOS ARM64. Les scripts PowerShell ont été relus, mais leur exécution sous Windows, l'installation Windows hors ligne et les échanges avec TIA Portal/PLCSIM Advanced restent à qualifier sur le poste cible.** Les résultats figurent dans [VERIFICATION.md](../evidence/VERIFICATION.md) et le [rapport macOS](../evidence/reprises/2026-11-02-macos-arm64/VERIFICATION.md) ; le protocole du poste est dans [ACCEPTANCE.md](ACCEPTANCE.md).
 
 ## Premier démarrage sur Windows
 

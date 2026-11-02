@@ -1,0 +1,14 @@
+{
+  "observed_at_utc": "2026-11-02T13:52:32.529760+00:00",
+  "installation": "fresh Python 3.12 venv, runtime wheels downloaded for macOS arm64, then pip --no-index --no-cache-dir",
+  "dependency_wheels": 28,
+  "network_index_used_for_install": false,
+  "requirements": "requirements.lock",
+  "application_wheel": "dist/local_fat_studio-0.1.1-py3-none-any.whl",
+  "installed_package": {
+    "module": "/Volumes/Tai_SSD/dev/Projects/TIA_Sim/work/2026-11-02-macos-reprise/FAT installation épreuve/.venv/lib/python3.12/site-packages/fat_studio/__init__.py",
+    "version": "0.1.1"
+  },
+  "pip_check": "No broken requirements found.",
+  "data_scope": "temporary installation smoke data; no PLC authorization"
+}

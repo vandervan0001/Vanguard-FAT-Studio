@@ -1,0 +1,583 @@
+{
+  "schema_version": "1.0",
+  "id": "tank-demo",
+  "name": "TK-101 · Banc de remplissage",
+  "description": "Cuve 1 000 L, alimentation P-101/XV-101 en série, soutirage FCV-101, mesure LT-101 et seuils haut/bas. Démonstration autonome : un contrôleur fictif remplit entre 30 et 70 %. En mode OPC UA, seul le programme PLC connecté produit les commandes. Les NodeIds d'exemple doivent être remplacés par ceux observés sur votre CPU virtuelle.",
+  "simulation": {
+    "step_ms": 100,
+    "speed": 1.0
+  },
+  "equipment": [
+    {
+      "id": "TK101",
+      "type": "tank",
+      "name": "TK-101",
+      "description": "Cuve à section constante ; débordement comptabilisé, volume borné.",
+      "unit": "L",
+      "position": {
+        "x": 470.0,
+        "y": 190.0
+      },
+      "params": {
+        "capacity_l": 1000.0,
+        "initial_level_pct": 25.0,
+        "high_level_pct": 90.0,
+        "low_level_pct": 10.0
+      },
+      "bindings": {
+        "volume": "volume"
+      }
+    },
+    {
+      "id": "P101",
+      "type": "pump",
+      "name": "P-101",
+      "description": "Alimentation ; 30 L/s à pleine vitesse.",
+      "unit": "",
+      "position": {
+        "x": 40.0,
+        "y": 230.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "inlet",
+        "flow_group": "feed",
+        "max_flow_l_s": 30.0,
+        "response_s": 0.4
+      },
+      "bindings": {
+        "command": "pump_cmd",
+        "feedback": "pump_running",
+        "fault": "pump_fault"
+      }
+    },
+    {
+      "id": "XV101",
+      "type": "valve_onoff",
+      "name": "XV-101",
+      "description": "Vanne d'isolement de l'alimentation ; limite du circuit à 25 L/s.",
+      "unit": "",
+      "position": {
+        "x": 250.0,
+        "y": 230.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "inlet",
+        "flow_group": "feed",
+        "max_flow_l_s": 25.0,
+        "response_s": 0.3
+      },
+      "bindings": {
+        "command": "inlet_cmd",
+        "position": "inlet_position",
+        "open": "inlet_open",
+        "closed": "inlet_closed"
+      }
+    },
+    {
+      "id": "FCV101",
+      "type": "valve_control",
+      "name": "FCV-101",
+      "description": "Soutirage 4,2 L/s à 35 % d'ouverture.",
+      "unit": "%",
+      "position": {
+        "x": 760.0,
+        "y": 230.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "outlet",
+        "flow_group": "drain",
+        "max_flow_l_s": 12.0,
+        "response_s": 0.5,
+        "characteristic": "linear",
+        "demo_control": "constant",
+        "demo_command": 35.0
+      },
+      "bindings": {
+        "command": "outlet_cmd",
+        "position": "outlet_position"
+      }
+    },
+    {
+      "id": "LT101",
+      "type": "analog_sensor",
+      "name": "LT-101",
+      "description": "Transmetteur de niveau 0–100 %.",
+      "unit": "%",
+      "position": {
+        "x": 470.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "scale": 1.0,
+        "offset": 0.0
+      },
+      "bindings": {
+        "value": "level"
+      }
+    },
+    {
+      "id": "LSH101",
+      "type": "digital_sensor",
+      "name": "LSH-101",
+      "description": "Détection niveau haut ≥ 90 %.",
+      "unit": "",
+      "position": {
+        "x": 700.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "operator": "ge",
+        "threshold": 90.0
+      },
+      "bindings": {
+        "value": "high"
+      }
+    },
+    {
+      "id": "LSL101",
+      "type": "digital_sensor",
+      "name": "LSL-101",
+      "description": "Détection niveau bas ≤ 10 %.",
+      "unit": "",
+      "position": {
+        "x": 910.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "operator": "le",
+        "threshold": 10.0
+      },
+      "bindings": {
+        "value": "low"
+      }
+    },
+    {
+      "id": "RUN101",
+      "type": "indicator",
+      "name": "Commande P-101",
+      "description": "Observation de la commande PLC, sans écriture.",
+      "unit": "",
+      "position": {
+        "x": 40.0,
+        "y": 10.0
+      },
+      "params": {},
+      "bindings": {
+        "value": "pump_cmd"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "feed_pump_valve",
+      "source": "P101",
+      "target": "XV101",
+      "label": "Alimentation",
+      "directed": true
+    },
+    {
+      "id": "feed_valve_tank",
+      "source": "XV101",
+      "target": "TK101",
+      "label": "25 L/s max.",
+      "directed": true
+    },
+    {
+      "id": "drain_tank_valve",
+      "source": "TK101",
+      "target": "FCV101",
+      "label": "Soutirage",
+      "directed": true
+    },
+    {
+      "id": "level_measurement",
+      "source": "TK101",
+      "target": "LT101",
+      "label": "Niveau",
+      "directed": false
+    }
+  ],
+  "tags": [
+    {
+      "id": "pump_cmd",
+      "name": "PumpCmd",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"PumpCmd\"",
+      "writable": false
+    },
+    {
+      "id": "inlet_cmd",
+      "name": "InletCmd",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"InletCmd\"",
+      "writable": false
+    },
+    {
+      "id": "outlet_cmd",
+      "name": "OutletCmd",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT\".\"OutletCmd\"",
+      "writable": false
+    },
+    {
+      "id": "level",
+      "name": "LevelPct",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 25.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT\".\"LevelPct\"",
+      "writable": true
+    },
+    {
+      "id": "volume",
+      "name": "VolumeL",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "L",
+      "initial_value": 250.0,
+      "min": 0.0,
+      "max": 1000.0,
+      "node_id": "ns=3;s=\"DB_FAT\".\"VolumeL\"",
+      "writable": true
+    },
+    {
+      "id": "pump_running",
+      "name": "PumpRunning",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"PumpRunning\"",
+      "writable": true
+    },
+    {
+      "id": "pump_fault",
+      "name": "PumpFault",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"PumpFault\"",
+      "writable": true
+    },
+    {
+      "id": "inlet_position",
+      "name": "InletPosition",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT\".\"InletPosition\"",
+      "writable": true
+    },
+    {
+      "id": "inlet_open",
+      "name": "InletOpen",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"InletOpen\"",
+      "writable": true
+    },
+    {
+      "id": "inlet_closed",
+      "name": "InletClosed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"InletClosed\"",
+      "writable": true
+    },
+    {
+      "id": "outlet_position",
+      "name": "OutletPosition",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT\".\"OutletPosition\"",
+      "writable": true
+    },
+    {
+      "id": "high",
+      "name": "LevelHigh",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"LevelHigh\"",
+      "writable": true
+    },
+    {
+      "id": "low",
+      "name": "LevelLow",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT\".\"LevelLow\"",
+      "writable": true
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "reference",
+      "name": "01 · Cycle de référence",
+      "description": "Remplir la cuve depuis 25 %, constater la marche et l'augmentation du niveau puis l'arrêt à 70 %. Les seuils d'assertion sont adaptés au contrôleur de démonstration ; les adapter au programme PLC réel.",
+      "duration_s": 32.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "marker",
+          "target": "",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Début du cycle de référence, cuve initiale 25 %."
+        },
+        {
+          "at_s": 5.0,
+          "action": "expect",
+          "target": "pump_running",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "La pompe retourne sa marche."
+        },
+        {
+          "at_s": 10.0,
+          "action": "expect",
+          "target": "level",
+          "value": 35.0,
+          "operator": "gt",
+          "tolerance": 0.001,
+          "message": "Le niveau augmente réellement."
+        },
+        {
+          "at_s": 25.0,
+          "action": "expect",
+          "target": "pump_cmd",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Arrêt de remplissage après le seuil haut de contrôle."
+        },
+        {
+          "at_s": 30.0,
+          "action": "expect",
+          "target": "level",
+          "value": 60.0,
+          "operator": "gt",
+          "tolerance": 0.001,
+          "message": "Le soutirage reste limité après l'arrêt."
+        },
+        {
+          "at_s": 32.0,
+          "action": "marker",
+          "target": "",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Fin de scénario : relever le résultat de la FAT."
+        }
+      ]
+    },
+    {
+      "id": "motor-trip",
+      "name": "02 · Défaut moteur et reprise",
+      "description": "Déclenchement moteur à 5 s, contrôle retour et défaut, suppression à 15 s puis observation de la reprise.",
+      "duration_s": 28.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "marker",
+          "target": "",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Vérification du défaut moteur P-101."
+        },
+        {
+          "at_s": 5.0,
+          "action": "fault",
+          "target": "P101",
+          "value": {
+            "kind": "motor_trip"
+          },
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 6.0,
+          "action": "expect",
+          "target": "pump_running",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Perte du retour marche."
+        },
+        {
+          "at_s": 6.0,
+          "action": "expect",
+          "target": "pump_fault",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Défaut transmis au PLC."
+        },
+        {
+          "at_s": 10.0,
+          "action": "expect",
+          "target": "level",
+          "value": 40.0,
+          "operator": "lt",
+          "tolerance": 0.001,
+          "message": "Aucun remplissage caché pendant le défaut."
+        },
+        {
+          "at_s": 15.0,
+          "action": "clear_fault",
+          "target": "P101",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 17.0,
+          "action": "expect",
+          "target": "pump_running",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Reprise après disparition du défaut."
+        },
+        {
+          "at_s": 25.0,
+          "action": "expect",
+          "target": "level",
+          "value": 40.0,
+          "operator": "gt",
+          "tolerance": 0.001,
+          "message": "Reprise du remplissage observable."
+        }
+      ]
+    },
+    {
+      "id": "sensor-freeze",
+      "name": "03 · Capteur figé puis libéré",
+      "description": "Figer LT-101 à 40 %, constater la mesure fixe, puis libérer le capteur. Le volume réel continue d'évoluer pendant le défaut.",
+      "duration_s": 24.0,
+      "steps": [
+        {
+          "at_s": 5.0,
+          "action": "fault",
+          "target": "LT101",
+          "value": {
+            "kind": "sensor_stuck",
+            "value": 40.0
+          },
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 10.0,
+          "action": "expect",
+          "target": "level",
+          "value": 40.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": "Mesure figée à 40 %."
+        },
+        {
+          "at_s": 14.0,
+          "action": "expect",
+          "target": "volume",
+          "value": 450.0,
+          "operator": "gt",
+          "tolerance": 0.001,
+          "message": "Le procédé continue d'évoluer malgré la mesure figée."
+        },
+        {
+          "at_s": 15.0,
+          "action": "clear_fault",
+          "target": "LT101",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 16.0,
+          "action": "expect",
+          "target": "level",
+          "value": 50.0,
+          "operator": "gt",
+          "tolerance": 0.001,
+          "message": "Retour à la mesure du procédé."
+        }
+      ]
+    }
+  ],
+  "plc": {
+    "mode": "demo",
+    "endpoint": "opc.tcp://127.0.0.1:4840",
+    "expected_application_uri": "",
+    "namespace_uri": "",
+    "security_policy": "None",
+    "server_certificate_sha256": "",
+    "client_certificate": "",
+    "client_private_key": "",
+    "username_env": "",
+    "password_env": "",
+    "approved_virtual_target": "",
+    "timeout_s": 3.0
+  }
+}

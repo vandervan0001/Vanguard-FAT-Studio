@@ -1,0 +1,215 @@
+[
+  {
+    "scenario": "reference",
+    "duration_s": 32.0,
+    "assertions": [
+      {
+        "index": 1,
+        "target": "pump_running",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "La pompe retourne sa marche.",
+        "scheduled_s": 5.0,
+        "evaluated_s": 5.0,
+        "quality": "good"
+      },
+      {
+        "index": 2,
+        "target": "level",
+        "operator": "gt",
+        "expected": 35.0,
+        "actual": 45.34965515136719,
+        "passed": true,
+        "message": "Le niveau augmente réellement.",
+        "scheduled_s": 10.0,
+        "evaluated_s": 10.0,
+        "quality": "good"
+      },
+      {
+        "index": 3,
+        "target": "pump_cmd",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "Arrêt de remplissage après le seuil haut de contrôle.",
+        "scheduled_s": 25.0,
+        "evaluated_s": 25.0,
+        "quality": "good"
+      },
+      {
+        "index": 4,
+        "target": "level",
+        "operator": "gt",
+        "expected": 60.0,
+        "actual": 67.33158874511719,
+        "passed": true,
+        "message": "Le soutirage reste limité après l'arrêt.",
+        "scheduled_s": 30.0,
+        "evaluated_s": 30.0,
+        "quality": "good"
+      }
+    ],
+    "final_values": {
+      "pump_cmd": false,
+      "inlet_cmd": false,
+      "outlet_cmd": 35.0,
+      "level": 66.49158477783203,
+      "volume": 664.9158935546875,
+      "pump_running": false,
+      "pump_fault": false,
+      "inlet_position": 0.0,
+      "inlet_open": false,
+      "inlet_closed": true,
+      "outlet_position": 35.0,
+      "high": false,
+      "low": false
+    },
+    "user_verdict": "not_evaluated",
+    "mode": "demo"
+  },
+  {
+    "scenario": "motor-trip",
+    "duration_s": 28.0,
+    "assertions": [
+      {
+        "index": 2,
+        "target": "pump_running",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "Perte du retour marche.",
+        "scheduled_s": 6.0,
+        "evaluated_s": 6.0,
+        "quality": "good"
+      },
+      {
+        "index": 3,
+        "target": "pump_fault",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "Défaut transmis au PLC.",
+        "scheduled_s": 6.0,
+        "evaluated_s": 6.0,
+        "quality": "good"
+      },
+      {
+        "index": 4,
+        "target": "level",
+        "operator": "lt",
+        "expected": 40.0,
+        "actual": 32.84965515136719,
+        "passed": true,
+        "message": "Aucun remplissage caché pendant le défaut.",
+        "scheduled_s": 10.0,
+        "evaluated_s": 10.0,
+        "quality": "good"
+      },
+      {
+        "index": 6,
+        "target": "pump_running",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "Reprise après disparition du défaut.",
+        "scheduled_s": 17.0,
+        "evaluated_s": 17.0,
+        "quality": "good"
+      },
+      {
+        "index": 7,
+        "target": "level",
+        "operator": "gt",
+        "expected": 40.0,
+        "actual": 50.77695846557617,
+        "passed": true,
+        "message": "Reprise du remplissage observable.",
+        "scheduled_s": 25.0,
+        "evaluated_s": 25.0,
+        "quality": "good"
+      }
+    ],
+    "final_values": {
+      "pump_cmd": true,
+      "inlet_cmd": true,
+      "outlet_cmd": 35.0,
+      "level": 57.01696014404297,
+      "volume": 570.1696166992188,
+      "pump_running": true,
+      "pump_fault": false,
+      "inlet_position": 100.0,
+      "inlet_open": true,
+      "inlet_closed": false,
+      "outlet_position": 35.0,
+      "high": false,
+      "low": false
+    },
+    "user_verdict": "not_evaluated",
+    "mode": "demo"
+  },
+  {
+    "scenario": "sensor-freeze",
+    "duration_s": 24.0,
+    "assertions": [
+      {
+        "index": 1,
+        "target": "level",
+        "operator": "eq",
+        "expected": 40.0,
+        "actual": 40.0,
+        "passed": true,
+        "message": "Mesure figée à 40 %.",
+        "scheduled_s": 10.0,
+        "evaluated_s": 10.0,
+        "quality": "fault"
+      },
+      {
+        "index": 2,
+        "target": "volume",
+        "operator": "gt",
+        "expected": 450.0,
+        "actual": 536.696533203125,
+        "passed": true,
+        "message": "Le procédé continue d'évoluer malgré la mesure figée.",
+        "scheduled_s": 14.0,
+        "evaluated_s": 14.0,
+        "quality": "good"
+      },
+      {
+        "index": 4,
+        "target": "level",
+        "operator": "gt",
+        "expected": 50.0,
+        "actual": 57.829654693603516,
+        "passed": true,
+        "message": "Retour à la mesure du procédé.",
+        "scheduled_s": 16.0,
+        "evaluated_s": 16.0,
+        "quality": "good"
+      }
+    ],
+    "final_values": {
+      "pump_cmd": false,
+      "inlet_cmd": false,
+      "outlet_cmd": 35.0,
+      "level": 69.85101318359375,
+      "volume": 698.5101318359375,
+      "pump_running": false,
+      "pump_fault": false,
+      "inlet_position": 0.09118819981813431,
+      "inlet_open": false,
+      "inlet_closed": true,
+      "outlet_position": 35.0,
+      "high": false,
+      "low": false
+    },
+    "user_verdict": "not_evaluated",
+    "mode": "demo"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "python": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "289",
+    "time": "85.219",
+    "timestamp": "2026-11-02T14:47:12.511066+01:00",
+    "hostname": "MacBook-Air-de-Tai.local"
+  },
+  "frontend": {
+    "startTime": "2026-11-02T13:47:42.817Z",
+    "duration": 53123.798,
+    "expected": 31,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "demo": {
+    "scenario_count": 3,
+    "assertion_count": 12,
+    "all_passed": true,
+    "human_verdicts": [
+      "not_evaluated",
+      "not_evaluated",
+      "not_evaluated"
+    ]
+  },
+  "wheel": {
+    "filename": "local_fat_studio-0.1.1-py3-none-any.whl",
+    "sha256": "d0a099fd9bf46c711749850e6193a8dbf9430e55f6d5229b39c31bee3c3d488b",
+    "application_files_compared": 30,
+    "source_mismatches": [],
+    "reference_application_files_compared": 30,
+    "reference_runtime_content": "identical"
+  }
+}
