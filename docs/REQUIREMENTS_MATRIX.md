@@ -14,6 +14,8 @@ Référence : [URS originale, version 0.1](URS-original.md). Cette matrice disti
 
 Les commandes et résultats effectivement exécutés pour la livraison figurent dans [VERIFICATION.md](../evidence/VERIFICATION.md). Les fichiers `tests/` et `frontend/tests/` permettent de rejouer les contrôles. Les exécutions de cette livraison ont été réalisées sous Linux ; les scripts Windows ont été relus, mais l'installation Windows, sa variante hors ligne et les essais TIA/PLCSIM ne sont pas déclarés exécutés. La présence d'une CI configurée ne vaut pas résultat d'une exécution distante.
 
+**Extension demandée le 2 novembre 2026, version 0.2.0 :** choix V20/V21 enregistré dans le projet, profils d'ingénierie séparés et refus des versions croisées. Preuves : `test_models.py`, `test_engineering.py`, `test_tia_versions.py`, `test_tia_server_source.py` et `frontend/tests/tia-version.spec.ts`. V20 prépare un portage à compiler avec les DLL réelles ; son build et la qualification Siemens de chaque version restent à exécuter. Voir [TIA_VERSIONS.md](TIA_VERSIONS.md) et le [rapport de reprise](../evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md). Les lignes historiques ci-dessous restent attachées au périmètre initial.
+
 ## Exigences fonctionnelles
 
 | ID | Couverture livrée | Preuve / fichiers | Statut et limite |

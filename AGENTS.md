@@ -12,6 +12,8 @@ FAT Studio est un banc FAT local : FastAPI/Python, interface React/TypeScript/Vi
 
 Réutiliser les composants présents. Le serveur d'ingénierie reste Czarnak `TiaMcpServer` **4.3.0** épinglé ; les références et licences sont dans `integrations/upstream.lock.json` et `THIRD_PARTY_NOTICES.md`. Lire le contrat de la version épinglée avant de changer son intégration.
 
+Depuis 0.2.0, le profil V21 utilise le paquet amont et le profil V20 prépare un portage de la même source, à compiler sur Windows contre les vraies DLL V20. Voir `docs/TIA_VERSIONS.md`. Exiger le manifeste de profil pour les deux versions, préserver le chemin Openness aux lancements et ne jamais prendre des références factices ou un build V21 pour une preuve V20. La compilation et l'acceptation Siemens restent distinctes des tests locaux.
+
 ## Invariants à préserver
 
 - Validation des projets, types et mappings avant communication ; namespace 0 interdit après résolution ; identité/certificat avant authentification et écritures.

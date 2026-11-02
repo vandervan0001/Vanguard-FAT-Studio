@@ -9,8 +9,21 @@
       "commit": "10c5de2eb44c0362792cd141370b3f42f92f6ecd",
       "observed_main_commit": "f4e48f6775918fa25419327ab2f65591ad0042af",
       "license": "MIT",
-      "decision": "Optional separately installed engineering server; pinned 4.3.0 contracts inspected. Read-only AI client, interactive Python CLI for reviewed writes.",
-      "live_siemens_qualification": false
+      "decision": "Pinned engineering contracts. V21 installs the original NuGet package; V20 prepares a source retarget and must compile against the real installed V20 assemblies. Both require a verified installation profile; AI stays read-only and reviewed writes use the interactive CLI.",
+      "live_siemens_qualification": false,
+      "tia_profiles": {
+        "V21": {
+          "distribution": "NuGet 4.3.0",
+          "native_qualification": false
+        },
+        "V20": {
+          "distribution": "local source retarget of the pinned commit",
+          "preparation_module": "integrations.prepare_tia_server",
+          "requires_real_openness_build": true,
+          "native_build_verified": false,
+          "native_qualification": false
+        }
+      }
     },
     {
       "name": "tiaportal-mcp alternative",

@@ -165,3 +165,27 @@ def test_project_is_stable_through_json_roundtrip():
     restored = Project.model_validate_json(project.model_dump_json())
     assert restored == project
     assert validate_project(restored)["valid"]
+
+
+def test_legacy_project_defaults_to_tia_version_v21():
+    raw = demo_project().model_dump()
+    raw["plc"].pop("tia_version", None)
+    assert Project.model_validate(raw).plc.tia_version == "V21"
+
+
+@pytest.mark.parametrize("version", ["V20", "V21"])
+def test_tia_version_survives_project_json_roundtrip(version):
+    raw = demo_project().model_dump()
+    raw["plc"]["tia_version"] = version
+    project = Project.model_validate(raw)
+    restored = Project.model_validate_json(project.model_dump_json())
+    assert restored.plc.tia_version == version
+    assert validate_project(restored)["valid"]
+
+
+@pytest.mark.parametrize("version", ["V19", "V22", "20", 20, None, True])
+def test_unsupported_tia_version_is_rejected(version):
+    raw = demo_project().model_dump()
+    raw["plc"]["tia_version"] = version
+    with pytest.raises(ValidationError):
+        Project.model_validate(raw)

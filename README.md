@@ -4,7 +4,7 @@
 
 Le programme PLC reste le contrôleur du procédé. FAT Studio lit ses commandes, calcule les équipements et renvoie les capteurs simulés. Le mode **Démonstration** fournit un contrôleur distinct pour essayer l'application sans Siemens.
 
-Version livrée : **0.1.1**, le 2 novembre 2026, après [revue de code et essais adverses](docs/ADVERSARIAL_REVIEW.md). L'application, les scénarios, les échanges OPC UA génériques et les parcours navigateur sont exécutés en test. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : leur qualification sur le poste cible reste nécessaire.** Les limites et preuves sont détaillées dans [ACCEPTANCE](docs/ACCEPTANCE.md) et [VERIFICATION](evidence/VERIFICATION.md).
+Version actuelle : **0.2.0**, le 2 novembre 2026, avec [choix V20/V21](docs/TIA_VERSIONS.md) et profils d'ingénierie séparés. La [revue adverse 0.1.1](docs/ADVERSARIAL_REVIEW.md) et ses preuves restent conservées. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : la compilation du portage V20 et la qualification Siemens des deux versions restent à effectuer sur le poste cible.** Voir [ACCEPTANCE](docs/ACCEPTANCE.md) et les [preuves 0.2.0](evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
 
 ## Démarrer sous Windows
 
@@ -92,6 +92,8 @@ Les révisions, licences et choix sont consignés dans [UPSTREAM_REVIEW](docs/UP
 ## Claude Code / Codex et TIA Portal
 
 Voir [TIA_MCP](docs/TIA_MCP.md). Les clients IA utilisent uniquement le serveur existant en **`--access-mode read-only`**. Le serveur amont n'est pas lancé avec son mode brut par défaut.
+
+Dans **Connexion**, sélectionner la version du projet TIA. V21 utilise le paquet Czarnak 4.3.0 ; V20 dispose d'un candidat de portage à compiler sur Windows avec les DLL V20 réellement installées. L'installateur demande la version et refuse les mélanges de profils ou une compilation incompatible. Voir [l'installation et les limites V20/V21](docs/TIA_VERSIONS.md).
 
 Le CLI `fat-tia` orchestre la préparation et l'application d'une proposition : copie sandbox exacte, sources et empreintes, diff, activation d'écriture distincte, confirmation au terminal, archive avant import, contrôle de source périmée, import, compilation et audit. Le résultat de compilation ne vaut pas validation fonctionnelle.
 

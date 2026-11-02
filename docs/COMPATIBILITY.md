@@ -15,13 +15,13 @@
 | PLCSIM Advanced | OPC UA d'une CPU virtuelle configurée, accès TCP/IP avec liaison `<Local>` | Documentation Siemens examinée ; qualification réelle à effectuer. |
 | CPU et firmware du client | À relever sur le poste cible | Non fournis dans l'URS. Aucune compatibilité universelle revendiquée. |
 | API native PLCSIM Advanced | Non utilisée par cette version | Comparée ; pas d'adaptateur natif livré ni de DLL Siemens requise pour la démo. |
-| TIA MCP | Czarnak `TiaMcpServer` **4.3.0**, tag/commit fixés | Code/contrats inspectés ; transport SDK exercé contre un double. |
-| TIA Portal / Openness du volet MCP | **V21**, projet standalone `.ap21` | Exigence du serveur retenu ; essai réel à effectuer. |
+| TIA MCP | Czarnak `TiaMcpServer` **4.3.0**, tag/commit fixés | V21 : paquet amont ; V20 : candidat de portage source local. Contrats et profils testés ; aucune qualification Siemens déduite des doubles. |
+| TIA Portal / Openness du volet MCP | Choix **V20/V21**, projet standalone `.ap20` ou `.ap21` | V20 exige une compilation réussie contre les vraies DLL V20 ; build et essais Siemens à effectuer sur le poste. Voir [TIA_VERSIONS](TIA_VERSIONS.md). |
 | Hôte MCP upstream | .NET 10 SDK stable **10.0.400 ou supérieur dans les branches 10.0** | Prérequis upstream ; l'installateur lance `doctor`. |
 | Worker Openness upstream | .NET Framework **4.8** + groupe Windows `Siemens TIA Openness` | Prérequis upstream ; DLL chargées depuis Siemens. |
 | Client MCP Python | **mcp 2.3.0**, négociation legacy explicite | Transport stdio réel vérifié avec serveur SDK factice. |
 | Claude Code / Codex | Serveur stdio standard en lecture seule ; snippets générés | Configuration générée ; clients réels non lancés dans cet environnement. |
-| Projets Multiuser `.amc21` / `.als21` | Non acceptés par le CLI d'écriture | Restriction volontaire du parcours sauvegarde/import. |
+| Projets Multiuser `.amc20` / `.als20` / `.amc21` / `.als21` | Non acceptés par le CLI d'écriture | Restriction du parcours sauvegarde/import. |
 | Blocs SCL / DB globaux | Export `source` si accepté par TIA | Contrats upstream lus ; chaque type de bloc doit être qualifié. |
 | LAD / FBD et autres langages | Export/import XML dans les limites upstream | Diff XML possible ; pas de promesse d'édition graphique universelle. |
 | Blocs protégés, sécurité, motion, CPU physique | Aucune validation fonctionnelle spécialisée | Hors périmètre de validation du banc. |
@@ -53,10 +53,10 @@ Ne pas remplir les résultats de cette fiche avec des valeurs issues du serveur 
 Sur une copie de test sans liaison à la production :
 
 1. Exécuter `tia-mcp doctor` ; consigner les versions et droits remontés.
-2. Ouvrir et sauvegarder la copie `.ap21` dans TIA.
+2. Ouvrir et sauvegarder la copie `.ap20` ou `.ap21` dans la version TIA choisie, avec son profil MCP vérifié.
 3. Vérifier `status`, `tree` puis l'export d'un bloc SCL ou DB simple.
 4. Modifier `after.scl`, examiner le diff, refuser l'application et constater l'absence de changement.
-5. Refaire l'essai en acceptant : constater l'archive `.zap21`, l'import, les diagnostics et le résultat dans TIA.
+5. Refaire l'essai en acceptant : constater l'archive `.zap20` ou `.zap21` du profil, l'import, les diagnostics et le résultat dans TIA.
 6. Tester une source modifiée entre export et import : l'import doit être refusé.
 7. Tester une compilation défectueuse : les erreurs doivent être conservées ; le CLI ne doit pas sauvegarder automatiquement.
 8. Réouvrir l'archive dans un emplacement distinct et vérifier sa restaurabilité. La vérification de fichier non vide et son SHA-256 ne prouvent pas, à elles seules, une restauration Siemens réussie.

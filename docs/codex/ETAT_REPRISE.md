@@ -2,6 +2,22 @@
 
 Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain agent et à l'ingénieur qui reprend le projet. Les sections historiques ci-dessous décrivent la livraison ; inscrire les développements ultérieurs dans la section « État courant » et les notes de session.
 
+## État courant — 0.2.0, choix V20/V21 et dépôt privé
+
+La version actuelle est **0.2.0**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.
+
+V21 conserve le paquet Czarnak 4.3.0. V20 prépare un portage de la même source épinglée, à compiler sur Windows contre les trois DLL Openness V20 réellement installées. Les profils vérifient binaires, DLL, politique, proposition et archive ; ils conservent le dossier Openness aux lancements MCP et dans les fragments client. Le manifeste est obligatoire dans les deux cas. **Le build natif V20 et l'acceptation Siemens V20/V21 n'ont pas été exécutés sur ce Mac.** Une erreur native bloque l'installation, sans repli V21 ou références factices.
+
+Contrôles locaux finaux : **418 tests Python et 33 tests frontend réussis**, build TypeScript/Vite et Ruff réussis, wheel dont les 32 fichiers applicatifs correspondent aux sources, contrôle du paquet installé 0.2.0 avec exports et persistance réussi. Les gardes, l'installation et la documentation ont fait l'objet de relectures indépendantes. Voir les [preuves 0.2.0](../../evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
+
+Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FAT-Studio](https://github.com/vandervan0001/FAT-Studio). `origin` désigne ce dépôt ; `handoff` conserve le bundle local d'origine. La branche de travail est `codex/tia-v20-v21`, destinée à être avancée sur `main` et poussée avec les tags existants. Vérifier les SHA distants et les résultats de CI avant de revendiquer une exécution distante réussie ; leur présence n'est pas une qualification Siemens.
+
+**Serveur local arrêté à la demande de Tai**, par SIGINT envoyé au processus FAT identifié. Données de démonstration conservées dans `../work/2026-11-02-macos-reprise/demo-data`. Aucun service FAT persistant n'est requis à la reprise. La section macOS ci-dessous décrit le démarrage précédent et reste historique.
+
+Prochaine action : installer le profil de la version effectivement disponible sur le PC Windows, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
+
+Dernière note : [sélection V20/V21 et publication privée](sessions/2026-11-02-v20-v21-private-git.md).
+
 ## État courant après reprise — 2 novembre 2026, macOS ARM64
 
 Le kit extrait dans `../fat-studio` est resté intact ; ses empreintes et ses 29 wheels Windows ont été vérifiées. Le travail se poursuit dans le clone source `fat-studio-source`, branche `codex/macos-validation`, créé depuis le bundle au commit `486d8180508a014fe4791d19bc13b59ecdc61146`. Le runtime reste celui de la version **0.1.1** : les assets reconstruits et les 30 fichiers applicatifs de la wheel sont identiques à la référence.
@@ -222,7 +238,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — validation macOS](sessions/2026-11-02-macos-validation.md). La [passation initiale](sessions/2026-11-02-passation.md) reste conservée. Les contrôles locaux accessibles ont été exécutés ; la prochaine qualification requiert le poste Windows, puis Siemens, selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02 — V20/V21 et Git privé](sessions/2026-11-02-v20-v21-private-git.md). La [validation macOS initiale](sessions/2026-11-02-macos-validation.md) et la [passation initiale](sessions/2026-11-02-passation.md) restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

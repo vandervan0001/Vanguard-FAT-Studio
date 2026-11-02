@@ -2,6 +2,8 @@
 
 Date de revue : **2 novembre 2026**. Les décisions ci-dessous reposent sur la lecture des dépôts, des licences et des contrats de code aux révisions indiquées. Les affirmations de compatibilité des auteurs ne constituent pas une qualification sur le poste de l'utilisateur.
 
+**Complément 0.2.0 :** [TIA_VERSIONS.md](TIA_VERSIONS.md) décrit le choix V20/V21. V21 conserve le paquet Czarnak 4.3.0. V20 prépare une adaptation bornée de sa source épinglée et exige une compilation locale avec les trois DLL Siemens V20 réelles ; aucune compatibilité native V20 n'est revendiquée avant cette compilation et l'acceptation sur Windows. Le portage conserve les contrats d'orchestration, les gardes d'identité d'assemblies et les confirmations. Le manifeste d'installation des deux profils lie leurs binaires et le dossier Openness effectivement transmis au lancement. La revue initiale ci-dessous décrit le composant amont V21 et le parcours 0.1.1.
+
 ## Décision d'architecture
 
 Le runtime FAT échange les valeurs de procédé par **OPC UA**, avec la bibliothèque existante **asyncua**. L'assistance d'ingénierie utilise séparément **Czarnak/tia-portal-mcp 4.3.0**, appuyé sur TIA Openness. Aucun serveur TIA MCP n'a été réécrit. Une couche Python courte orchestre le serveur existant pour ajouter les exigences spécifiques de l'URS : copie de développement, revue de diff, archive vérifiée et approbations interactives.

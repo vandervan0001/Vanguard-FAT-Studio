@@ -1,0 +1,52 @@
+{
+  "observed_at_utc": "2026-11-02T14:41:58.828554+00:00",
+  "version": "0.2.0",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "python": "3.12.12",
+  "git_base_commit": "1054d96d28bc2edb47f5ad8f2cbb742f6b2828da",
+  "worktree_changed_paths": [
+    ".github/workflows/ci.yml",
+    "AGENTS.md",
+    "README-CODEX.md",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "docs/COMPATIBILITY.md",
+    "docs/INSTALLATION.md",
+    "docs/REQUIREMENTS_MATRIX.md",
+    "docs/TIA_MCP.md",
+    "docs/UPSTREAM_REVIEW.md",
+    "docs/USER_GUIDE.md",
+    "fat_studio/__init__.py",
+    "fat_studio/models.py",
+    "fat_studio/web/assets/index-Cb2RHDue.js",
+    "fat_studio/web/index.html",
+    "frontend/package-lock.json",
+    "frontend/package.json",
+    "frontend/src/Panels.tsx",
+    "frontend/src/types.ts",
+    "integrations/tia_engineering.py",
+    "integrations/upstream.lock.json",
+    "pyproject.toml",
+    "scripts/build-web.py",
+    "scripts/install-tia-mcp.ps1",
+    "tests/test_distribution.py",
+    "tests/test_engineering.py",
+    "tests/test_models.py"
+  ],
+  "wheel": {
+    "name": "local_fat_studio-0.2.0-py3-none-any.whl",
+    "sha256": "9cebe66271e3175169721e72394eba61c1eb543180e9a09d5807781cc1e5809e",
+    "application_file_count": 32,
+    "application_files_match_source": true,
+    "web_files": [
+      "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt",
+      "fat_studio/web/assets/index-BnIYMUrX.css",
+      "fat_studio/web/assets/index-BuhlQBGi.js",
+      "fat_studio/web/favicon.svg",
+      "fat_studio/web/index.html"
+    ],
+    "stale_web_entries": []
+  },
+  "native_siemens_build": "not_executed",
+  "native_siemens_qualification": "not_executed"
+}

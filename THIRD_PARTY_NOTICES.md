@@ -38,7 +38,7 @@ Runtime versions and transitive dependencies are locked in `requirements.lock`. 
 
 ## Optional engineering components
 
-- **Czarnak/TiaMcpServer 4.3.0**, MIT, installed separately from NuGet. Exact reviewed commit and contracts: `integrations/upstream.lock.json`. Source: https://github.com/Czarnak/tia-portal-mcp.
+- **Czarnak/TiaMcpServer 4.3.0**, MIT. V21 installs the pinned NuGet package. The optional V20 profile prepares a modified checkout of the same pinned source and builds it locally against the installed Siemens V20 assemblies; its transformation report records every changed file. The upstream licence and provenance are retained. This repository does not redistribute Siemens assemblies. Exact revision and contracts: `integrations/upstream.lock.json`. Source: https://github.com/Czarnak/tia-portal-mcp.
 - **Official Python MCP SDK 2.3.0**, MIT, optional dependency in `requirements-engineering.lock`. Source: https://github.com/modelcontextprotocol/python-sdk.
 - **TIA Portal, TIA Portal Openness and S7-PLCSIM Advanced** are Siemens products. No Siemens installers, DLLs or licence files are redistributed here.
 

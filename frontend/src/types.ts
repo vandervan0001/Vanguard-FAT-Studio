@@ -17,7 +17,7 @@ export type ScenarioStep = {
 export type Scenario = { id: string; name: string; description: string; duration_s: number; steps: ScenarioStep[] };
 export type ScenarioDraft = { scenarioId: string; text: string };
 export type PLCConfig = {
-  mode: 'demo' | 'opcua'; endpoint: string; expected_application_uri: string; namespace_uri: string;
+  mode: 'demo' | 'opcua'; tia_version: 'V20' | 'V21'; endpoint: string; expected_application_uri: string; namespace_uri: string;
   security_policy: 'None' | 'Basic256Sha256'; server_certificate_sha256: string; client_certificate: string;
   client_private_key: string; username_env: string; password_env: string; approved_virtual_target: string; timeout_s: number;
 };

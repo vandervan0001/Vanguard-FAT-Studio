@@ -94,4 +94,6 @@ En cas de perte de communication ou de réponse partielle, l'essai passe en erre
 
 ## Assistance TIA optionnelle
 
+Dans **Connexion → Version du projet TIA**, choisir **V20** ou **V21** avant l'essai. Le choix est conservé avec le projet FAT ; il ne convertit pas la copie Siemens. Installer ensuite le profil correspondant selon [TIA_VERSIONS.md](TIA_VERSIONS.md). Le guide de l'interface affiche le suffixe de projet et la commande d'installation associés. La compilation et la qualification natives du profil V20 restent à réaliser sur le poste Windows.
+
 Le runtime FAT fonctionne sans IA. Pour consulter un projet avec Claude Code ou Codex, utiliser le serveur existant configuré en lecture seule et le parcours documenté dans [TIA_MCP.md](TIA_MCP.md). Les imports, sauvegardes et compilations suivent un terminal humain distinct, avec revue du changement et copie de développement. Selon le client IA choisi, le code transmis au modèle peut quitter le poste : appliquer la politique de confidentialité du client.

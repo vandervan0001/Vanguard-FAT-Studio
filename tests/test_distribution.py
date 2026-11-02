@@ -11,6 +11,7 @@ import pytest
 
 
 CHECKER = Path(__file__).resolve().parents[1] / "scripts" / "check-kit.py"
+BUILD_WEB = CHECKER.with_name("build-web.py")
 validate_kit = runpy.run_path(str(CHECKER))["validate_kit"]
 
 
@@ -99,3 +100,74 @@ def test_checker_cli_reports_incomplete_kit_as_nonzero(tmp_path):
                             capture_output=True, text=True, encoding="utf-8", timeout=10)
     assert result.returncode == 2
     assert "Kit incomplet" in result.stderr
+
+
+def make_web_build(root):
+    scripts = root / "scripts"
+    scripts.mkdir(parents=True)
+    script = scripts / "build-web.py"
+    script.write_bytes(BUILD_WEB.read_bytes())
+    frontend = root / "frontend" / "dist"
+    (frontend / "assets").mkdir(parents=True)
+    (frontend / "index.html").write_text('<script src="/assets/index-new.js"></script>\n')
+    (frontend / "assets" / "index-new.js").write_text('window.FAT_BUILD = "new";\n')
+    bundled = root / "fat_studio" / "web"
+    bundled.mkdir(parents=True)
+    (bundled / "old-bundle.txt").write_text("previous bundled interface\n")
+    return script, bundled
+
+
+def run_web_build(script):
+    return subprocess.run([sys.executable, str(script)], capture_output=True, text=True,
+                          encoding="utf-8", timeout=10)
+
+
+def test_web_bundle_removes_only_its_generated_setuptools_cache(tmp_path):
+    root = tmp_path / "FAT dossier épreuve"
+    script, bundled = make_web_build(root)
+    cache = root / "build" / "lib" / "fat_studio" / "web"
+    (cache / "assets").mkdir(parents=True)
+    stale = cache / "assets" / "index-old.js"
+    stale.write_text('window.FAT_BUILD = "old";\n')
+    sibling = cache.parent / "engine.py"
+    sibling.write_text("# unrelated generated Python module\n")
+    other_package = root / "build" / "lib" / "other_package" / "keep.py"
+    other_package.parent.mkdir()
+    other_package.write_text("# another package build output\n")
+    assert stale.is_file()
+
+    result = run_web_build(script)
+
+    assert result.returncode == 0, result.stderr
+    assert not cache.exists()
+    assert (bundled / "assets" / "index-new.js").read_text() == 'window.FAT_BUILD = "new";\n'
+    assert not (bundled / "old-bundle.txt").exists()
+    assert sibling.read_text() == "# unrelated generated Python module\n"
+    assert other_package.read_text() == "# another package build output\n"
+
+
+@pytest.mark.parametrize("link_path", ["build", "build/lib", "build/lib/fat_studio", "build/lib/fat_studio/web"])
+def test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation(tmp_path, link_path):
+    root = tmp_path / "fat-source"
+    script, bundled = make_web_build(root)
+    outside = tmp_path / "shared-outside-output"
+    outside.mkdir()
+    protected = outside / "keep.txt"
+    protected.write_text("must remain untouched\n")
+    link = root / link_path
+    link.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        link.symlink_to(outside, target_is_directory=True)
+    except OSError as exc:
+        if sys.platform == "win32":
+            pytest.skip(f"Windows account cannot create the symlink required for this check: {exc}")
+        raise
+
+    result = run_web_build(script)
+
+    assert result.returncode != 0
+    assert "Refus" in result.stderr
+    assert link.is_symlink()
+    assert protected.read_text() == "must remain untouched\n"
+    assert (bundled / "old-bundle.txt").read_text() == "previous bundled interface\n"
+    assert not (bundled / "assets" / "index-new.js").exists()

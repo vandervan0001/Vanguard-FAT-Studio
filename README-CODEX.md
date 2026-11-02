@@ -24,7 +24,7 @@ Ce dossier contient le projet complet et les éléments nécessaires pour le rep
 | Exécution Windows hors ligne | `Start-FAT.cmd`, `wheelhouse/`, `offline-manifest.json` |
 | Paquet Python compilé | `dist/local_fat_studio-0.1.1-py3-none-any.whl` |
 
-L'application reste **0.1.1**. Le tag `v0.1.1` désigne le code vérifié ; `v0.1.1-codex-handoff` ajoute cette passation documentaire. Aucun code d'exécution n'a été changé pour ajouter les prompts.
+L'application actuelle est **0.2.0** : [choix V20/V21 et profils d'ingénierie](docs/TIA_VERSIONS.md). Les tags `v0.1.1` et `v0.1.1-codex-handoff` conservent la référence et la passation initiales ; l'état courant figure dans [ETAT_REPRISE.md](docs/codex/ETAT_REPRISE.md). Les résultats de référence ci-dessous décrivent 0.1.1 ; les nouveaux résultats sont enregistrés séparément.
 
 ## Essayer directement la démonstration
 

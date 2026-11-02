@@ -35,6 +35,7 @@ class SimulationConfig(StrictModel):
 
 class PLCConfig(StrictModel):
     mode: Literal["demo", "opcua"] = "demo"
+    tia_version: Literal["V20", "V21"] = "V21"
     endpoint: str = Field(default="opc.tcp://127.0.0.1:4840", max_length=512)
     expected_application_uri: str = Field(default="", max_length=512)
     namespace_uri: str = Field(default="", max_length=512)

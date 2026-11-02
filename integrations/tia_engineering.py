@@ -24,8 +24,8 @@ from typing import Any, Protocol
 import unicodedata
 import uuid
 
+from integrations.tia_versions import SERVER_VERSION, profile, server_environment, validate_server_profile
 
-SERVER_VERSION = "4.3.0"
 READ_TOOLS = frozenset({"bind_project", "get_project_status", "browse_project_tree", "plc_read"})
 WRITE_TOOLS = frozenset({"archive_project", "plc_write", "compile_check", "save_project"})
 MAX_DOCUMENT_BYTES = 500_000
@@ -80,6 +80,7 @@ class Policy:
     allow_write: bool = False
     schema_version: int = 1
     expected_server_version: str = SERVER_VERSION
+    tia_version: str = "V21"
 
     @classmethod
     def load(cls, path: Path) -> "Policy":
@@ -93,7 +94,11 @@ class Policy:
 
     def validate(self) -> None:
         if self.schema_version != 1 or self.expected_server_version != SERVER_VERSION:
-            raise EngineeringError("Only policy v1 and the pinned TiaMcpServer 4.3.0 are qualified by this code.")
+            raise EngineeringError("Only policy v1 and the pinned TiaMcpServer 4.3.0 contract are supported.")
+        try:
+            selected = profile(self.tia_version)
+        except ValueError as exc:
+            raise EngineeringError(str(exc)) from exc
         if type(self.allow_write) is not bool:
             raise EngineeringError("allow_write must be a JSON boolean.")
         if any(not isinstance(value, str) or not value.strip() for value in (
@@ -101,8 +106,8 @@ class Policy:
             raise EngineeringError("All policy paths must be nonempty strings.")
         target = canonical(self.project_path, must_exist=True)
         root = canonical(self.sandbox_root, must_exist=True)
-        if target.suffix.lower() != ".ap21" or not target.is_file():
-            raise EngineeringError("An existing standalone .ap21 work copy is required (no multiuser session).")
+        if target.suffix.lower() != selected.project_suffix or not target.is_file():
+            raise EngineeringError(f"An existing standalone {selected.project_suffix} work copy is required for {selected.version}.")
         if not root.is_dir() or len(root.parts) < 3 or not target.is_relative_to(root):
             raise EngineeringError("Project must resolve inside the explicit, dedicated sandbox directory.")
         backup = canonical(self.backup_root)
@@ -116,6 +121,10 @@ class Policy:
         executable = canonical(self.server_executable, must_exist=True)
         if not executable.is_file():
             raise EngineeringError("MCP executable must be an existing local file.")
+        try:
+            validate_server_profile(executable, self.tia_version)
+        except ValueError as exc:
+            raise EngineeringError(str(exc)) from exc
         if audit.exists() and (audit.samefile(target) or audit.samefile(executable)):
             raise EngineeringError("Audit must not alias the TIA project or the MCP executable.")
 
@@ -129,18 +138,32 @@ class Policy:
         acknowledgment = json.loads(read_text(marker))
         if acknowledgment.get("project_path") != str(canonical(self.project_path)):
             raise EngineeringError("Work-copy acknowledgment does not match the exact project.")
+        if (acknowledgment.get("tia_version", "V21") != self.tia_version
+                or acknowledgment.get("profile_id", profile("V21").profile_id) != profile(self.tia_version).profile_id):
+            raise EngineeringError("Work-copy acknowledgment does not match the selected TIA version and server profile.")
 
 
 class Audit:
     """Durable append-only-by-application log; not a tamper-proof compliance ledger."""
 
-    def __init__(self, path: Path, project: str):
+    def __init__(self, path: Path, project: str, tia_version: str = "V21"):
         self.path = path
         self.project = project
+        self.tia_version = tia_version
+        try:
+            self.profile_id = profile(tia_version).profile_id
+        except ValueError as exc:
+            raise EngineeringError(str(exc)) from exc
+
+    def require_policy(self, policy: Policy) -> None:
+        if (canonical(self.project) != canonical(policy.project_path) or self.tia_version != policy.tia_version
+                or self.profile_id != profile(policy.tia_version).profile_id):
+            raise EngineeringError("Audit context does not match the selected project and TIA server profile.")
 
     def record(self, event: str, **detail: Any) -> None:
         row = {
             "timestamp": utc_now(), "event": event, "project_path": self.project,
+            "tia_version": self.tia_version, "profile_id": self.profile_id,
             "user": getpass.getuser(), "pid": os.getpid(), **detail,
         }
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -214,6 +237,7 @@ async def connect(policy: Policy, *, writable: bool, console: Console, audit: Au
     except ImportError as exc:
         raise EngineeringError("Install the optional extra: python -m pip install '.[engineering]'") from exc
     policy.validate()
+    audit.require_policy(policy)
     if writable:
         policy.require_write()
         console.require_interactive()
@@ -233,7 +257,11 @@ async def connect(policy: Policy, *, writable: bool, console: Console, audit: Au
 
     args = ["--access-mode", "read-write" if writable else "read-only", "--project", policy.project_path]
     # No shell, no arbitrary CLI tail, no full access mode, no network listener.
-    params = StdioServerParameters(command=policy.server_executable, args=args)
+    try:
+        environment = server_environment(Path(policy.server_executable), policy.tia_version)
+    except ValueError as exc:
+        raise EngineeringError(str(exc)) from exc
+    params = StdioServerParameters(command=policy.server_executable, args=args, env=environment)
     async with Client(params, mode="legacy", read_timeout_seconds=180,
                       elicitation_callback=elicit if writable else None) as client:
         info = client.server_info
@@ -289,6 +317,8 @@ class Proposal:
     created_at: str
     schema_version: int = 1
     server_version: str = SERVER_VERSION
+    tia_version: str = "V21"
+    profile_id: str = "czarnak-4.3.0-v21"
 
     @property
     def extension(self) -> str:
@@ -297,10 +327,23 @@ class Proposal:
     def validate(self) -> None:
         if self.schema_version != 1 or self.server_version != SERVER_VERSION or self.format not in {"source", "xml"}:
             raise EngineeringError("Unsupported proposal schema, format, or server version.")
+        try:
+            selected = profile(self.tia_version)
+        except ValueError as exc:
+            raise EngineeringError(str(exc)) from exc
+        if self.profile_id != selected.profile_id or canonical(self.project_path).suffix.lower() != selected.project_suffix:
+            raise EngineeringError("Proposal does not match its TIA version and server profile.")
         if not self.block_path or len(self.block_path) > 300 or any(ord(c) < 32 for c in self.block_path):
             raise EngineeringError("Invalid PLC block path.")
         if not re.fullmatch(self.format + r":sha256:[0-9a-fA-F]{64}", self.expected_content_hash):
             raise EngineeringError("Invalid expected upstream content hash.")
+
+
+def require_proposal_policy(proposal: Proposal, policy: Policy) -> None:
+    if canonical(proposal.project_path) != canonical(policy.project_path):
+        raise EngineeringError("Proposal belongs to another project; import refused.")
+    if proposal.tia_version != policy.tia_version or proposal.profile_id != profile(policy.tia_version).profile_id:
+        raise EngineeringError("Proposal belongs to another TIA version or server profile; import refused.")
 
 
 def load_proposal(directory: Path) -> tuple[Proposal, str, str, str]:
@@ -330,6 +373,7 @@ def load_proposal(directory: Path) -> tuple[Proposal, str, str, str]:
 
 class Engineering:
     def __init__(self, policy: Policy, transport: Transport, audit: Audit, console: Console):
+        audit.require_policy(policy)
         self.policy, self.transport, self.audit, self.console = policy, transport, audit, console
 
     async def call(self, tool: str, arguments: dict[str, Any]) -> dict[str, Any]:
@@ -436,7 +480,8 @@ class Engineering:
         await self.verify_target()
         value = await self.read_block(path, format)
         proposal = Proposal(str(canonical(self.policy.project_path)), path, format,
-                            value["contentHash"], digest(value["content"]), utc_now())
+                            value["contentHash"], digest(value["content"]), utc_now(),
+                            tia_version=self.policy.tia_version, profile_id=profile(self.policy.tia_version).profile_id)
         proposal.validate()
         directory.mkdir(parents=True, exist_ok=False)
         for name in ("before", "after"):
@@ -450,7 +495,7 @@ class Engineering:
         root = canonical(self.policy.backup_root)
         root.mkdir(parents=True, exist_ok=True)
         name = "fat-before-" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ-") + uuid.uuid4().hex[:10]
-        target = root / (name + ".zap21")
+        target = root / (name + profile(self.policy.tia_version).archive_suffix)
         arguments = {"archiveDirectory": str(root), "archiveName": name, "mode": "Compressed", "saveBeforeArchive": False}
         successful(await self.call("archive_project", {**arguments, "dryRun": True}), "archive_project", phase="preview")
         result = successful(await self.call("archive_project", {**arguments, "dryRun": False}), "archive_project", phase="applied")
@@ -468,8 +513,7 @@ class Engineering:
         self.policy.require_write()
         self.console.require_interactive()
         proposal, before, after, difference = load_proposal(directory)
-        if canonical(proposal.project_path) != canonical(self.policy.project_path):
-            raise EngineeringError("Proposal belongs to another project; import refused.")
+        require_proposal_policy(proposal, self.policy)
         if before == after:
             raise EngineeringError("Proposal has no changes.")
         await self.verify_target(saved=True)
@@ -502,6 +546,7 @@ class Engineering:
         if latest["contentHash"] != proposal.expected_content_hash or digest(latest["content"]) != proposal.before_sha256:
             raise EngineeringError("Source changed after approval/archive; import refused.")
         receipt: dict[str, Any] = {"backup": str(backup), "project": self.policy.project_path,
+                                  "tia_version": self.policy.tia_version, "profile_id": profile(self.policy.tia_version).profile_id,
                                   "block": proposal.block_path, "approved_sha256": digest(after), "timestamp": utc_now()}
         try:
             imported = await self.call("plc_write", {"operations": [operation], "dryRun": False})
@@ -579,15 +624,26 @@ def configure(args: argparse.Namespace) -> None:
     if location.exists():
         raise EngineeringError("Configuration already exists; refusing to replace it.")
     policy = Policy(str(canonical(args.project, must_exist=True)), str(canonical(args.sandbox_root, must_exist=True)),
-                    str(canonical(args.server, must_exist=True)), str(location.parent / "backups"), str(location.parent / "audit.jsonl"))
+                    str(canonical(args.server, must_exist=True)), str(location.parent / "backups"), str(location.parent / "audit.jsonl"),
+                    tia_version=args.tia_version)
     policy.validate()
+    try:
+        environment = server_environment(Path(policy.server_executable), policy.tia_version)
+    except ValueError as exc:
+        raise EngineeringError(str(exc)) from exc
     write_json(location, asdict(policy))
     server = {"command": policy.server_executable,
-              "args": ["--access-mode", "read-only", "--project", policy.project_path]}
-    write_json(location.parent / "claude.mcp.json", {"mcpServers": {"tia-fat-readonly": server}})
-    toml = '[mcp_servers.tia-fat-readonly]\ncommand = ' + json.dumps(server["command"]) + '\nargs = ' + json.dumps(server["args"]) + '\n'
-    (location.parent / "codex.mcp.toml").write_text(toml, encoding="utf-8", newline="\n")
-    print(f"Configured read-only work copy. Policy: {location}")
+              "args": ["--access-mode", "read-only", "--project", policy.project_path], "env": environment}
+    name = "tia-fat-" + policy.tia_version.lower() + "-readonly"
+    claude_path = location.parent / f"claude.{policy.tia_version.lower()}.mcp.json"
+    codex_path = location.parent / f"codex.{policy.tia_version.lower()}.mcp.toml"
+    write_json(claude_path, {"mcpServers": {name: server}})
+    toml = f'[mcp_servers.{name}]\ncommand = ' + json.dumps(server["command"]) + '\nargs = ' + json.dumps(server["args"]) + '\n'
+    toml += f'\n[mcp_servers.{name}.env]\n' + ''.join(key + ' = ' + json.dumps(value) + '\n' for key, value in environment.items())
+    codex_path.write_text(toml, encoding="utf-8", newline="\n")
+    print(f"Configured {policy.tia_version} read-only work copy. Policy: {location}")
+    print(f"Use a separate --config directory for each TIA version. MCP server name: {name}.")
+    print(f"Claude fragment: {claude_path}\nCodex fragment: {codex_path}")
     print("Sources sent by your AI client may leave this PC when its model is hosted. Follow your organization's policy.")
 
 
@@ -596,7 +652,7 @@ async def run_command(args: argparse.Namespace) -> int:
         configure(args)
         return 0
     policy = Policy.load(Path(args.config))
-    audit = Audit(Path(policy.audit_path), policy.project_path)
+    audit = Audit(Path(policy.audit_path), policy.project_path, policy.tia_version)
     console = Console()
     if args.command in {"enable-write", "disable-write"}:
         enable = args.command == "enable-write"
@@ -610,16 +666,21 @@ async def run_command(args: argparse.Namespace) -> int:
             return 2
         if enable:
             write_json(canonical(policy.sandbox_root) / ".fat-workcopy.json",
-                       {"project_path": str(canonical(policy.project_path)), "acknowledged_at": utc_now(), "user": getpass.getuser()})
+                       {"project_path": str(canonical(policy.project_path)), "tia_version": policy.tia_version,
+                        "profile_id": profile(policy.tia_version).profile_id, "acknowledged_at": utc_now(), "user": getpass.getuser()})
         write_json(Path(args.config), {**asdict(policy), "allow_write": enable})
         print("Interactive engineering writes " + ("enabled." if enable else "disabled."))
         return 0
     if args.command == "diff":
         proposal, before, after, diff = load_proposal(Path(args.proposal))
+        require_proposal_policy(proposal, policy)
         (Path(args.proposal) / "change.diff").write_text(diff, encoding="utf-8", newline="\n")
         console.show(diff or "No changes.")
         audit.record("diff_reviewed", proposal=str(args.proposal), before_sha256=digest(before), after_sha256=digest(after))
         return 0
+    if args.command == "apply":
+        proposal, _, _, _ = load_proposal(Path(args.proposal))
+        require_proposal_policy(proposal, policy)
     writable = args.command in {"apply", "compile"}
     async with connect(policy, writable=writable, console=console, audit=audit) as transport:
         engineer = Engineering(policy, transport, audit, console)
@@ -655,6 +716,7 @@ def main() -> int:
     setup.add_argument("--project", required=True)
     setup.add_argument("--sandbox-root", required=True)
     setup.add_argument("--server", required=True)
+    setup.add_argument("--tia-version", choices=["V20", "V21"], default="V21")
     for name in ("status", "enable-write", "disable-write", "compile"):
         commands.add_parser(name)
     tree = commands.add_parser("tree")

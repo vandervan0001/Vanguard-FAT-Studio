@@ -2,6 +2,7 @@ name: FAT Studio verification
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -18,6 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
+      - name: Read pinned engineering source for transformation tests
+        uses: actions/checkout@v6
+        with:
+          repository: Czarnak/tia-portal-mcp
+          ref: 10c5de2eb44c0362792cd141370b3f42f92f6ecd
+          path: .tools/tia-upstream
           persist-credentials: false
       - uses: actions/setup-python@v6
         with:
@@ -41,6 +49,8 @@ jobs:
       - name: Static Python checks
         run: python -m ruff check fat_studio integrations tests scripts
       - name: Deterministic models, API, local OPC UA and engineering guards
+        env:
+          FAT_TIA_UPSTREAM_SOURCE: ${{ github.workspace }}/.tools/tia-upstream
         run: python -m pytest --junitxml=evidence/pytest-${{ matrix.os }}.xml
       - name: Installation diagnostic
         run: python -m fat_studio doctor --json
@@ -52,6 +62,16 @@ jobs:
         run: npm test
       - name: Build distributable wheel
         run: python -m build --wheel --no-isolation
+      - name: Parse Windows installer scripts
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          foreach ($fatScript in Get-ChildItem scripts/*.ps1) {
+            $fatTokens = $null
+            $fatErrors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile($fatScript.FullName, [ref]$fatTokens, [ref]$fatErrors) | Out-Null
+            if ($fatErrors.Count -gt 0) { throw ($fatErrors | Out-String) }
+          }
       - name: Windows offline first installation in a new directory
         if: runner.os == 'Windows'
         shell: pwsh

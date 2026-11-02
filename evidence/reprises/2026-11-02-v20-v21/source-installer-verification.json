@@ -1,0 +1,24 @@
+{
+  "checked_at_utc": "2026-11-02T14:33:24.537273+00:00",
+  "source_helper_tests": {
+    "command": "FAT_TIA_UPSTREAM_SOURCE=/Volumes/Tai_SSD/dev/Projects/TIA_Sim/work/v20-v21-research/Czarnak-v4.3.0 .venv/bin/python -m pytest tests/test_tia_server_source.py -q",
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 1.09
+  },
+  "python_lint": "passed",
+  "powershell_parser": {
+    "version": "7.6.9",
+    "parse_errors": 0,
+    "tokens": 1662,
+    "parameters": 7,
+    "scope": "Actual PowerShell parser on macOS, not a native Windows installation or Siemens build"
+  },
+  "non_windows_guard": {
+    "exit_code": 1,
+    "observed_error": "TIA Portal Openness requires Windows. The FAT demo does not require this optional installation."
+  },
+  "native_windows_build": "not_executed: requires Windows, .NET SDK and the three installed Siemens V20 Openness DLLs; installer treats restore/build/version/doctor/profile failures as fatal.",
+  "processes_left_active": false
+}

@@ -4,14 +4,16 @@ Ce volet est **optionnel**. Le banc FAT, son P&ID et son adaptateur OPC UA fonct
 
 Le serveur réutilisé est [Czarnak/tia-portal-mcp v4.3.0](https://github.com/Czarnak/tia-portal-mcp/tree/v4.3.0). Cette version est épinglée pour conserver les contrats inspectés. Le détail de la comparaison se trouve dans [UPSTREAM_REVIEW.md](UPSTREAM_REVIEW.md).
 
+Depuis 0.2.0, choisir V20 ou V21 selon [TIA_VERSIONS.md](TIA_VERSIONS.md). Les commandes ci-dessous illustrent **V21**. V20 utilise une copie `.ap20`, un candidat de portage à compiler contre les vraies DLL V20, puis les mêmes contrôles d'orchestration. Les binaires, manifestes et politiques sont distincts ; aucune compilation Siemens V20 ou V21 n'a été réalisée sur ce Mac.
+
 ## Prérequis
 
-- Windows et **TIA Portal V21**, avec Openness installé.
+- Windows et **TIA Portal V20 ou V21** correspondant au profil choisi, avec Openness installé.
 - Compte Windows membre de `Siemens TIA Openness` ; ouvrir une nouvelle session après une éventuelle modification de groupe.
 - .NET Framework **4.8** pour le worker.
 - SDK .NET **10.0.400 ou ultérieur dans la branche 10.0** pour installer l'outil.
 - Python et environnement du projet FAT déjà installés.
-- Une **copie de développement standalone `.ap21`**, ouverte et sauvegardée dans TIA. Utiliser « Enregistrer sous » ou un archivage/restauration TIA pour créer cette copie. Les sessions multiutilisateurs ne sont pas prises en charge par notre parcours d'écriture.
+- Une **copie de développement standalone `.ap20` ou `.ap21`**, ouverte et sauvegardée dans sa version de TIA. Utiliser « Enregistrer sous » ou un archivage/restauration TIA pour créer cette copie. Les sessions multiutilisateurs ne sont pas prises en charge par notre parcours d'écriture. Le build V20 demande aussi Git et les références de compilation .NET Framework 4.8.
 
 Source des prérequis : [guide upstream épinglé](https://github.com/Czarnak/tia-portal-mcp/blob/v4.3.0/docs/guides/installation.md). La matrice de compatibilité du banc indique ce qui a été testé et ce qui reste à qualifier sur Siemens.
 
@@ -20,16 +22,16 @@ Source des prérequis : [guide upstream épinglé](https://github.com/Czarnak/ti
 Depuis la racine du dépôt, dans PowerShell :
 
 ```powershell
-.\scripts\install-tia-mcp.ps1
 .\scripts\setup.ps1 -Engineering
+.\scripts\install-tia-mcp.ps1 -TiaVersion V21
 ```
 
-Le premier script installe `TiaMcpServer 4.3.0` dans `.tools\tia-mcp`, vérifie la version et lance son `doctor`. Il ne télécharge ni TIA Portal, ni licence, ni DLL Siemens. Un autre outil déjà présent n'est pas remplacé silencieusement. `setup.ps1 -Engineering` installe les versions Python de `requirements-engineering.lock` ; l'exécuter depuis un clone source connecté ou un kit préparé avec `prepare-offline.ps1 -Engineering`. Le kit runtime livré ne contient pas cette option et la refuse avant installation.
+`setup.ps1 -Engineering` installe les versions Python de `requirements-engineering.lock` ; l'exécuter depuis un clone source connecté ou un kit préparé avec `prepare-offline.ps1 -Engineering`. Le kit runtime d'origine ne contient pas cette option et la refuse avant installation. L'installateur MCP propose un choix V20/V21 si le paramètre est omis. Pour V21, il installe `TiaMcpServer 4.3.0` dans `.tools\tia-mcp-v21`, vérifie la version, les DLL réelles, `doctor` et le manifeste du profil. Un outil déjà présent sans manifeste ou de version différente est refusé. Il ne télécharge ni TIA Portal, ni licence, ni DLL Siemens. Voir [le parcours V20](TIA_VERSIONS.md) pour la compilation locale distincte.
 
 Pour une installation isolée, préparer les paquets Python et NuGet sur un poste autorisé. Puis fournir le répertoire NuGet local :
 
 ```powershell
-.\scripts\install-tia-mcp.ps1 -Offline -PackageSource 'D:\Packages\nuget'
+.\scripts\install-tia-mcp.ps1 -TiaVersion V21 -Offline -PackageSource 'D:\Packages\nuget'
 .\scripts\setup.ps1 -Engineering
 ```
 
@@ -41,34 +43,30 @@ Exemple à adapter au chemin réellement créé et ouvert dans TIA :
 
 ```powershell
 $FatPython = (Resolve-Path '.\.venv\Scripts\python.exe').Path
-$FatMcp = (Resolve-Path '.\.tools\tia-mcp\tia-mcp.exe').Path
+$FatMcp = (Resolve-Path '.\.tools\tia-mcp-v21\tia-mcp.exe').Path
 $FatSandbox = 'C:\FAT\Sandbox'
 $FatProject = 'C:\FAT\Sandbox\UnitCopy\UnitCopy.ap21'
-$FatPolicy = Join-Path (Get-Location) '.local\tia\policy.json'
+$FatPolicy = Join-Path (Get-Location) '.local\tia\v21\policy.json'
 
 & $FatPython -m integrations.tia_engineering --config $FatPolicy configure `
-  --project $FatProject --sandbox-root $FatSandbox --server $FatMcp
+  --tia-version V21 --project $FatProject --sandbox-root $FatSandbox --server $FatMcp
 & $FatPython -m integrations.tia_engineering --config $FatPolicy status
 ```
 
 Le dossier sandbox et le fichier `.ap21` doivent exister. Les liens/jonctions sont résolus avant de vérifier que le projet reste dans le dossier autorisé. L'état renvoyé doit correspondre au **chemin exact** de la copie, et non simplement à son nom.
 
-La configuration créée est en lecture seule. Elle produit aussi deux fragments relisibles, `claude.mcp.json` et `codex.mcp.toml`, à côté de la politique. Les archives et le journal d'ingénierie sont placés dans ce même espace local, hors du dossier binaire TIA. Le journal doit être un fichier `.jsonl` situé hors du dossier contenant le `.ap21`. Le CLI refuse aussi un fichier d'audit qui désigne le projet ou l'exécutable par un autre lien : une lecture ne doit pas pouvoir y ajouter des lignes de journal.
+La configuration créée est en lecture seule. Elle produit deux fragments relisibles, `claude.v21.mcp.json` et `codex.v21.mcp.toml`, à côté de la politique. Ils contiennent le chemin Openness vérifié et le nom MCP `tia-fat-v21-readonly` ; V20 possède ses fragments et son nom distincts. Les archives et le journal d'ingénierie sont placés dans ce même espace local, hors du dossier binaire TIA. Le journal doit être un fichier `.jsonl` situé hors du dossier contenant le `.ap21`. Le CLI refuse aussi un fichier d'audit qui désigne le projet ou l'exécutable par un autre lien : une lecture ne doit pas pouvoir y ajouter des lignes de journal.
 
 ## 3. Connecter le client IA en lecture seule
 
-Utiliser les commandes natives d'installation fournies par le serveur épinglé :
+Lire le fragment généré pour le client choisi :
 
 ```powershell
-& $FatMcp install claude-code --name tia-fat-readonly `
-  --access-mode read-only --tia-project $FatProject --server-path $FatMcp
-
-# Ou pour Codex :
-& $FatMcp install codex --name tia-fat-readonly `
-  --access-mode read-only --tia-project $FatProject --server-path $FatMcp
+Get-Content (Join-Path (Split-Path $FatPolicy -Parent) 'codex.v21.mcp.toml')
+# Ou le fragment JSON Claude correspondant : claude.v21.mcp.json
 ```
 
-Lancer uniquement la commande correspondant au client souhaité. Le CLI upstream appelle le CLI natif du client ; il peut donc signaler qu'il est absent. Les fragments générés restent disponibles pour une configuration manuelle inspectable.
+Fusionner ce fragment dans la configuration du client en conservant les autres serveurs, puis recharger ses connexions MCP. Conserver la section `env` : elle fixe le dossier des DLL du profil validé, y compris pour un chemin Siemens non standard. Une inscription simplifiée qui omet cet environnement ne reproduit pas la configuration vérifiée.
 
 **Toujours fournir `--access-mode read-only`.** Le lancement brut `tia-mcp` upstream a un autre mode par défaut. Ne pas enregistrer notre CLI interactif comme outil d'écriture auprès du modèle, et ne pas substituer `read-write` ou `full` dans la configuration IA.
 
@@ -157,7 +155,7 @@ En cas de perte du worker, refus Siemens, timeout, écriture partielle ou erreur
 - Aucun outil du CLI ne réalise de téléchargement, de RUN/STOP CPU, de contrôle en ligne ou d'écriture matérielle. Le runtime FAT utilise son adaptateur OPC UA séparé.
 - Le serveur upstream prend en charge d'autres fonctions ; elles ne sont pas ajoutées au parcours contrôlé par leur seule existence.
 - Le compte Windows qui possède les fichiers peut modifier la politique ou le programme. Les gardes préviennent des erreurs et encadrent la revue ; elles ne rendent pas le système inviolable contre ce même compte.
-- Les tests locaux vérifient la politique et le protocole contre des doubles. La présence de TIA V21, les exports et la compilation réelle sont à qualifier sur le poste cible, conformément à [COMPATIBILITY.md](COMPATIBILITY.md).
+- Les tests locaux vérifient les politiques et profils V20/V21, les transformations et le protocole contre des doubles. Les builds et essais Siemens restent à qualifier sur le poste cible, conformément à [COMPATIBILITY.md](COMPATIBILITY.md).
 
 ## Vérifier les contrôles sans Siemens
 

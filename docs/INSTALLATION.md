@@ -44,7 +44,7 @@ Depuis le dossier du dépôt :
 .\.venv\Scripts\python.exe -m fat_studio doctor --json
 ```
 
-Le lancement normal n'installe pas l'assistance d'ingénierie. Pour cette option, lire [TIA_MCP.md](TIA_MCP.md), puis utiliser `setup.ps1 -Engineering` depuis un clone source avec Internet ou un kit préparé avec `-Engineering`. Le kit runtime livré est explicitement refusé pour cette option : il ne contient pas les dépendances MCP. TIA Portal V21, Openness et le serveur upstream restent des installations distinctes.
+Le lancement normal n'installe pas l'assistance d'ingénierie. Pour cette option, lire [TIA_VERSIONS.md](TIA_VERSIONS.md), puis utiliser `setup.ps1 -Engineering` depuis un clone source avec Internet ou un kit préparé avec `-Engineering`. L'installateur MCP demande V20 ou V21, ou accepte `-TiaVersion`. Le kit runtime d'origine est refusé pour cette option : il ne contient pas les dépendances MCP. TIA Portal de la version choisie, Openness et la passerelle restent des installations distinctes. V20 exige la compilation du portage contre les DLL V20 du poste ; une incompatibilité bloque l'installation.
 
 ## Linux et macOS : démonstration et développement
 
