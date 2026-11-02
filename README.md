@@ -4,7 +4,7 @@
 
 Le programme PLC reste le contrôleur du procédé. FAT Studio lit ses commandes, calcule les équipements et renvoie les capteurs simulés. Le mode **Démonstration** fournit un contrôleur distinct pour essayer l'application sans Siemens.
 
-Version actuelle : **0.2.0**, le 2 novembre 2026, avec [choix V20/V21](docs/TIA_VERSIONS.md) et profils d'ingénierie séparés. La [revue adverse 0.1.1](docs/ADVERSARIAL_REVIEW.md) et ses preuves restent conservées. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : la compilation du portage V20 et la qualification Siemens des deux versions restent à effectuer sur le poste cible.** Voir [ACCEPTANCE](docs/ACCEPTANCE.md) et les [preuves 0.2.0](evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
+Version actuelle : **0.2.1**, le 2 novembre 2026, avec [choix V20/V21](docs/TIA_VERSIONS.md), profils d'ingénierie séparés et [correctif d'encodage Windows](evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md). La [revue adverse 0.1.1](docs/ADVERSARIAL_REVIEW.md) et ses preuves restent conservées. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : la compilation du portage V20 et la qualification Siemens des deux versions restent à effectuer sur le poste cible.** Voir [ACCEPTANCE](docs/ACCEPTANCE.md) et les [preuves du choix V20/V21](evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
 
 ## Démarrer sous Windows
 

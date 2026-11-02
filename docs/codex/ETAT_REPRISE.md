@@ -2,9 +2,11 @@
 
 Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain agent et à l'ingénieur qui reprend le projet. Les sections historiques ci-dessous décrivent la livraison ; inscrire les développements ultérieurs dans la section « État courant » et les notes de session.
 
-## État courant — 0.2.0, choix V20/V21 et dépôt privé
+## État courant — 0.2.1, choix V20/V21 et dépôt privé
 
-La version actuelle est **0.2.0**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.
+La version actuelle est **0.2.1**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.
+
+La première CI distante de 0.2.0 a réussi sur Ubuntu (418 Python, 33 frontend) et révélé sept échecs d'encodage sur Windows. Le correctif 0.2.1 décode les chemins Git en UTF-8 et aligne l'encodage des processus Python capturés dans les tests. Les 30 cas locaux affectés passent ; le résultat de la nouvelle CI doit être consulté séparément. Voir [le rapport d'encodage Windows](../../evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md). Le tag 0.2.0 n'est pas déplacé.
 
 V21 conserve le paquet Czarnak 4.3.0. V20 prépare un portage de la même source épinglée, à compiler sur Windows contre les trois DLL Openness V20 réellement installées. Les profils vérifient binaires, DLL, politique, proposition et archive ; ils conservent le dossier Openness aux lancements MCP et dans les fragments client. Le manifeste est obligatoire dans les deux cas. **Le build natif V20 et l'acceptation Siemens V20/V21 n'ont pas été exécutés sur ce Mac.** Une erreur native bloque l'installation, sans repli V21 ou références factices.
 
@@ -16,7 +18,7 @@ Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FA
 
 Prochaine action : installer le profil de la version effectivement disponible sur le PC Windows, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
 
-Dernière note : [sélection V20/V21 et publication privée](sessions/2026-11-02-v20-v21-private-git.md).
+Dernière note : [correctif d'encodage Windows](sessions/2026-11-02-windows-utf8.md). La [sélection V20/V21 et publication privée](sessions/2026-11-02-v20-v21-private-git.md) reste conservée.
 
 ## État courant après reprise — 2 novembre 2026, macOS ARM64
 
@@ -238,7 +240,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — V20/V21 et Git privé](sessions/2026-11-02-v20-v21-private-git.md). La [validation macOS initiale](sessions/2026-11-02-macos-validation.md) et la [passation initiale](sessions/2026-11-02-passation.md) restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02 — encodage Windows](sessions/2026-11-02-windows-utf8.md). La [version V20/V21](sessions/2026-11-02-v20-v21-private-git.md), la [validation macOS initiale](sessions/2026-11-02-macos-validation.md) et la [passation initiale](sessions/2026-11-02-passation.md) restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

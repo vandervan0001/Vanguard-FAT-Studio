@@ -96,7 +96,7 @@ def test_manifest_rejects_case_collisions_on_windows(tmp_path):
 
 def test_checker_cli_reports_incomplete_kit_as_nonzero(tmp_path):
     (tmp_path / "wheelhouse").mkdir()
-    result = subprocess.run([sys.executable, str(CHECKER), "--root", str(tmp_path)],
+    result = subprocess.run([sys.executable, "-X", "utf8", str(CHECKER), "--root", str(tmp_path)],
                             capture_output=True, text=True, encoding="utf-8", timeout=10)
     assert result.returncode == 2
     assert "Kit incomplet" in result.stderr
@@ -118,7 +118,7 @@ def make_web_build(root):
 
 
 def run_web_build(script):
-    return subprocess.run([sys.executable, str(script)], capture_output=True, text=True,
+    return subprocess.run([sys.executable, "-X", "utf8", str(script)], capture_output=True, text=True,
                           encoding="utf-8", timeout=10)
 
 

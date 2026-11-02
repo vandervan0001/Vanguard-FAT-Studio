@@ -1,0 +1,397 @@
+{
+  "repository": "vandervan0001/FAT-Studio",
+  "run_id": 41466328324,
+  "url": "https://github.com/vandervan0001/FAT-Studio/actions/runs/41466328324",
+  "head_sha": "1d86ca42c06a551b4831dc2b4ffe5b6ce08ac4ca",
+  "expected_head_sha": "1d86ca42c06a551b4831dc2b4ffe5b6ce08ac4ca",
+  "event": "workflow_dispatch",
+  "checked_at_utc": "2026-11-02T14:58:50.315593+00:00",
+  "status": "completed",
+  "conclusion": "failure",
+  "expected_jobs_present": true,
+  "jobs": [
+    {
+      "id": 125348116427,
+      "name": "verify (ubuntu-latest)",
+      "status": "completed",
+      "conclusion": "success",
+      "current_step": null,
+      "failed_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Read pinned engineering source for transformation tests",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/setup-node@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Install locked Python dependencies",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Build the editor",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Bundle browser assets",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Install application",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Static Python checks",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Deterministic models, API, local OPC UA and engineering guards",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Installation diagnostic",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Install browser for interface tests",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "End-to-end interface tests against the local Python service",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Build distributable wheel",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Parse Windows installer scripts",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Windows offline first installation in a new directory",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/upload-artifact@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/setup-node@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Read pinned engineering source for transformation tests",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": 125348116962,
+      "name": "verify (windows-latest)",
+      "status": "completed",
+      "conclusion": "failure",
+      "current_step": null,
+      "failed_steps": [
+        {
+          "name": "Deterministic models, API, local OPC UA and engineering guards",
+          "conclusion": "failure"
+        }
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Read pinned engineering source for transformation tests",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/setup-python@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/setup-node@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Install locked Python dependencies",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Build the editor",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Bundle browser assets",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Install application",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Static Python checks",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Deterministic models, API, local OPC UA and engineering guards",
+          "conclusion": "failure",
+          "status": "completed"
+        },
+        {
+          "name": "Installation diagnostic",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Install browser for interface tests",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "End-to-end interface tests against the local Python service",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Build distributable wheel",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Parse Windows installer scripts",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Windows offline first installation in a new directory",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Run actions/upload-artifact@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/setup-node@v6",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/setup-python@v6",
+          "conclusion": "skipped",
+          "status": "completed"
+        },
+        {
+          "name": "Post Read pinned engineering source for transformation tests",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "conclusion": "success",
+          "status": "completed"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "windows_checks": {
+    "Parse Windows installer scripts": "skipped",
+    "Windows offline first installation in a new directory": "skipped"
+  },
+  "verified_ci_success": false,
+  "observations": [
+    {
+      "checked_at_utc": "2026-11-02T14:56:38.162635+00:00",
+      "status": "in_progress",
+      "conclusion": "",
+      "jobs": [
+        {
+          "name": "verify (ubuntu-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Deterministic models, API, local OPC UA and engineering guards"
+        },
+        {
+          "name": "verify (windows-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Deterministic models, API, local OPC UA and engineering guards"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-11-02T14:57:04.896332+00:00",
+      "status": "in_progress",
+      "conclusion": "",
+      "jobs": [
+        {
+          "name": "verify (ubuntu-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Install browser for interface tests"
+        },
+        {
+          "name": "verify (windows-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Deterministic models, API, local OPC UA and engineering guards"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-11-02T14:57:31.200448+00:00",
+      "status": "in_progress",
+      "conclusion": "",
+      "jobs": [
+        {
+          "name": "verify (ubuntu-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "End-to-end interface tests against the local Python service"
+        },
+        {
+          "name": "verify (windows-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Deterministic models, API, local OPC UA and engineering guards"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-11-02T14:58:23.860993+00:00",
+      "status": "in_progress",
+      "conclusion": "",
+      "jobs": [
+        {
+          "name": "verify (ubuntu-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Post Read pinned engineering source for transformation tests"
+        },
+        {
+          "name": "verify (windows-latest)",
+          "status": "in_progress",
+          "conclusion": "",
+          "current_step": "Deterministic models, API, local OPC UA and engineering guards"
+        }
+      ]
+    },
+    {
+      "checked_at_utc": "2026-11-02T14:58:50.315593+00:00",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "name": "verify (ubuntu-latest)",
+          "status": "completed",
+          "conclusion": "success",
+          "current_step": null
+        },
+        {
+          "name": "verify (windows-latest)",
+          "status": "completed",
+          "conclusion": "failure",
+          "current_step": null
+        }
+      ]
+    }
+  ],
+  "native_tia_siemens_qualification": false,
+  "scope": "GitHub Windows and Ubuntu application/runtime CI only. No TIA Portal installation, Siemens compilation or PLC connection is qualified.",
+  "failure_details": {
+    "windows_python": {
+      "failed": 7,
+      "passed": 411,
+      "warnings": 6,
+      "duration_seconds": 153.33,
+      "failed_tests": [
+        "test_checker_cli_reports_incomplete_kit_as_nonzero",
+        "test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation[build]",
+        "test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation[build/lib]",
+        "test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation[build/lib/fat_studio]",
+        "test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation[build/lib/fat_studio/web]",
+        "test_real_pinned_source_retarget_changes_native_profile_and_preserves_excluded_files",
+        "test_real_pinned_dirty_checkout_is_refused_without_overwriting_changes"
+      ],
+      "log_path": "/Volumes/Tai_SSD/dev/Projects/TIA_Sim/work/2026-11-02-v20-v21/github-ci-windows-failure.log"
+    },
+    "subsequent_windows_runtime_checks": "skipped after Python failure"
+  },
+  "ubuntu_success_log": "/Volumes/Tai_SSD/dev/Projects/TIA_Sim/work/2026-11-02-v20-v21/github-ci-ubuntu.log",
+  "ubuntu_test_summaries": [
+    "verify (ubuntu-latest)\tDeterministic models, API, local OPC UA and engineering guards\t2026-11-02T14:56:56.0126346Z ======================= 418 passed in 117.10s (0:01:57) ========================",
+    "verify (ubuntu-latest)\tEnd-to-end interface tests against the local Python service\t2026-11-02T14:58:17.6985067Z   33 passed (58.1s)"
+  ]
+}

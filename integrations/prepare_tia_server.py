@@ -33,7 +33,7 @@ _TOKEN_PATTERN = re.compile("|".join(re.escape(token) for token in _TOKENS))
 
 def _git(source: Path, *arguments: str) -> str:
     completed = subprocess.run(
-        ["git", "-C", str(source), *arguments], capture_output=True, text=True, check=False,
+        ["git", "-C", str(source), *arguments], capture_output=True, text=True, encoding="utf-8", check=False,
     )
     if completed.returncode:
         raise ValueError("Cannot inspect the source checkout: " + completed.stderr.strip())

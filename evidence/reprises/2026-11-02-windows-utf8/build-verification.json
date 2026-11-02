@@ -1,0 +1,8 @@
+{
+  "version": "0.2.1",
+  "wheel": "local_fat_studio-0.2.1-py3-none-any.whl",
+  "sha256": "5dd8dc75307e724e0f2c09e9bcfdfc6c7054849a50f5b1ef9dabecd480f2f255",
+  "application_files_match_source": 32,
+  "stale_web_entries": [],
+  "frontend_bundle": "unchanged from verified 0.2.0 bundle"
+}

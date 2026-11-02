@@ -17,3 +17,9 @@ Cause : un exécutable sans manifeste était initialement admis comme V21 ; un c
 Pour le portage source épinglé, restaurer explicitement le worker net48 avant la publication du host et transmettre les propriétés de version attendues aux deux. Conserver `UseTiaPortalReferenceStubs=false` et les références réelles de la version choisie.
 
 Cause : le worker est construit par une cible MSBuild distincte, pas par un `ProjectReference` du host ; une restauration du seul host ne prépare pas ses dépendances. Le source brut n'intègre pas non plus la version produit injectée par le workflow de publication amont.
+
+## Encodage des sous-processus sur Windows
+
+Décoder explicitement en UTF-8 les chemins renvoyés par Git. Dans un test qui capture une sortie Python en UTF-8, lancer aussi l'enfant avec `-X utf8` ; préciser seulement l'encodage du parent ne change pas celui de l'enfant.
+
+Cause : la première CI Windows a révélé un chemin Git accentué mal décodé et des sorties françaises Python écrites dans l'encodage Windows puis lues en UTF-8. Cela provoquait un faux refus de racine et des erreurs des threads de capture, avant les assertions prévues.
