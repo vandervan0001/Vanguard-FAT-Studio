@@ -19,6 +19,58 @@ import tempfile
 import time
 from urllib.error import URLError
 from urllib.request import Request, urlopen
+from uuid import uuid4
+
+
+def open_worker_handle(pid):
+    """Keep the real Python process identity across its Windows venv redirector's exit."""
+    if os.name != "nt":
+        return None
+    import ctypes
+    from ctypes import wintypes
+
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+    kernel.OpenProcess.restype = wintypes.HANDLE
+    handle = kernel.OpenProcess(0x00100000, False, pid)  # SYNCHRONIZE, no termination rights.
+    if not handle:
+        raise ctypes.WinError(ctypes.get_last_error())
+    return handle
+
+
+def wait_worker_handle(handle):
+    if handle is None:
+        return
+    import ctypes
+    from ctypes import wintypes
+
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+    kernel.WaitForSingleObject.restype = wintypes.DWORD
+    kernel.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel.CloseHandle.restype = wintypes.BOOL
+    try:
+        status = kernel.WaitForSingleObject(handle, 10_000)
+        if status == 258:
+            raise TimeoutError("Installed Python worker did not terminate within 10 seconds")
+        if status != 0:
+            raise ctypes.WinError(ctypes.get_last_error())
+    finally:
+        kernel.CloseHandle(handle)
+
+
+def shutdown(process, worker_handle):
+    try:
+        if process.poll() is None:
+            process.terminate()
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=5)
+    finally:
+        # Popen.wait() can finish before the redirector's job has killed its worker.
+        wait_worker_handle(worker_handle)
 
 
 def main() -> int:
@@ -52,35 +104,45 @@ def main() -> int:
             return json.loads(request(path, {} if body is None else body)[0])
 
         def boot(log):
-            process = subprocess.Popen([python, "-m", "fat_studio", "serve", "--host", "127.0.0.1",
+            pid_file = directory / ("worker-" + uuid4().hex + ".pid")
+            bootstrap = (
+                "import os,sys;from pathlib import Path;"
+                "Path(sys.argv[1]).write_text(str(os.getpid()),encoding='ascii');"
+                "from fat_studio.cli import main;raise SystemExit(main(sys.argv[2:]))"
+            )
+            process = subprocess.Popen([python, "-X", "utf8", "-c", bootstrap, str(pid_file),
+                                        "serve", "--host", "127.0.0.1",
                                         "--port", str(port), "--data-dir", str(data), "--no-browser"],
                                        cwd=directory, env=env, stdout=log, stderr=subprocess.STDOUT)
+            worker_pid, worker_handle = None, None
             try:
                 deadline = time.monotonic() + 25
                 while time.monotonic() < deadline:
                     if process.poll() is not None:
                         raise RuntimeError(f"Installed service exited with {process.returncode}")
+                    if worker_pid is None:
+                        if not pid_file.exists():
+                            time.sleep(0.05)
+                            continue
+                        pid_text = pid_file.read_text(encoding="ascii")
+                        if not pid_text:
+                            time.sleep(0.05)
+                            continue
+                        worker_pid = int(pid_text)
+                        worker_handle = open_worker_handle(worker_pid)
                     try:
                         health = json.loads(request("/api/health")[0])
                         result["health"] = health
-                        return process
+                        return process, worker_handle
                     except (URLError, ConnectionError, TimeoutError):
                         time.sleep(0.1)
                 raise TimeoutError("Installed service did not become healthy within 25 seconds")
             except BaseException:
-                shutdown(process)
+                shutdown(process, worker_handle)
                 raise
 
-        def shutdown(process):
-            process.terminate()
-            try:
-                process.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait(timeout=5)
-
         with (directory / "service.log").open("w", encoding="utf-8") as log:
-            process = boot(log)
+            process, worker_handle = boot(log)
             try:
                 html = request("/")[0].decode()
                 assets = re.findall(r'(?:src|href)="(/assets/[^\"]+)"', html)
@@ -115,9 +177,9 @@ def main() -> int:
                                          "consistent CSV, HTML and JSON exports", "stop/reset preserve archived evidence"])
                 result["sample_count"] = evidence["sample_count"]
             finally:
-                shutdown(process)
+                shutdown(process, worker_handle)
             context.clear()
-            process = boot(log)
+            process, worker_handle = boot(log)
             try:
                 context["X-FAT-Token"] = json.loads(request("/api/session")[0])["token"]
                 history = json.loads(request("/api/runs")[0])
@@ -125,7 +187,7 @@ def main() -> int:
                 assert json.loads(request("/api/state")[0])["status"] == "idle"
                 result["checks"].append("fresh process reopens saved evidence and remains idle")
             finally:
-                shutdown(process)
+                shutdown(process, worker_handle)
     result["status"] = "passed"
     result["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
     result["scope"] = "Installed application and loopback HTTP; no Siemens or external PLC"
