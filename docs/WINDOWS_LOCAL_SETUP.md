@@ -2,6 +2,8 @@
 
 Installation du 2 novembre 2026 dans `C:\FAT_Studio`, depuis le dépôt privé `vandervan0001/FAT-Studio`. Le runtime reste en version 0.2.1. TIA Portal, Openness et PLCSIM ne sont pas installés.
 
+La [vérification étendue](../evidence/reprises/2026-11-02-windows-extended/VERIFICATION.md) ajoute les tests du ZIP exact, de l'interface à 200 tags, des échanges OPC UA chiffrés et la CI Windows/Ubuntu sur la branche poussée. Les preuves de préparation initiales restent conservées.
+
 ## Ouvrir le banc
 
 Double-cliquer sur le raccourci **FAT Studio** du bureau, ou sur `C:\FAT_Studio\Start-FAT.cmd`. Le navigateur ouvre `http://127.0.0.1:8765`. Garder la fenêtre du serveur ouverte ; Ctrl+C arrête le banc.
@@ -67,3 +69,5 @@ Le kit d'exécution hors ligne utilise Python 3.12 x64 et contient les dépendan
 Le kit final neuf est dans `C:\FAT_Studio-Offline-2026-11-02` ; son manifeste est vérifié et ses fichiers applicatifs correspondent aux sources testées. Le kit de validation installé reste séparé dans `C:\FAT_Studio-Offline-Validation-2026-11-02`. Garder ces kits intacts et poursuivre les modifications dans `C:\FAT_Studio`.
 
 `C:\FAT_Studio-Delivery-2026-11-02` contient la sauvegarde Git et le ZIP complet du kit. Le bundle a été recloné et vérifié ; le ZIP a passé son contrôle CRC. Le fichier `delivery.json` et `SHA256SUMS.txt` identifient les artefacts et leurs empreintes.
+
+La campagne suivante dispose d'une livraison complémentaire dans `C:\FAT_Studio-Delivery-2026-11-02-extended`, avec le même runtime testé et le bundle de la branche enrichie par les tests et preuves étendus. Les deux livraisons sont conservées séparément.

@@ -1,0 +1,16 @@
+Usage: tia-mcp doctor [--json] [--verbose] [--project <path>] [--access-mode <mode>] [--worker-timeout-minutes <n>] [--help]
+
+Options:
+  --json          Emit a single JSON document to stdout.
+  --verbose       Include additional evidence.
+  --project       Validate an exact .ap21 binding without opening or attaching to TIA Portal.
+  --access-mode   Report diagnostics for read-only, read-write, or full mode.
+  --read-only     Alias for --access-mode read-only.
+  --read-write    Alias for --access-mode read-write.
+  --worker-timeout-minutes  Report worker timeout in whole minutes (5-60).
+  --help          Show command usage and exit.
+
+Exit codes:
+  0  No blocking failures.
+  1  One or more diagnostic checks failed.
+  2  Invalid arguments or an unexpected error.

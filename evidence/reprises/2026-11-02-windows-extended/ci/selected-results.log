@@ -1,0 +1,5 @@
+verify (windows-latest)	Deterministic models, API, local OPC UA and engineering guards	2026-11-02T21:59:15.9817955Z ======================= 427 passed in 139.13s (0:02:19) =======================
+verify (windows-latest)	End-to-end interface tests against the local Python service	2026-11-02T22:02:45.4453878Z   33 passed (52.9s)
+verify (windows-latest)	Windows offline first installation in a new directory	2026-11-02T22:03:09.1559303Z   "scope": "Installed application and loopback HTTP; no Siemens or external PLC"
+verify (ubuntu-latest)	Deterministic models, API, local OPC UA and engineering guards	2026-11-02T21:58:27.5889621Z ================== 419 passed, 8 skipped in 128.83s (0:02:08) ==================
+verify (ubuntu-latest)	End-to-end interface tests against the local Python service	2026-11-02T21:59:51.2751852Z   33 passed (1.0m)

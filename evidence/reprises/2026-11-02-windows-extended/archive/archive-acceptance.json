@@ -1,0 +1,57 @@
+{
+  "archive": "C:\\FAT_Studio-Delivery-2026-11-02\\FAT-Studio-Windows-2026-11-02.zip",
+  "sha256": "7fe117bd80029f134d796b3957db41b19f13e1828b1efb000bd8bb8cfae90f82",
+  "archive_head": "ef8f96cf4a5ec248f4196411b8c4309791828fae",
+  "members": 245,
+  "extracted_to": "C:\\FAT_Studio\\.local\\archive-acceptance-2251",
+  "temp": "C:\\Users\\taivb\\AppData\\Local\\Temp",
+  "manifest_validation": "passed before and after installation; 43 wheels",
+  "installation": "passed",
+  "scope": "Exact delivered ZIP, local runtime/MCP only; no Siemens",
+  "finished_at_utc": "2026-11-02T21:54:47.266123+00:00",
+  "setup": {
+    "shell": "Windows PowerShell 5.1.26100.9711",
+    "script": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\runtime-kit\\scripts\\setup.ps1",
+    "engineering": true,
+    "fresh_venv": true,
+    "exit_code": 0,
+    "environment": {
+      "PIP_NO_INDEX": "1",
+      "PIP_INDEX_URL": "http://127.0.0.1:9",
+      "PIP_NO_CACHE_DIR": "1"
+    },
+    "pip_check": "passed"
+  },
+  "installed_package": {
+    "module_path": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\runtime-kit\\.venv\\Lib\\site-packages\\fat_studio\\__init__.py",
+    "versions": {
+      "local-fat-studio": "0.2.1",
+      "mcp": "2.3.0",
+      "mcp-types": "2.3.0",
+      "pywin32": "312"
+    }
+  },
+  "smoke": {
+    "script": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\runtime-kit\\scripts\\smoke-installed.py",
+    "status": "passed",
+    "checks": [
+      "production HTML and local JS/CSS served outside source tree",
+      "demo start, pause, marker and explicit unevaluated verdict",
+      "consistent CSV, HTML and JSON exports",
+      "stop/reset preserve archived evidence",
+      "fresh process reopens saved evidence and remains idle"
+    ],
+    "sample_count": 4,
+    "cwd": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\outside-source",
+    "cleanup": "strict; passed"
+  },
+  "bundle": {
+    "path": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\FAT-Studio.bundle",
+    "recovered_head": "ef8f96cf4a5ec248f4196411b8c4309791828fae",
+    "expected_head_matches": true,
+    "git_fsck_full": "passed",
+    "working_tree_clean": true
+  },
+  "original_artifacts_modified": false,
+  "siemens_qualification": "not_executed"
+}

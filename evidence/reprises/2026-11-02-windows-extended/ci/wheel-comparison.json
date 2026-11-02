@@ -1,0 +1,20 @@
+{
+  "windows": {
+    "wheel_sha256": "1d0e44b64a0d62135dfaa0c64bd22bfa8c9184273e3b5becb3dbf8a780a3c6ae",
+    "application_files": 32,
+    "python_js_css_html_svg_match_local_source": true,
+    "text_files_differing_only_in_line_endings": [],
+    "unexpected_differences": []
+  },
+  "ubuntu": {
+    "wheel_sha256": "817ad4fcd13b2d297b6e9c97addc4b2afac9454c309a2c02081adc94a32bf08e",
+    "application_files": 32,
+    "python_js_css_html_svg_match_local_source": true,
+    "text_files_differing_only_in_line_endings": [
+      "fat_studio/vendor/historiansim/LICENSE",
+      "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt",
+      "integrations/requirements-engineering.txt"
+    ],
+    "unexpected_differences": []
+  }
+}

@@ -1,0 +1,351 @@
+{
+  "started_at_utc": "2026-11-02T21:56:45.987797+00:00",
+  "source_commit": "682be875662d99b37752d6174e471a72dcef451d",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "asyncua": "1.1.8",
+  "scope": "Generic OPC UA loopback, no Siemens, no production target, no browser",
+  "working_directory": "C:\\FAT_Studio\\.local\\opcua-extended\\run-119bd0685cb34f88905ef4ba29c27bba",
+  "phases": [
+    {
+      "phase": "actual_fixture_cli",
+      "status": "passed",
+      "tag_count": 13,
+      "equipment_count": 8,
+      "wall_time_s": 94.437,
+      "scenarios": [
+        {
+          "sample_count": 320,
+          "csv_rows": 4161,
+          "json_sha256": "6f8fac56aa9cce263a6dc39d32ad3ea7a8dc687ea90dc06ecc6ae887a276942f",
+          "human_verdict": "not_evaluated",
+          "status": "completed",
+          "scenario": "reference",
+          "assertions": [
+            {
+              "index": 1,
+              "target": "pump_running",
+              "operator": "eq",
+              "expected": true,
+              "actual": true,
+              "passed": true,
+              "message": "La pompe retourne sa marche.",
+              "scheduled_s": 5.0,
+              "evaluated_s": 5.0,
+              "quality": "good"
+            },
+            {
+              "index": 2,
+              "target": "level",
+              "operator": "gt",
+              "expected": 35.0,
+              "actual": 45.34965515136719,
+              "passed": true,
+              "message": "Le niveau augmente réellement.",
+              "scheduled_s": 10.0,
+              "evaluated_s": 10.0,
+              "quality": "good"
+            },
+            {
+              "index": 3,
+              "target": "pump_cmd",
+              "operator": "eq",
+              "expected": false,
+              "actual": false,
+              "passed": true,
+              "message": "Arrêt de remplissage après le seuil haut de contrôle.",
+              "scheduled_s": 25.0,
+              "evaluated_s": 25.0,
+              "quality": "good"
+            },
+            {
+              "index": 4,
+              "target": "level",
+              "operator": "gt",
+              "expected": 60.0,
+              "actual": 67.33158874511719,
+              "passed": true,
+              "message": "Le soutirage reste limité après l'arrêt.",
+              "scheduled_s": 30.0,
+              "evaluated_s": 30.0,
+              "quality": "good"
+            }
+          ],
+          "sim_time_s": 32.0
+        },
+        {
+          "sample_count": 280,
+          "csv_rows": 3641,
+          "json_sha256": "382f604bad444e242aa8d355191d0acf902c83a9737501912bbfb198ccd1d647",
+          "human_verdict": "not_evaluated",
+          "status": "completed",
+          "scenario": "motor-trip",
+          "assertions": [
+            {
+              "index": 2,
+              "target": "pump_running",
+              "operator": "eq",
+              "expected": false,
+              "actual": false,
+              "passed": true,
+              "message": "Perte du retour marche.",
+              "scheduled_s": 6.0,
+              "evaluated_s": 6.0,
+              "quality": "good"
+            },
+            {
+              "index": 3,
+              "target": "pump_fault",
+              "operator": "eq",
+              "expected": true,
+              "actual": true,
+              "passed": true,
+              "message": "Défaut transmis au PLC.",
+              "scheduled_s": 6.0,
+              "evaluated_s": 6.0,
+              "quality": "good"
+            },
+            {
+              "index": 4,
+              "target": "level",
+              "operator": "lt",
+              "expected": 40.0,
+              "actual": 32.59965515136719,
+              "passed": true,
+              "message": "Aucun remplissage caché pendant le défaut.",
+              "scheduled_s": 10.0,
+              "evaluated_s": 10.0,
+              "quality": "good"
+            },
+            {
+              "index": 6,
+              "target": "pump_running",
+              "operator": "eq",
+              "expected": true,
+              "actual": true,
+              "passed": true,
+              "message": "Reprise après disparition du défaut.",
+              "scheduled_s": 17.0,
+              "evaluated_s": 17.0,
+              "quality": "good"
+            },
+            {
+              "index": 7,
+              "target": "level",
+              "operator": "gt",
+              "expected": 40.0,
+              "actual": 50.52695846557617,
+              "passed": true,
+              "message": "Reprise du remplissage observable.",
+              "scheduled_s": 25.0,
+              "evaluated_s": 25.0,
+              "quality": "good"
+            }
+          ],
+          "sim_time_s": 28.0
+        },
+        {
+          "sample_count": 240,
+          "csv_rows": 3121,
+          "json_sha256": "a3651357bf2aa4a38158c0659f9074b796c0790e827731bf0950d07af8a4285a",
+          "human_verdict": "not_evaluated",
+          "status": "completed",
+          "scenario": "sensor-freeze",
+          "assertions": [
+            {
+              "index": 1,
+              "target": "level",
+              "operator": "eq",
+              "expected": 40.0,
+              "actual": 40.0,
+              "passed": true,
+              "message": "Mesure figée à 40 %.",
+              "scheduled_s": 10.0,
+              "evaluated_s": 10.0,
+              "quality": "fault"
+            },
+            {
+              "index": 2,
+              "target": "volume",
+              "operator": "gt",
+              "expected": 450.0,
+              "actual": 536.696533203125,
+              "passed": true,
+              "message": "Le procédé continue d'évoluer malgré la mesure figée.",
+              "scheduled_s": 14.0,
+              "evaluated_s": 14.0,
+              "quality": "good"
+            },
+            {
+              "index": 4,
+              "target": "level",
+              "operator": "gt",
+              "expected": 50.0,
+              "actual": 57.829654693603516,
+              "passed": true,
+              "message": "Retour à la mesure du procédé.",
+              "scheduled_s": 16.0,
+              "evaluated_s": 16.0,
+              "quality": "good"
+            }
+          ],
+          "sim_time_s": 24.0
+        }
+      ],
+      "manual_force_float32": 40.099998474121094,
+      "manual_motor_fault_observed_on_server": true,
+      "pause_no_writes": true,
+      "finite_running_export": {
+        "samples": 40,
+        "later_sample_count_increased": true
+      },
+      "loss": {
+        "error": "TimeoutError: ",
+        "writes_after_error": 450,
+        "no_automatic_resume": true,
+        "all_tag_qualities_bad": true,
+        "archived": {
+          "sample_count": 46,
+          "csv_rows": 599,
+          "json_sha256": "64057985870fd72a9a824de0a260726c0edf39c98020397382f65fd774dd0d16",
+          "human_verdict": "not_evaluated",
+          "status": "error"
+        }
+      },
+      "persistence": {
+        "sqlite_integrity": "ok",
+        "reopened_runs": 4,
+        "statuses": [
+          "completed",
+          "completed",
+          "completed",
+          "error"
+        ],
+        "sample_counts": [
+          320,
+          280,
+          240,
+          46
+        ]
+      },
+      "fixture_process_stopped": true
+    },
+    {
+      "phase": "encrypted_load_50x200",
+      "status": "passed",
+      "equipment_count": 50,
+      "tag_count": 200,
+      "read_outputs": 40,
+      "written_inputs": 160,
+      "security_policy": "Basic256Sha256/SignAndEncrypt",
+      "healthy_cycles": 1000,
+      "successful_tag_writes_before_loss": 160000,
+      "nominal_step_ms": 100,
+      "wall_time_s": 111.485,
+      "measured_tick_ms": {
+        "p50": 25.6824,
+        "p95": 30.7969,
+        "max": 223.6864
+      },
+      "timing_overrun_events": 3,
+      "server_and_evidence_float32_equal": true,
+      "distinct_command_values_observed": [
+        0.0,
+        30.0,
+        70.0,
+        100.0
+      ],
+      "forced_float32_value": 0.10000000149011612,
+      "stuck_valve_float32_value": 45.599998474121094,
+      "loss": {
+        "error": "TimeoutError: ",
+        "writes_after_error": 160000,
+        "server_restart_did_not_resume_writes": true,
+        "archived": {
+          "sample_count": 1001,
+          "csv_rows": 200201,
+          "json_sha256": "f0ad0c9f12cd733996773626973ff979653449dd5216815b150bb0793eda4611",
+          "human_verdict": "not_evaluated",
+          "status": "error"
+        }
+      },
+      "explicit_new_run": {
+        "sample_count": 20,
+        "csv_rows": 4001,
+        "json_sha256": "89d984109d61dcb9841d2ae081d4910706fc847da857b3aca26ca477f85d69da",
+        "human_verdict": "not_evaluated",
+        "status": "stopped"
+      },
+      "persistence": {
+        "sqlite_integrity": "ok",
+        "reopened_runs": 2,
+        "statuses": [
+          "error",
+          "stopped"
+        ],
+        "sample_counts": [
+          1001,
+          20
+        ]
+      },
+      "limitations": [
+        "Generic server fixture only, not Siemens",
+        "No browser/HTTP measured",
+        "Measured latency is specific to this run; no real-time guarantee"
+      ]
+    }
+  ],
+  "status": "passed",
+  "default_user_policy_unchanged": true,
+  "finished_at_utc": "2026-11-02T22:00:15.015283+00:00",
+  "cleanup": {
+    "checked_at_utc": "2026-11-02T22:02:21.083949+00:00",
+    "ports": [
+      {
+        "address": "127.0.0.1",
+        "port": 54645,
+        "connect_ex": 10035,
+        "listening": false
+      },
+      {
+        "address": "127.0.0.1",
+        "port": 60508,
+        "connect_ex": 10035,
+        "listening": false
+      }
+    ],
+    "fixture_process_list_checked": "no matching Python fixture/harness process remained",
+    "windows_listen_inventory": "Get-NetTCPConnection: no Listen socket on 54645 or 60508",
+    "connection_probe_note": "Nonblocking connect_ex returned WSAEWOULDBLOCK at 300 ms; listener/process inventories provide the independent shutdown evidence."
+  },
+  "source_sha256_recorded_after_run": {
+    "fat_studio/runtime.py": "3339268327a903c8c2eefa32a45fe394af5febbc4a649f0ecf24314c0963fee4",
+    "fat_studio/adapters/opcua.py": "106edcc1749d68c373949b9497ecfe00dbacba7f7f966da26d776639a2d66173",
+    "fat_studio/models.py": "3747d7f4f7df5401b64dc6bd5959b74d889eacdde078cc76afa50a0a1dc58f2b",
+    "fat_studio/engine.py": "622ce3ccb62d66df9e0196b1c8870d702471e5d6247ac3780881e49313d390c1",
+    "fat_studio/storage.py": "ffc72c6b12658bcd27ae073df741351691482b8b3a60db2e4ee9337d298a05aa",
+    "fat_studio/reporting.py": "db729b165ac03951010a96a046df32eaed80a7b3c09f10571a6b689c28d1ca6b",
+    "scripts/opcua-fixture.py": "4a3dfff85f34d1fa36c129e8a37b98b16a826c8d394adcb6c2296355a0895c48",
+    "scripts/benchmark.py": "02e145bb820561c7d050dacee9e1b6b3c2e2a1580b2ca4340ccec5974fa39ffb"
+  },
+  "measurement_context": {
+    "resource_isolation": false,
+    "note": "Shared development workstation; other validation jobs were run in the same session; no CPU affinity or real-time guarantee.",
+    "measured_tick_includes": [
+      "OPC UA read/write",
+      "process model",
+      "SQLite sample commit",
+      "scheduler latency"
+    ],
+    "measured_tick_excludes": [
+      "browser",
+      "HTTP",
+      "Siemens software"
+    ]
+  },
+  "harness": {
+    "path": ".local/opcua-extended/verify-opcua.py",
+    "sha256": "86adfff522a53160de6843929a179bae1f0d0426821ab6d3a7d17436680155d4",
+    "command": ".venv\\Scripts\\python.exe -X utf8 .local/opcua-extended/verify-opcua.py"
+  }
+}

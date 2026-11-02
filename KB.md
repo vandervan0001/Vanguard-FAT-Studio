@@ -23,3 +23,9 @@ Cause : le worker est construit par une cible MSBuild distincte, pas par un `Pro
 Décoder explicitement en UTF-8 les chemins renvoyés par Git. Dans un test qui capture une sortie Python en UTF-8, lancer aussi l'enfant avec `-X utf8` ; préciser seulement l'encodage du parent ne change pas celui de l'enfant.
 
 Cause : la première CI Windows a révélé un chemin Git accentué mal décodé et des sorties françaises Python écrites dans l'encodage Windows puis lues en UTF-8. Cela provoquait un faux refus de racine et des erreurs des threads de capture, avant les assertions prévues.
+
+## Aide CLI du serveur TIA épinglé
+
+Dans Czarnak `TiaMcpServer 4.3.0`, `--help` seul démarre le serveur MCP avec son mode par défaut. Utiliser `tia-mcp doctor --help` pour l'aide du diagnostic et `tia-mcp doctor --access-mode read-only --json` pour ses résultats. Tout lancement MCP par un client IA doit conserver explicitement `--access-mode read-only`.
+
+Observation du 2 novembre 2026 sur le paquet NuGet réel : le probe `--help` a démarré en lecture-écriture puis s'est arrêté à la fin de l'entrée, sans requête d'outil ni projet Siemens. Le probe corrigé en lecture seule a exposé huit outils de lecture et aucun outil d'écriture/compilation. `Program.cs` ne traite spécialement que `install`, `doctor` et `--version` avant le lancement MCP. Cette observation ne change pas les confirmations ni les profils de l'intégration FAT.

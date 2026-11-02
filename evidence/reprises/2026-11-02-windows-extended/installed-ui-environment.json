@@ -1,0 +1,7 @@
+{
+  "python": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\runtime-kit\\.venv\\Scripts\\python.exe",
+  "module": "C:\\FAT_Studio\\.local\\archive-acceptance-2251\\runtime-kit\\.venv\\Lib\\site-packages\\fat_studio\\__init__.py",
+  "base_url": "http://127.0.0.1:8768",
+  "data_dir": "C:/FAT_Studio/.local/installed-ui-2256/data",
+  "source": "Exact extracted ZIP installed distribution; frontend tests from root matching source"
+}

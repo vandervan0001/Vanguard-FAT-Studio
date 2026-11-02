@@ -1,0 +1,85 @@
+{
+  "status": "failed",
+  "timestampUtc": "2026-11-02T22:03:53Z",
+  "hostVersion": "4.3.0",
+  "accessMode": "read-only",
+  "workerTimeoutMinutes": 5,
+  "workerTimeoutSource": "default",
+  "summary": {
+    "passed": 5,
+    "warnings": 2,
+    "failed": 3
+  },
+  "checks": [
+    {
+      "id": "operating-system",
+      "name": "Operating system",
+      "status": "passed",
+      "message": "Windows 11 Pro 10.0.26200.0 X64",
+      "remediation": null
+    },
+    {
+      "id": "dotnet-runtime",
+      "name": ".NET runtime",
+      "status": "passed",
+      "message": ".NET 10.0.14 (X64)",
+      "remediation": null
+    },
+    {
+      "id": "dotnet-framework",
+      "name": ".NET Framework 4.8",
+      "status": "passed",
+      "message": ".NET Framework 4.8.1 detected (release 533509).",
+      "remediation": null
+    },
+    {
+      "id": "tia-portal-installation",
+      "name": "TIA Portal installation",
+      "status": "failed",
+      "message": "TIA Portal V21 installation was not found in any inspected location.",
+      "remediation": "Install TIA Portal V21, set TiaPortalV21Dir to its PublicAPI\\V21\\net48 folder, or set TiaPortalLocation to the Portal V21 installation root."
+    },
+    {
+      "id": "openness-assemblies",
+      "name": "Openness assemblies",
+      "status": "failed",
+      "message": "No TIA Portal V21 installation was found.",
+      "remediation": "Install TIA Portal V21 with the Openness option, or set TiaPortalV21Dir to the PublicAPI\\V21\\net48 folder."
+    },
+    {
+      "id": "openness-user-group",
+      "name": "Siemens TIA Openness group",
+      "status": "failed",
+      "message": "The local group \u0022Siemens TIA Openness\u0022 does not exist.",
+      "remediation": "Install TIA Portal V21 with the Openness option to create the group, then add the current user to it and sign out and sign in again."
+    },
+    {
+      "id": "openness-worker",
+      "name": "Openness worker",
+      "status": "passed",
+      "message": "Worker found at C:\\FAT_Studio\\.local\\tia-mcp-package-check\\.store\\tiamcpserver\\4.3.0\\tiamcpserver\\4.3.0\\tools\\net10.0\\any\\openness-worker\\TiaMcpServer.OpennessWorker.exe (version 4.3.0).",
+      "remediation": null
+    },
+    {
+      "id": "host-worker-version",
+      "name": "Host and worker compatibility",
+      "status": "passed",
+      "message": "Host 4.3.0, worker 4.3.0.",
+      "remediation": null
+    },
+    {
+      "id": "tia-portal-process",
+      "name": "TIA Portal process",
+      "status": "warning",
+      "message": "No running TIA Portal instance was detected.",
+      "remediation": "Start TIA Portal V21 before operations that attach to an open project. This is informational; the installation can still be valid."
+    },
+    {
+      "id": "project-binding",
+      "name": "Project binding",
+      "status": "warning",
+      "message": "No project binding is configured. Project tools fail until bind_project binds an already-open project.",
+      "remediation": "Call bind_project with the intended already-open project\u0027s absolute projectPath, or set --project to its path, or set TIA_MCP_PROJECT_PATH."
+    }
+  ]
+}

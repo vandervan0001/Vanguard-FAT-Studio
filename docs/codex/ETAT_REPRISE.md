@@ -2,7 +2,23 @@
 
 Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain agent et à l'ingénieur qui reprend le projet. Les sections historiques ci-dessous décrivent la livraison ; inscrire les développements ultérieurs dans la section « État courant » et les notes de session.
 
-## État courant — poste Windows local préparé, sans Siemens
+## État courant — vérification étendue sans Siemens
+
+Le 2 novembre 2026, la campagne étendue a réussi sur `682be875662d99b37752d6174e471a72dcef451d` : **423 tests Python réussis et 4 ignorés sur ce compte Windows**, **427 réussis en CI Windows**, **419 réussis et 8 jonctions NTFS ignorées en CI Ubuntu**, ainsi que **33 tests frontend par système**. Les quatre tests de liens symboliques ignorés localement passent en CI Windows. Huit essais supplémentaires couvrent de vraies jonctions sans modifier le poste.
+
+La branche `codex/windows-local-setup` est poussée. La [CI 41532733264](https://github.com/vandervan0001/FAT-Studio/actions/runs/41532733264) et l'installation hors ligne Windows ont réussi ; `main` reste inchangé. Les [preuves étendues](../../evidence/reprises/2026-11-02-windows-extended/VERIFICATION.md) distinguent le SHA du code testé des ajouts documentaires suivants.
+
+Le ZIP exact a été installé et testé hors ligne dans une extraction neuve. Les 33 tests frontend passent contre le paquet installé ; une charge UI de 50 équipements/200 tags passe sans erreur navigateur. Les essais OPC UA réels génériques passent, dont 1 000 cycles chiffrés à 200 tags, 160 000 écritures de valeurs, coupure sans reprise automatique et redémarrage explicite. Les dépassements mesurés restent visibles ; aucune garantie de cadence Siemens n'est déduite.
+
+Le paquet MCP réel a été vérifié en lecture seule par le SDK officiel, avec huit outils disponibles et aucune opération sur un projet. Son doctor confirme l'absence de TIA/Openness et du groupe Windows associé. L'observation sur `--help` seul est consignée dans `KB.md` ; utiliser `doctor --help` et garder le mode lecture seule explicite. Aucun profil MCP qualifié n'est installé.
+
+Tous les processus de test sont arrêtés ; le raccourci **FAT Studio** reste disponible. Le runtime et le frontend restent en 0.2.1 sans changement applicatif pendant cette campagne. **La prochaine qualification demande TIA Portal/Openness, PLCSIM, leurs licences et une copie du projet réel.** Aucun résultat local ne ferme cette frontière.
+
+Dernière note : [vérification étendue Windows et CI](sessions/2026-11-02-windows-extended-validation.md).
+
+Livraison complémentaire : `C:\FAT_Studio-Delivery-2026-11-02-extended`. Son reçu `delivery.json` identifie le HEAD sauvegardé, les empreintes et les contrôles d'archive/récupération. Elle conserve le kit runtime déjà testé et y associe le bundle Git de la branche enrichie. Les kits et l'archive initiale restent intacts.
+
+## Historique — poste Windows local préparé, sans Siemens
 
 Le 2 novembre 2026, le dépôt privé a été cloné intégralement dans `C:\FAT_Studio`, depuis `00ab08c`. Le travail local est sur `codex/windows-local-setup`. Python 3.12.10 x64, les dépendances runtime/dev/MCP, Node.js 22.23.4/npm 10.9.9 et le SDK .NET 10.0.403 sont disponibles. Le [guide de ce poste](../WINDOWS_LOCAL_SETUP.md) indique le lancement et l'environnement de développement local.
 
@@ -264,7 +280,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02, préparation locale Windows sans Siemens](sessions/2026-11-02-windows-local-setup.md). Les notes précédentes restent conservées. La prochaine qualification requiert les installations Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02, vérification étendue Windows et CI](sessions/2026-11-02-windows-extended-validation.md). Les notes précédentes restent conservées. La prochaine qualification requiert les installations Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

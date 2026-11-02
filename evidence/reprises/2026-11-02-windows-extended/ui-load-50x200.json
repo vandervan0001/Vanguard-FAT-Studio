@@ -1,0 +1,22 @@
+{
+  "scope": "Installed ZIP, Chromium, demo mode, HTTP and UI only; no Siemens",
+  "equipment": 50,
+  "tags": 200,
+  "shared_load": "Full Python tests and separate OPC UA endurance checks may run concurrently",
+  "started_at_utc": "2026-11-02T21:58:09.238Z",
+  "running_wall_s": 30.1323738,
+  "sim_time_s": 30.2,
+  "lag_ms_at_capture": 0,
+  "write_count": 48320,
+  "rendered_tag_rows": 200,
+  "sample_count": 305,
+  "http_state_responses": 64,
+  "http_state_response_ms": {
+    "p50": 34.168900000000576,
+    "p95": 55.009900000000926,
+    "max": 99.28319999999803
+  },
+  "browser_errors": [],
+  "status": "passed",
+  "finished_at_utc": "2026-11-02T21:58:42.080Z"
+}
