@@ -18,9 +18,9 @@ Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FA
 
 **Serveur local arrêté à la demande de Tai**, par SIGINT envoyé au processus FAT identifié. Données de démonstration conservées dans `../work/2026-11-02-macos-reprise/demo-data`. Aucun service FAT persistant n'est requis à la reprise. La section macOS ci-dessous décrit le démarrage précédent et reste historique.
 
-Prochaine action : installer le profil de la version effectivement disponible sur le PC Windows, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
+Prochaine action : ouvrir le dépôt sur le PC Windows équipé de Siemens et utiliser le [prompt de validation TIA V20/V21](PROMPT_VALIDATION_WINDOWS_TIA_V20_V21.md). Installer le profil de la version effectivement disponible, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
 
-Dernière note : [CI réussie et livraison privée 0.2.1](sessions/2026-11-02-ci-private-delivery.md). Les notes [de délais Windows](sessions/2026-11-02-windows-ui.md), [d'encodage Windows](sessions/2026-11-02-windows-utf8.md) et [de sélection V20/V21](sessions/2026-11-02-v20-v21-private-git.md) restent conservées.
+Dernière note : [préparation de la reprise Windows TIA](sessions/2026-11-02-windows-tia-handoff.md). Les [preuves de livraison privée 0.2.1](sessions/2026-11-02-ci-private-delivery.md) et les notes [de délais Windows](sessions/2026-11-02-windows-ui.md), [d'encodage Windows](sessions/2026-11-02-windows-utf8.md) et [de sélection V20/V21](sessions/2026-11-02-v20-v21-private-git.md) restent conservées.
 
 ## Historique — reprise du 2 novembre 2026, macOS ARM64
 
@@ -242,7 +242,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — CI réussie et livraison privée](sessions/2026-11-02-ci-private-delivery.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02 — reprise Windows TIA](sessions/2026-11-02-windows-tia-handoff.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

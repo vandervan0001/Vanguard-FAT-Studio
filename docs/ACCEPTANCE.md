@@ -17,7 +17,7 @@ Ce protocole couvre le banc FAT local et son option d'ingénierie. Il est à ex�
 | TIA Portal / Update / Openness | |
 | PLCSIM Advanced / Update | |
 | CPU virtuelle, référence et firmware | |
-| Nom d'instance et chemin de copie `.ap21` | |
+| Nom d'instance, version TIA et chemin de copie `.ap20` ou `.ap21` | |
 | IP / endpoint / namespace / ApplicationUri | |
 | Politique et empreintes OPC UA | |
 | Version `tia-portal-mcp`, client IA et politique de données | |
@@ -105,13 +105,13 @@ Il mesure moteur et SQLite ; mesurer séparément la liaison Siemens et l'interf
 
 ## E. Option d'ingénierie MCP / IA
 
-Ces essais s'exécutent seulement si le volet IA est retenu et les règles de circulation des sources approuvées. Utiliser la procédure de [TIA_MCP.md](TIA_MCP.md), Czarnak v4.3.0 épinglé et une copie standalone `.ap21` ouverte/sauvegardée dans TIA V21.
+Ces essais s'exécutent seulement si le volet IA est retenu et les règles de circulation des sources approuvées. Utiliser la procédure de [TIA_MCP.md](TIA_MCP.md) et les profils de [TIA_VERSIONS.md](TIA_VERSIONS.md) : Czarnak v4.3.0 épinglé pour V21, portage de la source épinglée compilé contre les vraies DLL V20 pour V20. Qualifier chaque version séparément, avec sa copie standalone `.ap20` ou `.ap21` ouverte/sauvegardée dans le TIA correspondant et son archive `.zap20` ou `.zap21`. Une version absente reste non exécutée ; aucun résultat d'une version ne valide l'autre.
 
 **E1 — Lecture seule.** Exécuter le `doctor` upstream, déclarer la copie puis connecter le client choisi avec `--access-mode read-only`. Lister l'arbre, lire un bloc SCL représentatif, un DB et les tables de tags nécessaires. Pour LAD/FBD, tester un bloc réellement utilisé et relever la représentation accessible. Attendu : cible exacte, contenu fidèle, outils d'écriture/compilation absents du client IA en lecture seule.
 
 **E2 — Proposition refusée.** Exporter un bloc vers `before.*`/`after.*`, préparer une modification locale simple, afficher le diff et refuser l'application lorsqu'elle est proposée. Attendu : le bloc dans TIA reste identique et le refus est journalisé. Ne pas modifier le fichier `before.*`.
 
-**E3 — Modification acceptée.** Activer l'écriture depuis le terminal humain et appliquer une proposition relue. Attendu : prévisualisation, confirmation avec la cible/hash, archive `.zap21` vérifiée avant import, contrôle de non-modification concurrente, diagnostics de compilation, sauvegarde soumise à sa confirmation. Examiner le bloc résultant dans TIA.
+**E3 — Modification acceptée.** Activer l'écriture depuis le terminal humain et appliquer une proposition relue. Attendu : prévisualisation, confirmation avec la cible/hash, archive `.zap20` ou `.zap21` du profil vérifiée avant import, contrôle de non-modification concurrente, diagnostics de compilation, sauvegarde soumise à sa confirmation. Examiner le bloc résultant dans TIA.
 
 **E4 — Garde de concurrence.** Après export, modifier volontairement le bloc de la copie dans TIA, puis tenter l'application de l'ancien export. Attendu : refus d'import sur source périmée. Produire un nouvel export avant tout autre changement.
 

@@ -10,6 +10,8 @@ Ce dossier contient le projet complet et les éléments nécessaires pour le rep
 
 **Après une interruption ou dans une nouvelle conversation**, utiliser [docs/codex/PROMPT_REPRISE_CODEX.md](docs/codex/PROMPT_REPRISE_CODEX.md). Il demande de relire l'état réel des fichiers, les commits et la dernière note de session avant de poursuivre.
 
+**Sur le PC Windows équipé de Siemens**, utiliser le [prompt de validation TIA V20/V21](docs/codex/PROMPT_VALIDATION_WINDOWS_TIA_V20_V21.md). Il reprend la référence 0.2.1 et conduit les builds natifs, les essais Openness/MCP et la qualification sur instance virtuelle, avec des résultats distincts pour chaque version.
+
 ## Contenu de l'archive initiale 0.1.1
 
 | Élément | Emplacement |
