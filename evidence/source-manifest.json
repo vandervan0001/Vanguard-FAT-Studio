@@ -1,9 +1,11 @@
 {
-  "generated_at_utc": "2026-11-02T13:21:46.975857+00:00",
+  "generated_at_utc": "2026-11-02T13:39:41.059270+00:00",
   "format": "Git index blob bytes; text normalized by .gitattributes",
-  "scope": "application, web sources and compiled assets, tests, scripts, configuration, licences and Siemens examples",
+  "scope": "application, web sources and compiled assets, tests, scripts, configuration, licences, Siemens examples and root handoff instructions",
   "release": "0.1.1",
-  "baseline_commit": "c18e0d439925155a91fbd1476c92be54f8a8cb06",
+  "handoff_tag": "v0.1.1-codex-handoff",
+  "tested_application_commit": "b271bba7cccb3dca1283ebfb4c301116b5df43f3",
+  "note": "Handoff documentation added; runtime, scripts, tests, locks and compiled assets unchanged. Historical test results were not rerun for this documentation-only change.",
   "files": [
     {
       "path": ".gitattributes",
@@ -21,9 +23,19 @@
       "sha256": "2639794f85a79af58a1a667598e1e4d4cc13892252ec177bfaf91937b5398942"
     },
     {
+      "path": "AGENTS.md",
+      "bytes": 4409,
+      "sha256": "5bab7d9d2c16a31cbe88ea0ecba0c57927f6a8f42cdfbb0e6ee1ab2c06d80b98"
+    },
+    {
       "path": "LICENSE",
       "bytes": 1080,
       "sha256": "3c2a24ce8cecd551944384c086c5af4c79f22127a1be36fe419363c69ba25abf"
+    },
+    {
+      "path": "README-CODEX.md",
+      "bytes": 3540,
+      "sha256": "a32d2e23182dae4ab3ce30a26733b7602ffa27ee1df1bb48a3a4eb3c63fa5eaf"
     },
     {
       "path": "README.md",
@@ -177,8 +189,8 @@
     },
     {
       "path": "frontend/README.md",
-      "bytes": 7035,
-      "sha256": "3568649b556c22d2622d869cf0c4c58df6009d5a896da9f731468162d6ba5bac"
+      "bytes": 7284,
+      "sha256": "4afcfcf8b27c3f231dbe61f7e4fed25d2870a6493bb8a546b75e3e09e6825b34"
     },
     {
       "path": "frontend/index.html",

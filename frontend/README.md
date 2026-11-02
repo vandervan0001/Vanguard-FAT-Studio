@@ -11,7 +11,7 @@ npm ci
 npm run build
 ```
 
-`dist/` contient les fichiers statiques servis par le backend. Le script d’installation du dépôt réalise ces étapes. Le fichier `package-lock.json` fige l’intégralité de l’arbre npm. Aucun service cloud ni clé API n’est requis.
+`dist/` contient le résultat de cette construction. Depuis la racine, `python scripts/build-web.py` le copie dans `fat_studio/web/`, le répertoire servi par le backend et inclus dans la wheel. Les lanceurs d'installation exigent cette interface précompilée ; ils n'exécutent pas npm. Le fichier `package-lock.json` fige l’intégralité de l’arbre npm. Aucun service cloud ni clé API n’est requis.
 
 Pour développer, démarrer le backend sur `127.0.0.1:8765` avec `FAT_STUDIO_DEV_ORIGIN=http://127.0.0.1:5173`, puis `npm run dev`. Le proxy Vite `/api` utilise cette autorisation d’origine de développement explicite. La distribution utilise toujours la même origine que le backend.
 
@@ -64,7 +64,7 @@ cd frontend
 npm test
 ```
 
-En CI Linux, utiliser `npx playwright install --with-deps chromium`. Le runner est figé à `@playwright/test` 1.56.1. `npm run test:e2e` exécute uniquement les parcours navigateur. Le rapport machine est écrit dans `frontend/test-results/results.json` ; traces et captures d’échec restent dans ce répertoire ignoré par Git.
+En CI Linux, utiliser `npx playwright install --with-deps chromium`. Le runner est figé à `@playwright/test` 1.56.1. `npm run test:e2e` exécute uniquement `workbench.spec.ts` ; utiliser `npm test` pour inclure aussi les parcours adverses et les tests TypeScript. Le rapport machine est écrit dans `frontend/test-results/results.json` ; traces et captures d’échec restent dans ce répertoire ignoré par Git.
 
 `FAT_E2E_PYTHON` peut désigner un interpréteur Python explicite. `FAT_E2E_BASE_URL` permet de viser un serveur de test existant **uniquement sur loopback** ; ce serveur doit être dédié aux tests, car la suite y remplace le projet actif. Sans cette variable, l’isolation temporaire est automatique.
 
