@@ -22,6 +22,8 @@ Dernière note : [préparation locale Windows sans Siemens](sessions/2026-11-02-
 
 Le correctif de livraison est commité sous `1f54282`. Le kit final neuf `C:\FAT_Studio-Offline-2026-11-02` contient le correctif du contrôle, les mêmes 32 fichiers applicatifs et 43 wheels ; son manifeste est vérifié. Le kit installé de validation reste distinct. La documentation et les preuves sont conservées dans le commit suivant sur la même branche.
 
+Sauvegarde hors dépôt : `C:\FAT_Studio-Delivery-2026-11-02`, avec bundle Git complet, wheel, ZIP contenant kit et bundle, empreintes SHA-256 et reçu `delivery.json`. Le bundle a été vérifié, recloné dans `.local/recovery-check` avec HEAD identique, puis contrôlé par `git fsck --full`. Le ZIP a passé la vérification CRC de tous ses fichiers. Les données personnelles, `.venv` et caches de développement ne sont pas dans cette archive.
+
 ## Historique — 0.2.1, choix V20/V21 et dépôt privé
 
 La version actuelle est **0.2.1**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.

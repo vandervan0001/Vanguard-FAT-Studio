@@ -65,3 +65,5 @@ Les [preuves du poste](../evidence/reprises/2026-11-02-windows-local/VERIFICATIO
 Le kit d'exécution hors ligne utilise Python 3.12 x64 et contient les dépendances runtime et MCP. Il ne contient ni Siemens, ni ses licences. La sauvegarde Git ne contient pas les données personnelles d'essai ; sauvegarder `%LOCALAPPDATA%\FATStudio` séparément, serveur arrêté, lorsqu'il contiendra des essais.
 
 Le kit final neuf est dans `C:\FAT_Studio-Offline-2026-11-02` ; son manifeste est vérifié et ses fichiers applicatifs correspondent aux sources testées. Le kit de validation installé reste séparé dans `C:\FAT_Studio-Offline-Validation-2026-11-02`. Garder ces kits intacts et poursuivre les modifications dans `C:\FAT_Studio`.
+
+`C:\FAT_Studio-Delivery-2026-11-02` contient la sauvegarde Git et le ZIP complet du kit. Le bundle a été recloné et vérifié ; le ZIP a passé son contrôle CRC. Le fichier `delivery.json` et `SHA256SUMS.txt` identifient les artefacts et leurs empreintes.
