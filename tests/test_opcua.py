@@ -36,7 +36,7 @@ class Fixture:
             self.started = False
 
 
-async def build_fixture(tmp_path, port, *, encrypted=False):
+async def build_fixture(tmp_path, port, *, encrypted=False, server_certificate_transform=None):
     server = Server()
     await server.init()
     endpoint = f"opc.tcp://127.0.0.1:{port}/fat-test/"
@@ -68,6 +68,8 @@ async def build_fixture(tmp_path, port, *, encrypted=False):
                                            [ExtendedKeyUsageOID.SERVER_AUTH], {"commonName": "Protocol fixture"})
         await setup_self_signed_certificate(client_key, client_cert, "urn:fat-studio:client", "localhost",
                                            [ExtendedKeyUsageOID.CLIENT_AUTH], {"commonName": "FAT Studio test client"})
+        if server_certificate_transform:
+            server_certificate_transform(server_key, server_cert)
         await server.load_certificate(server_cert)
         await server.load_private_key(server_key)
         server.set_security_policy([ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt])
@@ -125,6 +127,39 @@ async def test_namespace_uri_resolves_stale_numeric_index(fixture):
     try:
         await adapter.write(values())
         assert await fixture.nodes["input_int"].read_value() == -32768
+    finally:
+        await adapter.disconnect()
+
+
+async def test_namespace_resolution_cannot_bypass_system_namespace_prohibition(fixture):
+    node = await fixture.server.nodes.objects.add_variable(
+        ua.NodeId("unsafe_system_write", 0), "UnsafeSystemWrite", ua.Variant(0., ua.VariantType.Float))
+    await node.set_writable()
+    fixture.project.plc.namespace_uri = "http://opcfoundation.org/UA/"
+    fixture.project.tags = [Tag(id="signal", name="Signal", direction="input", data_type="REAL",
+                                initial_value=0., writable=True, node_id="ns=2;s=unsafe_system_write")]
+    adapter = fixture.adapter()
+    try:
+        with pytest.raises(MappingError, match="système 0"):
+            await adapter.connect()
+        assert adapter.write_count == 0
+        assert await node.read_value() == 0.
+    finally:
+        await adapter.disconnect()
+
+
+async def test_model_evidence_matches_real_float32_roundtrip(fixture):
+    from fat_studio.engine import ProcessEngine
+
+    tag = next(tag for tag in fixture.project.tags if tag.id == "input_real")
+    tag.initial_value = 16_777_217.
+    engine = ProcessEngine(fixture.project)
+    adapter = fixture.adapter()
+    try:
+        await adapter.connect()
+        image = engine.step(await adapter.read(engine.values, .1), .1)
+        await adapter.write(image)
+        assert engine.values["input_real"] == await fixture.nodes["input_real"].read_value()
     finally:
         await adapter.disconnect()
 
@@ -273,3 +308,158 @@ async def test_wrong_certificate_pin_refuses_before_write(tmp_path, unused_tcp_p
     finally:
         await adapter.disconnect()
         await resource.stop()
+
+
+@pytest.mark.parametrize("problem", ["expired", "future", "uri"])
+async def test_pinned_certificate_still_requires_valid_time_and_application_uri(tmp_path, unused_tcp_port, problem):
+    from datetime import datetime, timedelta, timezone
+    from cryptography import x509
+    from cryptography.hazmat.primitives import hashes, serialization
+
+    def transform(key_path, cert_path):
+        cert = x509.load_der_x509_certificate(cert_path.read_bytes())
+        key = serialization.load_pem_private_key(key_path.read_bytes(), password=None)
+        now = datetime.now(timezone.utc)
+        before = now + timedelta(days=1) if problem == "future" else now - timedelta(days=2)
+        after = now - timedelta(days=1) if problem == "expired" else now + timedelta(days=2)
+        builder = (x509.CertificateBuilder().subject_name(cert.subject).issuer_name(cert.issuer)
+                   .public_key(cert.public_key()).serial_number(cert.serial_number)
+                   .not_valid_before(before).not_valid_after(after))
+        for extension in cert.extensions:
+            value = extension.value
+            if problem == "uri" and isinstance(value, x509.SubjectAlternativeName):
+                value = x509.SubjectAlternativeName([x509.UniformResourceIdentifier("urn:wrong:certificate:identity"),
+                                                    x509.DNSName("localhost")])
+            builder = builder.add_extension(value, critical=extension.critical)
+        cert_path.write_bytes(builder.sign(key, hashes.SHA256()).public_bytes(serialization.Encoding.DER))
+
+    resource = await build_fixture(tmp_path, unused_tcp_port, encrypted=True, server_certificate_transform=transform)
+    adapter = resource.adapter()
+    try:
+        with pytest.raises(ua.UaError):
+            await adapter.connect()
+        assert not adapter.connected and adapter.write_count == 0
+        assert await resource.nodes["input_bool"].read_value() is False
+    finally:
+        await adapter.disconnect()
+        await resource.stop()
+
+
+async def test_session_identity_is_checked_before_user_authentication(tmp_path, unused_tcp_port, monkeypatch):
+    import copy
+    from asyncua.server.internal_session import InternalSession
+    from fat_studio.adapters.opcua import IdentityClient
+
+    resource = await build_fixture(tmp_path, unused_tcp_port, encrypted=True)
+    resource.project.plc.username_env = "FAT_TEST_USER"
+    resource.project.plc.password_env = "FAT_TEST_PASSWORD"
+    resource.policy.add({**resource.policy.entries()[0], "username_env": "FAT_TEST_USER", "password_env": "FAT_TEST_PASSWORD"})
+    monkeypatch.setenv("FAT_TEST_USER", "fixture-user")
+    monkeypatch.setenv("FAT_TEST_PASSWORD", "fixture-test-only-password")
+    original_session = InternalSession.create_session
+    original_activate = IdentityClient.activate_session
+    authentication_attempts = []
+
+    async def changed_session_identity(session, *args, **kwargs):
+        response = await original_session(session, *args, **kwargs)
+        response.ServerEndpoints = copy.deepcopy(response.ServerEndpoints)
+        for endpoint in response.ServerEndpoints:
+            endpoint.Server.ApplicationUri = "urn:session:identity:changed"
+        return response
+
+    async def observe_authentication(client, *args, **kwargs):
+        authentication_attempts.append(bool(kwargs.get("username")))
+        return await original_activate(client, *args, **kwargs)
+
+    monkeypatch.setattr(InternalSession, "create_session", changed_session_identity)
+    monkeypatch.setattr(IdentityClient, "activate_session", observe_authentication)
+    adapter = resource.adapter()
+    try:
+        with pytest.raises((TargetDenied, ua.UaError)):
+            await adapter.connect()
+        assert authentication_attempts == [], "Credentials must not be sent before the actual session identity is accepted"
+        assert not adapter.connected and adapter.write_count == 0
+    finally:
+        await adapter.disconnect()
+        await resource.stop()
+
+
+@pytest.mark.parametrize("credential", ["correct", "wrong", "missing"])
+async def test_encrypted_user_authentication_and_failure_have_no_fallback(tmp_path, unused_tcp_port, monkeypatch, credential):
+    from asyncua.crypto.permission_rules import User, UserRole
+
+    resource = await build_fixture(tmp_path, unused_tcp_port, encrypted=True)
+    resource.project.plc.username_env = "FAT_TEST_USER"
+    resource.project.plc.password_env = "FAT_TEST_PASSWORD"
+    resource.policy.add({**resource.policy.entries()[0], "username_env": "FAT_TEST_USER", "password_env": "FAT_TEST_PASSWORD"})
+    monkeypatch.setenv("FAT_TEST_USER", "fixture-user")
+    monkeypatch.delenv("FAT_TEST_PASSWORD", raising=False)
+    if credential != "missing":
+        monkeypatch.setenv("FAT_TEST_PASSWORD", "fixture-password" if credential == "correct" else "incorrect-password")
+
+    class RequiredUser:
+        def get_user(self, iserver, username=None, password=None, certificate=None):
+            return User(role=UserRole.User) if username == "fixture-user" and password == "fixture-password" else None
+
+    resource.server.iserver.user_manager = RequiredUser()
+    adapter = resource.adapter()
+    try:
+        if credential == "correct":
+            await adapter.connect()
+            await adapter.write(values())
+            assert await resource.nodes["input_real"].read_value() == 12.5
+        else:
+            with pytest.raises((TargetDenied, ua.UaError)):
+                await adapter.connect()
+            assert not adapter.connected and adapter.write_count == 0
+            assert await resource.nodes["input_bool"].read_value() is False
+            with pytest.raises(ConnectionError):
+                await adapter.write(values())
+    finally:
+        await adapter.disconnect()
+        await resource.stop()
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), [1., 2.]])
+async def test_invalid_live_real_image_latches_session_before_any_write(fixture, value):
+    adapter = fixture.adapter()
+    try:
+        await adapter.connect()
+        await fixture.nodes["output_real"].write_value(ua.Variant(value, ua.VariantType.Float))
+        with pytest.raises(ValueError, match="REAL fini"):
+            await adapter.read({}, .1)
+        assert not adapter.connected
+        with pytest.raises(ConnectionError):
+            await adapter.write(values())
+        assert adapter.write_count == 0
+        assert await fixture.nodes["input_bool"].read_value() is False
+    finally:
+        await adapter.disconnect()
+
+
+async def test_cancelled_disconnect_always_closes_owned_transport(tmp_path):
+    import asyncio
+
+    entered = asyncio.Event()
+
+    class SuspendedClient:
+        closed = False
+
+        async def disconnect(self):
+            entered.set()
+            await asyncio.Event().wait()
+
+        def disconnect_socket(self):
+            self.closed = True
+
+    project = Project(id="cancel", name="Cancel cleanup")
+    adapter = OpcUaAdapter(project, MachinePolicy(tmp_path / "unused-policy.json"), "unused")
+    client = SuspendedClient()
+    adapter.client, adapter.connected = client, True
+    task = asyncio.create_task(adapter.disconnect())
+    await entered.wait()
+    task.cancel()
+    with pytest.raises(asyncio.CancelledError):
+        await task
+    assert client.closed
+    assert adapter.client is None and not adapter.connected

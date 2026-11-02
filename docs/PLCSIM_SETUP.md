@@ -52,6 +52,8 @@ Limiter les droits du client aux variables nécessaires. Relever les **NodeIds r
 
 FAT Studio prend en charge `None` ou **Basic256Sha256 / SignAndEncrypt**. Si un nom utilisateur est nécessaire, le chiffrement est obligatoire dans cet adaptateur. Le projet conserve seulement les noms de variables d'environnement, jamais le mot de passe. Les chemins de certificat client et de clé privée pointent vers des fichiers sur le poste ; le serveur doit faire confiance au certificat client selon sa configuration.
 
+En mode chiffré, l'empreinte épinglée ne suffit pas : le certificat serveur doit être dans sa période de validité et son SAN URI doit correspondre à l'ApplicationUri observée. Vérifier également l'horloge du poste. L'identité retournée par `CreateSession` est contrôlée avant l'activation authentifiée. Une erreur d'identité ou de certificat doit être corrigée sur la cible et dans sa politique approuvée ; aucun repli anonyme n'est effectué. Le modèle de confiance reste l'épinglage local, sans consultation CA/CRL/OCSP.
+
 ## 4. Autoriser la cible sur le poste
 
 La politique locale est séparée des JSON de projet : importer un projet ne peut pas autoriser sa propre cible. Les noms DNS, IP publiques et URL contenant des identifiants sont refusés. Une adresse privée n'est toutefois pas une preuve de virtualisation : l'isolation doit être vérifiée par l'opérateur.

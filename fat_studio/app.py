@@ -151,16 +151,21 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
                     return JSONResponse({"detail": "La requête dépasse 5 Mo."}, status_code=413)
                 chunks.append(chunk)
             request._body = b"".join(chunks)
+        guarded_read = request.method == "GET" and request.url.path == "/api/mapping"
+        if mutation or guarded_read:
             async with app.state.mutations:
                 project_id = request.headers.get("x-fat-project-id")
-                guarded = request.url.path.startswith(("/api/run/", "/api/force", "/api/fault", "/api/markers", "/api/result"))
-                guarded = guarded or (request.method == "PUT" and request.url.path == "/api/project") or (
+                run_action = request.url.path.startswith(("/api/run/", "/api/force", "/api/fault", "/api/markers", "/api/result"))
+                guarded = guarded_read or run_action or (request.method == "PUT" and request.url.path == "/api/project") or (
                     request.method == "POST" and request.url.path == "/api/mapping")
                 if guarded and project_id and project_id != app.state.runtime.project.id:
                     return JSONResponse({"detail": "Le projet actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
                 revision = request.headers.get("x-fat-project-revision")
                 if guarded and revision and revision != app.state.runtime.project_revision:
                     return JSONResponse({"detail": "Le projet a été modifié dans un autre onglet ; conserver le brouillon et recharger avant d'agir."}, status_code=409)
+                run_id = request.headers.get("x-fat-run-id")
+                if run_action and run_id is not None and run_id != (app.state.runtime.run_id or ""):
+                    return JSONResponse({"detail": "L'essai actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
                 response = await call_next(request)
         else:
             response = await call_next(request)
@@ -293,7 +298,8 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     @app.get("/api/mapping")
     async def mapping_export():
         return Response(export_mapping(app.state.runtime.project), media_type="text/csv",
-                        headers={"Content-Disposition": 'attachment; filename="fat-mapping.csv"'})
+                        headers={"Content-Disposition": 'attachment; filename="fat-mapping.csv"',
+                                 "X-FAT-Project-Revision": app.state.runtime.project_revision})
 
     @app.post("/api/mapping")
     async def mapping_import(body: MappingRequest, response: Response):
@@ -342,23 +348,11 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
 
     @app.post("/api/markers")
     async def marker(body: MarkerRequest):
-        runtime = app.state.runtime
-        async with runtime.lock:
-            if not runtime.run_id:
-                raise ValueError("Aucun essai à annoter.")
-            runtime.event("marker", body.message)
-            return runtime.snapshot()
+        return await app.state.runtime.marker(body.message)
 
     @app.post("/api/result")
     async def result(body: ResultRequest):
-        runtime = app.state.runtime
-        async with runtime.lock:
-            if not runtime.run_id:
-                raise ValueError("Aucun essai à évaluer.")
-            app.state.store.set_result(runtime.run_id, body.verdict, body.comment)
-            runtime.event("user_result", "Verdict utilisateur : " + body.verdict,
-                          {"verdict": body.verdict, "comment": body.comment})
-            return runtime.snapshot()
+        return await app.state.runtime.set_result(body.verdict, body.comment)
 
     @app.get("/api/runs")
     async def runs():

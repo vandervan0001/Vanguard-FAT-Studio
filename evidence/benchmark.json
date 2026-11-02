@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "measured_at_utc": "2026-11-02T11:45:18.695986+00:00",
+  "measured_at_utc": "2026-11-02T13:08:20.314543+00:00",
   "system": {
     "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
     "python": "3.12.14",
@@ -30,9 +30,9 @@
     "project_sha256": "3086de7cbb56b7275a255be8aa7865899762e91b45f3eff661e081d29a3ab5e4"
   },
   "source_sha256": {
-    "fat_studio/engine.py": "d32552a35d0fa14045df1d684f5e05ba82d9211ea742d19f493599e8c40bbd35",
-    "fat_studio/models.py": "88037bc529a0ee2f8872f2e670061ae1bc1a3140257c322bc934972bcc55f077",
-    "fat_studio/storage.py": "384963efe6809c5d9b32ef3b462380ffb7c3d69fdcddfd50e0ce79102b464fcd",
+    "fat_studio/engine.py": "622ce3ccb62d66df9e0196b1c8870d702471e5d6247ac3780881e49313d390c1",
+    "fat_studio/models.py": "67af0fdc463fa77c3f65be9f97bf4cb7f807e0f543866db24c51f77190c559f2",
+    "fat_studio/storage.py": "ffc72c6b12658bcd27ae073df741351691482b8b3a60db2e4ee9337d298a05aa",
     "scripts/benchmark.py": "02e145bb820561c7d050dacee9e1b6b3c2e2a1580b2ca4340ccec5974fa39ffb"
   },
   "limitations": [
@@ -46,41 +46,41 @@
     "plant_only": {
       "cycles": 1000,
       "unit": "ms",
-      "p50": 0.215636,
-      "p95": 0.305159,
-      "max": 1.41712,
-      "min": 0.207794,
-      "mean": 0.234397,
-      "elapsed_wall_s": 0.242302
+      "p50": 0.419578,
+      "p95": 0.728034,
+      "max": 3.465311,
+      "min": 0.334304,
+      "mean": 0.47448,
+      "elapsed_wall_s": 0.486421
     },
     "sqlite_only": {
       "cycles": 1000,
       "unit": "ms",
-      "p50": 0.298616,
-      "p95": 0.627025,
-      "max": 3.108223,
-      "min": 0.186491,
-      "mean": 0.361642,
-      "elapsed_wall_s": 0.374881,
+      "p50": 0.366007,
+      "p95": 0.842617,
+      "max": 4.762188,
+      "min": 0.187724,
+      "mean": 0.463475,
+      "elapsed_wall_s": 0.476223,
       "sample_count": 1000,
       "sqlite_journal_mode": "wal",
       "sqlite_synchronous": 2,
-      "db_and_journal_bytes": 13483656
+      "db_and_journal_bytes": 13463104
     },
     "plant_and_sqlite": {
       "cycles": 1000,
       "unit": "ms",
-      "p50": 0.666336,
-      "p95": 1.045417,
-      "max": 4.293256,
-      "min": 0.468507,
-      "mean": 0.730835,
-      "elapsed_wall_s": 0.743771,
+      "p50": 0.91751,
+      "p95": 1.314572,
+      "max": 7.567804,
+      "min": 0.613186,
+      "mean": 0.995648,
+      "elapsed_wall_s": 1.008971,
       "sample_count": 1000,
       "sqlite_journal_mode": "wal",
       "sqlite_synchronous": 2,
-      "db_and_journal_bytes": 15560280
+      "db_and_journal_bytes": 15547992
     }
   },
-  "deterministic_final_values_sha256": "65cd9e1ead4b1843c86aa715f60bd7bab40c9c7988d912ea4d387da5d60cae03"
+  "deterministic_final_values_sha256": "26da949540d2b468d9f39d5a00886bb49243ec7784b7f4b743ed4a63b62d0829"
 }

@@ -108,10 +108,16 @@ class Policy:
         backup = canonical(self.backup_root)
         if backup.is_relative_to(target.parent):
             raise EngineeringError("Backup directory must be outside the TIA project directory.")
-        canonical(self.audit_path)
+        audit = canonical(self.audit_path)
+        if audit.is_relative_to(target.parent) or audit.suffix.lower() != ".jsonl":
+            raise EngineeringError("Audit must be a .jsonl file outside the TIA project directory.")
+        if audit.exists() and not audit.is_file():
+            raise EngineeringError("Audit path must be a regular file.")
         executable = canonical(self.server_executable, must_exist=True)
         if not executable.is_file():
             raise EngineeringError("MCP executable must be an existing local file.")
+        if audit.exists() and (audit.samefile(target) or audit.samefile(executable)):
+            raise EngineeringError("Audit must not alias the TIA project or the MCP executable.")
 
     def require_write(self) -> None:
         self.validate()
@@ -366,6 +372,66 @@ class Engineering:
             raise EngineeringError("Upstream returned a different export format.")
         return value
 
+    async def tree(self) -> dict[str, Any]:
+        """Drain v3 pages before closing stdio: upstream cursors are process-local."""
+        await self.verify_target()
+        arguments: dict[str, Any] = {"pageSize": 100}
+        snapshot = query = None
+        nodes: list[dict[str, Any]] = []
+        warnings: list[Any] = []
+        seen_cursors: set[str] = set()
+        seen_nodes: set[str] = set()
+        pages = 0
+        while True:
+            document = await self.call("browse_project_tree", arguments)
+            value = document.get("result")
+            if (document.get("contractVersion") != "3.0" or document.get("status") != "succeeded" or document.get("failure")
+                    or not isinstance(value, dict)):
+                raise EngineeringError("Project tree failed: " + json.dumps(document, ensure_ascii=False))
+            current_snapshot, current_query = value.get("snapshot"), value.get("query")
+            pagination, page_nodes = value.get("pagination"), value.get("nodes")
+            if (not isinstance(current_snapshot, dict) or not current_snapshot.get("snapshotId")
+                    or type(current_snapshot.get("totalNodes")) is not int
+                    or current_snapshot["totalNodes"] < 0 or not isinstance(current_query, dict)
+                    or not isinstance(pagination, dict) or not isinstance(page_nodes, list)
+                    or type(pagination.get("offset")) is not int or pagination["offset"] != len(nodes)
+                    or type(pagination.get("returnedCount")) is not int
+                    or pagination["returnedCount"] != len(page_nodes)):
+                raise EngineeringError("Project tree returned incomplete or out-of-order page metadata.")
+            if snapshot is None:
+                snapshot, query = current_snapshot, current_query
+                if not isinstance(query.get("projectPath"), str) or canonical(query["projectPath"]) != canonical(self.policy.project_path):
+                    raise EngineeringError("Project tree belongs to another project.")
+            elif (current_snapshot.get("snapshotId") != snapshot["snapshotId"]
+                  or current_snapshot["totalNodes"] != snapshot["totalNodes"] or current_query != query):
+                raise EngineeringError("Project tree snapshot changed during pagination; start a fresh read.")
+            for node in page_nodes:
+                if (not isinstance(node, dict) or not isinstance(node.get("nodeId"), str)
+                        or not node["nodeId"] or node["nodeId"] in seen_nodes
+                        or type(node.get("sequence")) is not int or node["sequence"] != len(nodes)
+                        or (node.get("parentNodeId") is not None and node["parentNodeId"] not in seen_nodes)):
+                    raise EngineeringError("Project tree contains an invalid or duplicated node.")
+                seen_nodes.add(node["nodeId"])
+                nodes.append(node)
+            if len(nodes) > snapshot["totalNodes"]:
+                raise EngineeringError("Project tree contains more nodes than its snapshot.")
+            page_warnings = document.get("warnings", [])
+            if not isinstance(page_warnings, list):
+                raise EngineeringError("Project tree returned malformed warnings.")
+            warnings.extend(page_warnings)
+            pages += 1
+            cursor = pagination.get("nextCursor")
+            if cursor is None:
+                if len(nodes) != snapshot["totalNodes"]:
+                    raise EngineeringError("Project tree stopped before the complete snapshot was read.")
+                break
+            if not isinstance(cursor, str) or not cursor or cursor in seen_cursors or not page_nodes:
+                raise EngineeringError("Project tree cursor did not make progress.")
+            seen_cursors.add(cursor)
+            arguments = {"cursor": cursor}
+        return {"status": "succeeded", "snapshot": snapshot, "query": query,
+                "nodes": nodes, "pages": pages, "warnings": warnings}
+
     async def export(self, path: str, format: str, directory: Path) -> Path:
         await self.verify_target()
         value = await self.read_block(path, format)
@@ -442,7 +508,7 @@ class Engineering:
             receipt["import"] = imported
             successful(imported, "plc_write", phase="applied")
             verification = imported.get("verification") or {}
-            if verification.get("success") is not True:
+            if verification.get("success") is not True or verification.get("omission"):
                 raise EngineeringError("Import verification failed; the work copy may already have changed.")
             receipt["status"] = "imported_in_memory"
             receipt["compile"] = await self.compile(archive_first=False)
@@ -452,6 +518,7 @@ class Engineering:
                 if saved:
                     await self.verify_target()
                     receipt["save"] = successful(await self.call("save_project", {"dryRun": False}), "save_project", phase="applied")
+                    standalone(receipt["save"], "save_project")
                     receipt["status"] = "saved_and_compiled"
             else:
                 receipt["status"] = "imported_compile_" + receipt["compile"]["status"]
@@ -476,9 +543,29 @@ class Engineering:
         await self.verify_target()
         document = await self.call("compile_check", {})
         # Compiler errors can be MCP isError:false + document.success:false.
-        report = (document.get("result") or {}).get("value")
-        if document.get("tool") != "compile_check" or document.get("contractVersion") != "1.0" or not isinstance(report, dict):
+        envelope = document.get("result")
+        report = envelope.get("value") if isinstance(envelope, dict) else None
+        if (document.get("tool") != "compile_check" or document.get("contractVersion") != "1.0"
+                or not isinstance(report, dict) or document.get("omission") or envelope.get("omission")
+                or envelope.get("status") not in {"succeeded", "failed"}
+                or type(report.get("totalErrorCount")) is not int or report["totalErrorCount"] < 0
+                or type(report.get("totalWarningCount")) is not int or report["totalWarningCount"] < 0):
             raise EngineeringError("Compilation returned no complete diagnostic report.")
+        if document.get("success") is True and (envelope["status"] != "succeeded" or envelope.get("failure")
+                                               or document.get("error")):
+            raise EngineeringError("Compilation returned contradictory diagnostic status.")
+        plcs = report.get("plcs")
+        if not isinstance(plcs, list) or (document.get("success") is True and not plcs):
+            raise EngineeringError("Compilation returned no PLC diagnostics.")
+        for plc in plcs:
+            if (not isinstance(plc, dict) or type(plc.get("errorCount")) is not int or plc["errorCount"] < 0
+                    or type(plc.get("warningCount")) is not int or plc["warningCount"] < 0
+                    or not isinstance(plc.get("state"), str)):
+                raise EngineeringError("Compilation returned invalid PLC diagnostic counters.")
+        if (sum(plc["errorCount"] for plc in plcs) != report["totalErrorCount"]
+                or sum(plc["warningCount"] for plc in plcs) != report["totalWarningCount"]
+                or (document.get("success") is True and any(plc["state"] not in {"Success", "Warning"} for plc in plcs))):
+            raise EngineeringError("Compilation returned contradictory PLC diagnostics.")
         passed = (document.get("success") is True and report.get("totalErrorCount") == 0
                   and report.get("overallState") in {"Success", "Warning"})
         result = {"status": "passed" if passed else "failed", "diagnostics": document, "backup": str(backup) if backup else None}
@@ -539,11 +626,9 @@ async def run_command(args: argparse.Namespace) -> int:
         if args.command == "status":
             result = await engineer.verify_target()
         elif args.command == "tree":
-            await engineer.verify_target()
-            arguments = {"pageSize": 100}
             if args.cursor:
-                arguments["cursor"] = args.cursor
-            result = await engineer.call("browse_project_tree", arguments)
+                raise EngineeringError("Tree cursors are process-local. Run tree without --cursor; it now reads every page in one session.")
+            result = await engineer.tree()
         elif args.command == "tags":
             await engineer.verify_target()
             operation = {"operationId": "fat-tags", "operation": "list_tag_tables"}

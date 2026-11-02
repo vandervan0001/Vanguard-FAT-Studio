@@ -21,19 +21,19 @@ Depuis la racine du dépôt, dans PowerShell :
 
 ```powershell
 .\scripts\install-tia-mcp.ps1
-.\.venv\Scripts\python.exe -m pip install -e ".[engineering]"
+.\scripts\setup.ps1 -Engineering
 ```
 
-Le script installe `TiaMcpServer 4.3.0` dans `.tools\tia-mcp`, vérifie la version et lance son `doctor`. Il ne télécharge ni TIA Portal, ni licence, ni DLL Siemens. Un autre outil déjà présent n'est pas remplacé silencieusement.
+Le premier script installe `TiaMcpServer 4.3.0` dans `.tools\tia-mcp`, vérifie la version et lance son `doctor`. Il ne télécharge ni TIA Portal, ni licence, ni DLL Siemens. Un autre outil déjà présent n'est pas remplacé silencieusement. `setup.ps1 -Engineering` installe les versions Python de `requirements-engineering.lock` ; l'exécuter depuis un clone source connecté ou un kit préparé avec `prepare-offline.ps1 -Engineering`. Le kit runtime livré ne contient pas cette option et la refuse avant installation.
 
 Pour une installation isolée, préparer les paquets Python et NuGet sur un poste autorisé. Puis fournir le répertoire NuGet local :
 
 ```powershell
 .\scripts\install-tia-mcp.ps1 -Offline -PackageSource 'D:\Packages\nuget'
-.\.venv\Scripts\python.exe -m pip install --no-index --find-links 'D:\Packages\wheels' -r integrations\requirements-engineering.txt
+.\scripts\setup.ps1 -Engineering
 ```
 
-Le répertoire NuGet doit contenir le paquet épinglé et ses dépendances requises par l'installation. Le répertoire de wheels doit correspondre à l'OS, l'architecture et la version Python. Ne pas supposer que des wheels Linux conviennent à Windows. Le mode `-Offline` fournit à NuGet une configuration avec uniquement la source locale ; aucune source réseau n'est conservée.
+Ces deux commandes supposent un kit préparé avec `-Engineering` et un répertoire NuGet contenant le paquet épinglé et ses dépendances requises par l'installation. Les wheels du kit doivent correspondre à l'OS, l'architecture et la version Python. Ne pas supposer que des wheels Linux conviennent à Windows. Le mode `-Offline` fournit à NuGet une configuration avec uniquement la source locale ; aucune source réseau n'est conservée.
 
 ## 2. Déclarer la copie de travail
 
@@ -53,7 +53,7 @@ $FatPolicy = Join-Path (Get-Location) '.local\tia\policy.json'
 
 Le dossier sandbox et le fichier `.ap21` doivent exister. Les liens/jonctions sont résolus avant de vérifier que le projet reste dans le dossier autorisé. L'état renvoyé doit correspondre au **chemin exact** de la copie, et non simplement à son nom.
 
-La configuration créée est en lecture seule. Elle produit aussi deux fragments relisibles, `claude.mcp.json` et `codex.mcp.toml`, à côté de la politique. Les archives et le journal d'ingénierie sont placés dans ce même espace local, hors du dossier binaire TIA.
+La configuration créée est en lecture seule. Elle produit aussi deux fragments relisibles, `claude.mcp.json` et `codex.mcp.toml`, à côté de la politique. Les archives et le journal d'ingénierie sont placés dans ce même espace local, hors du dossier binaire TIA. Le journal doit être un fichier `.jsonl` situé hors du dossier contenant le `.ap21`. Le CLI refuse aussi un fichier d'audit qui désigne le projet ou l'exécutable par un autre lien : une lecture ne doit pas pouvoir y ajouter des lignes de journal.
 
 ## 3. Connecter le client IA en lecture seule
 
@@ -86,6 +86,8 @@ Les commandes ci-dessous n'altèrent pas le projet TIA :
 & $FatPython -m integrations.tia_engineering --config $FatPolicy export `
   --block 'PLC_1/Main' --format source --output '.local\tia\review-main'
 ```
+
+`tree` lit toutes les pages de l'arbre dans **une seule session MCP**, puis renvoie un objet avec `status`, `snapshot`, `query`, `nodes`, `pages` et `warnings`. Les curseurs v3 de l'amont sont conservés en mémoire du processus : ils ne sont pas réutilisables par une deuxième invocation du CLI. L'ancien argument `--cursor` est donc refusé avec une consigne de relancer `tree` sans curseur. Le CLI vérifie la cible, le snapshot, les offsets, les séquences, les parents et le nombre total de nœuds ; une réponse incomplète ou incohérente ne devient pas un arbre présenté comme complet.
 
 L'export crée un dossier neuf contenant :
 
@@ -128,6 +130,8 @@ Séquence d'application :
 8. Proposer une sauvegarde seulement après compilation réussie. La sauvegarde comporte une confirmation et une vérification de la cible.
 
 Le parcours produit `receipt.json` avec les diagnostics, la sauvegarde préalable et le résultat. Si l'import a réussi mais que la compilation est refusée ou échoue, la copie peut être **modifiée en mémoire**. Examiner TIA ; le CLI ne prétend ni avoir annulé, ni avoir enregistré ces modifications.
+
+Le succès de compilation exige un rapport présent et cohérent : au moins un PLC, des compteurs entiers non négatifs, des totaux concordants et aucun état d'erreur masqué dans un PLC. Un résultat manquant, contradictoire ou omis reste un échec de vérification. Ces gardes locales sont alignées sur le contrat standalone de l'amont **v4.3.0** ; leurs tests injectent notamment des réponses malformées, sans prétendre que le serveur amont conforme les produit.
 
 Une compilation seule peut être demandée avec :
 

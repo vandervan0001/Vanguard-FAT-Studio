@@ -52,6 +52,7 @@ class Runtime:
         self.scenario = None
         self.completed_steps: set[int] = set()
         self.assertions = []
+        self.result = {"verdict": "not_evaluated", "comment": ""}
         self.scenario_state = "idle"
         self.write_count = 0
         self.lag_ms = 0.0
@@ -98,6 +99,7 @@ class Runtime:
             self.scenario = scenario
             self.completed_steps = set()
             self.assertions = []
+            self.result = {"verdict": "not_evaluated", "comment": ""}
             self.scenario_state = "running" if scenario else "manual"
             self.error = None
             self.events.clear()
@@ -128,6 +130,9 @@ class Runtime:
                     self.event("model_boundary", "Le PLC garde seul le contrôle. Pause/reset du banc ne change pas l'état de la CPU.")
                 if background:
                     self._task = asyncio.create_task(self._loop(self.run_id), name="fat-studio-runtime")
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Démarrage annulé ; l'essai doit être redémarré explicitement."))
+                raise
             except Exception as exc:
                 await self._fail(exc)
                 raise ValueError(self.error) from exc
@@ -151,10 +156,18 @@ class Runtime:
                     deadline = now
                 await asyncio.sleep(max(0.001, deadline - now))
         except asyncio.CancelledError:
+            # pause/stop detach the task before cancelling it while owning the
+            # lock. An independent cancellation must close the live run too.
+            if self._task is asyncio.current_task() and self.status == "running":
+                async with self.lock:
+                    await self._fail(RuntimeError("Boucle d'essai annulée ; écritures arrêtées."))
             raise
         except Exception as exc:
             async with self.lock:
                 await self._fail(exc)
+        finally:
+            if self._task is asyncio.current_task():
+                self._task = None
 
     async def tick(self) -> None:
         async with self.lock:
@@ -182,6 +195,9 @@ class Runtime:
                     # Boundary actions at the final timestamp are recorded but no additional PLC write occurs.
                     self._due_actions(self.engine.time_s)
                     await self._complete_scenario()
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Cycle d'échange annulé ; le dernier lot peut être partiel."))
+                raise
             except Exception as exc:
                 await self._fail(exc)
 
@@ -303,6 +319,9 @@ class Runtime:
                 self.connection.update(connected=False, quality="paused")
                 self.store.set_status(self.run_id, "paused")
                 self.event("pause", "Modèle et échanges en pause. La CPU externe n'est pas mise en STOP.")
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Mise en pause annulée ; l'essai ne peut pas être repris."))
+                raise
             except Exception as exc:
                 await self._fail(exc)
                 raise ValueError(self.error) from exc
@@ -323,6 +342,9 @@ class Runtime:
                 self.event("resume", "Reprise explicite ; identité et mapping revalidés.")
                 if background:
                     self._task = asyncio.create_task(self._loop(self.run_id), name="fat-studio-runtime")
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Reprise annulée ; l'essai doit être redémarré explicitement."))
+                raise
             except Exception as exc:
                 await self._fail(exc)
                 raise ValueError(self.error) from exc
@@ -340,6 +362,9 @@ class Runtime:
                     self._run_finished = True
                 self.event("stop", "Essai arrêté. Aucune commande de CPU envoyée.")
                 self.scenario_state = "stopped"
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Fermeture de l'essai annulée ; écritures arrêtées."))
+                raise
             except Exception as exc:
                 await self._fail(exc)
             finally:
@@ -351,16 +376,20 @@ class Runtime:
             if self.status == "running":
                 raise RunConflict("Mettre en pause ou arrêter l'essai avant réinitialisation.")
             await self._cancel_loop()
-            if self.adapter:
-                await self.adapter.disconnect()
-            if self.run_id and not self._run_finished:
-                self.event("reset", "Fin de l'essai par réinitialisation du modèle.")
-                self.store.set_status(self.run_id, "stopped", ended=True)
-            self.status = "stopped"
-            project = self.project
-            self.set_project(project)
-            self.adapter = None
-            self.event("reset", "Modèle réinitialisé ; traces précédentes conservées dans l'historique.")
+            try:
+                if self.adapter:
+                    await self.adapter.disconnect()
+                if self.run_id and not self._run_finished:
+                    self.event("reset", "Fin de l'essai par réinitialisation du modèle.")
+                    self.store.set_status(self.run_id, "stopped", ended=True)
+                self.status = "stopped"
+                project = self.project
+                self.set_project(project)
+                self.adapter = None
+                self.event("reset", "Modèle réinitialisé ; traces précédentes conservées dans l'historique.")
+            except asyncio.CancelledError:
+                await self._fail(RuntimeError("Réinitialisation annulée ; l'essai ne peut pas être repris."))
+                raise
         return self.snapshot()
 
     async def close(self) -> None:
@@ -382,6 +411,7 @@ class Runtime:
                 "run_id": self.run_id, "connection": dict(self.connection), "tags": tags,
                 "equipment": copy.deepcopy(self.engine.equipment_state), "faults": copy.deepcopy(self.engine.faults),
                 "events": list(self.events), "series": list(self.series),
+                "result": dict(self.result),
                 "scenario": {"id": self.scenario.id if self.scenario else None, "state": self.scenario_state,
                              "completed_steps": len(self.completed_steps),
                              "total_steps": len(self.scenario.steps) if self.scenario else 0,
@@ -393,30 +423,62 @@ class Runtime:
         if self.status not in ("running", "paused") or self.scenario_state == "completed":
             raise RunConflict("Démarrer un essai avant d'injecter des valeurs ou des défauts.")
 
+    async def _record_action(self, kind: str, message: str, details=None) -> None:
+        """Fail while still owning the model lock if an operator action is not durable."""
+        try:
+            self.event(kind, message, details)
+        except Exception as exc:
+            if self.status in ("running", "paused"):
+                await self._fail(exc)
+                await self._cancel_loop()
+            raise
+
+    async def marker(self, message: str) -> dict:
+        async with self.lock:
+            if not self.run_id:
+                raise ValueError("Aucun essai à annoter.")
+            await self._record_action("marker", message)
+            return self.snapshot()
+
+    async def set_result(self, verdict: str, comment: str) -> dict:
+        async with self.lock:
+            if not self.run_id:
+                raise ValueError("Aucun essai à évaluer.")
+            try:
+                entry = self.store.set_result(self.run_id, verdict, comment, sim_time_s=self.engine.time_s)
+            except Exception as exc:
+                if self.status in ("running", "paused"):
+                    await self._fail(exc)
+                    await self._cancel_loop()
+                raise
+            self.result = {"verdict": verdict, "comment": comment}
+            self.events.append(entry)
+            return self.snapshot()
+
     async def force(self, tag_id: str, value) -> dict:
         async with self.lock:
             self.require_active()
             self.engine.force(tag_id, value)
-            self.event("force", f"Forçage de {tag_id} à {value}.", {"tag_id": tag_id, "value": value})
+            await self._record_action("force", f"Forçage de {tag_id} à {value}.", {"tag_id": tag_id, "value": value})
             return self.snapshot()
 
     async def release(self, tag_id: str) -> dict:
         async with self.lock:
             self.require_active()
             self.engine.release(tag_id)
-            self.event("release", f"Libération du forçage {tag_id}.")
+            await self._record_action("release", f"Libération du forçage {tag_id}.")
             return self.snapshot()
 
     async def fault(self, equipment_id: str, kind: str, value=None) -> dict:
         async with self.lock:
             self.require_active()
             self.engine.set_fault(equipment_id, kind, value)
-            self.event("fault", f"Défaut {kind} sur {equipment_id}.", {"equipment_id": equipment_id, "kind": kind, "value": value})
+            await self._record_action("fault", f"Défaut {kind} sur {equipment_id}.", {"equipment_id": equipment_id, "kind": kind, "value": value})
             return self.snapshot()
 
     async def clear_fault(self, equipment_id: str) -> dict:
         async with self.lock:
             self.require_active()
             self.engine.clear_fault(equipment_id)
-            self.event("clear_fault", f"Défauts retirés sur {equipment_id}.")
+            await self._record_action("clear_fault", f"Défauts retirés sur {equipment_id}.")
             return self.snapshot()

@@ -13,7 +13,7 @@ import operator
 from collections import defaultdict
 
 from .catalog import parameters
-from .models import Project, validate_fault, validate_project, validate_value
+from .models import Project, outside_engineering_limits, validate_fault, validate_project, validate_value
 from .vendor.historiansim import valve as historian_valve
 
 COMPARISONS = {"eq": operator.eq, "ne": operator.ne, "gt": operator.gt, "ge": operator.ge, "lt": operator.lt, "le": operator.le}
@@ -81,6 +81,21 @@ class ProcessEngine:
             raise ValueError(f"Image des sorties PLC incomplète/invalide (absentes={missing}, inattendues={unexpected}).")
         # Validate the complete image before changing a single state.
         validated = {tag_id: validate_value(output_tags[tag_id], value) for tag_id, value in commands.items()}
+        previous = (self.values, self._raw_values, self.qualities, self.equipment_state, self.time_s)
+        # Stage one complete cycle. A derived sensor can exceed its PLC type
+        # (for example a cumulative counter), even with valid commands. Such a
+        # failure must not leave advanced volume/time with the previous signals.
+        self.values = dict(self.values)
+        self._raw_values = dict(self._raw_values)
+        self.qualities = dict(self.qualities)
+        self.equipment_state = {key: dict(state) for key, state in self.equipment_state.items()}
+        try:
+            return self._advance(validated, dt)
+        except BaseException:
+            self.values, self._raw_values, self.qualities, self.equipment_state, self.time_s = previous
+            raise
+
+    def _advance(self, validated: dict, dt: float) -> dict:
         self.values.update(validated)
         self._raw_values.update(validated)
         groups: dict[tuple[str, str, str], list[tuple[str, float]]] = defaultdict(list)
@@ -187,7 +202,7 @@ class ProcessEngine:
         for tag in self.project.tags:
             value = self.values[tag.id]
             self.qualities[tag.id] = "forced" if tag.id in self.forces else "good"
-            if tag.data_type != "BOOL" and ((tag.min is not None and value < tag.min) or (tag.max is not None and value > tag.max)):
+            if outside_engineering_limits(tag, value):
                 self.qualities[tag.id] = "out_of_range"
         for item in self.project.equipment:
             if item.type in ("analog_sensor", "digital_sensor"):
@@ -253,9 +268,9 @@ class ProcessEngine:
 class DemoController:
     """Small, explicit PLC stand-in, used exclusively by the demo adapter.
 
-    Inlet devices use tank level hysteresis; outlet devices use the configured
-    demo command. The controller sees mapped sensor values, including faults
-    and forcing, never the plant's internal volume.
+    Level-controlled inlets fill low tanks; level-controlled outlets drain high
+    tanks. Constant commands remain explicit. The controller sees mapped sensor
+    values, including faults and forcing, never the plant's internal volume.
     """
 
     def __init__(self, project: Project):
@@ -301,6 +316,8 @@ class DemoController:
             command = p["demo_command"]
             if p["demo_control"] == "level":
                 on = self._filling.get(p["tank_id"], False)
+                if p["role"] == "outlet":
+                    on = not on
                 command = (100.0 if on else 0.0) if item.type == "valve_control" else on
             if item.type == "pump" and values.get(item.bindings.get("fault"), False):
                 command = False

@@ -16,7 +16,7 @@ if (!$fatPython -and (Get-Command py -ErrorAction SilentlyContinue)) {
     if ($LASTEXITCODE -ne 0) { $fatPython = "" }
 }
 if (!$fatPython) { throw "Python 3.12 x64 est requis ; utiliser -Python CHEMIN si necessaire." }
-& $fatPython -c "import struct,sys; sys.exit(0 if sys.version_info[:2] == (3,12) and struct.calcsize('P') == 8 else 1)"
+& $fatPython -c "import struct,sys,sysconfig; sys.exit(0 if sys.version_info[:2] == (3,12) and struct.calcsize('P') == 8 and sysconfig.get_platform() == 'win-amd64' else 1)"
 if ($LASTEXITCODE -ne 0) { throw "Python 3.12 x64 est requis pour generer les wheels Windows correspondantes." }
 New-Item -ItemType Directory -Path $fatDestination | Out-Null
 $fatFolders = @("fat_studio", "frontend", "integrations", "scripts", "docs", "evidence", "examples", "siemens", "tests", ".github")
@@ -25,7 +25,7 @@ foreach ($fatFolder in $fatFolders) {
     if (!(Test-Path -LiteralPath $fatSource)) { continue }
     foreach ($fatFile in Get-ChildItem -LiteralPath $fatSource -Recurse -File -Force) {
         $fatRelative = $fatFile.FullName.Substring($fatRoot.Length + 1)
-        if ($fatRelative -match '(^|[\\/])(__pycache__|node_modules|\.venv|\.pytest_cache)([\\/]|$)' -or $fatRelative -match '^frontend[\\/]dist([\\/]|$)' -or $fatFile.Extension -eq ".pyc") { continue }
+        if ($fatRelative -match '(^|[\\/])(__pycache__|node_modules|\.venv|\.pytest_cache|\.ruff_cache|test-results|playwright-report|\.local|\.tools)([\\/]|$)' -or $fatRelative -match '^frontend[\\/]dist([\\/]|$)' -or $fatFile.Extension -in @(".pyc", ".tsbuildinfo", ".pem", ".key", ".pfx", ".cer") -or $fatFile.Name -match '^\.env($|\.)' -or ($fatFile.Attributes -band [IO.FileAttributes]::ReparsePoint)) { continue }
         $fatTarget = Join-Path $fatDestination $fatRelative
         New-Item -ItemType Directory -Path (Split-Path -Parent $fatTarget) -Force | Out-Null
         Copy-Item -LiteralPath $fatFile.FullName -Destination $fatTarget

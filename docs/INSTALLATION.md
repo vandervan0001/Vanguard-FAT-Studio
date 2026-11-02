@@ -14,7 +14,7 @@ La livraison contient l'interface compilée. **Python 3.12 x64 est le seul prér
 
 Laisser la fenêtre du serveur ouverte pendant l'utilisation. **Ctrl+C** dans cette fenêtre arrête le service. Fermer seulement l'onglet du navigateur n'arrête pas un essai en cours.
 
-Une connexion Internet est nécessaire à la première installation standard des dépendances. Le fonctionnement après installation est local. Aucun CDN, police distante, analytics ni API IA n'est requis par l'interface FAT.
+Depuis un clone source sans `wheelhouse/`, une connexion Internet est nécessaire à la première installation des dépendances. L'archive Windows livrée contient les wheels runtime et peut effectuer cette installation sans Internet. Le fonctionnement après installation est local. Aucun CDN, police distante, analytics ni API IA n'est requis par l'interface FAT.
 
 ### Politique PowerShell
 
@@ -44,11 +44,11 @@ Depuis le dossier du dépôt :
 .\.venv\Scripts\python.exe -m fat_studio doctor --json
 ```
 
-Le lancement normal n'installe pas l'assistance d'ingénierie. Pour cette option, lire [TIA_MCP.md](TIA_MCP.md), puis utiliser `setup.ps1 -Engineering`. TIA Portal V21, Openness et le serveur upstream restent des installations distinctes.
+Le lancement normal n'installe pas l'assistance d'ingénierie. Pour cette option, lire [TIA_MCP.md](TIA_MCP.md), puis utiliser `setup.ps1 -Engineering` depuis un clone source avec Internet ou un kit préparé avec `-Engineering`. Le kit runtime livré est explicitement refusé pour cette option : il ne contient pas les dépendances MCP. TIA Portal V21, Openness et le serveur upstream restent des installations distinctes.
 
 ## Linux et macOS : démonstration et développement
 
-La démonstration et les tests de protocole sont portables ; l'intégration Siemens s'utilise sur le poste Windows qualifié.
+La démonstration et les tests de protocole sont portables ; l'intégration Siemens s'utilise sur le poste Windows qualifié. Utiliser un clone source sans `wheelhouse/` Windows. Depuis le dossier extrait de la livraison, `git clone FAT-Studio.bundle ../fat-studio-source` restitue le dépôt sans les wheels ni l'environnement Windows ; lancer ensuite les commandes dans ce nouveau dossier. Un kit de la mauvaise plateforme est refusé avant l'installation des dépendances.
 
 ```bash
 bash scripts/start.sh
@@ -94,7 +94,11 @@ La préparation se fait sur **un poste Windows x64 avec Python 3.12 x64 et accè
 
 Le dossier produit contient le code Python et frontend, la documentation, les preuves de livraison, les assets web compilés, les dépendances Python dans `wheelhouse/` et un manifeste SHA-256. Les dépendances Node et le dossier de construction `frontend/dist` ne sont pas copiés ; l'interface utilisable est déjà dans `fat_studio/web`. Le script refuse une destination existante. Copier le dossier complet vers le poste isolé, fournir séparément l'installateur Python validé par l'IT si nécessaire, puis lancer `Start-FAT.cmd`.
 
-L'installation vérifie les empreintes, refuse les wheels non répertoriées et passe `--no-index` à pip. Elle ne tente pas de se rabattre sur Internet si une dépendance manque. Le manifeste détecte une corruption des fichiers ; il ne remplace pas une signature de distribution approuvée.
+Avant d'appeler pip, l'installation vérifie Python 3.12 64 bits, la plateforme, les chemins relatifs, les doublons, les empreintes et la liste des wheels. Sous Windows, l'architecture vérifiée est celle de l'interpréteur (`win-amd64`), y compris s'il fonctionne sur un hôte ARM. Cette détection n'est pas une qualification de Windows ARM. Le validateur partagé est `scripts/check-kit.py` ; il accepte les manifestes UTF-8 avec ou sans BOM et les dossiers comportant espaces ou accents.
+
+Le kit doit contenir à la fois `wheelhouse/` et `offline-manifest.json`. L'installation passe `--no-index` à pip ; elle ne tente pas de se rabattre sur Internet si une dépendance manque. Le manifeste détecte une corruption des fichiers ; il ne remplace pas une signature de distribution approuvée. Modifier un fichier répertorié invalide son empreinte : pour développer, utiliser un clone source, puis produire un nouveau kit.
+
+La préparation exclut notamment les environnements Python, `node_modules`, caches, résultats Playwright, fichiers `.env`, certificats et clés. Les fichiers projet et secrets doivent malgré tout rester dans leurs dossiers de données prévus, hors des sources à distribuer.
 
 Ce kit ne redistribue pas Siemens, .NET ni `tia-portal-mcp`. Pour un poste d'ingénierie totalement hors ligne, préparer ces composants séparément selon leurs licences et la procédure IT. Voir la matrice dans [COMPATIBILITY.md](COMPATIBILITY.md).
 
@@ -114,7 +118,7 @@ python -m pytest
 python -m build --wheel --no-isolation
 ```
 
-Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel. Aucun serveur Vite n'est nécessaire en exploitation. La CI construit l'interface et exécute les tests sur Windows et Ubuntu ; un fichier de workflow fourni n'est pas une preuve qu'un run distant a déjà réussi.
+Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel. Aucun serveur Vite n'est nécessaire en exploitation. La CI prévoit la construction de l'interface et les tests sur Windows et Ubuntu. Sa branche Windows prépare aussi un kit neuf, interdit les index pip, exécute `setup.ps1`, puis vérifie le service installé depuis l'extérieur des sources avec `scripts/smoke-installed.py`. **Ce workflow est fourni, mais n'a pas été exécuté sur GitHub dans cette livraison.** La preuve d'installation isolée exécutée sous Linux se trouve dans [VERIFICATION.md](../evidence/VERIFICATION.md).
 
 ## Dépannage
 
@@ -126,6 +130,8 @@ Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel.
 | Page inaccessible | Vérifier que la console du serveur tourne et ouvrir l'URL indiquée par celle-ci. |
 | `Service indisponible` dans l'interface | Les valeurs affichées sont anciennes ; vérifier le serveur avant de reprendre un essai. |
 | Kit hors ligne incomplet | Repréparer le kit sur la bonne plateforme ; une wheel Linux ne remplace pas une wheel Windows. |
+| Empreinte incorrecte ou wheel non répertoriée | Réextraire la livraison complète ou préparer un nouveau kit ; ne pas supprimer le manifeste pour forcer l'installation. |
+| Option ingénierie refusée dans le kit runtime | Préparer le kit avec `-Engineering`, ou installer depuis un clone source connecté. |
 | Projet signalé invalide | Corriger les diagnostics de **Connexion** ; l'enregistrement d'un brouillon incomplet reste possible. |
 | Cible OPC UA refusée | Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md), vérifier la politique locale et l'identité observée. |
 

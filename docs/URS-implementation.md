@@ -1,4 +1,4 @@
-# Reprise de l'URS — décisions de réalisation 0.1.0
+# Reprise de l'URS — décisions de réalisation 0.1.1
 
 Date : 2 novembre 2026. Document de conception livré pour revue de l'ingénieur ; aucune approbation formelle du client n'est prétendue. L'URS d'origine reste conservée sans modification dans `URS-original.md`.
 

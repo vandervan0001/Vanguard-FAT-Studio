@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowDownToLine, ArrowLeftRight, ChartNoAxesCombined, Check, ChevronDown, CircleAlert, CircleHelp, Clock3, FilePlus2, FolderOpen, ListChecks, LoaderCircle, Network, Pause, Play, RotateCcw, Save, Settings2, Shield, Square, Upload, Workflow, X } from 'lucide-react';
-import { api, download, getProjectRevision, initSession, setProjectContext } from './api';
+import { api, downloadMapping, downloadText, getMutationVersion, getProjectContext, getProjectRevision, initSession, setRunContext } from './api';
 import { useModalKeyboard } from './useModalKeyboard';
 import PidCanvas from './PidCanvas';
 import { ConnectionPanel, ScenariosPanel, TrendChart, TrendsPanel, VariablesPanel } from './Panels';
-import { STATUS_LABELS, fmt, type CatalogItem, type Project, type ProjectSummary, type Snapshot, type Tab, type Validation } from './types';
+import { STATUS_LABELS, fmt, type CatalogItem, type Project, type ProjectSummary, type ReportDraft, type ScenarioDraft, type Snapshot, type Tab, type Validation } from './types';
 
 const TABS = [
   { key: 'pid' as const, label: 'P&ID', icon: Workflow },
@@ -16,6 +16,7 @@ const TABS = [
 
 function errorMessage(error: unknown): string { return error instanceof Error ? error.message : String(error); }
 function elapsed(seconds: number): string { const minutes = Math.floor(seconds / 60); return `${String(minutes).padStart(2, '0')}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`; }
+function reportFor(state: Snapshot | null): ReportDraft { return { runId: state?.run_id ?? null, verdict: state?.result?.verdict ?? 'not_evaluated', comment: state?.result?.comment ?? '', marker: '', resultDirty: false, saved: false }; }
 
 export default function App() {
   const [project, setProject] = useState<Project | null>(null);
@@ -31,7 +32,9 @@ export default function App() {
   const [notice, setNotice] = useState('');
   const [validation, setValidation] = useState<Validation | null>(null);
   const [scenarioId, setScenarioId] = useState('');
-  const [scenarioPending, setScenarioPending] = useState(false);
+  const [scenarioDraft, setScenarioDraft] = useState<ScenarioDraft | null>(null);
+  const scenarioPending = scenarioDraft !== null;
+  const [reportDraft, setReportDraft] = useState<ReportDraft>(() => reportFor(null));
   const [projectsModal, setProjectsModal] = useState<'open' | 'new' | null>(null);
   const [projects, setProjects] = useState<ProjectSummary[]>([]);
   const [newName, setNewName] = useState('');
@@ -40,18 +43,52 @@ export default function App() {
   const [showLivePanel, setShowLivePanel] = useState(true);
   const [bootAttempt, setBootAttempt] = useState(0);
   const fileInput = useRef<HTMLInputElement>(null);
+  const stateRef = useRef<Snapshot | null>(null);
+  const latestSnapshotTime = useRef(0);
+  const actionBusy = useRef(false);
+  const reportPending = reportDraft.resultDirty || reportDraft.marker !== '';
   const locked = state?.status === 'running' || state?.status === 'paused';
   const serviceUnavailable = networkError || projectConflict;
   const editorDisabled = Boolean(locked || busy || serviceUnavailable);
   useModalKeyboard(projectsModal !== null || confirmTarget, () => { if (!busy) { setProjectsModal(null); setConfirmTarget(false); } });
 
+  const receiveSnapshot = useCallback((data: Snapshot) => {
+    const time = Date.parse(data.wall_time);
+    if (time < latestSnapshotTime.current) return;
+    latestSnapshotTime.current = time;
+    const mismatch = Boolean((data.project_id && data.project_id !== getProjectContext()) || (data.project_revision && getProjectRevision() && data.project_revision !== getProjectRevision()));
+    if (mismatch) { setProjectConflict(true); return; }
+    // A delayed poll or response must never put the screen back before a confirmed action.
+    if (stateRef.current && Date.parse(data.wall_time) < Date.parse(stateRef.current.wall_time)) return;
+    stateRef.current = data;
+    setRunContext(data.run_id);
+    setState(data);
+    setProjectConflict(false); setNetworkError(false);
+  }, []);
+
+  const refreshState = useCallback(async () => {
+    try { receiveSnapshot(await api<Snapshot>('/state')); }
+    catch (error) { setNetworkError(true); throw error; }
+  }, [receiveSnapshot]);
+
+  useEffect(() => {
+    setReportDraft(current => {
+      if (current.runId !== (state?.run_id ?? null)) return current.resultDirty || current.marker ? current : reportFor(state);
+      if (current.resultDirty) return current;
+      const result = reportFor(state);
+      return { ...current, verdict: result.verdict, comment: result.comment, saved: current.saved && current.verdict === result.verdict && current.comment === result.comment };
+    });
+  }, [state?.run_id, state?.result?.verdict, state?.result?.comment]);
+  const changeReportDraft = useCallback((update: (draft: ReportDraft) => ReportDraft) => setReportDraft(update), []);
+
   useEffect(() => {
     let active = true;
     const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
     setInitializing(true);
     const boot = async () => {
       try {
-        await initSession();
+        await initSession(controller.signal);
         const [projectData, catalogData, stateData] = await Promise.all([
           api<Project>('/project', 'GET', undefined, controller.signal),
           api<CatalogItem[]>('/catalog', 'GET', undefined, controller.signal),
@@ -59,16 +96,18 @@ export default function App() {
         ]);
         if (active) {
           const mismatch = Boolean((stateData.project_id && stateData.project_id !== projectData.id) || (stateData.project_revision && getProjectRevision() && stateData.project_revision !== getProjectRevision()));
-          setProject(projectData); setCatalog(catalogData); setState(mismatch ? null : stateData);
+          stateRef.current = null; latestSnapshotTime.current = 0; setState(null);
+          setProject(projectData); setCatalog(catalogData);
+          if (!mismatch) receiveSnapshot(stateData);
           setError(null); setNetworkError(false); setProjectConflict(mismatch); setDirty(false);
-          setScenarioId(''); setScenarioPending(false);
+          setScenarioId(''); setScenarioDraft(null);
         }
-      } catch (error) { if (active) setError(errorMessage(error)); }
-      finally { if (active) setInitializing(false); }
+      } catch (error) { if (active) setError(controller.signal.aborted ? 'Le service local ne répond pas. Vérifiez le serveur puis réessayez.' : errorMessage(error)); }
+      finally { clearTimeout(timeout); if (active) setInitializing(false); }
     };
     void boot();
-    return () => { active = false; controller.abort(); };
-  }, [bootAttempt]);
+    return () => { active = false; clearTimeout(timeout); controller.abort(); };
+  }, [bootAttempt, receiveSnapshot]);
 
   useEffect(() => {
     if (initializing || !project) return;
@@ -78,30 +117,31 @@ export default function App() {
     const poll = async () => {
       if (inFlight || !active) return;
       inFlight = true;
+      const requestController = new AbortController();
+      const cancel = () => requestController.abort();
+      controller.signal.addEventListener('abort', cancel, { once: true });
+      const timeout = setTimeout(cancel, 5000);
+      const requestedMutation = getMutationVersion();
       try {
         const requestedRevision = getProjectRevision();
-        const data = await api<Snapshot>('/state', 'GET', undefined, controller.signal);
+        const data = await api<Snapshot>('/state', 'GET', undefined, requestController.signal);
         if (active) {
-          if (getProjectRevision() !== requestedRevision) return; // a project save completed during this poll
-          const mismatch = Boolean((data.project_id && data.project_id !== project.id) || (data.project_revision && requestedRevision && data.project_revision !== requestedRevision));
-          setProjectConflict(mismatch); setNetworkError(false);
-          if (!mismatch) setState(data);
+          if (getProjectRevision() !== requestedRevision || getMutationVersion() !== requestedMutation) return;
+          receiveSnapshot(data);
         }
       }
-      catch { if (active) setNetworkError(true); }
-      finally { inFlight = false; }
+      catch { if (active && getMutationVersion() === requestedMutation) setNetworkError(true); }
+      finally { clearTimeout(timeout); controller.signal.removeEventListener('abort', cancel); inFlight = false; }
     };
     const timer = setInterval(() => void poll(), 500);
     return () => { active = false; controller.abort(); clearInterval(timer); };
-  }, [initializing, project?.id]);
-
-  useEffect(() => { setProjectContext(project?.id ?? ''); }, [project?.id]);
+  }, [initializing, project?.id, receiveSnapshot]);
 
   useEffect(() => {
-    const beforeUnload = (event: BeforeUnloadEvent) => { if (dirty || scenarioPending) { event.preventDefault(); event.returnValue = ''; } };
+    const beforeUnload = (event: BeforeUnloadEvent) => { if (dirty || scenarioPending || reportPending) { event.preventDefault(); event.returnValue = ''; } };
     window.addEventListener('beforeunload', beforeUnload);
     return () => window.removeEventListener('beforeunload', beforeUnload);
-  }, [dirty, scenarioPending]);
+  }, [dirty, scenarioPending, reportPending]);
 
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 4500); return () => clearTimeout(timer); }, [notice]);
 
@@ -113,14 +153,19 @@ export default function App() {
   const saveProject = useCallback(async (): Promise<Project> => {
     if (!project) throw new Error('Aucun projet chargé.');
     if (scenarioPending) throw new Error('Appliquez les étapes JSON du scénario avant de sauvegarder.');
+    if (!dirty) return project;
     const saved = await api<Project>('/project', 'PUT', project);
-    setProject(saved); setDirty(false); return saved;
-  }, [project, scenarioPending]);
+    setProject(saved); setDirty(false);
+    stateRef.current = null; setState(null);
+    await refreshState();
+    return saved;
+  }, [project, scenarioPending, dirty, refreshState]);
 
   const act = async (action: () => Promise<void>) => {
-    if (busy) return;
+    if (actionBusy.current) return;
+    actionBusy.current = true;
     setBusy(true); setError(null);
-    try { await action(); } catch (error) { setError(errorMessage(error)); } finally { setBusy(false); }
+    try { await action(); } catch (error) { setError(errorMessage(error)); } finally { actionBusy.current = false; setBusy(false); }
   };
 
   const save = () => act(async () => { await saveProject(); setNotice('Projet enregistré.'); });
@@ -135,20 +180,21 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [saveProject, editorDisabled, scenarioPending, busy]);
 
-  const replaceProject = (loaded: Project) => {
-    setProject(loaded); setProjectConflict(false); setDirty(false); setScenarioId(''); setScenarioPending(false); setValidation(null); setProjectsModal(null); setActiveTab('pid');
-    void api<Snapshot>('/state').then(setState).catch(error => setError(errorMessage(error)));
+  const replaceProject = async (loaded: Project) => {
+    setProject(loaded); setProjectConflict(false); setDirty(false); setScenarioId(''); setScenarioDraft(null); setValidation(null); setProjectsModal(null); setActiveTab('pid');
+    stateRef.current = null; setState(null);
+    await refreshState();
   };
   const canReplace = () => !(dirty || scenarioPending) || window.confirm('Les modifications non enregistrées seront perdues. Continuer ?');
   const openProjects = () => act(async () => { setProjects(await api<ProjectSummary[]>('/projects')); setProjectsModal('open'); });
-  const newProject = () => act(async () => { if (canReplace()) { replaceProject(await api<Project>('/projects', 'POST', { name: newName.trim() })); setNotice('Nouveau projet créé.'); } });
-  const loadProject = (id: string) => act(async () => { if (canReplace()) replaceProject(await api<Project>(`/projects/${encodeURIComponent(id)}/load`, 'POST', {})); });
-  const loadDemo = () => act(async () => { if (canReplace()) { replaceProject(await api<Project>('/demo/load', 'POST', {})); setNotice('Démonstration TK-101 chargée.'); } });
+  const newProject = () => act(async () => { if (canReplace()) { await replaceProject(await api<Project>('/projects', 'POST', { name: newName.trim() })); setNotice('Nouveau projet créé.'); } });
+  const loadProject = (id: string) => act(async () => { if (canReplace()) await replaceProject(await api<Project>(`/projects/${encodeURIComponent(id)}/load`, 'POST', {})); });
+  const loadDemo = () => act(async () => { if (canReplace()) { await replaceProject(await api<Project>('/demo/load', 'POST', {})); setNotice('Démonstration TK-101 chargée.'); } });
   const importFile = async (file: File) => act(async () => {
     if (!canReplace()) return;
     if (file.size > 5 * 1024 * 1024) throw new Error('Le fichier projet dépasse 5 Mo.');
     const data: unknown = JSON.parse(await file.text());
-    replaceProject(await api<Project>('/project/import', 'POST', data)); setNotice('Projet importé.');
+    await replaceProject(await api<Project>('/project/import', 'POST', data)); setNotice('Projet importé.');
   });
   const validate = () => act(async () => { await saveProject(); const result = await api<Validation>('/validate'); setValidation(result); if (!result.valid) setActiveTab('connection'); else setNotice('Configuration locale validée.'); });
   const start = (confirmation?: string) => act(async () => {
@@ -157,31 +203,29 @@ export default function App() {
     const result = await api<Validation>('/validate'); setValidation(result);
     if (!result.valid) { setActiveTab('connection'); throw new Error(`Le projet contient ${result.errors.length} erreur(s). Corrigez les points indiqués dans Connexion.`); }
     if (project.plc.mode === 'opcua' && !confirmation) { setTargetText(''); setConfirmTarget(true); return; }
-    setState(await api<Snapshot>('/run/start', 'POST', { ...(scenarioId ? { scenario_id: scenarioId } : {}), ...(confirmation ? { target_confirmation: confirmation } : {}) }));
+    receiveSnapshot(await api<Snapshot>('/run/start', 'POST', { ...(scenarioId ? { scenario_id: scenarioId } : {}), ...(confirmation ? { target_confirmation: confirmation } : {}) }));
     setConfirmTarget(false); setNotice('Essai démarré.');
   });
   const control = (action: 'pause' | 'resume' | 'stop' | 'reset') => act(async () => {
     if (action === 'reset' && !window.confirm('Réinitialiser les valeurs, le modèle et les forçages pour un nouvel essai ? Les traces déjà enregistrées restent dans l’historique.')) return;
-    setState(await api<Snapshot>(`/run/${action}`, 'POST', {}));
+    receiveSnapshot(await api<Snapshot>(`/run/${action}`, 'POST', {}));
   });
   const changeTab = (tab: Tab) => {
     if (activeTab === 'scenarios' && scenarioPending && tab !== 'scenarios') {
       if (!window.confirm('Les étapes JSON n’ont pas été appliquées. Les abandonner ?')) return;
-      setScenarioPending(false);
+      setScenarioDraft(null);
     }
     setActiveTab(tab);
     window.scrollTo({ top: 0 });
   };
-  const exportProject = () => act(async () => { if (dirty) await saveProject(); download('/project/download'); });
-  const exportMapping = () => act(async () => { if (dirty) await saveProject(); download('/mapping'); });
+  const exportProject = () => act(async () => { const saved = dirty ? await saveProject() : project; if (saved) downloadText(JSON.stringify(saved, null, 2) + '\n', `${saved.id}.json`); });
+  const exportMapping = () => act(async () => { if (dirty) await saveProject(); await downloadMapping(); });
   const downloadDraft = () => {
     if (!project) return;
-    const url = URL.createObjectURL(new Blob([JSON.stringify(project, null, 2) + '\n'], { type: 'application/json' }));
-    const anchor = document.createElement('a'); anchor.href = url; anchor.download = `${project.id}-brouillon.json`;
-    anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    downloadText(JSON.stringify(project, null, 2) + '\n', `${project.id}-brouillon.json`);
   };
   const importMapping = async (csv: string) => {
-    await act(async () => { await saveProject(); const loaded = await api<Project>('/mapping', 'POST', { csv }); setProject(loaded); setDirty(false); setValidation(null); setNotice('Mapping importé et enregistré.'); });
+    await act(async () => { await saveProject(); const loaded = await api<Project>('/mapping', 'POST', { csv }); setProject(loaded); setDirty(false); setValidation(null); stateRef.current = null; setState(null); await refreshState(); setNotice('Mapping importé et enregistré.'); });
   };
 
   if (initializing || !project) return <div className="boot-screen"><div className="brand-mark"><Workflow size={27} /></div><h1>FAT Studio</h1><p>Le banc de simulation, sur votre poste.</p>{initializing ? <div className="boot-loading"><LoaderCircle className="spin" size={20} />Connexion au service local…</div> : <><div className="boot-error"><CircleAlert size={21} /><span>{error}</span></div><button className="button primary" onClick={() => setBootAttempt(value => value + 1)}>Réessayer</button><p className="small-muted">Démarrez le serveur FAT Studio, puis rechargez cette page.</p></>}</div>;
@@ -191,7 +235,7 @@ export default function App() {
   const scenarioCompleted = state?.scenario.state === 'completed';
   const totalForces = Object.values(state?.tags ?? {}).filter(tag => tag.forced).length;
   const totalFaults = Object.values(state?.faults ?? {}).reduce((count, faults) => count + Object.keys(faults).length, 0);
-  const props = { project, state, locked: editorDisabled, online: !serviceUnavailable && !busy, onChange, onError: setError, onSnapshot: setState };
+  const props = { project, state, locked: editorDisabled, online: !serviceUnavailable && !busy, onChange, onError: setError, onSnapshot: receiveSnapshot };
   return <div className="app-shell">
     <header className="topbar"><div className="brand"><div className="brand-mark"><Workflow size={24} strokeWidth={2} /></div><div><strong>FAT<span>STUDIO</span></strong><small>BANC DE SIMULATION LOCAL</small></div></div>
       <div className="mode-badge"><Shield size={14} /><span>MODE FAT</span><span className="mode-divider" /><strong>{project.plc.mode === 'demo' ? 'DÉMONSTRATION' : 'PLCSIM ADVANCED'}</strong></div>
@@ -204,13 +248,13 @@ export default function App() {
     </header>
 
     <div className="projectbar"><div className="project-identity"><span className="project-icon"><FolderOpen size={22} /></span><div><input className="project-name" disabled={editorDisabled} aria-label="Nom du projet" value={project.name} onChange={event => onChange(project => ({ ...project, name: event.target.value }))} /><div className="project-subtitle"><span>{project.equipment.length} équipements</span><span>·</span><span>{project.tags.length} variables</span><span className={dirty ? 'unsaved-text' : 'saved-text'}>{dirty ? '• Modifications non enregistrées' : <><Check size={11} /> Enregistré</>}</span></div></div></div>
-      <div className="project-actions"><button className="button ghost" disabled={editorDisabled} onClick={() => { setNewName(''); setProjectsModal('new'); }}><FilePlus2 size={16} /><span>Nouveau</span></button><button className="button ghost" disabled={editorDisabled} onClick={() => void openProjects()}><FolderOpen size={16} /><span>Ouvrir</span></button><button className="button ghost" disabled={editorDisabled} onClick={() => fileInput.current?.click()}><Upload size={16} /><span>Importer</span></button><button className="button ghost" disabled={busy || serviceUnavailable || scenarioPending || (dirty && editorDisabled)} onClick={() => void exportProject()}><ArrowDownToLine size={16} /><span>Exporter</span></button><span className="toolbar-separator" /><button className="button save-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}><Save size={16} /><span>Enregistrer</span></button></div>
+      <div className="project-actions"><button className="button ghost" aria-label="Nouveau" title="Nouveau projet" disabled={editorDisabled} onClick={() => { setNewName(''); setProjectsModal('new'); }}><FilePlus2 size={16} /><span>Nouveau</span></button><button className="button ghost" aria-label="Ouvrir" title="Ouvrir un projet" disabled={editorDisabled} onClick={() => void openProjects()}><FolderOpen size={16} /><span>Ouvrir</span></button><button className="button ghost" aria-label="Importer" title="Importer un projet" disabled={editorDisabled} onClick={() => fileInput.current?.click()}><Upload size={16} /><span>Importer</span></button><button className="button ghost" aria-label="Exporter" title="Exporter le projet" disabled={busy || serviceUnavailable || scenarioPending || (dirty && editorDisabled)} onClick={() => void exportProject()}><ArrowDownToLine size={16} /><span>Exporter</span></button><span className="toolbar-separator" /><button className="button save-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}><Save size={16} /><span>Enregistrer</span></button></div>
       <input ref={fileInput} type="file" accept=".json,application/json" hidden onChange={event => { const file = event.target.files?.[0]; if (file) void importFile(file); event.target.value = ''; }} />
     </div>
 
     <div className="tabsbar"><nav aria-label="Sections du banc FAT">{TABS.map(tab => <button key={tab.key} className={`tab-button ${activeTab === tab.key ? 'active' : ''}`} onClick={() => changeTab(tab.key)}><tab.icon size={16} /><span>{tab.label}</span>{tab.key === 'tags' && <small>{project.tags.length}</small>}</button>)}</nav><div className="runtime-status"><span className={`status-badge ${serviceUnavailable ? 'error' : currentStatus}`}><span />{projectConflict ? 'Autre projet actif' : networkError ? 'Service indisponible' : STATUS_LABELS[currentStatus]}</span><button className="icon-button" title="Guide de mise en service" onClick={() => changeTab('connection')} aria-label="Ouvrir le guide de mise en service"><CircleHelp size={18} /></button></div></div>
 
-    {projectConflict && <div className="banner error-banner" role="alert"><CircleAlert size={18} /><span>Le projet actif a changé dans un autre onglet. Vos modifications restent dans cet onglet ; les commandes sont bloquées pour éviter toute action sur une autre cible.</span><div className="button-row"><button className="button compact-button" onClick={downloadDraft}>Télécharger mon brouillon</button><button className="button compact-button" onClick={() => { if (canReplace()) setBootAttempt(value => value + 1); }}>Recharger le projet actif</button></div></div>}
+    {projectConflict && <div className="banner error-banner" role="alert"><CircleAlert size={18} /><span>Le projet actif a changé dans un autre onglet. Vos modifications restent dans cet onglet ; les commandes sont bloquées pour éviter toute action sur une autre cible.</span><div className="button-row"><button className="button compact-button" onClick={downloadDraft}>Télécharger mon brouillon</button>{scenarioDraft && <button className="button compact-button" onClick={() => downloadText(scenarioDraft.text, `${scenarioDraft.scenarioId}-etapes-brouillon.json`)}>Télécharger les étapes JSON</button>}<button className="button compact-button" onClick={() => { if (canReplace()) setBootAttempt(value => value + 1); }}>Recharger le projet actif</button></div></div>}
     {networkError && <div className="banner error-banner" role="alert"><CircleAlert size={18} /><span>Connexion au service local perdue. Les valeurs affichées sont anciennes. Vérifiez le serveur ; les commandes sont désactivées.</span></div>}
     {error && <div className="banner error-banner" role="alert"><CircleAlert size={18} /><pre>{error}</pre><button className="icon-button" onClick={() => setError(null)} aria-label="Fermer le message d’erreur"><X size={16} /></button></div>}
     {state?.error && state.error !== error && <div className="banner error-banner" role="alert"><CircleAlert size={18} /><span>{state.error}</span></div>}
@@ -224,8 +268,8 @@ export default function App() {
         {showLivePanel && <div className="live-overview"><div><TrendChart project={project} state={state} compact /></div><div className="live-events"><div className="live-events-title">Derniers événements</div>{(state?.events ?? []).slice(-4).reverse().map(event => <div key={event.id}><time>{fmt(event.sim_time_s)} s</time><p>{event.message}</p></div>)}{!state?.events.length && <p className="small-muted">Démarrez l’essai pour suivre les actions et les diagnostics.</p>}</div></div>}
       </>}
       {activeTab === 'tags' && <VariablesPanel {...props} onImport={importMapping} onExport={exportMapping} />}
-      {activeTab === 'scenarios' && <ScenariosPanel {...props} selectedId={scenarioId} onSelect={setScenarioId} onDraftChange={setScenarioPending} />}
-      {activeTab === 'trends' && <TrendsPanel {...props} />}
+      {activeTab === 'scenarios' && <ScenariosPanel {...props} selectedId={scenarioId} onSelect={setScenarioId} onDraftChange={setScenarioDraft} />}
+      {activeTab === 'trends' && <TrendsPanel {...props} draft={reportDraft} onDraftChange={changeReportDraft} />}
       {activeTab === 'connection' && <ConnectionPanel {...props} validation={validation} onValidate={validate} catalog={catalog} />}
     </main>
 

@@ -19,12 +19,14 @@ Pour développer, démarrer le backend sur `127.0.0.1:8765` avec `FAT_STUDIO_DEV
 
 - **P&ID** : bibliothèque de sept symboles, glisser-déposer ou clic pour ajouter, déplacements, connexions, libellés, zoom, panoramique, grille, suppression et propriétés des équipements.
 - **Associations PLC** : sélection de variables compatibles par port, création des tags manquants, édition des types, bornes, valeurs initiales, directions, autorisations d’écriture et NodeId OPC UA ; import/export CSV.
-- **Scénarios** : création, choix, description, durée, séquence JSON éditable et contrôlée, aperçu de la chronologie et résultats d’assertions. Un brouillon JSON non appliqué bloque sauvegarde et démarrage.
+- **Scénarios** : création, choix, description, durée, séquence JSON éditable et contrôlée, aperçu de la chronologie et résultats d’assertions. Un brouillon JSON non appliqué bloque sauvegarde et démarrage ; ses étapes restent téléchargeables, y compris pendant un conflit de projet.
 - **Exécution** : lancement, pause, reprise, arrêt et réinitialisation ; commandes bloquées si le service est indisponible. L’édition du modèle est verrouillée pendant l’essai et sa pause.
 - **Essais** : forçage de mesures simulées, libération, injection/levée des défauts proposés pour chaque équipement ; distinction visuelle des valeurs forcées et défauts.
-- **Traces** : tendances en unités natives, journal, marqueurs, conclusion de l’ingénieur, rapports HTML, exports CSV/JSON et récupération des essais archivés.
+- **Traces** : tendances en unités natives, journal, marqueurs, conclusion de l’ingénieur, rapports HTML, exports CSV/JSON et récupération des essais archivés. Les conclusions enregistrées sont relues depuis le service. Les brouillons de conclusion et de marqueur restent dans l’onglet lors des changements de section ; un changement d’essai bloque leur envoi et permet de les télécharger. Une fermeture ou un rechargement avertit si une saisie reste non enregistrée.
 - **Connexion** : mode démonstration ou OPC UA, identité de cible, certificats, noms de variables d’environnement pour les secrets, confirmation saisie avant connexion réelle. La politique d’autorisation du poste reste gérée hors du projet.
-- **Plusieurs onglets** : si un autre onglet change de projet actif ou en enregistre une nouvelle révision, les commandes sont bloquées. Le brouillon local reste téléchargeable avant rechargement. Le serveur vérifie aussi l’identifiant et la révision attendue sur les commandes d’essai et les sauvegardes.
+- **Plusieurs onglets** : si un autre onglet change de projet actif ou en enregistre une nouvelle révision, les commandes sont bloquées. Le brouillon local reste téléchargeable avant rechargement. Le serveur vérifie aussi l’identifiant et la révision attendue sur les commandes d’essai et les sauvegardes, et l’identifiant de l’essai pour les interventions. Les exports de preuves ciblent l’essai affiché ; l’export du mapping vérifie le contexte du projet.
+
+Enregistrer ou valider un projet inchangé conserve l’essai courant. Les réponses de polling antérieures à une intervention confirmée sont ignorées. Une requête d’acquisition sans réponse est interrompue après cinq secondes et le service est signalé indisponible ; la reprise du polling conserve le brouillon.
 
 Les lignes du P&ID sont graphiques. Les groupes de débit définissent les circuits physiques simplifiés : cuve cible, sens, circuit en série et capacité. Cette distinction est rappelée dans l’interface.
 
@@ -47,7 +49,7 @@ Sources primaires consultées pour l’implémentation :
 
 `npm run build` effectue la vérification TypeScript stricte et produit la distribution.
 
-La suite Playwright utilise un navigateur neuf, le backend réel et le vrai moteur de procédé, avec un répertoire de données temporaire sur le port local `8766`. Elle ne touche pas aux projets du technicien. Elle couvre édition/sauvegarde/rechargement, boucle fermée, défaut moteur, forçage, pause/reprise, exports CSV/HTML, scénario JSON malformé, import invalide et conflit entre onglets. Des tests ciblés vérifient aussi le format des étapes et les erreurs de session/API.
+La suite Playwright utilise un navigateur neuf, le backend réel et le vrai moteur de procédé, avec un répertoire de données temporaire sur le port local `8766`. Elle ne touche pas aux projets du technicien. Elle couvre édition/sauvegarde/rechargement, création complète depuis un canevas vide, boucle fermée, défaut moteur, forçage, pause/reprise, exports CSV/HTML, import/export du mapping, scénario JSON malformé, import invalide et conflit entre onglets. Les parcours adverses retardent volontairement des réponses pour vérifier les courses de polling, la conservation des saisies et le rattachement des rapports au bon essai. Ils contrôlent aussi les requêtes bloquées, le forçage vide, les associations incompatibles, les états des symboles et l’accès aux actions à 768 px. Des tests ciblés vérifient le format des étapes et les erreurs de session/API, notamment le contexte conservé après renouvellement du jeton.
 
 Depuis la racine du dépôt, après installation Python :
 

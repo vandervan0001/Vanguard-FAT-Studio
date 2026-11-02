@@ -1,4 +1,4 @@
-# Modèle de procédé et limites
+# Modèle de procédé et limites — FAT Studio 0.1.1
 
 ## Contrat physique
 
@@ -7,6 +7,8 @@ Le moteur représente des cuves à section constante, des alimentations/soutirag
 À chaque pas de temps, il reçoit une image complète des commandes PLC, calcule l'évolution du procédé et produit les entrées simulées. `ProcessEngine` n'implémente aucune régulation. En mode démonstration, un `DemoController` séparé remplace explicitement le PLC ; l'adaptateur OPC UA utilise exclusivement les commandes lues dans la CPU virtuelle.
 
 Le pas est configurable de 20 à 2 000 ms, avec 100 ms par défaut. Le temps simulé progresse par pas fixes. La communication OPC UA et le programme PLC ne sont pas exécutés en synchronisation déterministe : un dépassement de temps est journalisé, sans rattrapage en rafale. Le mode OPC UA impose une vitesse de 1×. L'accélération de la démonstration ne constitue pas une qualification de performance temps réel.
+
+Le calcul interne du procédé conserve la double précision (`float64`). Un appel à `ProcessEngine.step` valide toute l'image de commandes, puis prépare un cycle complet avant de le conserver. Si le calcul ou la publication d'une mesure échoue, il restaure ensemble le temps, les états des équipements, les valeurs brutes, les valeurs publiées et leurs qualités. Cette restauration porte sur l'appel local à `step` ; les forçages ou actions appliqués avant cet appel restent distincts. Elle ne constitue pas une transaction OPC UA et ne peut pas annuler une écriture déjà reçue par le serveur.
 
 ## Cuve et bilan volumique
 
@@ -58,9 +60,23 @@ Un capteur analogique mesure un état d'une cuve, pompe ou vanne : `mesure = sou
 | BOOL | Booléen JSON `true` ou `false` ; ni `0`/`1` ni chaîne. |
 | INT | Entier signé de −32 768 à 32 767. |
 | DINT | Entier signé de −2 147 483 648 à 2 147 483 647. |
-| REAL | Nombre fini dans la plage IEEE-754 simple précision ; transfert OPC UA en Float. |
+| REAL | Nombre fini dans la plage IEEE-754 simple précision, normalisé en `float32` dès sa validation ; transfert OPC UA en Float. |
 
 Les limites min/max de procédé s'appliquent aux commandes lues et aux forçages ordinaires. Un défaut `out_of_range` peut dépasser ces limites, mais jamais le type de stockage PLC. Les valeurs non finies, les types incohérents et les images de commandes incomplètes provoquent un arrêt en erreur.
+
+### Représentation des REAL et assertions
+
+Les valeurs initiales, les forçages, les mesures publiées et les commandes validées utilisent la même représentation IEEE-754 simple précision. L'image des tags enregistrée correspond ainsi à la valeur représentable dans le Float OPC UA envoyé. Par exemple, `16777217` devient `16777216`, et `0.1` devient `0.10000000149011612`. Les états physiques internes conservent leur double précision ; leur affichage ou leur mesure par un tag REAL peut donc présenter un arrondi.
+
+Les bornes REAL représentables sont comparées après la même quantification. Une borne maximale déclarée à `0.1` accepte son retour Float32 `0.10000000149011612`. Le calcul de la qualité et la validation d'un défaut hors plage suivent cette règle : une valeur demandée qui s'arrondit à la borne n'est pas un défaut hors plage. NaN, les infinis, les booléens utilisés comme REAL et les dépassements de la plage de stockage restent refusés.
+
+Les assertions conservent l'attente et la tolérance choisies dans le scénario. Pour `eq` et `ne` numériques, `tolerance` est une tolérance absolue, avec une tolérance relative nulle ; les comparaisons `gt`, `ge`, `lt`, `le` ne l'utilisent pas. La valeur attendue n'est pas automatiquement arrondie pour rendre l'assertion vraie. Avec une tolérance nulle, une attente `0.1` peut donc échouer face au tag REAL correspondant ; choisir la tolérance selon le signal et l'essai à réaliser.
+
+### Plages des capteurs
+
+La validation du projet contrôle les extrémités connues de la plage mesurée après application de l'échelle et du décalage, puis de l'arrondi INT/DINT éventuel. Les domaines des débits agrégés `inflow_l_s` et `outflow_l_s` tiennent compte des circuits : minimum des capacités en série et somme des branches. Un capteur INT qui pourrait mesurer `25 L/s × 2000 = 50000` est ainsi refusé avant le démarrage.
+
+Le débordement cumulé `overflow_l` commence à zéro, mais n'a pas de borne supérieure pour un essai manuel sans durée maximale. Sa valeur initiale, décalage compris, est vérifiée ; une échelle non nulle entraîne un avertissement sur cette absence de borne. Un dépassement ultérieur du type PLC arrête l'essai sans conserver un cycle local partiellement calculé. Le modèle ne sature pas silencieusement ce compteur pour masquer le dépassement.
 
 ## Forçages, défauts et qualité
 
@@ -75,12 +91,16 @@ Les limites min/max de procédé s'appliquent aux commandes lues et aux forçage
 
 Un capteur ne cumule pas simultanément `sensor_stuck` et `out_of_range`. Un forçage manuel a priorité sur le signal défectueux et reste visible. Les qualités enregistrées sont `good`, `forced`, `fault`, `out_of_range`, auxquelles le runtime ajoute l'état de communication lors d'une erreur.
 
+Une erreur de communication ou une annulation de l'échange interrompt l'essai, ferme la session et marque l'image courante `bad`. Si l'annulation intervient pendant l'écriture, une partie du dernier lot peut déjà être appliquée au serveur ; l'image calculée n'est alors pas une confirmation de réception de toutes les valeurs. Aucun nouveau lot ni aucune reconnexion automatique ne sont engagés après cet arrêt.
+
 La remise à zéro efface forces et défauts, restaure les volumes initiaux et réinitialise le contrôleur de démonstration. Elle ne remet pas à zéro le programme d'une CPU externe. Pour rejouer une FAT Siemens dans des conditions comparables, l'automaticien doit remettre aussi les états internes du programme testé dans les conditions convenues.
 
 ## Démonstration TK-101
 
 La cuve de 1 000 L démarre à 25 %. Son contrôleur fictif commande le remplissage sous 30 % et l'arrête à 70 %. FCV-101 reste à 35 % en démonstration, soit 4,2 L/s après stabilisation. Le contrôleur lit les **tags simulés**, donc il réagit aux forçages et défauts du transmetteur.
 
+Pour les équipements configurés avec `demo_control="level"`, le sens du débit détermine le sens de la commande : une alimentation (`inlet`) démarre au seuil bas et s'arrête au seuil haut ; un soutirage (`outlet`) démarre au seuil haut et s'arrête au seuil bas. Entre les seuils, le contrôleur conserve son état. Avec `demo_control="constant"`, il utilise la commande constante configurée. Ces règles appartiennent uniquement au contrôleur de démonstration.
+
 Trois scénarios sont livrés : cycle de référence, défaut moteur/reprise, capteur figé/libéré. Leurs assertions visent ce contrôleur de démonstration et doivent être adaptées aux séquences du programme PLC réel. La réussite de ces scénarios démontre le comportement de ce modèle et de cette logique de test ; elle ne certifie aucune installation.
 
-Les tests exécutables du modèle sont dans `tests/test_engine.py` et `tests/test_models.py`.
+Les comportements sont implémentés dans [models.py](../fat_studio/models.py), [engine.py](../fat_studio/engine.py) et [runtime.py](../fat_studio/runtime.py). Les tests exécutables du modèle et de ses frontières sont dans [test_engine.py](../tests/test_engine.py), [test_models.py](../tests/test_models.py) et [test_adverse_process.py](../tests/test_adverse_process.py).

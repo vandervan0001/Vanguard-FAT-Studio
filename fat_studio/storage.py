@@ -88,11 +88,17 @@ class Store:
         path = self.projects_dir / f"{safe_id(project.id)}.json"
         if path.is_symlink():
             raise ValueError("Un fichier projet ne peut pas être un lien symbolique.")
+        current = project.model_dump(mode="json")
         if path.exists():
             backup = self.projects_dir / f"{project.id}.previous.json"
             previous = json.loads(path.read_text(encoding="utf-8"))
-            atomic_json(backup, previous)
-        atomic_json(path, project.model_dump(mode="json"))
+            # Loading or re-saving an unchanged document is not a new revision.
+            # Keep the last distinct saved version available for recovery.
+            if previous != current:
+                atomic_json(backup, previous)
+                atomic_json(path, current)
+        else:
+            atomic_json(path, current)
         atomic_json(self.root / "last-project.json", {"id": project.id})
 
     def load_project(self, project_id: str) -> Project:
@@ -107,6 +113,8 @@ class Store:
     def last_project(self) -> Project | None:
         path = self.root / "last-project.json"
         if not path.exists():
+            if any(self.projects_dir.glob("*.json")):
+                raise ValueError("Le fichier last-project.json est absent alors que des projets sont enregistrés.")
             return None
         pointer = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(pointer, dict) or not isinstance(pointer.get("id"), str):
@@ -119,7 +127,7 @@ class Store:
             if path.name.endswith(".previous.json") or path.is_symlink():
                 continue
             try:
-                project = Project.model_validate_json(path.read_text(encoding="utf-8"))
+                project = self.load_project(path.stem)
                 result.append({"id": project.id, "name": project.name,
                                "updated_at": datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()})
             except (ValueError, OSError) as exc:
@@ -136,12 +144,16 @@ class Store:
             )
 
     def event(self, run_id: str, sim_time_s: float, kind: str, message: str, details=None) -> dict:
-        timestamp = utc_now()
         with self.db:
-            cursor = self.db.execute(
-                "INSERT INTO events(run_id,timestamp,sim_time_s,kind,message,details_json) VALUES (?,?,?,?,?,?)",
-                (run_id, timestamp, sim_time_s, kind, message, encode(details or {})),
-            )
+            return self._insert_event(run_id, sim_time_s, kind, message, details)
+
+    def _insert_event(self, run_id: str, sim_time_s: float, kind: str, message: str, details=None) -> dict:
+        """Insert into the caller's transaction, so related evidence is atomic."""
+        timestamp = utc_now()
+        cursor = self.db.execute(
+            "INSERT INTO events(run_id,timestamp,sim_time_s,kind,message,details_json) VALUES (?,?,?,?,?,?)",
+            (run_id, timestamp, sim_time_s, kind, message, encode(details or {})),
+        )
         return {"id": cursor.lastrowid, "timestamp": timestamp, "sim_time_s": sim_time_s,
                 "kind": kind, "message": message, "details": details or {}}
 
@@ -161,10 +173,13 @@ class Store:
             else:
                 self.db.execute("UPDATE runs SET status=? WHERE id=?", (status, run_id))
 
-    def set_result(self, run_id: str, verdict: str, comment: str) -> None:
+    def set_result(self, run_id: str, verdict: str, comment: str, *, sim_time_s: float = 0) -> dict:
+        result = {"verdict": verdict, "comment": comment}
         with self.db:
-            self.db.execute("UPDATE runs SET result_json=? WHERE id=?",
-                            (encode({"verdict": verdict, "comment": comment}), run_id))
+            updated = self.db.execute("UPDATE runs SET result_json=? WHERE id=?", (encode(result), run_id))
+            if updated.rowcount != 1:
+                raise ValueError("Essai introuvable.")
+            return self._insert_event(run_id, sim_time_s, "user_result", "Verdict utilisateur : " + verdict, result)
 
     def runs(self) -> list[dict]:
         return [dict(row) for row in self.db.execute(

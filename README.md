@@ -4,7 +4,7 @@
 
 Le programme PLC reste le contrôleur du procédé. FAT Studio lit ses commandes, calcule les équipements et renvoie les capteurs simulés. Le mode **Démonstration** fournit un contrôleur distinct pour essayer l'application sans Siemens.
 
-Version livrée : **0.1.0**, le 2 novembre 2026. L'application, les scénarios, les échanges OPC UA génériques et le parcours navigateur sont exécutés en test. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : leur qualification sur le poste cible reste nécessaire.** Les limites et preuves sont détaillées dans [ACCEPTANCE](docs/ACCEPTANCE.md) et [VERIFICATION](evidence/VERIFICATION.md).
+Version livrée : **0.1.1**, le 2 novembre 2026, après [revue de code et essais adverses](docs/ADVERSARIAL_REVIEW.md). L'application, les scénarios, les échanges OPC UA génériques et les parcours navigateur sont exécutés en test. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : leur qualification sur le poste cible reste nécessaire.** Les limites et preuves sont détaillées dans [ACCEPTANCE](docs/ACCEPTANCE.md) et [VERIFICATION](evidence/VERIFICATION.md).
 
 ## Démarrer sous Windows
 
@@ -31,13 +31,13 @@ L'absence de Siemens n'est jamais masquée : le bandeau affiche **DÉMONSTRATION
 
 ### Linux / macOS, pour la démonstration
 
-Avec Python 3.12 installé :
+Depuis un clone source sans les wheels Windows, avec Python 3.12 installé :
 
 ```bash
 bash scripts/start.sh
 ```
 
-PLCSIM Advanced et TIA Portal restent des logiciels Windows. Le script installe le banc dans un environnement Python isolé puis sert la même interface locale.
+PLCSIM Advanced et TIA Portal restent des logiciels Windows. Le script installe le banc dans un environnement Python isolé puis sert la même interface locale. L'archive Windows contient un dépôt Git et un bundle : `git clone FAT-Studio.bundle fat-studio-source` crée une copie source sans les dépendances spécifiques à Windows.
 
 ## Fonctions livrées
 
@@ -105,7 +105,7 @@ python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements-dev.lock -r requirements-engineering.lock
 .venv/bin/python -m pip install --no-deps --no-build-isolation .
 .venv/bin/python -m pytest
-.venv/bin/python -m ruff check fat_studio integrations tests
+.venv/bin/python -m ruff check fat_studio integrations tests scripts
 ```
 
 Reconstruction de l'interface avec Node.js 22+ :
@@ -128,6 +128,7 @@ Tests navigateur : voir [frontend/README](frontend/README.md). La CI décrit les
 - [Installation](docs/INSTALLATION.md), [utilisation](docs/USER_GUIDE.md), [modèle](docs/MODEL.md).
 - [Raccordement Siemens](docs/PLCSIM_SETUP.md), [compatibilité](docs/COMPATIBILITY.md), [ingénierie MCP](docs/TIA_MCP.md).
 - [Protocole d'acceptation](docs/ACCEPTANCE.md) et [résultats exécutés](evidence/VERIFICATION.md).
+- [Revue adverse 0.1.1 : défauts reproduits, corrections et limites](docs/ADVERSARIAL_REVIEW.md).
 
 ## Données et maintenance
 

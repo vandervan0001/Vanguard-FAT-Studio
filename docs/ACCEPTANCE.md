@@ -35,6 +35,8 @@ Conserver le JSON du projet, les rapports d'essai, les diagnostics TIA, les vers
 
 **A4 — Persistance et rapport.** Ajouter un marqueur et un verdict avec commentaire. Télécharger CSV/HTML/JSON, fermer puis relancer le service. Attendu : essai archivé consultable, configuration d'origine conservée dans la preuve, résultat utilisateur distinct des assertions.
 
+Vérifier aussi qu'une conclusion sauvegardée reste visible après rechargement du navigateur. Pendant une saisie dans l'onglet A, arrêter puis redémarrer le même projet depuis B : l'envoi du brouillon de A doit être refusé pour le nouvel essai et le brouillon doit rester récupérable.
+
 **A5 — Installation hors ligne, si retenue.** Préparer le kit sur Windows avec `prepare-offline.ps1`, transférer le dossier complet vers un poste sans accès Internet et exécuter le lanceur. Attendu : vérification des empreintes, installation depuis wheelhouse, ouverture de la démo sans index externe. Modifier une copie d'une wheel : la vérification doit refuser le kit avant installation.
 
 ## B. Préparer la communication Siemens
@@ -70,7 +72,7 @@ Démarrer un essai libre sur la cible approuvée. Forcer un tag BOOL, puis une m
 | INT si utilisé | | | | | |
 | DINT si utilisé | | | | | |
 
-Le DB de démo contient BOOL/REAL. Pour INT/DINT, utiliser des variables de preuve distinctes dans le DB convenu, les exposer et les mapper explicitement. Tester les bornes utiles au procédé ; une valeur dépassant le type de stockage doit être refusée par le banc.
+Le DB de démo contient BOOL/REAL. Pour INT/DINT, utiliser des variables de preuve distinctes dans le DB convenu, les exposer et les mapper explicitement. Tester les bornes utiles au procédé ; une valeur dépassant le type de stockage doit être refusée par le banc. Les tags REAL sont enregistrés en représentation Float32 : comparer la valeur reçue et la trace dans cette représentation, et fixer les tolérances d'assertion adaptées au signal. Voir [MODEL.md](MODEL.md#représentation-des-real-et-assertions).
 
 **Attendu :** valeur correcte au consommateur, indication visible de force, retour à la mesure du modèle après libération. Vérifier qu'une affectation cyclique du programme n'écrase pas le tag simulé.
 

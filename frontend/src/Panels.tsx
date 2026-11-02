@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ArrowDownToLine, ArrowLeftRight, Check, CircleAlert, Clock3, FileJson, FileText, Flag, FolderClock, Info, ListChecks, Plus, Search, ShieldCheck, Trash2, Upload, Wifi, X } from 'lucide-react';
-import { api, download } from './api';
+import { api, download, downloadText } from './api';
 import { useModalKeyboard } from './useModalKeyboard';
 import { parseScenarioSteps } from './scenarioFormat';
 import { ForceField } from './PidCanvas';
-import { fmt, uid, type CatalogItem, type Project, type Snapshot, type Tag, type Scenario, type RunSummary, type Validation } from './types';
+import { fmt, uid, type CatalogItem, type Project, type ReportDraft, type RunResult, type Snapshot, type Tag, type Scenario, type ScenarioDraft, type RunSummary, type Validation } from './types';
 
 type CommonProps = {
   project: Project; state: Snapshot | null; locked: boolean; online: boolean;
@@ -66,12 +66,12 @@ export function VariablesPanel({ project, state, locked, online, onChange, onErr
   </section>;
 }
 
-export function ScenariosPanel({ project, state, locked, onChange, selectedId, onSelect, onDraftChange }: CommonProps & { selectedId: string; onSelect: (id: string) => void; onDraftChange: (pending: boolean) => void }) {
+export function ScenariosPanel({ project, state, locked, onChange, selectedId, onSelect, onDraftChange }: CommonProps & { selectedId: string; onSelect: (id: string) => void; onDraftChange: (draft: ScenarioDraft | null) => void }) {
   const selected = project.scenarios.find(scenario => scenario.id === selectedId) ?? null;
   const [stepsText, setStepsText] = useState('[]');
   const [jsonError, setJsonError] = useState('');
   const [pending, setPending] = useState(false);
-  useEffect(() => { setStepsText(JSON.stringify(selected?.steps ?? [], null, 2)); setJsonError(''); setPending(false); onDraftChange(false); }, [selected?.id]); // reset only when choosing a different scenario
+  useEffect(() => { setStepsText(JSON.stringify(selected?.steps ?? [], null, 2)); setJsonError(''); setPending(false); onDraftChange(null); }, [selected?.id]); // reset only when choosing a different scenario
   const update = (patch: Partial<Scenario>) => { if (selected) onChange(project => ({ ...project, scenarios: project.scenarios.map(scenario => scenario.id === selected.id ? { ...scenario, ...patch } : scenario) })); };
   const add = () => {
     if (pending && !window.confirm('Abandonner les étapes non appliquées ?')) return;
@@ -82,7 +82,7 @@ export function ScenariosPanel({ project, state, locked, onChange, selectedId, o
   const applySteps = () => {
     try {
       const steps = parseScenarioSteps(stepsText, selected?.duration_s ?? 0);
-      update({ steps }); setPending(false); onDraftChange(false); setJsonError('');
+      update({ steps }); setPending(false); onDraftChange(null); setJsonError('');
     } catch (error) { setJsonError(error instanceof Error ? error.message : String(error)); }
   };
   const choose = (id: string) => { if (!pending || window.confirm('Abandonner les étapes non appliquées ?')) onSelect(id); };
@@ -96,9 +96,9 @@ export function ScenariosPanel({ project, state, locked, onChange, selectedId, o
       <label>Description<textarea disabled={locked} rows={2} value={selected.description} onChange={event => update({ description: event.target.value })} placeholder="Objectif, conditions initiales et résultat attendu" /></label>
       <div className="timeline">{selected.steps.map((step, index) => <div className={`timeline-step ${state?.scenario.id === selected.id && index < state.scenario.completed_steps ? 'done' : ''}`} key={`${index}-${step.at_s}`}><span className="timeline-time">{fmt(step.at_s)} s</span><span className="timeline-dot" /><div><strong>{({ force: 'Forcer une entrée', release: 'Libérer le forçage', fault: 'Injecter un défaut', clear_fault: 'Lever un défaut', marker: 'Marqueur', expect: 'Vérification' })[step.action]}</strong><p>{step.message || `${step.target ?? ''}${step.value !== undefined ? ' → ' + JSON.stringify(step.value) : ''}`}</p></div></div>)}</div>
       <div className="editor-title"><h3>Étapes du scénario <span className="type-label">JSON</span></h3><span className="small-muted">Les temps sont exprimés en secondes simulées.</span></div>
-      <textarea className="code-editor" disabled={locked} spellCheck={false} aria-label="Étapes JSON du scénario" rows={14} value={stepsText} onChange={event => { setStepsText(event.target.value); setPending(true); onDraftChange(true); setJsonError(''); }} />
+      <textarea className="code-editor" disabled={locked} spellCheck={false} aria-label="Étapes JSON du scénario" rows={14} value={stepsText} onChange={event => { setStepsText(event.target.value); setPending(true); onDraftChange({ scenarioId: selected.id, text: event.target.value }); setJsonError(''); }} />
       {jsonError && <div className="inline-error"><CircleAlert size={16} />{jsonError}</div>}
-      <div className="scenario-editor-actions"><span className={pending ? 'unsaved-text' : 'small-muted'}>{pending ? 'Étapes modifiées : appliquez-les avant de sauvegarder ou démarrer.' : 'Étapes appliquées au projet.'}</span><button className="button" disabled={locked || !pending} onClick={applySteps}><Check size={16} />Appliquer les étapes</button></div>
+      <div className="scenario-editor-actions"><span className={pending ? 'unsaved-text' : 'small-muted'}>{pending ? 'Étapes modifiées : appliquez-les avant de sauvegarder ou démarrer.' : 'Étapes appliquées au projet.'}</span><div className="button-row">{pending && <button className="button" onClick={() => downloadText(stepsText, `${selected.id}-etapes-brouillon.json`)}><ArrowDownToLine size={16} />Télécharger les étapes JSON</button>}<button className="button" disabled={locked || !pending} onClick={applySteps}><Check size={16} />Appliquer les étapes</button></div></div>
       <details className="help-details"><summary>Syntaxe des actions et exemples</summary><p><code>target</code> désigne l’identifiant interne d’un tag, ou d’un équipement pour les défauts.</p><pre>{JSON.stringify([
         { at_s: 5, action: 'marker', message: 'Contrôle de la montée en niveau' },
         { at_s: 10, action: 'force', target: project.tags.find(tag => tag.direction === 'input')?.id ?? 'tag_id', value: 85 },
@@ -136,23 +136,35 @@ export function TrendChart({ project, state, compact = false }: { project: Proje
   </div>;
 }
 
-export function TrendsPanel({ project, state, online, onError, onSnapshot }: Pick<CommonProps, 'project' | 'state' | 'online' | 'onError' | 'onSnapshot'>) {
-  const [marker, setMarker] = useState('');
-  const [verdict, setVerdict] = useState('not_evaluated');
-  const [comment, setComment] = useState('');
+export function TrendsPanel({ project, state, online, onError, onSnapshot, draft, onDraftChange }: Pick<CommonProps, 'project' | 'state' | 'online' | 'onError' | 'onSnapshot'> & { draft: ReportDraft; onDraftChange: (update: (draft: ReportDraft) => ReportDraft) => void }) {
+  const { marker, verdict, comment } = draft;
   const [runs, setRuns] = useState<RunSummary[]>([]);
   const [showRuns, setShowRuns] = useState(false);
-  const [savedVerdict, setSavedVerdict] = useState(false);
   const [busy, setBusy] = useState(false);
+  const wrongRun = draft.runId !== (state?.run_id ?? null);
   useModalKeyboard(showRuns, () => setShowRuns(false));
-  useEffect(() => { setSavedVerdict(false); setVerdict('not_evaluated'); setComment(''); }, [state?.run_id]);
-  const mutate = async (path: string, body: unknown) => { setBusy(true); try { onSnapshot(await api<Snapshot>(path, 'POST', body)); return true; } catch (error) { onError(error instanceof Error ? error.message : String(error)); return false; } finally { setBusy(false); } };
+  const mutate = async (path: string, body: unknown) => {
+    if (!online || busy || wrongRun || !draft.runId) return false;
+    setBusy(true);
+    try { onSnapshot(await api<Snapshot>(path, 'POST', body, undefined, draft.runId)); return true; }
+    catch (error) { onError(error instanceof Error ? error.message : String(error)); return false; }
+    finally { setBusy(false); }
+  };
+  const saveResult = async () => {
+    const submitted = draft;
+    if (await mutate('/result', { verdict, comment })) onDraftChange(current => current.runId === submitted.runId && current.verdict === submitted.verdict && current.comment === submitted.comment ? { ...current, resultDirty: false, saved: true } : current);
+  };
+  const addMarker = async () => {
+    const submitted = draft;
+    if (await mutate('/markers', { message: marker })) onDraftChange(current => current.runId === submitted.runId && current.marker === submitted.marker ? { ...current, marker: '' } : current);
+  };
   const loadRuns = async () => { try { setRuns(await api<RunSummary[]>('/runs')); setShowRuns(true); } catch (error) { onError(String(error)); } };
   return <section className="page-panel">
-    <div className="section-heading"><div><div className="eyebrow">TRACES & RÉSULTATS</div><h2>Tendances et rapport d’essai</h2><p>Chaque valeur, défaut et intervention est lié au temps de simulation et à l’essai.</p></div><div className="button-row"><button className="button" disabled={!online} onClick={() => void loadRuns()}><FolderClock size={16} />Historique</button><button className="button" disabled={!online || !state?.run_id} onClick={() => download('/export/csv')}><ArrowDownToLine size={16} />Données CSV</button><button className="button primary" disabled={!online || !state?.run_id} onClick={() => download('/export/report')}><FileText size={16} />Rapport FAT</button></div></div>
+    {wrongRun && <div className="information-strip" role="alert"><CircleAlert size={18} /><div>Ce brouillon appartient à l’essai précédent. Il est conservé ici ; il ne peut pas être envoyé à l’essai actuel.<div className="button-row"><button className="button compact-button" onClick={() => downloadText(JSON.stringify({ run_id: draft.runId, verdict, comment, marker }, null, 2) + '\n', `${draft.runId ?? 'sans-essai'}-brouillon-rapport.json`)}>Télécharger le brouillon du rapport</button><button className="button compact-button" onClick={() => { if (window.confirm('Abandonner ce brouillon et afficher la conclusion de l’essai actuel ?')) onDraftChange(() => ({ runId: state?.run_id ?? null, verdict: state?.result?.verdict ?? 'not_evaluated', comment: state?.result?.comment ?? '', marker: '', resultDirty: false, saved: false })); }}>Afficher l’essai actuel</button></div></div></div>}
+    <div className="section-heading"><div><div className="eyebrow">TRACES & RÉSULTATS</div><h2>Tendances et rapport d’essai</h2><p>Chaque valeur, défaut et intervention est lié au temps de simulation et à l’essai.</p></div><div className="button-row"><button className="button" disabled={!online} onClick={() => void loadRuns()}><FolderClock size={16} />Historique</button><button className="button" disabled={!online || !state?.run_id} onClick={() => download(`/runs/${encodeURIComponent(state!.run_id!)}/csv`)}><ArrowDownToLine size={16} />Données CSV</button><button className="button primary" disabled={!online || !state?.run_id} onClick={() => download(`/runs/${encodeURIComponent(state!.run_id!)}/report`)}><FileText size={16} />Rapport FAT</button></div></div>
     <div className="chart-panel"><div className="chart-heading"><h3>Évolution du procédé</h3><span className="live-label"><span className={state?.status === 'running' ? 'live-dot' : ''} />{state?.status === 'running' ? 'Acquisition en cours' : 'Dernières valeurs acquises'}</span></div><TrendChart project={project} state={state} /><p className="chart-note">Jusqu’à 8 variables dans leurs unités natives. Les BOOL valent 0 / 1. Fenêtre glissante ; l’export contient l’historique complet.</p></div>
-    <div className="evidence-grid"><div className="journal-panel"><div className="chart-heading"><h3>Journal de l’essai</h3><span className="small-muted">{state?.events.length ?? 0} événements visibles</span></div><form className="marker-form" onSubmit={event => { event.preventDefault(); void mutate('/markers', { message: marker }).then(ok => { if (ok) setMarker(''); }); }}><Flag size={17} /><input aria-label="Commentaire de l’essai" value={marker} onChange={event => setMarker(event.target.value)} placeholder="Ajouter un marqueur ou une observation…" maxLength={2000} /><button className="button compact-button" disabled={!online || !state?.run_id || !marker.trim() || busy}>Ajouter</button></form><div className="event-list">{[...(state?.events ?? [])].reverse().map(event => <div className={`event-row ${event.kind}`} key={event.id}><span className="event-time">{fmt(event.sim_time_s)} s<small>{new Date(event.timestamp).toLocaleTimeString('fr-CH')}</small></span><span className="event-kind">{event.kind}</span><p>{event.message}</p></div>)}{!state?.events.length && <p className="empty-inline">Les actions et diagnostics apparaîtront ici.</p>}</div></div>
-      <div className="verdict-panel"><h3>Conclusion de l’ingénieur</h3><p>Les assertions automatiques complètent votre évaluation. La conclusion est enregistrée dans le rapport.</p><label>Résultat<select value={verdict} onChange={event => { setVerdict(event.target.value); setSavedVerdict(false); }}><option value="not_evaluated">Non évalué</option><option value="pass">Conforme</option><option value="fail">Non conforme</option></select></label><label>Observations<textarea rows={5} value={comment} onChange={event => { setComment(event.target.value); setSavedVerdict(false); }} placeholder="Écarts, réserves, conditions de l’essai…" /></label><button className="button primary full-width" disabled={!online || !state?.run_id || busy} onClick={() => void mutate('/result', { verdict, comment }).then(ok => setSavedVerdict(ok))}><Check size={16} />Enregistrer la conclusion</button>{savedVerdict && <p className="success-text"><Check size={14} />Conclusion enregistrée</p>}<button className="text-link" disabled={!online || !state?.run_id} onClick={() => download('/export/json')}><FileJson size={15} />Exporter les preuves JSON</button></div></div>
+    <div className="evidence-grid"><div className="journal-panel"><div className="chart-heading"><h3>Journal de l’essai</h3><span className="small-muted">{state?.events.length ?? 0} événements visibles</span></div><form className="marker-form" onSubmit={event => { event.preventDefault(); void addMarker(); }}><Flag size={17} /><input aria-label="Commentaire de l’essai" value={marker} onChange={event => { const marker = event.target.value; onDraftChange(current => ({ ...current, marker })); }} placeholder="Ajouter un marqueur ou une observation…" maxLength={2000} /><button className="button compact-button" disabled={!online || !state?.run_id || wrongRun || !marker.trim() || busy}>Ajouter</button></form><div className="event-list">{[...(state?.events ?? [])].reverse().map(event => <div className={`event-row ${event.kind}`} key={event.id}><span className="event-time">{fmt(event.sim_time_s)} s<small>{new Date(event.timestamp).toLocaleTimeString('fr-CH')}</small></span><span className="event-kind">{event.kind}</span><p>{event.message}</p></div>)}{!state?.events.length && <p className="empty-inline">Les actions et diagnostics apparaîtront ici.</p>}</div></div>
+      <div className="verdict-panel"><h3>Conclusion de l’ingénieur</h3><p>Les assertions automatiques complètent votre évaluation. La conclusion est enregistrée dans le rapport.</p><label>Résultat<select value={verdict} onChange={event => { const verdict = event.target.value as RunResult['verdict']; onDraftChange(current => ({ ...current, verdict, resultDirty: true, saved: false })); }}><option value="not_evaluated">Non évalué</option><option value="pass">Conforme</option><option value="fail">Non conforme</option></select></label><label>Observations<textarea rows={5} value={comment} maxLength={10000} onChange={event => { const comment = event.target.value; onDraftChange(current => ({ ...current, comment, resultDirty: true, saved: false })); }} placeholder="Écarts, réserves, conditions de l’essai…" /></label><button className="button primary full-width" disabled={!online || !state?.run_id || wrongRun || busy} onClick={() => void saveResult()}><Check size={16} />Enregistrer la conclusion</button>{draft.saved && <p className="success-text"><Check size={14} />Conclusion enregistrée</p>}{draft.resultDirty && <p className="unsaved-text">Conclusion modifiée, non enregistrée.</p>}<button className="text-link" disabled={!online || !state?.run_id} onClick={() => download(`/runs/${encodeURIComponent(state!.run_id!)}/json`)}><FileJson size={15} />Exporter les preuves JSON</button></div></div>
     {showRuns && <div className="modal-backdrop"><section className="modal wide-modal" role="dialog" aria-modal="true" aria-labelledby="runs-title"><div className="modal-heading"><h2 id="runs-title">Essais enregistrés</h2><button className="icon-button" onClick={() => setShowRuns(false)} aria-label="Fermer l’historique"><X size={18} /></button></div><div className="run-list">{runs.map(run => { const id = run.id ?? run.run_id ?? ''; return <div className="saved-run" key={id}><div><strong>{run.project_name ?? id}</strong><small>{run.started_at ? new Date(run.started_at).toLocaleString('fr-CH') : id}</small><span>{run.verdict ?? run.status ?? ''}</span></div><div className="button-row"><button className="button compact-button" onClick={() => download(`/runs/${encodeURIComponent(id)}/csv`)}>CSV</button><button className="button compact-button" onClick={() => download(`/runs/${encodeURIComponent(id)}/report`)}>Rapport</button><button className="button compact-button" onClick={() => download(`/runs/${encodeURIComponent(id)}/json`)}>JSON</button></div></div>; })}{!runs.length && <div className="empty-inline">Aucun essai enregistré.</div>}</div></section></div>}
   </section>;
 }

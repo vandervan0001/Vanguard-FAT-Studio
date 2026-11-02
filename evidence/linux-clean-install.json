@@ -1,0 +1,59 @@
+{
+  "started_at_utc": "2026-11-02T13:15:57.183528+00:00",
+  "checks": [
+    "production HTML and local JS/CSS served outside source tree",
+    "demo start, pause, marker and explicit unevaluated verdict",
+    "consistent CSV, HTML and JSON exports",
+    "stop/reset preserve archived evidence",
+    "fresh process reopens saved evidence and remains idle"
+  ],
+  "health": {
+    "status": "ok",
+    "version": "0.1.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "sample_count": 4,
+  "status": "passed",
+  "finished_at_utc": "2026-11-02T13:15:59.378346+00:00",
+  "scope": "Installed application and loopback HTTP; no Siemens or external PLC",
+  "platform": "Linux x86_64 / Python 3.12.14",
+  "installation": "new .venv created by scripts/start.sh; locked runtime installed from local wheels, with pip indexes and cache disabled",
+  "bootstrap_started_at_utc": "2026-11-02T13:15:48.712530+00:00",
+  "bootstrap_health": {
+    "status": "ok",
+    "version": "0.1.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "directory_with_spaces_and_accents": true,
+  "offline_wheel_count": 28,
+  "pip_check": "No broken requirements found.",
+  "doctor": {
+    "application": "FAT Studio",
+    "version": "0.1.1",
+    "python": "3.12.14",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.39",
+    "dependencies": {
+      "fastapi": "0.162.0",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.14.2",
+      "asyncua": "1.1.8"
+    },
+    "missing_dependencies": [],
+    "web_ready": true,
+    "web_path": "<TEMP>/FAT installation épreuve/.venv/lib/python3.12/site-packages/fat_studio/web",
+    "data_dir": "<USER_DATA_DEFAULT>",
+    "authorized_target_count": 0,
+    "policy_error": null,
+    "siemens_validation": "Non vérifiée par doctor : effectuer la qualification sur le poste cible."
+  },
+  "script_sha256": {
+    "scripts/start.sh": "4304fcbb031a1f526c9b764c3e726c36044ad2f1d574be467f18ffb4d5735c70",
+    "scripts/check-kit.py": "93de830b7b0293de3f4274d8119e9dc2751c32d5adff612a2313502e9f14c228",
+    "scripts/smoke-installed.py": "effc3bcc1799cc03272cb327fc6d800baa7078fe60758c14291fb926afc535d5"
+  },
+  "redactions": [
+    "temporary installation path and default user data directory replaced with placeholders"
+  ]
+}

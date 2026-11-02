@@ -4,6 +4,8 @@ These do not establish compatibility with installed Siemens software.
 """
 
 import asyncio
+import argparse
+from contextlib import asynccontextmanager
 from dataclasses import replace
 import json
 from pathlib import Path
@@ -15,6 +17,7 @@ from integrations.tia_engineering import (
     Audit, Console, Engineering, EngineeringError, Policy, SdkTransport,
     digest, load_proposal, write_json,
 )
+import integrations.tia_engineering as engineering_module
 
 
 def standalone(tool, value, *, success=True, phase=None):
@@ -88,7 +91,11 @@ class FakeTransport:
                     "verification": {"success": True}}
         if tool == "compile_check":
             return standalone(tool, {"totalErrorCount": int(self.fail_compile), "totalWarningCount": 0,
-                              "overallState": "Error" if self.fail_compile else "Success", "plcs": []},
+                              "overallState": "Error" if self.fail_compile else "Success", "plcs": [{
+                                  "plcName": "PLC_1", "deviceName": None,
+                                  "state": "Error" if self.fail_compile else "Success",
+                                  "errorCount": int(self.fail_compile), "warningCount": 0,
+                                  "messages": [], "diagnosticNotes": []}]},
                               success=not self.fail_compile)
         if tool == "save_project":
             self.modified = False
@@ -285,3 +292,97 @@ server.run()
             result = await transport.call("get_project_status", {})
             assert result["success"] is True and result["result"]["value"]["isOpen"] is True
     asyncio.run(exercise())
+
+
+def test_readonly_policy_cannot_append_audit_into_tia_project(policy):
+    """Even a status request records an audit row; its path must not corrupt TIA files."""
+    with pytest.raises(EngineeringError, match="audit|Audit"):
+        replace(policy, audit_path=policy.project_path).validate()
+
+
+def test_tree_collects_pages_within_one_server_session(policy, tmp_path, monkeypatch):
+    """Czarnak v4.3.0 tree cursors are process-local, so separate CLI calls cannot resume them."""
+    config = tmp_path / "policy.json"
+    write_json(config, policy.__dict__)
+    console = FakeConsole()
+    transports = []
+
+    class TreeTransport(FakeTransport):
+        async def call(self, tool, arguments):
+            if tool != "browse_project_tree":
+                return await super().call(tool, arguments)
+            self.calls.append((tool, arguments))
+            offset = 1 if arguments.get("cursor") == "same-process-page-2" else 0
+            return {
+                "contractVersion": "3.0", "status": "succeeded", "failure": None, "warnings": [],
+                "result": {
+                    "snapshot": {"snapshotId": "one-snapshot", "totalNodes": 2},
+                    "query": {"projectPath": policy.project_path},
+                    "pagination": {"offset": offset, "requestedPageSize": 100, "returnedCount": 1,
+                                   "nextCursor": "same-process-page-2" if offset == 0 else None},
+                    "nodes": [{"nodeId": f"n{offset}", "parentNodeId": None if offset == 0 else "n0",
+                               "sequence": offset, "name": "PLC_1" if offset == 0 else "Main"}],
+                },
+            }
+
+    @asynccontextmanager
+    async def connection(*args, **kwargs):
+        transport = TreeTransport(policy)
+        transports.append(transport)
+        yield transport
+
+    monkeypatch.setattr(engineering_module, "connect", connection)
+    monkeypatch.setattr(engineering_module, "Console", lambda: console)
+    code = asyncio.run(engineering_module.run_command(argparse.Namespace(config=str(config), command="tree", cursor=None)))
+    assert code == 0 and len(transports) == 1
+    result = json.loads(console.shown[-1])
+    assert [node["name"] for node in result["nodes"]] == ["PLC_1", "Main"]
+    assert result["pages"] == 2
+    tree_calls = [args for tool, args in transports[0].calls if tool == "browse_project_tree"]
+    assert tree_calls == [{"pageSize": 100}, {"cursor": "same-process-page-2"}]
+
+
+def test_tree_v3_failure_is_not_a_successful_cli_exit(policy, tmp_path, monkeypatch):
+    config = tmp_path / "policy.json"
+    write_json(config, policy.__dict__)
+
+    class BrokenTree(FakeTransport):
+        async def call(self, tool, arguments):
+            if tool == "browse_project_tree":
+                return {"contractVersion": "3.0", "status": "failed", "result": None,
+                        "failure": {"category": "snapshot_unavailable", "message": "Snapshot expired"}, "warnings": []}
+            return await super().call(tool, arguments)
+
+    @asynccontextmanager
+    async def connection(*args, **kwargs):
+        yield BrokenTree(policy)
+
+    monkeypatch.setattr(engineering_module, "connect", connection)
+    monkeypatch.setattr(engineering_module, "Console", FakeConsole)
+    monkeypatch.setattr(sys, "argv", ["fat-tia", "--config", str(config), "tree"])
+    assert engineering_module.main() == 1
+
+
+@pytest.mark.parametrize("damage", ["omitted", "wrong_status", "boolean_count", "hidden_plc_error", "empty_plcs"])
+def test_compile_incomplete_or_malformed_result_is_not_passed(policy, damage):
+    engineer, fake = engine(writable(policy), FakeConsole([True]))
+    original_call = fake.call
+
+    async def call(tool, arguments):
+        result = await original_call(tool, arguments)
+        if tool == "compile_check":
+            if damage == "omitted":
+                result["result"]["omission"] = {"reason": "responseExceededDocumentCharLimit"}
+            elif damage == "wrong_status":
+                result["result"]["status"] = "failed"
+            elif damage == "boolean_count":
+                result["result"]["value"]["totalErrorCount"] = False
+            elif damage == "hidden_plc_error":
+                result["result"]["value"]["plcs"][0].update(state="Error", errorCount=3)
+            else:
+                result["result"]["value"]["plcs"] = []
+        return result
+
+    fake.call = call
+    with pytest.raises(EngineeringError, match="[Cc]ompil|diagnostic"):
+        asyncio.run(engineer.compile(archive_first=False))

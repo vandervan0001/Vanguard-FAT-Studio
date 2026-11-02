@@ -160,5 +160,10 @@
       "bytes": 33320,
       "sha256": "3217dcc807155e45db462d7ef2431f5ddda0d7273b700d05a67b271ceb1287ab"
     }
-  ]
+  ],
+  "release_0_1_1_recheck": {
+    "at_utc": "2026-11-02T13:19:28.982692+00:00",
+    "status": "passed",
+    "details": "Same runtime lock as v0.1.0; all 29 stored wheel hashes and sizes rechecked. No Windows process executed."
+  }
 }

@@ -3,90 +3,212 @@
   "framework": "Playwright 1.56.1",
   "browser": "Chromium 141, installed Playwright distribution",
   "backend": "real FastAPI application and temporary SQLite data",
+  "frontend": "compiled production assets served by FastAPI; no Vite server",
   "stats": {
-    "startTime": "2026-11-02T11:44:40.130Z",
-    "duration": 10138.057,
-    "expected": 12,
+    "startTime": "2026-11-02T13:10:41.662Z",
+    "duration": 44440.4,
+    "expected": 31,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   },
   "cases": [
     {
+      "suite": "adversarial.spec.ts",
+      "title": "un brouillon de conclusion et de marqueur survit aux changements de section",
+      "status": "expected",
+      "duration_ms": 1074
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une conclusion enregistrée est relue après rechargement et ne devient pas Non évalué",
+      "status": "expected",
+      "duration_ms": 1235
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "un ancien polling arrivé après Pause ne remet jamais l’écran en cours",
+      "status": "expected",
+      "duration_ms": 1115
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "enregistrer ou valider un projet inchangé conserve l’essai arrêté et ses exports",
+      "status": "expected",
+      "duration_ms": 1258
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "créer un procédé vide, ses tags, son scénario puis l’importer reproduit le projet",
+      "status": "expected",
+      "duration_ms": 3510
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une perte de réseau bloque les commandes puis restaure le brouillon au retour du service",
+      "status": "expected",
+      "duration_ms": 2246
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une largeur de 768 px garde les actions du banc nommées et accessibles",
+      "status": "expected",
+      "duration_ms": 625
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "un brouillon de rapport reste attaché à son essai si un autre onglet redémarre",
+      "status": "expected",
+      "duration_ms": 1203
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une sauvegarde lente de conclusion conserve les modifications saisies pendant la requête",
+      "status": "expected",
+      "duration_ms": 869
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "effacer la valeur du forçage ne force pas silencieusement la mesure à zéro",
+      "status": "expected",
+      "duration_ms": 763
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "les symboles montrent la pompe sans retour optionnel et la vanne partiellement ouverte",
+      "status": "expected",
+      "duration_ms": 1064
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "un mapping CSV exporté se réimporte et une erreur de mapping conserve les associations",
+      "status": "expected",
+      "duration_ms": 980
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "le mapping d’un autre projet ne peut pas être téléchargé pendant une course entre onglets",
+      "status": "expected",
+      "duration_ms": 584
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "un polling bloqué est signalé puis reprend sans perdre le brouillon",
+      "status": "expected",
+      "duration_ms": 6413
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "un brouillon JSON non appliqué reste récupérable après un conflit de projet",
+      "status": "expected",
+      "duration_ms": 976
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une association devenue incompatible reste explicite et peut être corrigée",
+      "status": "expected",
+      "duration_ms": 826
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "une session locale bloquée propose de réessayer et récupère au retour du service",
+      "status": "expected",
+      "duration_ms": 6413
+    },
+    {
+      "suite": "adversarial.spec.ts",
+      "title": "glisser un symbole, relier ses ports, déplacer et supprimer persiste le vrai graphe",
+      "status": "expected",
+      "duration_ms": 2555
+    },
+    {
       "suite": "api-errors.spec.ts",
       "title": "une erreur non JSON ou un corps null reste une erreur lisible",
       "status": "expected",
-      "duration_ms": 15
+      "duration_ms": 10
     },
     {
       "suite": "api-errors.spec.ts",
       "title": "un jeton expiré est renouvelé une seule fois et conserve le contexte projet",
       "status": "expected",
-      "duration_ms": 8
+      "duration_ms": 3
+    },
+    {
+      "suite": "api-errors.spec.ts",
+      "title": "un renouvellement de session ne redirige pas une action vers un autre projet ou essai",
+      "status": "expected",
+      "duration_ms": 3
     },
     {
       "suite": "scenario-format.spec.ts",
       "title": "refuse des objets à la place du texte avant de les exposer à React",
       "status": "expected",
-      "duration_ms": 4
+      "duration_ms": 3
     },
     {
       "suite": "scenario-format.spec.ts",
       "title": "refuse un temps infini et une séquence hors ordre ou durée",
       "status": "expected",
-      "duration_ms": 3
+      "duration_ms": 2
     },
     {
       "suite": "scenario-format.spec.ts",
       "title": "préserve les vrais booléens, les valeurs négatives et les étapes au même instant",
       "status": "expected",
-      "duration_ms": 3
+      "duration_ms": 1
     },
     {
       "suite": "scenario-format.spec.ts",
       "title": "signale champs inconnus et mauvaises valeurs de défaut sans les supprimer",
       "status": "expected",
-      "duration_ms": 3
+      "duration_ms": 1
     },
     {
       "suite": "workbench.spec.ts",
       "title": "éditer un vrai P&ID, sauvegarder puis recharger conserve les propriétés",
       "status": "expected",
-      "duration_ms": 1226
+      "duration_ms": 996
     },
     {
       "suite": "workbench.spec.ts",
       "title": "essai réel : boucle fermée, défaut, forçage, pause/reprise et exports",
       "status": "expected",
-      "duration_ms": 3357
+      "duration_ms": 3613
     },
     {
       "suite": "workbench.spec.ts",
       "title": "un JSON de scénario invalide reste un brouillon et ne casse pas React",
       "status": "expected",
-      "duration_ms": 806
+      "duration_ms": 1059
     },
     {
       "suite": "workbench.spec.ts",
       "title": "un import invalide préserve le projet affiché et enregistré",
       "status": "expected",
-      "duration_ms": 523
+      "duration_ms": 622
     },
     {
       "suite": "workbench.spec.ts",
       "title": "un autre onglet change de projet : commandes bloquées et brouillon récupérable",
       "status": "expected",
-      "duration_ms": 1421
+      "duration_ms": 1041
     },
     {
       "suite": "workbench.spec.ts",
       "title": "une nouvelle révision du même projet ne remplace pas silencieusement le brouillon",
       "status": "expected",
-      "duration_ms": 976
+      "duration_ms": 1056
     }
   ],
+  "assets_sha256": {
+    "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt": "9de548bc9136893a9ed1c509fe1c2d615e70e2f21d348281dfdb708dfb27ec91",
+    "fat_studio/web/assets/index-BnIYMUrX.css": "f611c35e6338ea4b66dfc5d783c487cec4218ddcac2c0a5487df06b4df9a2e56",
+    "fat_studio/web/assets/index-Cb2RHDue.js": "3091ff06ae7653087e451bef483fc99deed157defe71e714df567f2ba78dc4a4"
+  },
   "limitations": [
-    "Executed on Linux, not Windows",
-    "Browser screenshots are inspection artefacts, not included in this evidence file"
+    "Executed on Linux, not Windows; Chromium only",
+    "31 includes TypeScript unit tests and browser scenarios; see suite names",
+    "Browser screenshots are inspection artefacts, not included in this evidence file",
+    "Desktop viewport checks at 1440, 1024 and 768 pixels; not a mobile or screen-reader qualification"
   ]
 }

@@ -59,8 +59,9 @@ const SymbolNode = memo(function SymbolNode({ data, selected }: NodeProps<Equipm
   const { equipment, state, tags, faults } = data;
   const primaryPort = equipment.type === 'tank' ? 'level' : equipment.type === 'pump' ? 'feedback' : equipment.type.startsWith('valve') ? 'position' : 'value';
   const portValue = tags[equipment.bindings[primaryPort]]?.value;
-  const value = portValue ?? state[primaryPort] ?? state.value;
-  const active = Boolean(state.running ?? state.open ?? (typeof value === 'boolean' ? value : typeof value === 'number' && value > 0));
+  const value = portValue ?? state[equipment.type === 'pump' ? 'running' : primaryPort] ?? state.value;
+  const physicalValue = equipment.type.startsWith('valve') ? state.position ?? value : state.running ?? value;
+  const active = typeof physicalValue === 'boolean' ? physicalValue : typeof physicalValue === 'number' && physicalValue > 0;
   const faulted = Object.keys(faults).length > 0 || Boolean(state.fault);
   const forced = Object.values(equipment.bindings).some(id => tags[id]?.forced);
   const unit = primaryPort === 'level' || primaryPort === 'position' ? '%' : equipment.unit;
@@ -261,14 +262,16 @@ function Inspector({ equipment, project, state, catalog, locked, online, onChang
       {Object.entries(item?.ports ?? {}).map(([port, spec]) => {
         const tagId = equipment.bindings[port] ?? '';
         const tag = project.tags.find(tag => tag.id === tagId);
+        const incompatible = Boolean(tagId && (!tag || tag.direction !== spec.direction || !spec.data_types.includes(tag.data_type)));
         return <div className="binding-field" key={port}>
           <label><span>{spec.label ?? port}{spec.required && <em> *</em>}<small>{spec.direction === 'input' ? '→ PLC' : '← PLC'}</small></span>
-            <select disabled={locked} className={spec.required && !tagId ? 'missing' : ''} value={tagId} onChange={event => { const bindings = { ...equipment.bindings }; if (event.target.value) bindings[port] = event.target.value; else delete bindings[port]; change({ bindings }); }}>
-              <option value="">— Non associé —</option>{project.tags.filter(tag => tag.direction === spec.direction && spec.data_types.includes(tag.data_type)).map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}
+            <select disabled={locked} aria-invalid={incompatible || (spec.required && !tagId)} className={incompatible || (spec.required && !tagId) ? 'missing' : ''} value={tagId} onChange={event => { const bindings = { ...equipment.bindings }; if (event.target.value) bindings[port] = event.target.value; else delete bindings[port]; change({ bindings }); }}>
+              <option value="">— Non associé —</option>{incompatible && <option value={tagId} disabled>{tag?.name ?? tagId} · incompatible</option>}{project.tags.filter(tag => tag.direction === spec.direction && spec.data_types.includes(tag.data_type)).map(tag => <option key={tag.id} value={tag.id}>{tag.name}</option>)}
             </select>
           </label>
+          {incompatible && <p className="inline-error">Association incompatible : choisissez une variable {spec.data_types.join(' / ')} de sens {spec.direction === 'input' ? 'entrée PLC' : 'sortie PLC'}.</p>}
           {tag && <div className="binding-value"><span>{tag.data_type}</span><strong>{fmt(state?.tags[tag.id]?.value ?? tag.initial_value)} {tag.unit}</strong></div>}
-          {tag?.direction === 'input' && state?.run_id && <ForceField tag={tag} state={state} disabled={!online} onError={onError} onSnapshot={onSnapshot} />}
+          {tag?.direction === 'input' && state?.run_id && <ForceField key={tag.id} tag={tag} state={state} disabled={!online || incompatible} onError={onError} onSnapshot={onSnapshot} />}
         </div>;
       })}
       {!locked && <button className="button compact-button full-width" onClick={createTags} disabled={project.tags.length >= 200}><WandSparkles size={14} />Créer les tags manquants</button>}
@@ -295,6 +298,7 @@ export function ForceField({ tag, state, onSnapshot, onError, disabled = false }
   const apply = async (release = false) => {
     setBusy(true);
     try {
+      if (!release && value.trim() === '') throw new Error('Saisissez une valeur avant de forcer la mesure.');
       const parsed: Scalar = tag.data_type === 'BOOL' ? value === 'true' : Number(value);
       if (!release && typeof parsed === 'number' && (!Number.isFinite(parsed) || (tag.data_type !== 'REAL' && !Number.isInteger(parsed)))) throw new Error('Saisissez une valeur numérique valide pour ce type.');
       onSnapshot(await api<Snapshot>(release ? `/force/${encodeURIComponent(tag.id)}` : '/force', release ? 'DELETE' : 'POST', release ? undefined : { tag_id: tag.id, value: parsed }));

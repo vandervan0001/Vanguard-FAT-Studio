@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { api, setProjectContext } from '../src/api';
+import { api, setProjectContext, setRunContext } from '../src/api';
 
 const originalFetch = globalThis.fetch;
 test.afterEach(() => { globalThis.fetch = originalFetch; setProjectContext(''); });
@@ -27,4 +27,26 @@ test('un jeton expiré est renouvelé une seule fois et conserve le contexte pro
   expect(calls[2].headers['X-FAT-Token']).toBe('nouveau-jeton-test');
   expect(calls[0].headers['X-FAT-Project-ID']).toBe('tank-demo');
   expect(calls[2].headers['X-FAT-Project-ID']).toBe('tank-demo');
+});
+
+test('un renouvellement de session ne redirige pas une action vers un autre projet ou essai', async () => {
+  setProjectContext('premier-projet');
+  setRunContext('premier-essai');
+  const headers: Record<string, string>[] = [];
+  let attempts = 0;
+  globalThis.fetch = async (input, init) => {
+    if (String(input) === '/api/session') {
+      setProjectContext('autre-projet');
+      setRunContext('autre-essai');
+      return new Response('{"token":"session-renouvelee"}', { status: 200 });
+    }
+    headers.push(init?.headers as Record<string, string>);
+    return ++attempts === 1 ? new Response('{"detail":"Session expirée"}', { status: 403 }) : new Response('{"detail":"Contexte périmé"}', { status: 409 });
+  };
+  await expect(api('/result', 'POST', { verdict: 'fail', comment: 'Ancien essai' })).rejects.toThrow('Contexte périmé');
+  expect(headers).toHaveLength(2);
+  for (const header of headers) {
+    expect(header['X-FAT-Project-ID']).toBe('premier-projet');
+    expect(header['X-FAT-Run-ID']).toBe('premier-essai');
+  }
 });

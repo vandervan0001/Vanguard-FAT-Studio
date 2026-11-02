@@ -1,7 +1,9 @@
 {
-  "generated_at_utc": "2026-11-02T11:53:41.575615+00:00",
+  "generated_at_utc": "2026-11-02T13:21:46.975857+00:00",
   "format": "Git index blob bytes; text normalized by .gitattributes",
   "scope": "application, web sources and compiled assets, tests, scripts, configuration, licences and Siemens examples",
+  "release": "0.1.1",
+  "baseline_commit": "c18e0d439925155a91fbd1476c92be54f8a8cb06",
   "files": [
     {
       "path": ".gitattributes",
@@ -10,8 +12,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 2030,
-      "sha256": "09b9eab35128124f946a060bf1129c29ea2ba6c1aabedb8a86355ef07c5ce1da"
+      "bytes": 2841,
+      "sha256": "8d4491f4fc1f488da5d3756747b8bb566722d3e30af01ea0f88f069558908f12"
     },
     {
       "path": ".gitignore",
@@ -25,8 +27,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 10821,
-      "sha256": "f40002254be7f80dbadce5b80358220d72e0d6066f7d0dcb7dde584f37776308"
+      "bytes": 11223,
+      "sha256": "6c983dde04bce291b19b6c2d9ce4aa43214d7904d9cfc90c583ca0c18ed2fb5a"
     },
     {
       "path": "Start-FAT.cmd",
@@ -41,7 +43,7 @@
     {
       "path": "fat_studio/__init__.py",
       "bytes": 107,
-      "sha256": "43fd4dcc7cdc3f113b6d581863d831b09de91d390287478e0ad6fbba31be9ff9"
+      "sha256": "8af8200df308bfbf0a6762c83c4b56eef4ecb84d024bedf0de68426c97601fb2"
     },
     {
       "path": "fat_studio/__main__.py",
@@ -60,13 +62,13 @@
     },
     {
       "path": "fat_studio/adapters/opcua.py",
-      "bytes": 11904,
-      "sha256": "9b0f5764efbb880024e3b4e34d6df5df1645ff0858c7ed6307398c3971e9a492"
+      "bytes": 13339,
+      "sha256": "106edcc1749d68c373949b9497ecfe00dbacba7f7f966da26d776639a2d66173"
     },
     {
       "path": "fat_studio/app.py",
-      "bytes": 17791,
-      "sha256": "7274f618b4e919cd1f879514ecb7483536eb17935ac9589306470ce856ab4cfb"
+      "bytes": 17776,
+      "sha256": "00c581b26b9f416568307a9e91507784bcbfb3f01828cd426cf7a55939a5d786"
     },
     {
       "path": "fat_studio/catalog.py",
@@ -85,18 +87,18 @@
     },
     {
       "path": "fat_studio/engine.py",
-      "bytes": 16723,
-      "sha256": "d32552a35d0fa14045df1d684f5e05ba82d9211ea742d19f493599e8c40bbd35"
+      "bytes": 17622,
+      "sha256": "622ce3ccb62d66df9e0196b1c8870d702471e5d6247ac3780881e49313d390c1"
     },
     {
       "path": "fat_studio/mapping.py",
-      "bytes": 2553,
-      "sha256": "0b768e74fb4fc2f12fe0318effdcba1e925b73b70dfae6ad0c6e1ac69d2340d3"
+      "bytes": 3796,
+      "sha256": "05d519f6ad0721753f9e58bc4d8dfb1065c9f268d3b119568017ed1d362598a4"
     },
     {
       "path": "fat_studio/models.py",
-      "bytes": 22594,
-      "sha256": "88037bc529a0ee2f8872f2e670061ae1bc1a3140257c322bc934972bcc55f077"
+      "bytes": 24658,
+      "sha256": "67af0fdc463fa77c3f65be9f97bf4cb7f807e0f543866db24c51f77190c559f2"
     },
     {
       "path": "fat_studio/reporting.py",
@@ -105,8 +107,8 @@
     },
     {
       "path": "fat_studio/runtime.py",
-      "bytes": 21369,
-      "sha256": "6e5864672702a3054df7f2b6e0f790eb0e0143878a73f774c179263b87ee72a9"
+      "bytes": 24556,
+      "sha256": "3339268327a903c8c2eefa32a45fe394af5febbc4a649f0ecf24314c0963fee4"
     },
     {
       "path": "fat_studio/security.py",
@@ -115,8 +117,8 @@
     },
     {
       "path": "fat_studio/storage.py",
-      "bytes": 10456,
-      "sha256": "384963efe6809c5d9b32ef3b462380ffb7c3d69fdcddfd50e0ce79102b464fcd"
+      "bytes": 11376,
+      "sha256": "ffc72c6b12658bcd27ae073df741351691482b8b3a60db2e4ee9337d298a05aa"
     },
     {
       "path": "fat_studio/vendor/__init__.py",
@@ -149,14 +151,14 @@
       "sha256": "9de548bc9136893a9ed1c509fe1c2d615e70e2f21d348281dfdb708dfb27ec91"
     },
     {
-      "path": "fat_studio/web/assets/index-8uu7ywok.css",
-      "bytes": 53084,
-      "sha256": "522b315bb73c2c786ed9b2e1400ec5ce501df53d066299521f55e104731b3a10"
+      "path": "fat_studio/web/assets/index-BnIYMUrX.css",
+      "bytes": 53416,
+      "sha256": "f611c35e6338ea4b66dfc5d783c487cec4218ddcac2c0a5487df06b4df9a2e56"
     },
     {
-      "path": "fat_studio/web/assets/index-DmSFx8Xz.js",
-      "bytes": 870228,
-      "sha256": "dad3f9039b0bedebfbdc2f3723188f5fd41d92ac12b900f7ef547df7578255eb"
+      "path": "fat_studio/web/assets/index-Cb2RHDue.js",
+      "bytes": 876031,
+      "sha256": "3091ff06ae7653087e451bef483fc99deed157defe71e714df567f2ba78dc4a4"
     },
     {
       "path": "fat_studio/web/favicon.svg",
@@ -166,7 +168,7 @@
     {
       "path": "fat_studio/web/index.html",
       "bytes": 645,
-      "sha256": "051f03ae8079d434b34ad2ed8330336adaf9904c80323cb2c2562e0dac340cfc"
+      "sha256": "f3129a8b943691705b0a054cd7a8dc4dc72979702aefe8b9026a8905f3aa3867"
     },
     {
       "path": "frontend/.gitignore",
@@ -175,8 +177,8 @@
     },
     {
       "path": "frontend/README.md",
-      "bytes": 5693,
-      "sha256": "cdba682d59a599c26c9d0f90af6050eb7801c3feda41f0b9b997eca10dedb994"
+      "bytes": 7035,
+      "sha256": "3568649b556c22d2622d869cf0c4c58df6009d5a896da9f731468162d6ba5bac"
     },
     {
       "path": "frontend/index.html",
@@ -186,12 +188,12 @@
     {
       "path": "frontend/package-lock.json",
       "bytes": 85980,
-      "sha256": "bebb2e9886cf9ead6a5c6d9b59001105a852514320378b0b86d96fd1f31bfad1"
+      "sha256": "eb60700581fa88153da2a98e6cb3e60e476aadae79414a0eae9b5e67b90958cb"
     },
     {
       "path": "frontend/package.json",
       "bytes": 776,
-      "sha256": "3055ea0c1fd6fda87fc417523b422f15b08429bf1daa404fea7f8320c7bba146"
+      "sha256": "5d6100cf45ccd512a2d49c0f4a5ce5353209166c1746c0c4a283d0e38651806d"
     },
     {
       "path": "frontend/playwright.config.ts",
@@ -215,23 +217,23 @@
     },
     {
       "path": "frontend/src/App.tsx",
-      "bytes": 24363,
-      "sha256": "34149c2ce6a66ae515f6c3767d2001a65eda1a995f028c48419d265e8dc217b2"
+      "bytes": 27737,
+      "sha256": "fde9996b771d9391f912bd0bc75a7e8e7af8f1f3b0c92a8eb98f731c19964daf"
     },
     {
       "path": "frontend/src/Panels.tsx",
-      "bytes": 35316,
-      "sha256": "819d6f0ae1878f2823c1e8faeb6281dc2da4d5a2bd0a663336c410c6651cc991"
+      "bytes": 37508,
+      "sha256": "ebb458984dc811a86399ee928ddd4048127f56cd6fde5b8c1ade3c95ebfeed79"
     },
     {
       "path": "frontend/src/PidCanvas.tsx",
-      "bytes": 28623,
-      "sha256": "884bdae05d62c69a8014413d27113194d03e3dc668cb0b684f183d575185a18b"
+      "bytes": 29418,
+      "sha256": "c874af25a1a8e0b72410aeede3b29918ecdd7e9489d53a10d1861bf5eedf920c"
     },
     {
       "path": "frontend/src/api.ts",
-      "bytes": 3623,
-      "sha256": "3f79d6fd7e91360cb3c670f2a1c6a06d44471e5dc1ee1ce0d0512bf13c480f05"
+      "bytes": 6718,
+      "sha256": "9a77ef82d4900d0c39a2d4ec97ce846ac17f6a7a4103f88b3ce4d9f05dccdd58"
     },
     {
       "path": "frontend/src/main.tsx",
@@ -245,13 +247,13 @@
     },
     {
       "path": "frontend/src/styles.css",
-      "bytes": 42647,
-      "sha256": "c7c9cece65d52768f799fb497e46f3646d861d94375549460e26a3efe0166e09"
+      "bytes": 43137,
+      "sha256": "0acdb4fd0afe75a54f5841fcf28ffae048af5afecefafbbfe7d383ab6e49cb24"
     },
     {
       "path": "frontend/src/types.ts",
-      "bytes": 4139,
-      "sha256": "be40473fed57b414e04458ae274355b354426a4ea94de52ea1458edf33f9597a"
+      "bytes": 4433,
+      "sha256": "97ae439dad06d97cd85ec88f237eab8ef05727b06036719292fa47c74ceda131"
     },
     {
       "path": "frontend/src/useModalKeyboard.ts",
@@ -259,9 +261,14 @@
       "sha256": "18933299ac6d74992e831c991beb83e234b80b37a8f208dc12098842b2187ff1"
     },
     {
+      "path": "frontend/tests/adversarial.spec.ts",
+      "bytes": 25577,
+      "sha256": "ba2f516d8d68ff1f3a6747d9b30b9947504fa80356284f772d2f48ce23170776"
+    },
+    {
       "path": "frontend/tests/api-errors.spec.ts",
-      "bytes": 1800,
-      "sha256": "8d498f0c8ff488f05cdaa785273432aa51b6efa3ed5d70d81347a66a077d15ac"
+      "bytes": 2861,
+      "sha256": "3464e1738202b636e34144a0790f3b02511eea19f893c76207a2abdf2482e837"
     },
     {
       "path": "frontend/tests/scenario-format.spec.ts",
@@ -305,8 +312,8 @@
     },
     {
       "path": "integrations/tia_engineering.py",
-      "bytes": 31649,
-      "sha256": "f9d88c5338daf02b0771d51de113db8a0ccccb0e256766f6da3d4fbaa26bd99b"
+      "bytes": 37901,
+      "sha256": "b6fc2f0e09f280a781479cc33523e41e840c301898686496f1fd58465ed2487a"
     },
     {
       "path": "integrations/upstream.lock.json",
@@ -316,7 +323,7 @@
     {
       "path": "pyproject.toml",
       "bytes": 1252,
-      "sha256": "3d4538e9ae917cf4c83cfa3c0819d85702af95b3f8cfd8ced19545614dcbe011"
+      "sha256": "0713337391f46295282d7f298934cc5f0ed75008cef12e4c4d72826965a96fb9"
     },
     {
       "path": "requirements-dev.lock",
@@ -344,6 +351,11 @@
       "sha256": "46061431cbf139a6f6b464a4c28e3d257b0703827e57c3044790ae1135fe1c09"
     },
     {
+      "path": "scripts/check-kit.py",
+      "bytes": 5451,
+      "sha256": "93de830b7b0293de3f4274d8119e9dc2751c32d5adff612a2313502e9f14c228"
+    },
+    {
       "path": "scripts/generate-examples.py",
       "bytes": 2707,
       "sha256": "fec9a20f4d749f9685ac5310cda1144c249e68c8333263224d3c23742bde1203"
@@ -360,13 +372,18 @@
     },
     {
       "path": "scripts/prepare-offline.ps1",
-      "bytes": 4340,
-      "sha256": "bae1b367c488ac5487514d9585160c7cfed86d134405ca774522a4d0f8b4da6f"
+      "bytes": 4611,
+      "sha256": "9399167e6e67aad6ac93d3dcba67d12b83d4eafdf93fc0d9e6b6e0aa25a64db2"
     },
     {
       "path": "scripts/setup.ps1",
-      "bytes": 4333,
-      "sha256": "e87f82fc1eca098b547326bf166a6fdd166b6d8925078cd5e5971c3f80d17e6f"
+      "bytes": 3239,
+      "sha256": "b356d8e5f70dc06fb718d889c65993ab8ab22bab40377eaa6a640484f73e8e94"
+    },
+    {
+      "path": "scripts/smoke-installed.py",
+      "bytes": 6952,
+      "sha256": "effc3bcc1799cc03272cb327fc6d800baa7078fe60758c14291fb926afc535d5"
     },
     {
       "path": "scripts/start.ps1",
@@ -375,8 +392,8 @@
     },
     {
       "path": "scripts/start.sh",
-      "bytes": 2084,
-      "sha256": "028f250a3ae4ba4bfce55c1c78d28e95f59ab9fe7eb84aba8e63e398d1312eeb"
+      "bytes": 1258,
+      "sha256": "4304fcbb031a1f526c9b764c3e726c36044ad2f1d574be467f18ffb4d5735c70"
     },
     {
       "path": "siemens/DB_FAT-tags.csv",
@@ -399,6 +416,16 @@
       "sha256": "1146bfe3304b0ed7f4d4bf5d6be06a6ed3e0ae583e5e34f29270cb1d692fe38e"
     },
     {
+      "path": "tests/test_adverse_backend.py",
+      "bytes": 15032,
+      "sha256": "92988a274c526ee5dbd879aa2a3242546cd25d057a12a95a4e7bc2ba3d8cb99b"
+    },
+    {
+      "path": "tests/test_adverse_process.py",
+      "bytes": 7040,
+      "sha256": "0d2088ebe3c839618b990f63339f5fbf1940bd31d1f7b202551f5d515720068f"
+    },
+    {
       "path": "tests/test_api.py",
       "bytes": 11555,
       "sha256": "001d1e5ed7bd7f68fa5e8dba1cb1f97c4a3a2af728927e40fd4d9978754aa02c"
@@ -409,14 +436,19 @@
       "sha256": "ae94d768b57004ff1c74806f51ac8e4eac5546e6d452ab2816b6952c4c75f5b8"
     },
     {
+      "path": "tests/test_distribution.py",
+      "bytes": 4058,
+      "sha256": "6d2643ff65a48c3be8399a0c4590adc1f6e4db1885cbad3a519063ad8679cad1"
+    },
+    {
       "path": "tests/test_engine.py",
       "bytes": 9965,
       "sha256": "f12fefa057d7de16dc80354dbd3651112bb13e0fc1033089aaa5118354f34a8e"
     },
     {
       "path": "tests/test_engineering.py",
-      "bytes": 12661,
-      "sha256": "645d56da17e5f887d9b264d42d62b6a21c964a7d0b14c09d86be0439bc8591f1"
+      "bytes": 17635,
+      "sha256": "3a1c592f614f4d422b7fb1079b4692b03184632d988aa9f1a22f0c5890a4e60c"
     },
     {
       "path": "tests/test_models.py",
@@ -425,8 +457,8 @@
     },
     {
       "path": "tests/test_opcua.py",
-      "bytes": 11613,
-      "sha256": "8ea48451590ca81f8a77a0faec220f8ee1d2fc47ecd4604bf841d0a32fa3cfa6"
+      "bytes": 20538,
+      "sha256": "0ab2927cba06af5c69f6f45c8a8f695331c9108ebf58fef68c5b9c27a44a7b8c"
     },
     {
       "path": "tests/test_runtime.py",

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import math
 import re
+import struct
+from collections import defaultdict
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
@@ -14,6 +16,7 @@ ID_PATTERN = r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"
 Scalar = bool | int | float
 EquipmentType = Literal["tank", "pump", "valve_onoff", "valve_control", "analog_sensor", "digital_sensor", "indicator"]
 DataType = Literal["BOOL", "INT", "DINT", "REAL"]
+REAL_MAX = 3.4028234663852886e38
 
 
 class StrictModel(BaseModel):
@@ -70,7 +73,9 @@ class Tag(StrictModel):
             raise ValueError("La limite min doit être inférieure ou égale à max.")
         if self.direction == "output" and self.writable:
             raise ValueError("Une sortie PLC ne peut jamais être autorisée en écriture.")
-        validate_value(self, self.initial_value)
+        # Store the same value that the declared PLC type can represent. Bypass
+        # assignment validation here to avoid recursively invoking this validator.
+        object.__setattr__(self, "initial_value", validate_value(self, self.initial_value))
         return self
 
 
@@ -162,11 +167,30 @@ class Project(StrictModel):
     plc: PLCConfig = Field(default_factory=PLCConfig)
 
 
+def _float32(value: int | float) -> float:
+    return struct.unpack("!f", struct.pack("!f", value))[0]
+
+
+def engineering_bounds(tag: Tag) -> tuple[float | None, float | None]:
+    """Compare REAL signals to bounds in their PLC representation too."""
+    def bound(value):
+        return _float32(value) if tag.data_type == "REAL" and value is not None and abs(value) <= REAL_MAX else value
+
+    return bound(tag.min), bound(tag.max)
+
+
+def outside_engineering_limits(tag: Tag, value: Scalar) -> bool:
+    low, high = engineering_bounds(tag)
+    return tag.data_type != "BOOL" and ((low is not None and value < low) or (high is not None and value > high))
+
+
 def validate_value(tag: Tag, value: Any, *, enforce_limits: bool = True) -> Scalar:
     """Validate wire types without Python's unsafe bool/int/string coercions.
 
     Fault injection can bypass engineering bounds, never PLC storage bounds.
-    REAL follows the finite IEEE-754 single precision range used by S7 REAL.
+    REAL is quantized to IEEE-754 single precision so the logged image, demo
+    controller and OPC UA Float carry exactly the same signal. Plant state is
+    still calculated in double precision.
     """
     if tag.data_type == "BOOL":
         if type(value) is not bool:
@@ -180,13 +204,14 @@ def validate_value(tag: Tag, value: Any, *, enforce_limits: bool = True) -> Scal
             raise ValueError(f"{tag.name} dépasse la plage {tag.data_type} [{low}, {high}].")
         result = value
     else:
-        if type(value) not in (int, float) or abs(value) > 3.4028234663852886e38 or not math.isfinite(value):
+        if type(value) not in (int, float) or abs(value) > REAL_MAX or not math.isfinite(value):
             raise ValueError(f"{tag.name} attend un REAL fini.")
-        result = float(value)
+        result = _float32(value)
     if enforce_limits and tag.data_type != "BOOL":
-        if tag.min is not None and result < tag.min:
+        low, high = engineering_bounds(tag)
+        if low is not None and result < low:
             raise ValueError(f"{tag.name} doit être ≥ {tag.min} {tag.unit}.")
-        if tag.max is not None and result > tag.max:
+        if high is not None and result > high:
             raise ValueError(f"{tag.name} doit être ≤ {tag.max} {tag.unit}.")
     return result
 
@@ -210,16 +235,16 @@ def validate_fault(equipment: Equipment, kind: str, value: Any, tags: dict[str, 
         if tag_id not in tags:
             raise ValueError("Le capteur doit être associé à une variable avant l'injection.")
         if value is not None:
-            validate_value(tags[tag_id], value, enforce_limits=kind != "out_of_range")
+            value = validate_value(tags[tag_id], value, enforce_limits=kind != "out_of_range")
         if kind == "out_of_range":
             tag = tags[tag_id]
             if value is None:
                 raise ValueError("Le défaut hors plage exige une valeur explicite.")
-            if not ((tag.min is not None and value < tag.min) or (tag.max is not None and value > tag.max)):
+            if not outside_engineering_limits(tag, value):
                 raise ValueError("La valeur du défaut doit être hors des limites min/max du tag.")
 
 
-def _source_range(source: Equipment, field: str) -> tuple[float, float] | None:
+def _source_range(source: Equipment, field: str, equipment: dict[str, Equipment]) -> tuple[float, float] | None:
     """Conservative finite bounds used to reject incompatible wire mappings."""
     p = parameters(source)
     if field in ("level", "level_percent", "speed", "position"):
@@ -232,6 +257,16 @@ def _source_range(source: Equipment, field: str) -> tuple[float, float] | None:
         return (p["capacity_l"], p["capacity_l"])
     if field == "flow_l_s":
         return (0, p["max_flow_l_s"])
+    if field in ("inflow_l_s", "outflow_l_s"):
+        role = "inlet" if field == "inflow_l_s" else "outlet"
+        groups: dict[str, list[float]] = defaultdict(list)
+        for item in equipment.values():
+            if item.type not in ("pump", "valve_onoff", "valve_control"):
+                continue
+            flow = parameters(item)
+            if flow["tank_id"] == source.id and flow["role"] == role:
+                groups[flow["flow_group"]].append(flow["max_flow_l_s"])
+        return (0, sum(min(capacities) for capacities in groups.values()))
     return None
 
 
@@ -336,14 +371,18 @@ def validate_project(project: Project | dict) -> dict:
                 error(path + ".params.source_field", f"Grandeur inconnue ; possibilités : {', '.join(sorted(STATE_FIELDS[source.type]))}.")
             elif item.type == "analog_sensor":
                 tag = tags.get(item.bindings.get("value"))
-                source_range = _source_range(source, params["source_field"])
-                if tag is not None and source_range is not None:
+                if tag is not None:
                     try:
-                        for source_value in source_range:
+                        source_range = _source_range(source, params["source_field"], equipment)
+                        # Cumulative overflow has no finite bound in a manual
+                        # run, but its initial value (zero) must still be valid.
+                        for source_value in source_range if source_range is not None else (0,):
                             value = source_value * params["scale"] + params["offset"]
                             if tag.data_type in ("INT", "DINT"):
                                 value = int(round(value))
                             validate_value(tag, value, enforce_limits=False)
+                        if source_range is None and params["scale"] != 0:
+                            warning(path + ".bindings.value", "Cette mesure cumulative n'a pas de borne supérieure : un dépassement du type PLC arrêtera l'essai.")
                     except (ValueError, TypeError, OverflowError):
                         error(path + ".bindings.value", "La plage du modèle dépasse le type PLC de cette mesure ; ajustez l'échelle ou le type.")
         elif item.type == "tank":

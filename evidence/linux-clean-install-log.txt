@@ -1,0 +1,53 @@
+Python 3.12 · Linux-x64 · kit vérifié : 28 wheels
+Looking in links: <TEMP>/FAT installation épreuve/wheelhouse
+Ignoring colorama: markers 'sys_platform == "win32"' don't match your environment
+Processing ./wheelhouse/aiofiles-25.1.0-py3-none-any.whl (from -r requirements.lock (line 2))
+Processing ./wheelhouse/aiosqlite-0.22.1-py3-none-any.whl (from -r requirements.lock (line 3))
+Processing ./wheelhouse/annotated_doc-0.0.5-py3-none-any.whl (from -r requirements.lock (line 4))
+Processing ./wheelhouse/annotated_types-0.8.0-py3-none-any.whl (from -r requirements.lock (line 5))
+Processing ./wheelhouse/anyio-4.16.0-py3-none-any.whl (from -r requirements.lock (line 6))
+Processing ./wheelhouse/asyncua-1.1.8-py3-none-any.whl (from -r requirements.lock (line 7))
+Processing ./wheelhouse/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (from -r requirements.lock (line 8))
+Processing ./wheelhouse/click-8.5.0-py3-none-any.whl (from -r requirements.lock (line 9))
+Processing ./wheelhouse/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (from -r requirements.lock (line 10))
+Processing ./wheelhouse/fastapi-0.162.0-py3-none-any.whl (from -r requirements.lock (line 11))
+Processing ./wheelhouse/h11-0.16.0-py3-none-any.whl (from -r requirements.lock (line 12))
+Processing ./wheelhouse/idna-3.20-py3-none-any.whl (from -r requirements.lock (line 13))
+Processing ./wheelhouse/opentelemetry_api-1.45.2-py3-none-any.whl (from -r requirements.lock (line 14))
+Processing ./wheelhouse/packaging-26.3-py3-none-any.whl (from -r requirements.lock (line 15))
+Processing ./wheelhouse/pycparser-3.12-py3-none-any.whl (from -r requirements.lock (line 16))
+Processing ./wheelhouse/pydantic-2.14.2-py3-none-any.whl (from -r requirements.lock (line 17))
+Processing ./wheelhouse/pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (from -r requirements.lock (line 18))
+Processing ./wheelhouse/pyopenssl-26.4.0-py3-none-any.whl (from -r requirements.lock (line 19))
+Processing ./wheelhouse/python_dateutil-4.0.0-py3-none-any.whl (from -r requirements.lock (line 20))
+Processing ./wheelhouse/pytz-2026.6-py2.py3-none-any.whl (from -r requirements.lock (line 21))
+Processing ./wheelhouse/setuptools-84.2.1-py3-none-any.whl (from -r requirements.lock (line 22))
+Processing ./wheelhouse/sortedcontainers-2.4.0-py2.py3-none-any.whl (from -r requirements.lock (line 23))
+Processing ./wheelhouse/starlette-1.10.0-py3-none-any.whl (from -r requirements.lock (line 24))
+Processing ./wheelhouse/typing_extensions-4.16.0-py3-none-any.whl (from -r requirements.lock (line 25))
+Processing ./wheelhouse/typing_inspection-0.4.4-py3-none-any.whl (from -r requirements.lock (line 26))
+Processing ./wheelhouse/tzdata-2026.6-py2.py3-none-any.whl (from -r requirements.lock (line 27))
+Processing ./wheelhouse/uvicorn-0.54.0-py3-none-any.whl (from -r requirements.lock (line 28))
+Processing ./wheelhouse/wheel-0.48.0-py3-none-any.whl (from -r requirements.lock (line 29))
+Installing collected packages: sortedcontainers, pytz, tzdata, typing-extensions, setuptools, pycparser, packaging, idna, h11, click, annotated-types, annotated-doc, aiosqlite, aiofiles, wheel, uvicorn, typing-inspection, python-dateutil, pydantic-core, opentelemetry-api, cffi, anyio, starlette, pydantic, cryptography, pyopenssl, fastapi, asyncua
+Successfully installed aiofiles-25.1.0 aiosqlite-0.22.1 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.16.0 asyncua-1.1.8 cffi-2.1.1 click-8.5.0 cryptography-50.0.2 fastapi-0.162.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.2 packaging-26.3 pycparser-3.12 pydantic-2.14.2 pydantic-core-2.50.2 pyopenssl-26.4.0 python-dateutil-4.0.0 pytz-2026.6 setuptools-84.2.1 sortedcontainers-2.4.0 starlette-1.10.0 typing-extensions-4.16.0 typing-inspection-0.4.4 tzdata-2026.6 uvicorn-0.54.0 wheel-0.48.0
+Looking in links: <TEMP>/FAT installation épreuve/wheelhouse
+Processing <TEMP>/FAT installation épreuve
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: local-fat-studio
+  Building wheel for local-fat-studio (pyproject.toml): started
+  Building wheel for local-fat-studio (pyproject.toml): finished with status 'done'
+  Created wheel for local-fat-studio: filename=local_fat_studio-0.1.1-py3-none-any.whl size=352888 sha256=63205a7d39150d4f39df867dcc7722078cea935d4b5442c1ccc9bdda9b9ffcaa
+  Stored in directory: /tmp/pip-ephem-wheel-cache-jdekg540/wheels/99/65/0e/b6c041a0139597230e6f17396ed6f17f06d3347893c0cc8f7b
+Successfully built local-fat-studio
+Installing collected packages: local-fat-studio
+Successfully installed local-fat-studio-0.1.1
+INFO:     Started server process [18681]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:35607 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18681]

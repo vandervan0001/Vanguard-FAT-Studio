@@ -1,33 +1,64 @@
 {
-  "executed_at_utc": "2026-11-02T11:50:23.239260+00:00",
-  "status": "passed",
-  "installation": "pip --no-index --no-deps --target, imported outside source tree",
-  "wheel": "local_fat_studio-0.1.0-py3-none-any.whl",
-  "wheel_sha256": "2caed442fd0e8f9d6fd78ae3eb4cf1f314e2985469ef545bf4fa573d18617014",
-  "platform": "Linux x86_64; this does not execute Windows or Siemens",
+  "started_at_utc": "2026-11-02T13:16:50.316941+00:00",
   "checks": [
-    "isolated package import",
-    "doctor exit 0",
-    "single production JS bundle",
-    "bundled licence notices",
-    "HTTP HTML/JS/CSS",
-    "demo project 8 equipment and 13 tags",
-    "start and pause real runtime",
-    "consistent JSON evidence",
-    "HTML and CSV exports",
-    "stop"
+    "production HTML and local JS/CSS served outside source tree",
+    "demo start, pause, marker and explicit unevaluated verdict",
+    "consistent CSV, HTML and JSON exports",
+    "stop/reset preserve archived evidence",
+    "fresh process reopens saved evidence and remains idle"
   ],
-  "samples_recorded": 4,
-  "web_assets": [
-    "/assets/index-DmSFx8Xz.js",
-    "/assets/index-8uu7ywok.css"
-  ],
+  "health": {
+    "status": "ok",
+    "version": "0.1.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "sample_count": 4,
+  "status": "passed",
+  "finished_at_utc": "2026-11-02T13:16:52.357429+00:00",
+  "scope": "Installed application and loopback HTTP; no Siemens or external PLC",
+  "executed_at_utc": "2026-11-02T13:16:52.443665+00:00",
+  "installation": "new isolated venv, pip --no-index --no-cache-dir; wheel imported and served outside source tree",
+  "wheel": "local_fat_studio-0.1.1-py3-none-any.whl",
+  "wheel_sha256": "d1b8e8db0cd4bed83a17b5fa971d44750614b6a2f30a76ef50c776be8f692567",
+  "platform": "Linux x86_64 / Python 3.12.14; no Windows or Siemens execution",
+  "pip_check": "No broken requirements found.",
   "dependencies": {
     "fastapi": "0.162.0",
     "uvicorn": "0.54.0",
     "pydantic": "2.14.2",
     "asyncua": "1.1.8"
   },
-  "wheel_sha256_before_documentation_refresh": "ad9c7efc363eec0be3698c4f6c2677da512d812b408d75671b81064923ea38d9",
-  "documentation_refresh": "README installation instructions updated after smoke check; package code and assets unchanged, verified by archive comparison."
+  "assets_sha256": {
+    "fat_studio/web/favicon.svg": "e013914710fcece72e3aedcd142e86b3358866c5531766e655b0b1d97837d304",
+    "fat_studio/web/index.html": "f3129a8b943691705b0a054cd7a8dc4dc72979702aefe8b9026a8905f3aa3867",
+    "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt": "9de548bc9136893a9ed1c509fe1c2d615e70e2f21d348281dfdb708dfb27ec91",
+    "fat_studio/web/assets/index-BnIYMUrX.css": "f611c35e6338ea4b66dfc5d783c487cec4218ddcac2c0a5487df06b4df9a2e56",
+    "fat_studio/web/assets/index-Cb2RHDue.js": "3091ff06ae7653087e451bef483fc99deed157defe71e714df567f2ba78dc4a4"
+  },
+  "package_source_sha256": {
+    "fat_studio/__init__.py": "8af8200df308bfbf0a6762c83c4b56eef4ecb84d024bedf0de68426c97601fb2",
+    "fat_studio/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "fat_studio/app.py": "00c581b26b9f416568307a9e91507784bcbfb3f01828cd426cf7a55939a5d786",
+    "fat_studio/catalog.py": "c3b92ee4ebbf1bff234d3a40e7053f0f38d263a4dafd8c341826d56befe8f38a",
+    "fat_studio/cli.py": "a5d998ba31ecded156e4b36f07d62e0e89d30f32e872829071c39db7fbce6e48",
+    "fat_studio/demo.py": "3b7db1a0962fa13ea025e77380d9a3528fc072478e873fe78fadb0ade1450444",
+    "fat_studio/engine.py": "622ce3ccb62d66df9e0196b1c8870d702471e5d6247ac3780881e49313d390c1",
+    "fat_studio/mapping.py": "05d519f6ad0721753f9e58bc4d8dfb1065c9f268d3b119568017ed1d362598a4",
+    "fat_studio/models.py": "67af0fdc463fa77c3f65be9f97bf4cb7f807e0f543866db24c51f77190c559f2",
+    "fat_studio/reporting.py": "db729b165ac03951010a96a046df32eaed80a7b3c09f10571a6b689c28d1ca6b",
+    "fat_studio/runtime.py": "3339268327a903c8c2eefa32a45fe394af5febbc4a649f0ecf24314c0963fee4",
+    "fat_studio/security.py": "bf164d55479adfd8e455514671297d20b33c7cffb775fb44e3a043e3b6e1cc7c",
+    "fat_studio/storage.py": "ffc72c6b12658bcd27ae073df741351691482b8b3a60db2e4ee9337d298a05aa",
+    "fat_studio/adapters/__init__.py": "b87cb799deebaed547d721e9545b40775e47cb3adc2388f658217d5f60d391b9",
+    "fat_studio/adapters/demo.py": "000f9f4ee116cf9139e9cd2b25bdb6af87699189f29afc24e656d5750695e7cf",
+    "fat_studio/adapters/opcua.py": "106edcc1749d68c373949b9497ecfe00dbacba7f7f966da26d776639a2d66173",
+    "fat_studio/vendor/__init__.py": "553802e36faaf3cdadeeec1b70c87d7c5725f1d8de48f55f5c117f020e2e6d30",
+    "fat_studio/vendor/historiansim/__init__.py": "a54ed213a16e1da8f1df92d1060d36ba1572ba2f77709211e3a19e1bf34bfe9d",
+    "fat_studio/vendor/historiansim/valve.py": "f3cac33ddec0fa788e01a74d47660086982221a3cf70b1a28cfc4f50a7a2e5dc",
+    "integrations/__init__.py": "df90a2a811037ba3b5d2e0a6e0394148af8a7a4e73d70cfa8e3102d3bb784509",
+    "integrations/tia_engineering.py": "b6fc2f0e09f280a781479cc33523e41e840c301898686496f1fd58465ed2487a"
+  },
+  "package_import_in_venv": true,
+  "licence_files_verified": true
 }

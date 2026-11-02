@@ -9,6 +9,7 @@ from pathlib import Path
 
 from asyncua import Client, ua
 from asyncua.crypto.security_policies import SecurityPolicyBasic256Sha256
+from asyncua.crypto.validator import CertificateValidator, CertificateValidatorOptions
 
 from ..models import validate_tag_value
 from ..security import MachinePolicy, TargetDenied
@@ -31,10 +32,17 @@ class PartialWriteError(ConnectionError):
 class IdentityClient(Client):
     """Retain identity from the actual CreateSession response, not a display label."""
 
+    def __init__(self, *args, identity_check, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._identity_check = identity_check
+
     async def create_session(self):
         response = await super().create_session()
         selected = self.find_endpoint(response.ServerEndpoints, self.security_policy.Mode, self.security_policy.URI)
         self.server_application_uri = selected.Server.ApplicationUri
+        # Client.connect activates the session immediately after this method.
+        # Check here, before user credentials can leave the client.
+        self._identity_check(self.server_application_uri, self.security_policy.peer_certificate)
         return response
 
 
@@ -70,13 +78,18 @@ class OpcUaAdapter:
             raise TargetDenied(f"Confirmer exactement la cible : {self.target}")
         self.policy.authorize(self.config, self.confirmation)
         self.nodes.clear()
-        client = IdentityClient(self.config.endpoint, timeout=self.config.timeout_s)
+        client = IdentityClient(self.config.endpoint, timeout=self.config.timeout_s, identity_check=self._check_identity)
         client.application_uri = "urn:fat-studio:client"
         client.name = "FAT Studio local virtual-PLC test client"
         self.client = client
         try:
             async with asyncio.timeout(self.config.timeout_s * 5):
                 if self.config.security_policy == "Basic256Sha256":
+                    # Fingerprint pinning establishes trust in this certificate;
+                    # its validity window and application identity still apply.
+                    client.certificate_validator = CertificateValidator(
+                        CertificateValidatorOptions.TIME_RANGE | CertificateValidatorOptions.URI
+                        | CertificateValidatorOptions.PEER_SERVER)
                     for name in ("client_certificate", "client_private_key"):
                         if not Path(getattr(self.config, name)).is_file():
                             raise TargetDenied(f"Fichier {name} manquant sur le poste.")
@@ -102,8 +115,11 @@ class OpcUaAdapter:
                 self._check_identity(client.server_application_uri, client.security_policy.peer_certificate)
                 await self._validate_nodes()
             self.connected = True
-        except BaseException:
-            await self.disconnect()
+        except BaseException as error:
+            try:
+                await self.disconnect()
+            except Exception as cleanup_error:
+                error.add_note(f"Échec de fermeture de la session OPC UA : {cleanup_error}")
             raise
 
     async def _validate_nodes(self) -> None:
@@ -114,6 +130,8 @@ class OpcUaAdapter:
                 namespace = await self.client.get_namespace_index(self.config.namespace_uri)
             except ValueError as exc:
                 raise MappingError(f"Namespace OPC UA introuvable : {self.config.namespace_uri}") from exc
+            if namespace == 0:
+                raise MappingError("Namespace système 0 interdit dans le mapping FAT, y compris après résolution de l'URI")
         errors = []
         seen = set()
         for tag in self.project.tags:
@@ -162,6 +180,10 @@ class OpcUaAdapter:
                     await client.disconnect()
             except (OSError, ConnectionError, TimeoutError, ua.UaError):
                 # A failed disconnect cannot re-enable a write or hide the original transport fault.
+                pass
+            finally:
+                # Also covers cancellation and unexpected client cleanup errors.
+                # Closing the local transport is idempotent in asyncua.
                 client.disconnect_socket()
 
     async def read(self, values: dict, dt: float) -> dict:

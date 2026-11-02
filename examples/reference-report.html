@@ -4,9 +4,9 @@
 :root{font-family:system-ui,sans-serif;color:#182b3a;background:#eef2f5}body{max-width:1150px;margin:40px auto;padding:36px;background:white}h1{font-size:30px}h2{margin-top:36px;border-bottom:2px solid #dbe4eb;padding-bottom:8px}.eyebrow{font-size:12px;letter-spacing:2px;color:#436475}.status{padding:15px;background:#edf5fb;border-left:4px solid #0b6970;font-weight:bold}dl{display:grid;grid-template-columns:180px 1fr;gap:9px}dt{font-weight:600}dd{margin:0;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #dbe4eb;padding:8px;vertical-align:top;text-align:left;overflow-wrap:anywhere}th{background:#eff4f7}pre{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}.note{padding:14px;background:#fff6e5;line-height:1.5}@media print{body{margin:0;padding:10px}details{display:block}h2{break-after:avoid}tr{break-inside:avoid}}
 </style></head><body><div class="eyebrow">FAT STUDIO · ESSAI FONCTIONNEL LOCAL</div>
 <h1>TK-101 · Banc de remplissage</h1><div class="status">NON ÉVALUÉ</div>
-<dl><dt>Identifiant</dt><dd>run-89995afab86748ba80069be8627f0cf8</dd><dt>Version logiciel</dt><dd>0.1.0</dd>
-<dt>Début UTC</dt><dd>2026-11-02T11:45:54.456+00:00</dd><dt>Fin UTC</dt><dd>2026-11-02T11:45:54.662+00:00</dd>
-<dt>Instant de l'export UTC</dt><dd>2026-11-02T11:45:54.663+00:00</dd>
+<dl><dt>Identifiant</dt><dd>run-bfebe83d42574c96aac58e61f05f329a</dd><dt>Version logiciel</dt><dd>0.1.1</dd>
+<dt>Début UTC</dt><dd>2026-11-02T13:08:19.682+00:00</dd><dt>Fin UTC</dt><dd>2026-11-02T13:08:19.859+00:00</dd>
+<dt>Instant de l'export UTC</dt><dd>2026-11-02T13:08:19.861+00:00</dd>
 <dt>Statut technique</dt><dd>completed</dd><dt>Mode / cible</dt><dd>demo — Contrôleur de démonstration local — aucun PLC connecté</dd>
 <dt>Scénario</dt><dd>01 · Cycle de référence</dd><dt>Pas / vitesse</dt><dd>100 ms / 1.0×</dd>
 <dt>Échantillons</dt><dd>320 cycles enregistrés</dd><dt>Assertions</dt><dd>4 réussies sur 4 évaluées</dd>
@@ -14,19 +14,19 @@
 <p class="note">Modèle simplifié de volume et de débits ; aucune validation de sécurité ni autorisation de mise en service.
 Les assertions automatiques sont distinctes du verdict utilisateur. En OPC UA, les conditions initiales du PLC sont à rétablir manuellement avant chaque répétition ; le banc ne commande jamais RUN/STOP.</p>
 <h2>Conclusion de l'utilisateur</h2><p>Aucun commentaire renseigné.</p>
-<h2>Assertions du scénario</h2><table><thead><tr><th>Variable</th><th>Attendu</th><th>Observé</th><th>Temps simulé s</th><th>Résultat</th></tr></thead><tbody><tr><td>pump_running</td><td>eq True</td><td>True</td><td>5.000</td><td>OK</td></tr><tr><td>level</td><td>gt 35.0</td><td>45.349655590520676</td><td>10.000</td><td>OK</td></tr><tr><td>pump_cmd</td><td>eq False</td><td>False</td><td>25.000</td><td>OK</td></tr><tr><td>level</td><td>gt 60.0</td><td>67.33158720191449</td><td>30.000</td><td>OK</td></tr></tbody></table>
+<h2>Assertions du scénario</h2><table><thead><tr><th>Variable</th><th>Attendu</th><th>Observé</th><th>Temps simulé s</th><th>Résultat</th></tr></thead><tbody><tr><td>pump_running</td><td>eq True</td><td>True</td><td>5.000</td><td>OK</td></tr><tr><td>level</td><td>gt 35.0</td><td>45.34965515136719</td><td>10.000</td><td>OK</td></tr><tr><td>pump_cmd</td><td>eq False</td><td>False</td><td>25.000</td><td>OK</td></tr><tr><td>level</td><td>gt 60.0</td><td>67.33158874511719</td><td>30.000</td><td>OK</td></tr></tbody></table>
 <h2>Variables suivies</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Sens</th><th>Type</th><th>Unité</th><th>NodeId configuré</th></tr></thead><tbody><tr><td>PumpCmd</td><td>pump_cmd</td><td>output</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;PumpCmd&quot;</td></tr><tr><td>InletCmd</td><td>inlet_cmd</td><td>output</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;InletCmd&quot;</td></tr><tr><td>OutletCmd</td><td>outlet_cmd</td><td>output</td><td>REAL</td><td>%</td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;OutletCmd&quot;</td></tr><tr><td>LevelPct</td><td>level</td><td>input</td><td>REAL</td><td>%</td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;LevelPct&quot;</td></tr><tr><td>VolumeL</td><td>volume</td><td>input</td><td>REAL</td><td>L</td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;VolumeL&quot;</td></tr><tr><td>PumpRunning</td><td>pump_running</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;PumpRunning&quot;</td></tr><tr><td>PumpFault</td><td>pump_fault</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;PumpFault&quot;</td></tr><tr><td>InletPosition</td><td>inlet_position</td><td>input</td><td>REAL</td><td>%</td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;InletPosition&quot;</td></tr><tr><td>InletOpen</td><td>inlet_open</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;InletOpen&quot;</td></tr><tr><td>InletClosed</td><td>inlet_closed</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;InletClosed&quot;</td></tr><tr><td>OutletPosition</td><td>outlet_position</td><td>input</td><td>REAL</td><td>%</td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;OutletPosition&quot;</td></tr><tr><td>LevelHigh</td><td>high</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;LevelHigh&quot;</td></tr><tr><td>LevelLow</td><td>low</td><td>input</td><td>BOOL</td><td></td><td>ns=3;s=&quot;DB_FAT&quot;.&quot;LevelLow&quot;</td></tr></tbody></table>
-<h2>Journal et défauts injectés</h2><table><thead><tr><th>UTC</th><th>Simulation s</th><th>Événement</th><th>Description</th></tr></thead><tbody><tr><td>2026-11-02T11:45:54.457+00:00</td><td>0.000</td><td>start_requested</td><td>Démarrage demandé.<details><summary>Détails</summary><pre>{
+<h2>Journal et défauts injectés</h2><table><thead><tr><th>UTC</th><th>Simulation s</th><th>Événement</th><th>Description</th></tr></thead><tbody><tr><td>2026-11-02T13:08:19.683+00:00</td><td>0.000</td><td>start_requested</td><td>Démarrage demandé.<details><summary>Détails</summary><pre>{
   &quot;mode&quot;: &quot;demo&quot;,
   &quot;target&quot;: &quot;Contrôleur de démonstration local — aucun PLC connecté&quot;,
   &quot;step_ms&quot;: 100,
   &quot;speed&quot;: 1.0
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.475+00:00</td><td>0.000</td><td>started</td><td>Essai démarré. Mapping validé avant toute écriture.<details><summary>Détails</summary><pre>{}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.476+00:00</td><td>0.000</td><td>scenario_marker</td><td>Début du cycle de référence, cuve initiale 25 %.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.684+00:00</td><td>0.000</td><td>started</td><td>Essai démarré. Mapping validé avant toute écriture.<details><summary>Détails</summary><pre>{}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.685+00:00</td><td>0.000</td><td>scenario_marker</td><td>Début du cycle de référence, cuve initiale 25 %.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 0,
   &quot;scheduled_s&quot;: 0.0,
   &quot;target&quot;: &quot;&quot;,
   &quot;value&quot;: null
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.496+00:00</td><td>5.000</td><td>assertion_pass</td><td>La pompe retourne sa marche.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.704+00:00</td><td>5.000</td><td>assertion_pass</td><td>La pompe retourne sa marche.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 1,
   &quot;target&quot;: &quot;pump_running&quot;,
   &quot;operator&quot;: &quot;eq&quot;,
@@ -37,18 +37,18 @@ Les assertions automatiques sont distinctes du verdict utilisateur. En OPC UA, l
   &quot;scheduled_s&quot;: 5.0,
   &quot;evaluated_s&quot;: 5.0,
   &quot;quality&quot;: &quot;good&quot;
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.517+00:00</td><td>10.000</td><td>assertion_pass</td><td>Le niveau augmente réellement.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.726+00:00</td><td>10.000</td><td>assertion_pass</td><td>Le niveau augmente réellement.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 2,
   &quot;target&quot;: &quot;level&quot;,
   &quot;operator&quot;: &quot;gt&quot;,
   &quot;expected&quot;: 35.0,
-  &quot;actual&quot;: 45.349655590520676,
+  &quot;actual&quot;: 45.34965515136719,
   &quot;passed&quot;: true,
   &quot;message&quot;: &quot;Le niveau augmente réellement.&quot;,
   &quot;scheduled_s&quot;: 10.0,
   &quot;evaluated_s&quot;: 10.0,
   &quot;quality&quot;: &quot;good&quot;
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.591+00:00</td><td>25.000</td><td>assertion_pass</td><td>Arrêt de remplissage après le seuil haut de contrôle.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.810+00:00</td><td>25.000</td><td>assertion_pass</td><td>Arrêt de remplissage après le seuil haut de contrôle.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 3,
   &quot;target&quot;: &quot;pump_cmd&quot;,
   &quot;operator&quot;: &quot;eq&quot;,
@@ -59,23 +59,23 @@ Les assertions automatiques sont distinctes du verdict utilisateur. En OPC UA, l
   &quot;scheduled_s&quot;: 25.0,
   &quot;evaluated_s&quot;: 25.0,
   &quot;quality&quot;: &quot;good&quot;
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.646+00:00</td><td>30.000</td><td>assertion_pass</td><td>Le soutirage reste limité après l&#x27;arrêt.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.842+00:00</td><td>30.000</td><td>assertion_pass</td><td>Le soutirage reste limité après l&#x27;arrêt.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 4,
   &quot;target&quot;: &quot;level&quot;,
   &quot;operator&quot;: &quot;gt&quot;,
   &quot;expected&quot;: 60.0,
-  &quot;actual&quot;: 67.33158720191449,
+  &quot;actual&quot;: 67.33158874511719,
   &quot;passed&quot;: true,
   &quot;message&quot;: &quot;Le soutirage reste limité après l&#x27;arrêt.&quot;,
   &quot;scheduled_s&quot;: 30.0,
   &quot;evaluated_s&quot;: 30.0,
   &quot;quality&quot;: &quot;good&quot;
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.662+00:00</td><td>32.000</td><td>scenario_marker</td><td>Fin de scénario : relever le résultat de la FAT.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.858+00:00</td><td>32.000</td><td>scenario_marker</td><td>Fin de scénario : relever le résultat de la FAT.<details><summary>Détails</summary><pre>{
   &quot;index&quot;: 5,
   &quot;scheduled_s&quot;: 32.0,
   &quot;target&quot;: &quot;&quot;,
   &quot;value&quot;: null
-}</pre></details></td></tr><tr><td>2026-11-02T11:45:54.662+00:00</td><td>32.000</td><td>scenario_completed</td><td>Scénario terminé ; écritures arrêtées. Verdict humain à renseigner.<details><summary>Détails</summary><pre>{
+}</pre></details></td></tr><tr><td>2026-11-02T13:08:19.859+00:00</td><td>32.000</td><td>scenario_completed</td><td>Scénario terminé ; écritures arrêtées. Verdict humain à renseigner.<details><summary>Détails</summary><pre>{
   &quot;assertions_passed&quot;: 4,
   &quot;assertions_total&quot;: 4
 }</pre></details></td></tr></tbody></table>

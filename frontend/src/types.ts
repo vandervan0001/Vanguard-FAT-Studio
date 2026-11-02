@@ -15,6 +15,7 @@ export type ScenarioStep = {
   target?: string; value?: unknown; operator?: 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le'; tolerance?: number; message?: string;
 };
 export type Scenario = { id: string; name: string; description: string; duration_s: number; steps: ScenarioStep[] };
+export type ScenarioDraft = { scenarioId: string; text: string };
 export type PLCConfig = {
   mode: 'demo' | 'opcua'; endpoint: string; expected_application_uri: string; namespace_uri: string;
   security_policy: 'None' | 'Basic256Sha256'; server_certificate_sha256: string; client_certificate: string;
@@ -32,6 +33,8 @@ export type CatalogItem = {
 };
 export type Validation = { valid: boolean; errors: { path: string; message: string }[]; warnings: { path: string; message: string }[] };
 export type Event = { id: string | number; timestamp: string; sim_time_s: number; kind: string; message: string };
+export type RunResult = { verdict: 'not_evaluated' | 'pass' | 'fail'; comment: string };
+export type ReportDraft = RunResult & { runId: string | null; marker: string; resultDirty: boolean; saved: boolean };
 export type Snapshot = {
   project_id: string;
   project_revision: string;
@@ -42,6 +45,7 @@ export type Snapshot = {
   events: Event[]; series: { time_s: number; values: Record<string, Scalar> }[];
   scenario: { id: string | null; state: string; completed_steps: number; total_steps: number; assertions: Record<string, unknown>[] };
   error: string | null; write_count: number; lag_ms: number; model_warnings: string[];
+  result: RunResult;
 };
 export type ProjectSummary = { id: string; name: string; updated_at?: string };
 export type RunSummary = { id?: string; run_id?: string; project_name?: string; started_at?: string; status?: string; verdict?: string };
