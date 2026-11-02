@@ -8,6 +8,8 @@ La version actuelle est **0.2.1**. Dans **Connexion → Version du projet TIA**,
 
 La première CI distante de 0.2.0 a réussi sur Ubuntu (418 Python, 33 frontend) et révélé sept échecs d'encodage sur Windows. Le correctif 0.2.1 décode les chemins Git en UTF-8 et aligne l'encodage des processus Python capturés dans les tests. Les 30 cas locaux affectés passent ; le résultat de la nouvelle CI doit être consulté séparément. Voir [le rapport d'encodage Windows](../../evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md). Le tag 0.2.0 n'est pas déplacé.
 
+La relance `41468421321` a confirmé les **418 tests Python Windows réussis**, y compris les sept cas corrigés. Deux tests navigateur historiques ont ensuite dépassé leurs délais malgré les bonnes sélections visibles dans les captures ; les deux nouveaux tests V20/V21 passaient. Les délais Playwright sont ajustés uniquement pour Windows CI, avec assertions et instrumentation conservées. Voir [la mesure et les limites](../../evidence/reprises/2026-11-02-windows-ui/VERIFICATION.md). La réussite du kit Windows hors ligne reste conditionnée au prochain résultat de CI.
+
 V21 conserve le paquet Czarnak 4.3.0. V20 prépare un portage de la même source épinglée, à compiler sur Windows contre les trois DLL Openness V20 réellement installées. Les profils vérifient binaires, DLL, politique, proposition et archive ; ils conservent le dossier Openness aux lancements MCP et dans les fragments client. Le manifeste est obligatoire dans les deux cas. **Le build natif V20 et l'acceptation Siemens V20/V21 n'ont pas été exécutés sur ce Mac.** Une erreur native bloque l'installation, sans repli V21 ou références factices.
 
 Contrôles locaux finaux : **418 tests Python et 33 tests frontend réussis**, build TypeScript/Vite et Ruff réussis, wheel dont les 32 fichiers applicatifs correspondent aux sources, contrôle du paquet installé 0.2.0 avec exports et persistance réussi. Les gardes, l'installation et la documentation ont fait l'objet de relectures indépendantes. Voir les [preuves 0.2.0](../../evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
@@ -18,7 +20,7 @@ Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FA
 
 Prochaine action : installer le profil de la version effectivement disponible sur le PC Windows, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
 
-Dernière note : [correctif d'encodage Windows](sessions/2026-11-02-windows-utf8.md). La [sélection V20/V21 et publication privée](sessions/2026-11-02-v20-v21-private-git.md) reste conservée.
+Dernière note : [délais de l'automatisation Windows](sessions/2026-11-02-windows-ui.md). Les notes [d'encodage Windows](sessions/2026-11-02-windows-utf8.md) et [de sélection V20/V21](sessions/2026-11-02-v20-v21-private-git.md) restent conservées.
 
 ## État courant après reprise — 2 novembre 2026, macOS ARM64
 
@@ -240,7 +242,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — encodage Windows](sessions/2026-11-02-windows-utf8.md). La [version V20/V21](sessions/2026-11-02-v20-v21-private-git.md), la [validation macOS initiale](sessions/2026-11-02-macos-validation.md) et la [passation initiale](sessions/2026-11-02-passation.md) restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02 — délais Windows CI](sessions/2026-11-02-windows-ui.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 
