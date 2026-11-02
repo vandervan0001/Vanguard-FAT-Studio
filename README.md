@@ -120,7 +120,7 @@ cd ..
 .venv/bin/python scripts/build-web.py
 ```
 
-Tests navigateur : voir [frontend/README](frontend/README.md). La CI décrit les mêmes vérifications sur Windows et Ubuntu ; l'existence de ce workflow ne signifie pas qu'une exécution distante a déjà eu lieu.
+Tests navigateur : voir [frontend/README](frontend/README.md). La [CI du 2 novembre 2026](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176) a réussi sur Windows et Ubuntu : 418 tests Python et 33 tests frontend par système. L'installation runtime Windows depuis un kit neuf, sans index pip, a aussi réussi. Voir les [preuves 0.2.1](evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) ; elles ne qualifient pas les échanges Siemens.
 
 ## Documentation et preuves
 

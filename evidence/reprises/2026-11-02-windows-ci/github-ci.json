@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "application": "FAT Studio",
+  "runtime_version": "0.2.1",
+  "run_id": 41471993176,
+  "url": "https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176",
+  "event": "workflow_dispatch",
+  "source_commit": "b55bfded63dc5572da8d3409409210381cc50c34",
+  "conclusion": "success",
+  "jobs": {
+    "windows": {
+      "id": 125367698729,
+      "name": "verify (windows-latest)",
+      "conclusion": "success",
+      "python": {
+        "tests": 418,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 418,
+        "duration_s": 148.85,
+        "junit_file": "pytest-windows-latest.xml",
+        "junit_sha256": "833328f59afd47ec091e6d2bdb41500ff417dd5e5872dc24869eeda0427166f5"
+      },
+      "frontend": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "duration_s": 71.910271,
+        "source_artifact": "fat-studio-windows-latest/frontend/test-results/results.json",
+        "source_sha256": "157470434be3a60601d092f6b0a05a0b5bc3967f2c630fe2453e79e01f59587f"
+      }
+    },
+    "ubuntu": {
+      "id": 125367699406,
+      "name": "verify (ubuntu-latest)",
+      "conclusion": "success",
+      "python": {
+        "tests": 418,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 418,
+        "duration_s": 121.433,
+        "junit_file": "pytest-ubuntu-latest.xml",
+        "junit_sha256": "b685cac335c7618e5bd8247390ce7cc18f12f9ed0c0b8435e9893a7f56637f45"
+      },
+      "frontend": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "duration_s": 50.769575,
+        "source_artifact": "fat-studio-ubuntu-latest/frontend/test-results/results.json",
+        "source_sha256": "a2dc309ffdc639f881449ae0667ad9d0e1c8c1250c1173a61757f406b15bff3c"
+      }
+    }
+  },
+  "windows_checks": {
+    "Parse Windows installer scripts": "success",
+    "Windows offline first installation in a new directory": "success"
+  },
+  "native_tia_siemens_qualification": false,
+  "scope": "Application runtime and local protocol fixtures on GitHub Windows/Ubuntu runners. Native TIA Portal, PLCSIM Advanced, Siemens compilation and PLC communication were not executed.",
+  "windows_clean_install": {
+    "status": "passed",
+    "version": "0.2.1",
+    "sample_count": 4,
+    "checks": 5,
+    "file": "windows-clean-install.json",
+    "sha256": "6aa7e8784549eb1ea0f0c8c9ad54d2aedeb0ca955c5fe0aaba382395bb13da4f",
+    "network_scope": "Kit prepared with connectivity; fresh kit installation used wheelhouse with pip indexes disabled.",
+    "source_sha256": "c0252dc1d3fb9e412c4200d7f9a92884466748d98221b7b47dde796d760a4839",
+    "normalization": "CRLF to LF only; JSON values unchanged."
+  }
+}

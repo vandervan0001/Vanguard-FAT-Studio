@@ -12,6 +12,6 @@ Il n'y a pas de profil CPU dans les artefacts Windows. Une comparaison Mac avec 
 
 ## Correctif et contrôle
 
-Seule la configuration du banc change : sur Windows CI, délai d'action 12 s et délai de test 60 s. Assertions 6 s, zéro retry, traces et captures conservés ; aucun changement produit. Les deux parcours affectés ont été rejoués localement : deux réussis, 4,8 s. Un nouveau résultat Windows réel doit confirmer le parcours complet et permettre le contrôle installé hors ligne.
+Seule la configuration du banc change : sur Windows CI, délai d'action 12 s et délai de test 60 s. Assertions 6 s, zéro retry, traces et captures conservés ; aucun changement produit. Les deux parcours affectés ont été rejoués localement : deux réussis, 4,8 s. La [CI 41471993176](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176), commit `b55bfded63dc5572da8d3409409210381cc50c34`, a ensuite réussi les 33 tests navigateur Windows et le contrôle installé hors ligne. Voir les [preuves finales](../2026-11-02-windows-ci/VERIFICATION.md).
 
 Les logs, traces et captures sources sont conservés dans les artefacts privés de la CI citée. Ils ne constituent pas une qualification TIA/PLCSIM. Le serveur local reste arrêté, données conservées.

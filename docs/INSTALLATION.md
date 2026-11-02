@@ -1,6 +1,6 @@
 # Installer et démarrer FAT Studio
 
-**État de vérification : les essais de livraison ont été exécutés sous Linux. La reprise du 2 novembre 2026 a aussi vérifié la démonstration, les suites Python/frontend et une installation runtime neuve sous macOS ARM64. Les scripts PowerShell ont été relus, mais leur exécution sous Windows, l'installation Windows hors ligne et les échanges avec TIA Portal/PLCSIM Advanced restent à qualifier sur le poste cible.** Les résultats figurent dans [VERIFICATION.md](../evidence/VERIFICATION.md) et le [rapport macOS](../evidence/reprises/2026-11-02-macos-arm64/VERIFICATION.md) ; le protocole du poste est dans [ACCEPTANCE.md](ACCEPTANCE.md).
+**État de vérification au 2 novembre 2026 : la CI 0.2.1 a réussi 418 tests Python et 33 tests frontend sur chacun des systèmes Windows et Ubuntu. Sous Windows, les scripts PowerShell ont été parsés et un kit runtime neuf a été préparé puis installé sans index pip ; le contrôle du service installé, des exports et de la persistance a réussi.** Voir les [preuves Windows/Ubuntu](../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md), les [preuves initiales Linux](../evidence/VERIFICATION.md) et la [reprise macOS ARM64](../evidence/reprises/2026-11-02-macos-arm64/VERIFICATION.md). La compilation du portage V20 et les échanges TIA Portal/PLCSIM Advanced des deux versions restent à qualifier selon [ACCEPTANCE.md](ACCEPTANCE.md).
 
 ## Premier démarrage sur Windows
 
@@ -118,7 +118,7 @@ python -m pytest
 python -m build --wheel --no-isolation
 ```
 
-Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel. Aucun serveur Vite n'est nécessaire en exploitation. La CI prévoit la construction de l'interface et les tests sur Windows et Ubuntu. Sa branche Windows prépare aussi un kit neuf, interdit les index pip, exécute `setup.ps1`, puis vérifie le service installé depuis l'extérieur des sources avec `scripts/smoke-installed.py`. **Ce workflow est fourni, mais n'a pas été exécuté sur GitHub dans cette livraison.** La preuve d'installation isolée exécutée sous Linux se trouve dans [VERIFICATION.md](../evidence/VERIFICATION.md).
+Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel. Aucun serveur Vite n'est nécessaire en exploitation. La CI construit l'interface et exécute les tests sur Windows et Ubuntu. Sa branche Windows prépare aussi un kit neuf, interdit les index pip, exécute `setup.ps1`, puis vérifie le service installé depuis l'extérieur des sources avec `scripts/smoke-installed.py`. La [CI 41471993176](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176) a réussi toutes ces étapes pour le code `b55bfded63dc5572da8d3409409210381cc50c34`, version 0.2.1. Les [preuves sélectionnées](../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) conservent les résultats des deux systèmes et le rapport d'installation Windows.
 
 ## Dépannage
 

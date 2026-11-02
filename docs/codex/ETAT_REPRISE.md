@@ -6,23 +6,23 @@ Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain a
 
 La version actuelle est **0.2.1**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.
 
-La première CI distante de 0.2.0 a réussi sur Ubuntu (418 Python, 33 frontend) et révélé sept échecs d'encodage sur Windows. Le correctif 0.2.1 décode les chemins Git en UTF-8 et aligne l'encodage des processus Python capturés dans les tests. Les 30 cas locaux affectés passent ; le résultat de la nouvelle CI doit être consulté séparément. Voir [le rapport d'encodage Windows](../../evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md). Le tag 0.2.0 n'est pas déplacé.
+La [CI finale 41471993176](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176), sur le code `b55bfded63dc5572da8d3409409210381cc50c34`, a réussi les deux jobs **Windows et Ubuntu**, avec **418 tests Python et 33 tests frontend par système**. Windows a aussi réussi la construction de wheel, le parsing PowerShell et l'installation d'un kit runtime neuf sans index pip. Le contrôle externe du paquet installé 0.2.1 valide les assets, la démo, les exports, l'historique après reset et le redémarrage. Voir les [preuves finales](../../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md).
 
-La relance `41468421321` a confirmé les **418 tests Python Windows réussis**, y compris les sept cas corrigés. Deux tests navigateur historiques ont ensuite dépassé leurs délais malgré les bonnes sélections visibles dans les captures ; les deux nouveaux tests V20/V21 passaient. Les délais Playwright sont ajustés uniquement pour Windows CI, avec assertions et instrumentation conservées. Voir [la mesure et les limites](../../evidence/reprises/2026-11-02-windows-ui/VERIFICATION.md). La réussite du kit Windows hors ligne reste conditionnée au prochain résultat de CI.
+Les deux corrections ayant permis cette validation sont documentées séparément : [encodage UTF-8 des sous-processus Windows](../../evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md), puis [délais mesurés du banc navigateur Windows](../../evidence/reprises/2026-11-02-windows-ui/VERIFICATION.md). Les assertions, traces et captures sont conservées, sans retry. Le tag 0.2.0 n'est pas déplacé.
 
 V21 conserve le paquet Czarnak 4.3.0. V20 prépare un portage de la même source épinglée, à compiler sur Windows contre les trois DLL Openness V20 réellement installées. Les profils vérifient binaires, DLL, politique, proposition et archive ; ils conservent le dossier Openness aux lancements MCP et dans les fragments client. Le manifeste est obligatoire dans les deux cas. **Le build natif V20 et l'acceptation Siemens V20/V21 n'ont pas été exécutés sur ce Mac.** Une erreur native bloque l'installation, sans repli V21 ou références factices.
 
 Contrôles locaux finaux : **418 tests Python et 33 tests frontend réussis**, build TypeScript/Vite et Ruff réussis, wheel dont les 32 fichiers applicatifs correspondent aux sources, contrôle du paquet installé 0.2.0 avec exports et persistance réussi. Les gardes, l'installation et la documentation ont fait l'objet de relectures indépendantes. Voir les [preuves 0.2.0](../../evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
 
-Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FAT-Studio](https://github.com/vandervan0001/FAT-Studio). `origin` désigne ce dépôt ; `handoff` conserve le bundle local d'origine. La branche de travail est `codex/tia-v20-v21`, destinée à être avancée sur `main` et poussée avec les tags existants. Vérifier les SHA distants et les résultats de CI avant de revendiquer une exécution distante réussie ; leur présence n'est pas une qualification Siemens.
+Le dépôt GitHub créé pour cette livraison est **privé** : [vandervan0001/FAT-Studio](https://github.com/vandervan0001/FAT-Studio). `origin` désigne ce dépôt ; `handoff` conserve le bundle local d'origine. Le code est poussé sur **main** ; le tag **v0.2.1** est préparé après cette CI, avec une dernière mise à jour documentaire des résultats. Vérifier les SHA distants à la reprise. Les tags 0.1.1 et 0.2.0 restent inchangés. La CI du runtime n'est pas une qualification Siemens.
 
 **Serveur local arrêté à la demande de Tai**, par SIGINT envoyé au processus FAT identifié. Données de démonstration conservées dans `../work/2026-11-02-macos-reprise/demo-data`. Aucun service FAT persistant n'est requis à la reprise. La section macOS ci-dessous décrit le démarrage précédent et reste historique.
 
 Prochaine action : installer le profil de la version effectivement disponible sur le PC Windows, relever les diagnostics de compilation/doctor, puis qualifier une copie autorisée avec [ACCEPTANCE.md](../ACCEPTANCE.md). Ne pas transformer le statut du candidat V20 en compatibilité native acquise sans ces résultats.
 
-Dernière note : [délais de l'automatisation Windows](sessions/2026-11-02-windows-ui.md). Les notes [d'encodage Windows](sessions/2026-11-02-windows-utf8.md) et [de sélection V20/V21](sessions/2026-11-02-v20-v21-private-git.md) restent conservées.
+Dernière note : [CI réussie et livraison privée 0.2.1](sessions/2026-11-02-ci-private-delivery.md). Les notes [de délais Windows](sessions/2026-11-02-windows-ui.md), [d'encodage Windows](sessions/2026-11-02-windows-utf8.md) et [de sélection V20/V21](sessions/2026-11-02-v20-v21-private-git.md) restent conservées.
 
-## État courant après reprise — 2 novembre 2026, macOS ARM64
+## Historique — reprise du 2 novembre 2026, macOS ARM64
 
 Le kit extrait dans `../fat-studio` est resté intact ; ses empreintes et ses 29 wheels Windows ont été vérifiées. Le travail se poursuit dans le clone source `fat-studio-source`, branche `codex/macos-validation`, créé depuis le bundle au commit `486d8180508a014fe4791d19bc13b59ecdc61146`. Le runtime reste celui de la version **0.1.1** : les assets reconstruits et les 30 fichiers applicatifs de la wheel sont identiques à la référence.
 
@@ -242,7 +242,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — délais Windows CI](sessions/2026-11-02-windows-ui.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02 — CI réussie et livraison privée](sessions/2026-11-02-ci-private-delivery.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

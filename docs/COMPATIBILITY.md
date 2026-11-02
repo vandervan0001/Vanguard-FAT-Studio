@@ -10,7 +10,7 @@
 
 | Composant | Cible choisie | État / preuve |
 | --- | --- | --- |
-| Application locale et procédé démo | Python 3.12 ; interface construite depuis le lock Node | Implémentés ; scripts et tests livrés. |
+| Application locale et procédé démo | Python 3.12 ; interface construite depuis le lock Node | CI 0.2.1 Windows/Ubuntu réussie : 418 tests Python et 33 frontend par système ; installation runtime Windows sans index réussie. [Preuves](../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md). |
 | Adaptateur OPC UA | Bibliothèque `asyncua`, versions exactes dans le lock Python | Implémenté ; serveur OPC UA de test disponible. |
 | PLCSIM Advanced | OPC UA d'une CPU virtuelle configurée, accès TCP/IP avec liaison `<Local>` | Documentation Siemens examinée ; qualification réelle à effectuer. |
 | CPU et firmware du client | À relever sur le poste cible | Non fournis dans l'URS. Aucune compatibilité universelle revendiquée. |

@@ -10,7 +10,7 @@ Ce dossier contient le projet complet et les éléments nécessaires pour le rep
 
 **Après une interruption ou dans une nouvelle conversation**, utiliser [docs/codex/PROMPT_REPRISE_CODEX.md](docs/codex/PROMPT_REPRISE_CODEX.md). Il demande de relire l'état réel des fichiers, les commits et la dernière note de session avant de poursuivre.
 
-## Ce qui est inclus
+## Contenu de l'archive initiale 0.1.1
 
 | Élément | Emplacement |
 | --- | --- |
@@ -40,6 +40,8 @@ Choisir un autre nom si cette destination existe déjà. Ouvrir ensuite `fat-stu
 
 ## État de validation transmis
 
-La référence 0.1.1 a obtenu **289 tests Python**, **31 tests frontend/API cliente** et **12 assertions de démonstration réussis**, ainsi que deux installations propres sous Linux. Les scripts Windows, TIA Portal et PLCSIM Advanced restent à qualifier sur le poste cible. La publication GitHub n'a pas été réalisée. Voir [VERIFICATION.md](evidence/VERIFICATION.md).
+La référence 0.1.1 a obtenu **289 tests Python**, **31 tests frontend/API cliente** et **12 assertions de démonstration réussis**, ainsi que deux installations propres sous Linux. À cette remise initiale, les scripts Windows n'avaient pas été exécutés et aucun dépôt GitHub n'avait été publié. Voir [VERIFICATION.md](evidence/VERIFICATION.md).
+
+La reprise 0.2.1 est publiée dans le dépôt privé [vandervan0001/FAT-Studio](https://github.com/vandervan0001/FAT-Studio). Sa CI a réussi **418 tests Python et 33 tests frontend sur chacun des systèmes Windows et Ubuntu**, puis l'installation d'un kit runtime Windows neuf sans index pip. Les [preuves datées](evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) identifient le commit testé. Le portage natif V20 et la qualification TIA/PLCSIM des deux versions restent à effectuer sur le poste Siemens.
 
 Le ZIP contient le logiciel et ses exemples. Les projets et essais personnels déjà créés sur un autre poste, les licences, les certificats, les secrets et un vrai projet TIA utilisateur ne sont pas dans cette archive.
