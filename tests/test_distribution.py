@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 from pathlib import Path
 import runpy
 import subprocess
@@ -171,3 +172,43 @@ def test_web_bundle_refuses_cache_symlink_or_linked_parent_before_mutation(tmp_p
     assert protected.read_text() == "must remain untouched\n"
     assert (bundled / "old-bundle.txt").read_text() == "previous bundled interface\n"
     assert not (bundled / "assets" / "index-new.js").exists()
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="NTFS junctions are a Windows filesystem boundary")
+@pytest.mark.parametrize("link_path", ["build", "build/lib", "build/lib/fat_studio", "build/lib/fat_studio/web"])
+@pytest.mark.parametrize("target_in_root", [False, True], ids=["external-target", "shared-in-root-target"])
+def test_web_bundle_refuses_real_cache_junction_before_mutation(tmp_path, link_path, target_in_root):
+    root = tmp_path / "FAT source épreuve"
+    script, bundled = make_web_build(root)
+    target = (root if target_in_root else tmp_path) / "shared-generated-output"
+    target.mkdir()
+    protected = target / "keep.txt"
+    protected.write_text("shared output must remain untouched\n")
+    link = root / link_path
+    link.parent.mkdir(parents=True, exist_ok=True)
+    command = (
+        "$ErrorActionPreference = 'Stop';"
+        "[Console]::OutputEncoding = [Text.UTF8Encoding]::new($false);"
+        "New-Item -ItemType Junction -Path $env:FAT_TEST_JUNCTION_LINK "
+        "-Target $env:FAT_TEST_JUNCTION_TARGET | Out-Null"
+    )
+    created = subprocess.run(
+        ["powershell.exe", "-NoLogo", "-NoProfile", "-NonInteractive", "-Command", command],
+        env={**os.environ, "FAT_TEST_JUNCTION_LINK": str(link), "FAT_TEST_JUNCTION_TARGET": str(target)},
+        capture_output=True, text=True, encoding="utf-8", timeout=15,
+    )
+    assert created.returncode == 0, created.stderr
+    assert link.is_junction(), "The test must exercise an actual NTFS junction"
+    try:
+        result = run_web_build(script)
+
+        assert result.returncode != 0
+        assert "Refus" in result.stderr
+        assert link.is_junction()
+        assert protected.read_text() == "shared output must remain untouched\n"
+        assert (bundled / "old-bundle.txt").read_text() == "previous bundled interface\n"
+        assert not (bundled / "assets" / "index-new.js").exists()
+    finally:
+        # Remove only this test's junction; never recurse into its shared target.
+        if link.is_junction():
+            link.rmdir()
