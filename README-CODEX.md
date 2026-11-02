@@ -2,6 +2,8 @@
 
 Ce dossier contient le projet complet et les éléments nécessaires pour le reprendre sans l'historique de la conversation ChatGPT.
 
+Sur le poste `C:\FAT_Studio`, la [préparation Windows sans Siemens](docs/WINDOWS_LOCAL_SETUP.md) décrit le lancement, les outils installés et les dépendances TIA déjà récupérées. Les résultats propres à ce poste sont dans [l'état courant](docs/codex/ETAT_REPRISE.md).
+
 ## Pour Tai : trois étapes
 
 1. Extraire **tout** le ZIP et ouvrir le dossier `fat-studio` dans Codex, ou donner accès à ce dossier à l'agent de code utilisé.

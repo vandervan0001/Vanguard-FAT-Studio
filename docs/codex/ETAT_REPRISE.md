@@ -2,7 +2,27 @@
 
 Passation initiale : **2 novembre 2026**. Ce document est destiné au prochain agent et à l'ingénieur qui reprend le projet. Les sections historiques ci-dessous décrivent la livraison ; inscrire les développements ultérieurs dans la section « État courant » et les notes de session.
 
-## État courant — 0.2.1, choix V20/V21 et dépôt privé
+## État courant — poste Windows local préparé, sans Siemens
+
+Le 2 novembre 2026, le dépôt privé a été cloné intégralement dans `C:\FAT_Studio`, depuis `00ab08c`. Le travail local est sur `codex/windows-local-setup`. Python 3.12.10 x64, les dépendances runtime/dev/MCP, Node.js 22.23.4/npm 10.9.9 et le SDK .NET 10.0.403 sont disponibles. Le [guide de ce poste](../WINDOWS_LOCAL_SETUP.md) indique le lancement et l'environnement de développement local.
+
+Vérifications réellement exécutées ici : **414 tests Python réussis et 4 ignorés** (création de liens symboliques refusée par Windows, erreur 1314), **33 tests frontend réussis** avec Node 22, TypeScript/Vite, Ruff et `pip check` réussis. Les 32 fichiers applicatifs de la wheel correspondent aux sources ; les 3 scénarios de démonstration passent leurs 12 assertions, avec verdict humain `not_evaluated`. L'interface a été démarrée, contrôlée visuellement, puis arrêtée. Les nouvelles [preuves Windows locales](../../evidence/reprises/2026-11-02-windows-local/VERIFICATION.md) restent distinctes des preuves historiques.
+
+Un kit neuf de validation runtime/MCP a été créé dans `C:\FAT_Studio-Offline-Validation-2026-11-02`. Son premier `Start-FAT.cmd` a installé une `.venv` neuve et démarré le service avec index pip et cache pip désactivés. L'ajout MCP hors ligne et le manifeste de 43 wheels sont vérifiés. `pywin32==312` est maintenant épinglé pour Windows ; la résolution des trois locks confirme 54 dépendances toutes épinglées.
+
+La source Czarnak épinglée reste propre dans `.tools/tia-upstream`. Le cache NuGet local contient 61 paquets, dont les références net48 et le paquet TiaMcpServer 4.3.0. Le worker et le host ont été restaurés dans un cache neuf avec cette seule source locale et `UseTiaPortalReferenceStubs=false`. **Aucune compilation TIA, installation de profil MCP ou qualification Siemens n'a été faite.** TIA Portal, Openness et PLCSIM manquent toujours.
+
+Le premier contrôle `smoke-installed.py` a révélé un verrou SQLite au nettoyage temporaire. Le contrôle attend désormais la fin du vrai processus Python Windows via un handle acquis avant l'arrêt du redirecteur de `.venv`. Le nouveau test utilise un vrai worker avec SQLite ouverte. Les régressions ciblées passent (**18 réussies, 4 ignorées**, distinctes de la suite complète initiale). Les contrôles installés finaux passent contre la `.venv` source et celle du kit hors ligne : assets servis hors sources, exports CSV/HTML/JSON, historique après reset et relecture par un nouveau processus. Aucun contrôle d'assertion ou de nettoyage n'a été supprimé.
+
+Aucun service de test n'est laissé actif. Le raccourci **FAT Studio** du bureau ou `Start-FAT.cmd` démarre l'application. Les données d'essais personnels restent hors du dépôt. Les outils locaux ignorés sont conservés dans `.tools/` et `.local/`. Les changements de cette mission sont conservés en commits locaux ; aucun push ni nouveau résultat GitHub Actions n'est revendiqué.
+
+Prochaine action fonctionnelle : installer TIA Portal/Openness et PLCSIM, puis utiliser le [prompt de qualification Windows](PROMPT_VALIDATION_WINDOWS_TIA_V20_V21.md). Les sources, commandes et dépendances sont préparées ; les versions, DLL, licences et le vrai projet Siemens doivent encore être disponibles pour cette qualification.
+
+Dernière note : [préparation locale Windows sans Siemens](sessions/2026-11-02-windows-local-setup.md).
+
+Le correctif de livraison est commité sous `1f54282`. Le kit final neuf `C:\FAT_Studio-Offline-2026-11-02` contient le correctif du contrôle, les mêmes 32 fichiers applicatifs et 43 wheels ; son manifeste est vérifié. Le kit installé de validation reste distinct. La documentation et les preuves sont conservées dans le commit suivant sur la même branche.
+
+## Historique — 0.2.1, choix V20/V21 et dépôt privé
 
 La version actuelle est **0.2.1**. Dans **Connexion → Version du projet TIA**, l'utilisateur choisit V20 ou V21 ; le choix suit les sauvegardes, exports et imports. Les anciens projets utilisent V21. Le guide [TIA_VERSIONS.md](../TIA_VERSIONS.md) décrit les profils, prérequis et commandes propres à chaque version.
 
@@ -242,7 +262,7 @@ Ne pas déplacer `v0.1.1`, qui identifie la référence déjà testée. Un chang
 
 ## 10. Journal des sessions et prochaine reprise
 
-Dernière note : [2026-11-02 — reprise Windows TIA](sessions/2026-11-02-windows-tia-handoff.md). Les notes précédentes restent conservées. La prochaine qualification requiert le poste Windows et Siemens selon l'état courant en tête de ce document.
+Dernière note : [2026-11-02, préparation locale Windows sans Siemens](sessions/2026-11-02-windows-local-setup.md). Les notes précédentes restent conservées. La prochaine qualification requiert les installations Siemens selon l'état courant en tête de ce document.
 
 Dans la copie source, créer une note `docs/codex/sessions/<date-heure>-<sujet>.md` à chaque pause importante. Mettre à jour cette section avec un lien vers la dernière note. Utiliser ce format :
 

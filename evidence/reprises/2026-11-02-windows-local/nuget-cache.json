@@ -1,0 +1,311 @@
+{
+  "count": 61,
+  "source": "https://api.nuget.org/v3/index.json",
+  "packages": [
+    {
+      "name": "microsoft.aspnetcore.app.runtime.win-x64.10.0.14.nupkg",
+      "size": 12784020,
+      "sha256": "91638ac8382c437e71c0739a0e3123290f9bf48bcd01e616352a86add5571089"
+    },
+    {
+      "name": "microsoft.bcl.asyncinterfaces.10.0.14.nupkg",
+      "size": 99341,
+      "sha256": "fb9352e6211df8509094861281e627547956e3a81fbba41b6af1d829bae5c80b"
+    },
+    {
+      "name": "microsoft.build.tasks.git.10.0.403.nupkg",
+      "size": 630481,
+      "sha256": "9d21a711e9fce96b34e8c02f10069bc66a381d84a2912e65a14dc9c411135e29"
+    },
+    {
+      "name": "microsoft.extensions.ai.abstractions.10.11.0.nupkg",
+      "size": 1478711,
+      "sha256": "87e1367f89d8a4957ff281df09703c860a93786830930fb2ba1f5d0af3ad2245"
+    },
+    {
+      "name": "microsoft.extensions.caching.abstractions.10.0.13.nupkg",
+      "size": 178840,
+      "sha256": "bf66ebe438451a3495562c8fb853a939d9e875e65b040637b66ce16b2313e7b1"
+    },
+    {
+      "name": "microsoft.extensions.configuration.10.0.14.nupkg",
+      "size": 187043,
+      "sha256": "b0ca15b9078a45cff5d8b488cfd1c75735cc4020d13c30db79733e42426ef5ad"
+    },
+    {
+      "name": "microsoft.extensions.configuration.abstractions.10.0.13.nupkg",
+      "size": 145189,
+      "sha256": "3327e40e108b4d6550d6b4e4737046678fba6530dc48212dd8ef73c52c5ee4bf"
+    },
+    {
+      "name": "microsoft.extensions.configuration.abstractions.10.0.14.nupkg",
+      "size": 145194,
+      "sha256": "96c0a42025c01715e702a1afe22d0bd14304a8ef2f8e65c8cba66e85e965c0ed"
+    },
+    {
+      "name": "microsoft.extensions.configuration.binder.10.0.14.nupkg",
+      "size": 387188,
+      "sha256": "d6e0a5d2bfa4bbb73f64f731eec978e243f809273a0fd4f150dceed3b7b431af"
+    },
+    {
+      "name": "microsoft.extensions.configuration.commandline.10.0.14.nupkg",
+      "size": 134937,
+      "sha256": "68aa57f9b6abb672aba9d8b063d2699166a2309c57afe426db164109d2e12f45"
+    },
+    {
+      "name": "microsoft.extensions.configuration.environmentvariables.10.0.14.nupkg",
+      "size": 120657,
+      "sha256": "e3f39d79f65db890a78ce0dab96daa7280ff9702f793a00dd45dfba2921749bb"
+    },
+    {
+      "name": "microsoft.extensions.configuration.fileextensions.10.0.14.nupkg",
+      "size": 138922,
+      "sha256": "ffffa38cfb77c3dc74458677e3475f8b06eba1132082a8545b80c4736c79cdc8"
+    },
+    {
+      "name": "microsoft.extensions.configuration.json.10.0.14.nupkg",
+      "size": 155128,
+      "sha256": "1e4e17483d63b1a537181ac1368fe11ffc15ec37d969aad19e6bbac7a1cdf503"
+    },
+    {
+      "name": "microsoft.extensions.configuration.usersecrets.10.0.14.nupkg",
+      "size": 135791,
+      "sha256": "424817bf3296ffe24a0d15d677895dd215cd7b78d964d0b0f45701904acc231f"
+    },
+    {
+      "name": "microsoft.extensions.dependencyinjection.10.0.14.nupkg",
+      "size": 349588,
+      "sha256": "114e01934b637009d55b4d3d68eb06a22eb1b6fffbe70db094427638fe772d49"
+    },
+    {
+      "name": "microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg",
+      "size": 283997,
+      "sha256": "676f9bb47a23af349f85b6f45f71d7a634db60a71b5c9f370d037215a8f3ac8c"
+    },
+    {
+      "name": "microsoft.extensions.dependencyinjection.abstractions.10.0.14.nupkg",
+      "size": 283983,
+      "sha256": "79ac1e48098662b052291e5e0829d37f8efa65a7b54427ec10541699595caddf"
+    },
+    {
+      "name": "microsoft.extensions.diagnostics.10.0.14.nupkg",
+      "size": 157823,
+      "sha256": "b75d7972586f3ad80ac8655900d7dd08c03dce34883dde273e2e9f5723332d69"
+    },
+    {
+      "name": "microsoft.extensions.diagnostics.abstractions.10.0.13.nupkg",
+      "size": 150572,
+      "sha256": "95c35704365d07f6e9ee1ed563febf091fe1b60380701430961ec5699c9edfb2"
+    },
+    {
+      "name": "microsoft.extensions.diagnostics.abstractions.10.0.14.nupkg",
+      "size": 150580,
+      "sha256": "f345c3e7e58b5c32cfe76387c81fdabc074a2438d0768d2b761d3e22036c9ed9"
+    },
+    {
+      "name": "microsoft.extensions.fileproviders.abstractions.10.0.13.nupkg",
+      "size": 126988,
+      "sha256": "3b778466535ede401102cd8ee5e466b44a446fa416385a141f44ccae76e0c0ee"
+    },
+    {
+      "name": "microsoft.extensions.fileproviders.abstractions.10.0.14.nupkg",
+      "size": 127012,
+      "sha256": "c3ca173153598dfe9ce73ede98047918d5ed9a118af56aebff18eec52a606d5b"
+    },
+    {
+      "name": "microsoft.extensions.fileproviders.physical.10.0.14.nupkg",
+      "size": 194570,
+      "sha256": "2f333e4fb1c477ac8c4ef11a5bf74cc97379fa1834c36ca587231ed1be2eb452"
+    },
+    {
+      "name": "microsoft.extensions.filesystemglobbing.10.0.14.nupkg",
+      "size": 191387,
+      "sha256": "3ce1c3bc975befc6ef854fc95972ecfec7404065000a50cd4cf0b1c2a70a6d89"
+    },
+    {
+      "name": "microsoft.extensions.hosting.10.0.14.nupkg",
+      "size": 303152,
+      "sha256": "57dcefe7d68f6a53dac8d1e3a46dc251a7a58d66ab47f2642c0ffe2c1c671a2d"
+    },
+    {
+      "name": "microsoft.extensions.hosting.abstractions.10.0.13.nupkg",
+      "size": 232236,
+      "sha256": "0bad01c257d0dbb11b744439e418458f5904ffc6d53ee2c93567ba46e427c190"
+    },
+    {
+      "name": "microsoft.extensions.hosting.abstractions.10.0.14.nupkg",
+      "size": 232295,
+      "sha256": "b66e44d93b390e40203f0b55609b2e34d18247c6b7e9b2042fdae6a032e6c598"
+    },
+    {
+      "name": "microsoft.extensions.logging.10.0.14.nupkg",
+      "size": 228255,
+      "sha256": "fdc4934f3857482c2a1cffd49c1d0bf402f10b11b00933a6fc622e81b5252474"
+    },
+    {
+      "name": "microsoft.extensions.logging.abstractions.10.0.13.nupkg",
+      "size": 807970,
+      "sha256": "8c09f4328a801716b8997707fb567013db193935b4ef9e69897c83dc9c56c8b1"
+    },
+    {
+      "name": "microsoft.extensions.logging.abstractions.10.0.14.nupkg",
+      "size": 808396,
+      "sha256": "a4a2c273c7b08411a4ead0b0bcc5e1ac3c0312ca1bb6d2f8d69c5648d00b17e0"
+    },
+    {
+      "name": "microsoft.extensions.logging.configuration.10.0.14.nupkg",
+      "size": 140774,
+      "sha256": "55c2388488541bd45f6dcd139cfa46150fce7a9904ccb741bccdbf583bbaefb2"
+    },
+    {
+      "name": "microsoft.extensions.logging.console.10.0.14.nupkg",
+      "size": 275700,
+      "sha256": "83e0af217e75aeb58269d690ee4d693519b02f182ff47a10bc1c46dbf5097c77"
+    },
+    {
+      "name": "microsoft.extensions.logging.debug.10.0.14.nupkg",
+      "size": 117091,
+      "sha256": "8e5460729bf4f7a71378d80ebcdf9627b0c3928b1be481834a13db972e645e6e"
+    },
+    {
+      "name": "microsoft.extensions.logging.eventlog.10.0.14.nupkg",
+      "size": 134593,
+      "sha256": "7279dbac87c569dcabeb86954b325c44bbd249f98a6c6ef98057a0d0bdb4a35b"
+    },
+    {
+      "name": "microsoft.extensions.logging.eventsource.10.0.14.nupkg",
+      "size": 167547,
+      "sha256": "09f81ae26c7f14be78e89c9e4721d2d306a86a0c2d3d8cb2907bd669cdb50cbc"
+    },
+    {
+      "name": "microsoft.extensions.options.10.0.14.nupkg",
+      "size": 491778,
+      "sha256": "2a94af58b7bd28f973da6388e0a4281d68d46efc192f2ee9b66e29576198e82b"
+    },
+    {
+      "name": "microsoft.extensions.options.configurationextensions.10.0.14.nupkg",
+      "size": 131613,
+      "sha256": "335849a479a3bc562fc65d8f81db12e35d42a6f93bf9720b3bcee4d2763afae7"
+    },
+    {
+      "name": "microsoft.extensions.primitives.10.0.13.nupkg",
+      "size": 207076,
+      "sha256": "7a5f1dcbcc6e7b94cb3e7c18d22acef5823949fe94b4076ad20ff057322c6e6f"
+    },
+    {
+      "name": "microsoft.extensions.primitives.10.0.14.nupkg",
+      "size": 207072,
+      "sha256": "f2ed5d5c56c6fd4cf0e4237da121e76f3d1492e963f37796d5c5e2dc687eee2c"
+    },
+    {
+      "name": "microsoft.netcore.app.runtime.win-x64.10.0.14.nupkg",
+      "size": 39979900,
+      "sha256": "a3ea61b4a2da6d28e562dd1cdacf80eb4dd6b9727b0a2b47f9d6aba90dbbcb1f"
+    },
+    {
+      "name": "microsoft.netcore.platforms.1.1.0.nupkg",
+      "size": 17960,
+      "sha256": "15e338d24b5c39b4099389cc612841eb51ff13c07bb4829f97d39b27420e7023"
+    },
+    {
+      "name": "microsoft.netframework.referenceassemblies.1.0.3.nupkg",
+      "size": 20961,
+      "sha256": "141a093f90c7645d101ccd312e6f727781c965540eb92a52280f95411a698441"
+    },
+    {
+      "name": "microsoft.netframework.referenceassemblies.net48.1.0.3.nupkg",
+      "size": 20997929,
+      "sha256": "8a7e348538e7eb91351696911689f49e3d4f63f8bab517432bbe159b8b1104a2"
+    },
+    {
+      "name": "microsoft.sourcelink.common.10.0.403.nupkg",
+      "size": 347321,
+      "sha256": "e99d7aea402042d04faa4971709718ebf256406b4c59f700cb1c8a739859c6a2"
+    },
+    {
+      "name": "microsoft.sourcelink.github.10.0.403.nupkg",
+      "size": 536318,
+      "sha256": "9c3252f8cbe1547bf8c12b7c65a7bc28985bab2d598ff97c13e0104c22d80cd5"
+    },
+    {
+      "name": "microsoft.windowsdesktop.app.runtime.win-x64.10.0.14.nupkg",
+      "size": 39195036,
+      "sha256": "a6dba3ca8b8b5b7945399545d881e0ac294746a7571f2209981934d49ecfe8cc"
+    },
+    {
+      "name": "modelcontextprotocol.2.3.0.nupkg",
+      "size": 228080,
+      "sha256": "4334254fa8c2f40e3de04da4cc4ef36e22c01e0755f9e108aff71a3ff4899a95"
+    },
+    {
+      "name": "modelcontextprotocol.core.2.3.0.nupkg",
+      "size": 2329408,
+      "sha256": "da5819cd05c1907c7d6b7eec87223b744b0ac47a6e31ca9d2c4e9852fe58c815"
+    },
+    {
+      "name": "netstandard.library.2.0.3.nupkg",
+      "size": 3146139,
+      "sha256": "3eb87644f79bcffb3c0331dbdac3c7837265f2cdf58a7bfd93e431776f77c9ba"
+    },
+    {
+      "name": "system.buffers.4.6.1.nupkg",
+      "size": 67724,
+      "sha256": "b00451e91d016fbec091ad1e361f3a7015e1d91d4047f7e48a74455b2a673d79"
+    },
+    {
+      "name": "system.diagnostics.eventlog.10.0.14.nupkg",
+      "size": 546747,
+      "sha256": "4cd2dc9d7f59b136c445a99838e218ebd4cafe53a02977e8cb5325971357b37e"
+    },
+    {
+      "name": "system.io.hashing.10.0.14.nupkg",
+      "size": 206575,
+      "sha256": "86917bafb634c4d06dd7f07c5f745141fea220f64e13e7657680e81dac68f941"
+    },
+    {
+      "name": "system.io.pipelines.10.0.14.nupkg",
+      "size": 267435,
+      "sha256": "cc153aae0db94e775e985f907c2bed88bad3d3e8c1660597412ca37905560037"
+    },
+    {
+      "name": "system.memory.4.6.3.nupkg",
+      "size": 192935,
+      "sha256": "26078aeb758c9ae985e8bf851f973026061da6a5eb4837204d0c2d2204c72955"
+    },
+    {
+      "name": "system.numerics.vectors.4.6.1.nupkg",
+      "size": 136872,
+      "sha256": "2bc500a86dcb02f2032d6d877f9e2d6e9e4a79080e57239b4198679d4031f2c7"
+    },
+    {
+      "name": "system.runtime.compilerservices.unsafe.6.1.2.nupkg",
+      "size": 75106,
+      "sha256": "5f6a7f53af3465f92beb6da873ebe0e496206c313313b98badee4355a6b25937"
+    },
+    {
+      "name": "system.text.encodings.web.10.0.14.nupkg",
+      "size": 411027,
+      "sha256": "3db3934f595c30618e751c003852dc9b6406781653f9a1936c8df0203e379261"
+    },
+    {
+      "name": "system.text.json.10.0.14.nupkg",
+      "size": 2223225,
+      "sha256": "efb4116efc788602d167da9bc086c65d97cb32fd4624110eb00e3ff88e57c8c8"
+    },
+    {
+      "name": "system.threading.tasks.extensions.4.6.3.nupkg",
+      "size": 74604,
+      "sha256": "1abc92c7517a021ead7e79d0b7f3c70be75bce0fac7cfe3b38e157d32245ff1a"
+    },
+    {
+      "name": "system.valuetuple.4.6.2.nupkg",
+      "size": 86474,
+      "sha256": "76fd0e366a2b90655fd15d557b0b79504197748358cb578fe3193f6d97bdd9aa"
+    },
+    {
+      "name": "tiamcpserver.4.3.0.nupkg",
+      "size": 3095802,
+      "sha256": "cf13b7257bf442b7c34662d7322217f0301a103bc18a3eb907214f43a79cb84a"
+    }
+  ]
+}

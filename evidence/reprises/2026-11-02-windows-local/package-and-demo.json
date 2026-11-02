@@ -1,0 +1,182 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "source_commit": "00ab08c9701e1860ce57bec1d2b37bdc659da0bd",
+  "scope": "Windows local application, demo and packaging only; no Siemens",
+  "wheel": {
+    "name": "local_fat_studio-0.2.1-py3-none-any.whl",
+    "sha256": "de7ee6f71c195b0b7b063cf3b6c33bbdc20aca7acaadcc053f38363cc9e4147f",
+    "application_files": 32,
+    "all_names_and_contents_match": true
+  },
+  "scenarios": [
+    {
+      "id": "reference",
+      "sim_time_s": 32.0,
+      "sample_count": 320,
+      "assertions": [
+        {
+          "index": 1,
+          "target": "pump_running",
+          "operator": "eq",
+          "expected": true,
+          "actual": true,
+          "passed": true,
+          "message": "La pompe retourne sa marche.",
+          "scheduled_s": 5.0,
+          "evaluated_s": 5.0,
+          "quality": "good"
+        },
+        {
+          "index": 2,
+          "target": "level",
+          "operator": "gt",
+          "expected": 35.0,
+          "actual": 45.34965515136719,
+          "passed": true,
+          "message": "Le niveau augmente réellement.",
+          "scheduled_s": 10.0,
+          "evaluated_s": 10.0,
+          "quality": "good"
+        },
+        {
+          "index": 3,
+          "target": "pump_cmd",
+          "operator": "eq",
+          "expected": false,
+          "actual": false,
+          "passed": true,
+          "message": "Arrêt de remplissage après le seuil haut de contrôle.",
+          "scheduled_s": 25.0,
+          "evaluated_s": 25.0,
+          "quality": "good"
+        },
+        {
+          "index": 4,
+          "target": "level",
+          "operator": "gt",
+          "expected": 60.0,
+          "actual": 67.33158874511719,
+          "passed": true,
+          "message": "Le soutirage reste limité après l'arrêt.",
+          "scheduled_s": 30.0,
+          "evaluated_s": 30.0,
+          "quality": "good"
+        }
+      ],
+      "human_verdict": "not_evaluated"
+    },
+    {
+      "id": "motor-trip",
+      "sim_time_s": 28.0,
+      "sample_count": 280,
+      "assertions": [
+        {
+          "index": 2,
+          "target": "pump_running",
+          "operator": "eq",
+          "expected": false,
+          "actual": false,
+          "passed": true,
+          "message": "Perte du retour marche.",
+          "scheduled_s": 6.0,
+          "evaluated_s": 6.0,
+          "quality": "good"
+        },
+        {
+          "index": 3,
+          "target": "pump_fault",
+          "operator": "eq",
+          "expected": true,
+          "actual": true,
+          "passed": true,
+          "message": "Défaut transmis au PLC.",
+          "scheduled_s": 6.0,
+          "evaluated_s": 6.0,
+          "quality": "good"
+        },
+        {
+          "index": 4,
+          "target": "level",
+          "operator": "lt",
+          "expected": 40.0,
+          "actual": 32.84965515136719,
+          "passed": true,
+          "message": "Aucun remplissage caché pendant le défaut.",
+          "scheduled_s": 10.0,
+          "evaluated_s": 10.0,
+          "quality": "good"
+        },
+        {
+          "index": 6,
+          "target": "pump_running",
+          "operator": "eq",
+          "expected": true,
+          "actual": true,
+          "passed": true,
+          "message": "Reprise après disparition du défaut.",
+          "scheduled_s": 17.0,
+          "evaluated_s": 17.0,
+          "quality": "good"
+        },
+        {
+          "index": 7,
+          "target": "level",
+          "operator": "gt",
+          "expected": 40.0,
+          "actual": 50.77695846557617,
+          "passed": true,
+          "message": "Reprise du remplissage observable.",
+          "scheduled_s": 25.0,
+          "evaluated_s": 25.0,
+          "quality": "good"
+        }
+      ],
+      "human_verdict": "not_evaluated"
+    },
+    {
+      "id": "sensor-freeze",
+      "sim_time_s": 24.0,
+      "sample_count": 240,
+      "assertions": [
+        {
+          "index": 1,
+          "target": "level",
+          "operator": "eq",
+          "expected": 40.0,
+          "actual": 40.0,
+          "passed": true,
+          "message": "Mesure figée à 40 %.",
+          "scheduled_s": 10.0,
+          "evaluated_s": 10.0,
+          "quality": "fault"
+        },
+        {
+          "index": 2,
+          "target": "volume",
+          "operator": "gt",
+          "expected": 450.0,
+          "actual": 536.696533203125,
+          "passed": true,
+          "message": "Le procédé continue d'évoluer malgré la mesure figée.",
+          "scheduled_s": 14.0,
+          "evaluated_s": 14.0,
+          "quality": "good"
+        },
+        {
+          "index": 4,
+          "target": "level",
+          "operator": "gt",
+          "expected": 50.0,
+          "actual": 57.829654693603516,
+          "passed": true,
+          "message": "Retour à la mesure du procédé.",
+          "scheduled_s": 16.0,
+          "evaluated_s": 16.0,
+          "quality": "good"
+        }
+      ],
+      "human_verdict": "not_evaluated"
+    }
+  ]
+}

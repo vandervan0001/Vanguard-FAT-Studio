@@ -1,0 +1,14 @@
+{
+  "kit": "C:\\FAT_Studio-Offline-2026-11-02",
+  "engineering": true,
+  "wheels": 43,
+  "manifest_files": 241,
+  "manifest_sha256": "c32040c149ee0a5a5d509a953a838c44519cfbf88de6afaed1163d3f7e5df5e8",
+  "manifest_check": "passed",
+  "application_files_match_source": 32,
+  "corrected_smoke_included": true,
+  "fresh_uninstalled_kit": true,
+  "installed_behavior_verified_in": "C:/FAT_Studio-Offline-Validation-2026-11-02",
+  "code_commit": "1f54282",
+  "runtime_base_commit": "00ab08c"
+}

@@ -1,0 +1,45 @@
+SDK .NET :
+ Version:           10.0.403
+ Commit:            5a2162bea6
+ Workload version:  10.0.400-manifests.a00bebb6
+ MSBuild version:   18.9.15+5a2162bea
+
+Environnement d'exécution :
+ OS Name:     Windows
+ OS Version:  10.0.26200
+ OS Platform: Windows
+ RID:         win-x64
+ Base Path:   C:\FAT_Studio\.tools\dotnet\sdk\10.0.403\
+
+Charges de travail .NET installées :
+Il n'y a aucune charge de travail installée à afficher.
+Configuré pour utiliser desworkload sets lors de l’installation de nouveaux manifestes.
+Aucun ensemble de charges de travail n’est installé. Exécutez « dotnet workload restore » pour installer un ensemble de charge de travail.
+
+Host:
+  Version:      10.0.14
+  Architecture: x64
+  Commit:       0427b9abbe
+
+.NET SDKs installed:
+  10.0.403 [C:\FAT_Studio\.tools\dotnet\sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 10.0.14 [C:\FAT_Studio\.tools\dotnet\shared\Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 10.0.14 [C:\FAT_Studio\.tools\dotnet\shared\Microsoft.NETCore.App]
+  Microsoft.WindowsDesktop.App 10.0.14 [C:\FAT_Studio\.tools\dotnet\shared\Microsoft.WindowsDesktop.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  DOTNET_ROOT                              [C:\FAT_Studio\.tools\dotnet]
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download

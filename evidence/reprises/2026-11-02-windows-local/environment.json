@@ -1,0 +1,20 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "python_bits": 64,
+  "git": "git version 2.54.0.windows.1",
+  "base_commit": "00ab08c9701e1860ce57bec1d2b37bdc659da0bd",
+  "node_tested": [
+    "24.22.1 (Codex runtime initial)",
+    "22.23.4 (standalone local final)"
+  ],
+  "npm_final": "10.9.9",
+  "dotnet_sdk": "10.0.403",
+  "dependency_resolution": {
+    "all_pinned": true,
+    "resolved_packages": 54
+  },
+  "siemens_installed": false,
+  "authorized_plc_targets": 0,
+  "scope": "No TIA/PLCSIM/Siemens qualification"
+}
