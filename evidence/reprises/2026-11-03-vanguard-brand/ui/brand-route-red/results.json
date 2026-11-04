@@ -1,0 +1,193 @@
+{
+  "config": {
+    "configFile": "C:\\FAT_Studio\\frontend\\playwright.config.ts",
+    "rootDir": "C:/FAT_Studio/frontend/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/FAT_Studio/frontend/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/FAT_Studio/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/serve.mjs",
+      "url": "http://127.0.0.1:8766/api/health",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "brand.spec.ts",
+      "file": "brand.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "identité Vanguard locale et écrans du banc conservés",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3224,
+                  "error": {
+                    "message": "Error: locator.evaluate: EncodingError: The source image cannot be decoded.",
+                    "stack": "Error: locator.evaluate: EncodingError: The source image cannot be decoded.\n    at C:\\FAT_Studio\\frontend\\tests\\brand.spec.ts:21:55",
+                    "location": {
+                      "file": "C:\\FAT_Studio\\frontend\\tests\\brand.spec.ts",
+                      "column": 55,
+                      "line": 21
+                    },
+                    "snippet": "  19 |   await expect(page).toHaveTitle('Vanguard FAT Studio — Banc de simulation local');\n  20 |   await expect(page.getByLabel('Vanguard FAT Studio', { exact: true })).toBeVisible();\n> 21 |   const brand = await page.locator('.brand-wordmark').evaluate(async element => {\n     |                                                       ^\n  22 |     const logo = element as HTMLImageElement;\n  23 |     await logo.decode();\n  24 |     await document.fonts.ready;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\FAT_Studio\\frontend\\tests\\brand.spec.ts",
+                        "column": 55,
+                        "line": 21
+                      },
+                      "message": "Error: locator.evaluate: EncodingError: The source image cannot be decoded.\n\n  19 |   await expect(page).toHaveTitle('Vanguard FAT Studio — Banc de simulation local');\n  20 |   await expect(page.getByLabel('Vanguard FAT Studio', { exact: true })).toBeVisible();\n> 21 |   const brand = await page.locator('.brand-wordmark').evaluate(async element => {\n     |                                                       ^\n  22 |     const logo = element as HTMLImageElement;\n  23 |     await logo.decode();\n  24 |     await document.fonts.ready;\n    at C:\\FAT_Studio\\frontend\\tests\\brand.spec.ts:21:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T21:14:58.936Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\brand-identité-Vanguard-locale-et-écrans-du-banc-conservés\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\brand-identité-Vanguard-locale-et-écrans-du-banc-conservés\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\brand-identité-Vanguard-locale-et-écrans-du-banc-conservés\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\FAT_Studio\\frontend\\tests\\brand.spec.ts",
+                    "column": 55,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "7f66a5e57d790915269d-79cf5436cbf99351ed32",
+          "file": "brand.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "écran de démarrage Vanguard et erreur de service identifiés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 724,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T21:15:04.255Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "7f66a5e57d790915269d-2605b7cad7c884b72b3a",
+          "file": "brand.spec.ts",
+          "line": 82,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-03T21:14:53.855Z",
+    "duration": 11796.658,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

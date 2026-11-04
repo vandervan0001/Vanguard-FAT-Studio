@@ -1,5 +1,7 @@
 # Internal implementation contract — FAT Studio 0.1.1
 
+This document records the 0.1.1 contract. Later project fields, guided FAT execution, analog stimuli, pulse controls and the local assistant CLI are described in [AI_CONTROL.md](AI_CONTROL.md). Query `/api/health`, `/api/openapi.json`, `/api/schema` and `/api/catalog` on the running instance before building a client. Historical contracts and test results do not establish the current Siemens qualification status; see [ETAT_REPRISE.md](codex/ETAT_REPRISE.md).
+
 Package `fat_studio`, Python 3.12+, FastAPI. UI React/TypeScript/Vite + React Flow. All routes same-origin under `/api`; server serves bundled UI. Target Windows, portable demo Linux/macOS. Model is deterministic, no controller when OPC UA is selected.
 
 ## Project JSON

@@ -23,7 +23,7 @@ h2 { margin-bottom: 9px; font-size: 23px; letter-spacing: -.6px; font-weight: 65
 h3 { font-size: 15px; font-weight: 650; margin-bottom: 14px; }
 h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .9px; color: #71818e; margin: 26px 0 14px; }
 p { line-height: 1.65; }
-code,.mono,pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+code,.mono,pre { font-family: "Geist Mono", monospace; }
 code { font-size: 11px; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .small-muted { color: var(--muted); font-size: 11px; line-height: 1.6; }
@@ -63,7 +63,7 @@ pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 .mode-badge strong { color: #9db4c6; font-weight: 500; }
 .mode-divider { height: 11px; width: 1px; background: #485d6b; margin: 0 3px; }
 .run-controls { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-.run-clock { color: #a3b7c6; display: flex; gap: 8px; align-items: center; margin-right: 13px; font-family: "Cascadia Code", Consolas, monospace; font-size: 17px; }
+.run-clock { color: #a3b7c6; display: flex; gap: 8px; align-items: center; margin-right: 13px; font-family: "Geist Mono", monospace; font-size: 17px; }
 .run-clock svg { color: #718da1; }
 .run-button { height: 35px; min-width: 35px; padding: 0 9px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #223747; border: 1px solid #3c5363; border-radius: 5px; color: #bcd1df; font-size: 12px; font-weight: 600; }
 .run-button:hover:not(:disabled) { background: #314b5f; }
@@ -188,7 +188,7 @@ kbd { font: inherit; font-size: 8px; border: 1px solid #e1e7ec; background: #f7f
 .binding-field label em { color: #bf7851; font-style: normal; }
 .binding-field .missing { border-color: #e7bc96; background: #fffcf7; }
 .binding-value { display: flex; align-items: center; justify-content: space-between; font-size: 9px; margin-top: 5px; color: #95a6b1; }
-.binding-value strong { font-weight: 500; color: #568a7c; font-family: "Cascadia Code", Consolas, monospace; }
+.binding-value strong { font-weight: 500; color: #568a7c; font-family: "Geist Mono", monospace; }
 .force-field { display: flex; align-items: center; margin-top: 8px; gap: 3px; }
 .force-field input,.force-field select { padding: 5px 6px; font-size: 10px; min-width: 35px; }
 .force-field button { background: #f1f5f7; border: 1px solid #dce5ea; border-radius: 4px; color: #6f8795; font-size: 9px; padding: 6px; display: flex; align-items: center; justify-content: center; }
@@ -276,7 +276,7 @@ tr:last-child td { border-bottom: 0; }
 .timeline-step { display: flex; position: relative; gap: 15px; padding-bottom: 19px; font-size: 11px; }
 .timeline-step:after { content: ''; position: absolute; left: 67px; top: 14px; bottom: 0; width: 1px; background: #dce8ed; }
 .timeline-step:last-child:after { display: none; }
-.timeline-time { width: 49px; text-align: right; padding-top: 1px; color: #9badb8; font-size: 10px; font-family: Consolas, monospace; flex-shrink: 0; }
+.timeline-time { width: 49px; text-align: right; padding-top: 1px; color: #9badb8; font-size: 10px; font-family: "Geist Mono", monospace; flex-shrink: 0; }
 .timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; border: 2px solid #adbfca; margin-top: 3px; flex-shrink: 0; }
 .timeline-step.done .timeline-dot { background: #25a084; border-color: #25a084; }
 .timeline-step.done strong { color: #41907a; }
@@ -285,7 +285,7 @@ tr:last-child td { border-bottom: 0; }
 .editor-title { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 9px; }
 .editor-title h3 { font-size: 12px; margin-bottom: 0; }
 .editor-title .type-label { margin-left: 7px; }
-.code-editor { background: #f6f9fb; color: #54758b; border-color: #e1eaf0; padding: 15px; font-family: "Cascadia Code", Consolas, monospace; font-size: 11px; line-height: 1.7; tab-size: 2; }
+.code-editor { background: #f6f9fb; color: #54758b; border-color: #e1eaf0; padding: 15px; font-family: "Geist Mono", monospace; font-size: 11px; line-height: 1.7; tab-size: 2; }
 .scenario-editor-actions { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-top: 12px; }
 .scenario-editor-actions .unsaved-text { font-size: 10px; }
 .help-details { border: 1px solid #dce6eb; border-radius: 5px; background: #fff; padding: 15px 18px; margin-top: 21px; font-size: 11px; line-height: 1.7; color: #7b929f; }
@@ -320,7 +320,7 @@ tr:last-child td { border-bottom: 0; }
 .marker-form input { border: 0; background: transparent; font-size: 11px; padding: 7px 0; }
 .event-list { max-height: 355px; overflow-y: auto; }
 .event-row { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid #eef2f5; }
-.event-time { min-width: 48px; flex-shrink: 0; font-size: 10px; color: #8fa3af; font-family: Consolas, monospace; }
+.event-time { min-width: 48px; flex-shrink: 0; font-size: 10px; color: #8fa3af; font-family: "Geist Mono", monospace; }
 .event-time small { display: block; font-size: 8px; margin-top: 5px; color: #b4c0c8; }
 .event-kind { min-width: 62px; width: 62px; flex-shrink: 0; background: #f0f4f6; border-radius: 3px; color: #8da0ad; padding: 3px; font-size: 8px; text-align: center; overflow-wrap: anywhere; }
 .event-row p { font-size: 10px; color: #748e9c; line-height: 1.6; margin: 0; overflow-wrap: anywhere; }

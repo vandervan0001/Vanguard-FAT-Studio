@@ -1,0 +1,649 @@
+{
+  "project_id": "fat-public-demo-plcsim-v21-20261103",
+  "project_revision": "a1fef53a79744b465f930707a4b3f04c9e6fa179d09784ac865386d2c8cc68f3",
+  "status": "running",
+  "sim_time_s": 0.0,
+  "wall_time": "2026-11-03T19:51:05.165+00:00",
+  "run_id": "run-c2aeca955ee84cf8b3c4529096c7d39e",
+  "connection": {
+    "mode": "opcua",
+    "connected": true,
+    "target": "FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840",
+    "quality": "connected",
+    "last_update": null,
+    "error": null
+  },
+  "tags": {
+    "stop_healthy": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_requested_speed": {
+      "value": 60.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_speed_command": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_running": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_speed": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p101_fault": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_requested_speed": {
+      "value": 60.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_speed_command": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_running": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_speed": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p201_fault": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_requested_speed": {
+      "value": 60.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_speed_command": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_running": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_speed": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p202_fault": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_requested_speed": {
+      "value": 60.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_speed_command": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_running": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_speed": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "p301_fault": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv101_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv101_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv101_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv101_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv201_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv201_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv201_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv201_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv202_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv202_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv202_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv202_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv301_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv301_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv301_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv301_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv102_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv102_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv102_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv102_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv203_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv203_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv203_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv203_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "xv103_request": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv103_command": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv103_open": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "xv103_closed": {
+      "value": true,
+      "quality": "good",
+      "forced": false
+    },
+    "fcv302_request": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "fcv302_command": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "fcv302_position": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "lt101_raw": {
+      "value": 16589,
+      "quality": "good",
+      "forced": false
+    },
+    "lt101_percent": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "tk101_volume": {
+      "value": 720.0,
+      "quality": "good",
+      "forced": false
+    },
+    "lsl101": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "lsh101": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "lt201_raw": {
+      "value": 6912,
+      "quality": "good",
+      "forced": false
+    },
+    "lt201_percent": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "tk201_volume": {
+      "value": 450.0,
+      "quality": "good",
+      "forced": false
+    },
+    "lsl201": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "lsh201": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "lt301_raw": {
+      "value": 4147,
+      "quality": "good",
+      "forced": false
+    },
+    "lt301_percent": {
+      "value": 0.0,
+      "quality": "good",
+      "forced": false
+    },
+    "tk301_volume": {
+      "value": 180.0,
+      "quality": "good",
+      "forced": false
+    },
+    "lsl301": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    },
+    "lsh301": {
+      "value": false,
+      "quality": "good",
+      "forced": false
+    }
+  },
+  "equipment": {
+    "TK101": {
+      "volume_l": 720.0,
+      "volume": 720.0,
+      "level": 60.0,
+      "level_percent": 60.0,
+      "capacity_l": 1200.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT101": {
+      "value": 16589,
+      "quality": "good"
+    },
+    "LSL101": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH101": {
+      "value": false,
+      "quality": "good"
+    },
+    "TK201": {
+      "volume_l": 450.0,
+      "volume": 450.0,
+      "level": 25.0,
+      "level_percent": 25.0,
+      "capacity_l": 1800.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT201": {
+      "value": 6912,
+      "quality": "good"
+    },
+    "LSL201": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH201": {
+      "value": false,
+      "quality": "good"
+    },
+    "TK301": {
+      "volume_l": 180.0,
+      "volume": 180.0,
+      "level": 15.0,
+      "level_percent": 15.0,
+      "capacity_l": 1200.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT301": {
+      "value": 4147,
+      "quality": "good"
+    },
+    "LSL301": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH301": {
+      "value": false,
+      "quality": "good"
+    },
+    "P101": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P201": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P202": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P301": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "XV101": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV201": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV202": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV301": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV102": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV203": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV103": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "FCV302": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "IO_stop_healthy": {
+      "value": true,
+      "quality": "good"
+    },
+    "IO_p101_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p201_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p202_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p301_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv101_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv201_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv202_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv301_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv102_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv203_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv103_request": {
+      "value": false,
+      "quality": "good"
+    }
+  },
+  "faults": {},
+  "events": [
+    {
+      "id": 31,
+      "timestamp": "2026-11-03T19:51:04.840+00:00",
+      "sim_time_s": 0.0,
+      "kind": "start_requested",
+      "message": "Démarrage demandé.",
+      "details": {
+        "mode": "opcua",
+        "target": "FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840",
+        "step_ms": 100,
+        "speed": 1.0
+      }
+    },
+    {
+      "id": 32,
+      "timestamp": "2026-11-03T19:51:05.162+00:00",
+      "sim_time_s": 0.0,
+      "kind": "started",
+      "message": "Essai démarré. Mapping validé avant toute écriture.",
+      "details": {}
+    },
+    {
+      "id": 33,
+      "timestamp": "2026-11-03T19:51:05.164+00:00",
+      "sim_time_s": 0.0,
+      "kind": "model_boundary",
+      "message": "Le PLC garde seul le contrôle. Pause/reset du banc ne change pas l'état de la CPU.",
+      "details": {}
+    }
+  ],
+  "series": [],
+  "result": {
+    "verdict": "not_evaluated",
+    "comment": ""
+  },
+  "scenario": {
+    "id": "demo-transfer-2",
+    "state": "running",
+    "completed_steps": 0,
+    "completed_step_indices": [],
+    "total_steps": 10,
+    "assertions": []
+  },
+  "guided_steps": [],
+  "pulses": {},
+  "error": null,
+  "write_count": 0,
+  "lag_ms": 0.0,
+  "model_warnings": [
+    "La topologie et l'identité doivent être qualifiées sur le poste Siemens ; l'ApplicationUri ne prouve pas à elle seule qu'une CPU est virtuelle.",
+    "Les lignes sont graphiques. Les débits utilisent cuve, sens et circuit explicitement configurés, sans solveur hydraulique général."
+  ]
+}

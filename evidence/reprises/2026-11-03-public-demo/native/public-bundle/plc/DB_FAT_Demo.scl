@@ -1,0 +1,84 @@
+// SPDX-License-Identifier: MIT. Public passive laboratory example.
+DATA_BLOCK "DB_FAT_Demo"
+{ S7_Optimized_Access := 'FALSE' }
+VERSION : 1.0
+VAR
+    EnableDemo { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False' } : Bool := FALSE; // isolated virtual copy only
+    StopHealthy { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    P101_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P101_RequestedSpeed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#60.0;
+    P101_RunCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    P101_SpeedCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    P101_Running { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P101_SpeedFeedback { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    P101_Fault { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P201_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P201_RequestedSpeed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#60.0;
+    P201_RunCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    P201_SpeedCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    P201_Running { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P201_SpeedFeedback { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    P201_Fault { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P202_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P202_RequestedSpeed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#60.0;
+    P202_RunCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    P202_SpeedCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    P202_Running { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P202_SpeedFeedback { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    P202_Fault { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P301_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P301_RequestedSpeed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#60.0;
+    P301_RunCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    P301_SpeedCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    P301_Running { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    P301_SpeedFeedback { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    P301_Fault { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV101_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV101_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV101_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV101_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV201_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV201_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV201_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV201_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV202_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV202_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV202_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV202_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV301_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV301_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV301_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV301_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV102_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV102_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV102_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV102_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV203_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV203_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV203_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV203_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    XV103_Request { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV103_OpenCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Bool := FALSE;
+    XV103_Open { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    XV103_Closed { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := TRUE;
+    FCV302_RequestedPosition { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    FCV302_PositionCommand { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    FCV302_PositionFeedback { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#0.0;
+    LT101_Raw { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Int := INT#16589;
+    LT101_Percent { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    TK101_Volume { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#720.0;
+    LSL101 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    LSH101 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    LT201_Raw { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Int := INT#6912;
+    LT201_Percent { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    TK201_Volume { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#450.0;
+    LSL201 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    LSH201 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    LT301_Raw { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Int := INT#4147;
+    LT301_Percent { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'False' } : Real := REAL#0.0;
+    TK301_Volume { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Real := REAL#180.0;
+    LSL301 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+    LSH301 { ExternalAccessible := 'True'; ExternalVisible := 'True'; ExternalWritable := 'True' } : Bool := FALSE;
+END_VAR
+BEGIN
+END_DATA_BLOCK

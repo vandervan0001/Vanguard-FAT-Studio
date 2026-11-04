@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "prototype": true,
+  "application": "Vanguard FAT Studio",
+  "version": "0.2.1",
+  "wheel": {
+    "name": "vanguard_fat_studio-0.2.1-py3-none-any.whl",
+    "entries": 54,
+    "bytes": 569494,
+    "sha256": "65cdbdf2cf424ff1e6fd34288b3999051a9ed0f2d64f825a14d4690bb080ab7a"
+  },
+  "source_files": 477,
+  "locked_wheels": 29,
+  "source_cli_aliases": [
+    "vanguard-fat-studio",
+    "fat-studio"
+  ],
+  "source_service_checks": 5,
+  "portable_launchers": [
+    "Vanguard-FAT-Studio.cmd",
+    "Start-FAT.cmd"
+  ],
+  "portable_service_checks": 5,
+  "isolated_python": "3.12.10",
+  "isolated_mode": 1,
+  "final_integrity_files": 3123,
+  "scope": "Fresh temporary copies, demo loopback only, no Siemens/CPU or human FAT verdict",
+  "harness_corrections": [
+    "CRLF metadata read as split lines",
+    "product title accepts descriptive suffix",
+    "successful integrity text retained as text, not JSON"
+  ],
+  "temporary_copies_removed": true
+}

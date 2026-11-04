@@ -1,0 +1,16 @@
+{
+  "kit": "C:/FAT_Studio-Offline-Validation-2026-11-02",
+  "wheels": 43,
+  "pip_no_index": true,
+  "pip_cache_disabled": true,
+  "configured_index": "http://127.0.0.1:9",
+  "python_packages": {
+    "local-fat-studio": "0.2.1",
+    "mcp": "2.3.0",
+    "mcp-types": "2.3.0",
+    "pywin32": "312"
+  },
+  "pip_check": "passed",
+  "manifest_check": "passed",
+  "siemens_profile_installed": false
+}

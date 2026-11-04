@@ -1,0 +1,16 @@
+{
+  "utc": "2026-11-03T20:24:24.391084+00:00",
+  "fixed": true,
+  "synthetic_samples": 6000,
+  "tags": 75,
+  "archive_bytes": 1512131,
+  "archive_elapsed_seconds": 8.937,
+  "health_elapsed_seconds": 0.015,
+  "stop_elapsed_seconds": 0.015,
+  "health_and_stop_both_completed_while_archive_running": true,
+  "archive_validated": true,
+  "original_samples_preserved": true,
+  "artificial_delay_in_export": false,
+  "pinned_readonly_snapshot_and_background_worker": true,
+  "live_service_or_cpu_contacted": false
+}

@@ -1,6 +1,6 @@
 # Choisir TIA Portal V20 ou V21
 
-FAT Studio 0.2.0 permet de choisir **V20** ou **V21** dans **Connexion → Version du projet TIA**. Le choix est enregistré, exporté et réimporté avec le projet FAT. Les anciens projets sans ce champ utilisent V21. Le sélecteur est verrouillé pendant un essai. Il ne convertit pas un projet Siemens ; la copie ouverte dans TIA et la passerelle installée doivent correspondre à la version choisie.
+Vanguard FAT Studio 0.2.0 permet de choisir **V20** ou **V21** dans **Connexion → Version du projet TIA**. Le choix est enregistré, exporté et réimporté avec le projet FAT. Les anciens projets sans ce champ utilisent V21. Le sélecteur est verrouillé pendant un essai. Il ne convertit pas un projet Siemens ; la copie ouverte dans TIA et la passerelle installée doivent correspondre à la version choisie.
 
 Le moteur FAT échange toujours par OPC UA. Le choix de version concerne le projet d'ingénierie et sa passerelle Openness ; il ne découvre pas les NodeIds ou les droits d'une CPU.
 

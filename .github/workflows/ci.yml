@@ -1,4 +1,4 @@
-name: FAT Studio verification
+name: Vanguard FAT Studio verification
 
 on:
   push:
@@ -87,7 +87,7 @@ jobs:
       - uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: fat-studio-${{ matrix.os }}
+          name: vanguard-fat-studio-${{ matrix.os }}
           path: |
             dist/*.whl
             evidence/pytest-*.xml

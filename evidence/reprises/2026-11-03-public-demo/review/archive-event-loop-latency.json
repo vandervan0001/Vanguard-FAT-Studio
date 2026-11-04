@@ -1,0 +1,17 @@
+{
+  "name": "archive-event-loop-latency",
+  "utc": "2026-11-03T20:13:51.155368+00:00",
+  "reproduced": true,
+  "synthetic_history_samples": 6000,
+  "tags": 75,
+  "simulated_history_seconds": 600,
+  "archive_bytes": 1511338,
+  "export_elapsed_seconds": 8.468,
+  "concurrent_health_elapsed_seconds": 8.453,
+  "health_submitted_after_export_started": true,
+  "artificial_delay_in_export": false,
+  "expected": "Health/state and explicit stop should remain schedulable during large archive generation",
+  "history_preserved": true,
+  "product_source_changed": false,
+  "live_service_or_cpu_contacted": false
+}

@@ -1,0 +1,16 @@
+{
+  "utc": "2026-11-03T20:16:10.100414+00:00",
+  "reproduced": true,
+  "operation": "Public LocalClient.mutate opening the already active default workspace after stop",
+  "workspace_open_succeeded": true,
+  "project_returned": "public-io-lab",
+  "before_run_id": "run-fa7185b9c70f428eb44ed9952a7b4d90",
+  "client_run_id_after": null,
+  "actual_run_id_after": "run-fa7185b9c70f428eb44ed9952a7b4d90",
+  "next_start_error": "Contexte périmé : projet, révision, essai ou URL a changé. Relire l'état puis capturer context explicitement.",
+  "next_start_sent_to_server": false,
+  "expected": "A successful workspace-open must retain an accurate client baseline for its no-op branch",
+  "transport": "FastAPI TestClient in process; no HTTP socket",
+  "product_source_changed": false,
+  "live_service_or_cpu_contacted": false
+}

@@ -14,7 +14,7 @@ if [[ ! -x "$fat_python" ]]; then
   "$fat_system_python" -m venv .venv
 fi
 "$fat_python" "$fat_root/scripts/check-kit.py" --root "$fat_root"
-if [[ ! -x "$fat_root/.venv/bin/fat-studio" ]]; then
+if [[ ! -x "$fat_root/.venv/bin/vanguard-fat-studio" ]]; then
   fat_pip_options=(--disable-pip-version-check)
   if [[ -d "$fat_root/wheelhouse" ]]; then
     fat_pip_options+=(--no-index --find-links "$fat_root/wheelhouse")

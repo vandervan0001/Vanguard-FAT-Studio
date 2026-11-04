@@ -1,0 +1,11 @@
+{
+  "archive": "C:\\FAT_Studio-Delivery-2026-11-02\\FAT-Studio-Windows-2026-11-02.zip",
+  "sha256": "7fe117bd80029f134d796b3957db41b19f13e1828b1efb000bd8bb8cfae90f82",
+  "archive_head": "ef8f96cf4a5ec248f4196411b8c4309791828fae",
+  "members": 245,
+  "extracted_to": "C:\\FAT_Studio\\.local\\archive-acceptance-2251",
+  "temp": "C:\\Users\\taivb\\AppData\\Local\\Temp",
+  "manifest_validation": "passed before and after installation; 43 wheels",
+  "installation": "passed",
+  "scope": "Exact delivered ZIP, local runtime/MCP only; no Siemens"
+}

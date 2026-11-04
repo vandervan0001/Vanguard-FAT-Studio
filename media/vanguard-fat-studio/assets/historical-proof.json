@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-03",
+  "tia_version": "V21",
+  "plcsim_advanced_version": "8",
+  "target": "isolated virtual CPU",
+  "timed_scenarios": 8,
+  "expectations_passed": 31,
+  "human_acceptance": false,
+  "film_capture_connection": "demo only, disconnected",
+  "source_receipt": "evidence/reprises/2026-11-03-public-demo/final-live/verification.json",
+  "source_receipt_sha256": "8482f5765e0f33006054718f5bfadae1290fbb1c56db11228bb86441053ff90b"
+}

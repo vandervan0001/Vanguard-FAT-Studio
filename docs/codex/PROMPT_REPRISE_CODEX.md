@@ -1,6 +1,6 @@
 # Prompt court — continuer après interruption
 
-Reprends **FAT Studio** depuis le dossier de travail actuel. C'est la continuation du projet et de sa validation, pas un nouveau développement.
+Reprends **Vanguard FAT Studio** depuis le dossier de travail actuel. C'est la continuation du projet et de sa validation, pas un nouveau développement.
 
 1. Lis `AGENTS.md`, `README-CODEX.md`, `docs/codex/ETAT_REPRISE.md`, puis les notes les plus récentes dans `docs/codex/sessions/`.
 2. Vérifie l'OS, le répertoire courant, `git status`, le diff et les derniers commits. Les fichiers et commandes réellement exécutés priment sur un ancien résumé. Préserve mes changements, les essais et les données ; ne fais pas de reset ou de nettoyage destructif.

@@ -1,0 +1,12 @@
+{
+  "name": "stream-across-workspace-close",
+  "utc": "2026-11-03T20:13:38.525790+00:00",
+  "passed": true,
+  "response_status": 200,
+  "streamed_samples": 3,
+  "old_workspace_closed_while_stream_waited": true,
+  "independent_read_only_sqlite_connection": true,
+  "history_preserved": true,
+  "synchronization_injected_in_test_only": true,
+  "live_service_or_cpu_contacted": false
+}

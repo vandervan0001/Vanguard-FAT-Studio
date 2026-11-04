@@ -1,0 +1,1433 @@
+{
+  "db_name": "DB_FAT_Demo",
+  "db_number": 1,
+  "memory_layout": "Standard",
+  "native_offset_unit": "bit",
+  "source_xml_sha256": "04a88a3c7b8d8a60f400e6494dfef5853b6460f8d5aee8bcf1b958b7d8a36987",
+  "tags": [
+    {
+      "tag_id": "stop_healthy",
+      "field": "StopHealthy",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 1,
+      "plc_address": "%DB1.DBX0.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"StopHealthy\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"StopHealthy\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "p101_request",
+      "field": "P101_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 2,
+      "plc_address": "%DB1.DBX0.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p101_requested_speed",
+      "field": "P101_RequestedSpeed",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 16,
+      "plc_address": "%DB1.DBD2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_RequestedSpeed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_RequestedSpeed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 60.0
+    },
+    {
+      "tag_id": "p101_command",
+      "field": "P101_RunCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 48,
+      "plc_address": "%DB1.DBX6.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_RunCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_RunCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p101_speed_command",
+      "field": "P101_SpeedCommand",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 64,
+      "plc_address": "%DB1.DBD8",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_SpeedCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_SpeedCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p101_running",
+      "field": "P101_Running",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 96,
+      "plc_address": "%DB1.DBX12.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Running\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Running\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p101_speed",
+      "field": "P101_SpeedFeedback",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 112,
+      "plc_address": "%DB1.DBD14",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_SpeedFeedback\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_SpeedFeedback\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p101_fault",
+      "field": "P101_Fault",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 144,
+      "plc_address": "%DB1.DBX18.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Fault\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Fault\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p201_request",
+      "field": "P201_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 145,
+      "plc_address": "%DB1.DBX18.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p201_requested_speed",
+      "field": "P201_RequestedSpeed",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 160,
+      "plc_address": "%DB1.DBD20",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_RequestedSpeed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_RequestedSpeed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 60.0
+    },
+    {
+      "tag_id": "p201_command",
+      "field": "P201_RunCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 192,
+      "plc_address": "%DB1.DBX24.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_RunCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_RunCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p201_speed_command",
+      "field": "P201_SpeedCommand",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 208,
+      "plc_address": "%DB1.DBD26",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_SpeedCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_SpeedCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p201_running",
+      "field": "P201_Running",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 240,
+      "plc_address": "%DB1.DBX30.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Running\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Running\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p201_speed",
+      "field": "P201_SpeedFeedback",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 256,
+      "plc_address": "%DB1.DBD32",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_SpeedFeedback\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_SpeedFeedback\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p201_fault",
+      "field": "P201_Fault",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 288,
+      "plc_address": "%DB1.DBX36.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Fault\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Fault\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p202_request",
+      "field": "P202_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 289,
+      "plc_address": "%DB1.DBX36.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p202_requested_speed",
+      "field": "P202_RequestedSpeed",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 304,
+      "plc_address": "%DB1.DBD38",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_RequestedSpeed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_RequestedSpeed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 60.0
+    },
+    {
+      "tag_id": "p202_command",
+      "field": "P202_RunCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 336,
+      "plc_address": "%DB1.DBX42.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_RunCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_RunCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p202_speed_command",
+      "field": "P202_SpeedCommand",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 352,
+      "plc_address": "%DB1.DBD44",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_SpeedCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_SpeedCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p202_running",
+      "field": "P202_Running",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 384,
+      "plc_address": "%DB1.DBX48.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Running\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Running\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p202_speed",
+      "field": "P202_SpeedFeedback",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 400,
+      "plc_address": "%DB1.DBD50",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_SpeedFeedback\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_SpeedFeedback\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p202_fault",
+      "field": "P202_Fault",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 432,
+      "plc_address": "%DB1.DBX54.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Fault\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Fault\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p301_request",
+      "field": "P301_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 433,
+      "plc_address": "%DB1.DBX54.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p301_requested_speed",
+      "field": "P301_RequestedSpeed",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 448,
+      "plc_address": "%DB1.DBD56",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_RequestedSpeed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_RequestedSpeed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 60.0
+    },
+    {
+      "tag_id": "p301_command",
+      "field": "P301_RunCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 480,
+      "plc_address": "%DB1.DBX60.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_RunCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_RunCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p301_speed_command",
+      "field": "P301_SpeedCommand",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 496,
+      "plc_address": "%DB1.DBD62",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_SpeedCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_SpeedCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p301_running",
+      "field": "P301_Running",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 528,
+      "plc_address": "%DB1.DBX66.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Running\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Running\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "p301_speed",
+      "field": "P301_SpeedFeedback",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 544,
+      "plc_address": "%DB1.DBD68",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_SpeedFeedback\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_SpeedFeedback\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "p301_fault",
+      "field": "P301_Fault",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 576,
+      "plc_address": "%DB1.DBX72.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Fault\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Fault\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv101_request",
+      "field": "XV101_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 577,
+      "plc_address": "%DB1.DBX72.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv101_command",
+      "field": "XV101_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 578,
+      "plc_address": "%DB1.DBX72.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv101_open",
+      "field": "XV101_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 579,
+      "plc_address": "%DB1.DBX72.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv101_closed",
+      "field": "XV101_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 580,
+      "plc_address": "%DB1.DBX72.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv201_request",
+      "field": "XV201_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 581,
+      "plc_address": "%DB1.DBX72.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv201_command",
+      "field": "XV201_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 582,
+      "plc_address": "%DB1.DBX72.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv201_open",
+      "field": "XV201_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 583,
+      "plc_address": "%DB1.DBX72.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv201_closed",
+      "field": "XV201_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 584,
+      "plc_address": "%DB1.DBX73.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv202_request",
+      "field": "XV202_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 585,
+      "plc_address": "%DB1.DBX73.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv202_command",
+      "field": "XV202_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 586,
+      "plc_address": "%DB1.DBX73.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv202_open",
+      "field": "XV202_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 587,
+      "plc_address": "%DB1.DBX73.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv202_closed",
+      "field": "XV202_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 588,
+      "plc_address": "%DB1.DBX73.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv301_request",
+      "field": "XV301_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 589,
+      "plc_address": "%DB1.DBX73.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv301_command",
+      "field": "XV301_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 590,
+      "plc_address": "%DB1.DBX73.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv301_open",
+      "field": "XV301_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 591,
+      "plc_address": "%DB1.DBX73.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv301_closed",
+      "field": "XV301_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 592,
+      "plc_address": "%DB1.DBX74.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv102_request",
+      "field": "XV102_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 593,
+      "plc_address": "%DB1.DBX74.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv102_command",
+      "field": "XV102_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 594,
+      "plc_address": "%DB1.DBX74.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv102_open",
+      "field": "XV102_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 595,
+      "plc_address": "%DB1.DBX74.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv102_closed",
+      "field": "XV102_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 596,
+      "plc_address": "%DB1.DBX74.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv203_request",
+      "field": "XV203_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 597,
+      "plc_address": "%DB1.DBX74.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv203_command",
+      "field": "XV203_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 598,
+      "plc_address": "%DB1.DBX74.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv203_open",
+      "field": "XV203_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 599,
+      "plc_address": "%DB1.DBX74.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv203_closed",
+      "field": "XV203_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 600,
+      "plc_address": "%DB1.DBX75.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "xv103_request",
+      "field": "XV103_Request",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 601,
+      "plc_address": "%DB1.DBX75.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Request\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Request\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv103_command",
+      "field": "XV103_OpenCommand",
+      "data_type": "BOOL",
+      "direction": "output",
+      "native_offset_bits": 602,
+      "plc_address": "%DB1.DBX75.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_OpenCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_OpenCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv103_open",
+      "field": "XV103_Open",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 603,
+      "plc_address": "%DB1.DBX75.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Open\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Open\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "xv103_closed",
+      "field": "XV103_Closed",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 604,
+      "plc_address": "%DB1.DBX75.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Closed\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Closed\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": true
+    },
+    {
+      "tag_id": "fcv302_request",
+      "field": "FCV302_RequestedPosition",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 608,
+      "plc_address": "%DB1.DBD76",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_RequestedPosition\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_RequestedPosition\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "fcv302_command",
+      "field": "FCV302_PositionCommand",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 640,
+      "plc_address": "%DB1.DBD80",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_PositionCommand\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_PositionCommand\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "fcv302_position",
+      "field": "FCV302_PositionFeedback",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 672,
+      "plc_address": "%DB1.DBD84",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_PositionFeedback\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_PositionFeedback\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 0.0
+    },
+    {
+      "tag_id": "lt101_raw",
+      "field": "LT101_Raw",
+      "data_type": "INT",
+      "direction": "input",
+      "native_offset_bits": 704,
+      "plc_address": "%DB1.DBW88",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT101_Raw\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT101_Raw\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Int16",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 16589
+    },
+    {
+      "tag_id": "lt101_percent",
+      "field": "LT101_Percent",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 720,
+      "plc_address": "%DB1.DBD90",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT101_Percent\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT101_Percent\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 60.00072479248047
+    },
+    {
+      "tag_id": "tk101_volume",
+      "field": "TK101_Volume",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 752,
+      "plc_address": "%DB1.DBD94",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK101_Volume\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK101_Volume\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 720.0
+    },
+    {
+      "tag_id": "lsl101",
+      "field": "LSL101",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 784,
+      "plc_address": "%DB1.DBX98.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL101\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL101\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "lsh101",
+      "field": "LSH101",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 785,
+      "plc_address": "%DB1.DBX98.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH101\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH101\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "lt201_raw",
+      "field": "LT201_Raw",
+      "data_type": "INT",
+      "direction": "input",
+      "native_offset_bits": 800,
+      "plc_address": "%DB1.DBW100",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT201_Raw\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT201_Raw\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Int16",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 6912
+    },
+    {
+      "tag_id": "lt201_percent",
+      "field": "LT201_Percent",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 816,
+      "plc_address": "%DB1.DBD102",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT201_Percent\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT201_Percent\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 25.0
+    },
+    {
+      "tag_id": "tk201_volume",
+      "field": "TK201_Volume",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 848,
+      "plc_address": "%DB1.DBD106",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK201_Volume\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK201_Volume\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 450.0
+    },
+    {
+      "tag_id": "lsl201",
+      "field": "LSL201",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 880,
+      "plc_address": "%DB1.DBX110.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL201\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL201\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "lsh201",
+      "field": "LSH201",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 881,
+      "plc_address": "%DB1.DBX110.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH201\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH201\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "lt301_raw",
+      "field": "LT301_Raw",
+      "data_type": "INT",
+      "direction": "input",
+      "native_offset_bits": 896,
+      "plc_address": "%DB1.DBW112",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT301_Raw\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT301_Raw\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Int16",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 4147
+    },
+    {
+      "tag_id": "lt301_percent",
+      "field": "LT301_Percent",
+      "data_type": "REAL",
+      "direction": "output",
+      "native_offset_bits": 912,
+      "plc_address": "%DB1.DBD114",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT301_Percent\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT301_Percent\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead"
+      ],
+      "quality": "Good",
+      "value": 14.999276161193848
+    },
+    {
+      "tag_id": "tk301_volume",
+      "field": "TK301_Volume",
+      "data_type": "REAL",
+      "direction": "input",
+      "native_offset_bits": 944,
+      "plc_address": "%DB1.DBD118",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK301_Volume\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK301_Volume\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Float",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": 180.0
+    },
+    {
+      "tag_id": "lsl301",
+      "field": "LSL301",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 976,
+      "plc_address": "%DB1.DBX122.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL301\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL301\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    },
+    {
+      "tag_id": "lsh301",
+      "field": "LSH301",
+      "data_type": "BOOL",
+      "direction": "input",
+      "native_offset_bits": 977,
+      "plc_address": "%DB1.DBX122.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH301\"",
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH301\"",
+      "namespace_index": 3,
+      "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+      "variant_type": "Boolean",
+      "user_access": [
+        "CurrentRead",
+        "CurrentWrite"
+      ],
+      "quality": "Good",
+      "value": false
+    }
+  ],
+  "utc": "2026-11-03T19:48:54.974841+00:00",
+  "target": "FAT-DEMO-20261103",
+  "endpoint": "opc.tcp://192.168.247.3:4840",
+  "security_mode": "SignAndEncrypt",
+  "application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+  "server_certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391",
+  "scope": "Read-only native exported offsets and actual encrypted OPC UA browse; zero writes",
+  "cpu": {
+    "name": "FAT-DEMO-20261103",
+    "id": 1,
+    "state": "Run",
+    "license": "OK",
+    "network": "TCPIPSingleAdapter",
+    "storage": "C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\cpu-storage",
+    "ip": [
+      "192.168.247.3"
+    ]
+  }
+}

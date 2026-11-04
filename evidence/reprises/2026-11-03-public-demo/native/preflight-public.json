@@ -1,0 +1,55 @@
+{
+  "utc": "2026-11-03T19:38:10.6297260Z",
+  "platform": "Microsoft Windows NT 10.0.26200.0",
+  "target": "FAT-DEMO-20261103",
+  "address": "192.168.247.3",
+  "routes": [
+    {
+      "DestinationPrefix": "192.168.247.0/24",
+      "InterfaceIndex": 12,
+      "NextHop": "0.0.0.0",
+      "RouteMetric": 256
+    }
+  ],
+  "bindings": [
+    {
+      "Name": "Wi-Fi 3",
+      "InterfaceDescription": "MediaTek Wi-Fi 7 MT7925 Wireless LAN Card",
+      "Enabled": false
+    },
+    {
+      "Name": "Wi-Fi",
+      "InterfaceDescription": "MediaTek Wi-Fi 7 MT7925 Wireless LAN Card",
+      "Enabled": false
+    },
+    {
+      "Name": "Wi-Fi 5",
+      "InterfaceDescription": "MediaTek Wi-Fi 7 MT7925 Wireless LAN Card",
+      "Enabled": false
+    },
+    {
+      "Name": "Ethernet",
+      "InterfaceDescription": "Realtek PCIe GbE Family Controller",
+      "Enabled": false
+    },
+    {
+      "Name": "Ethernet 2",
+      "InterfaceDescription": "VirtualBox Host-Only Ethernet Adapter",
+      "Enabled": false
+    },
+    {
+      "Name": "Ethernet 3",
+      "InterfaceDescription": "Siemens PLCSIM Virtual Ethernet Adapter",
+      "Enabled": true
+    }
+  ],
+  "previous_app_untouched": "http://127.0.0.1:8768",
+  "new_owner_port": 8771,
+  "old_helper_backup_sha256": "1b8769ca81a826e68a5a19404a63937829ad0ad3f6bd3c3b9e6d7d0ac16febb2",
+  "other_target_mutations": 0,
+  "public_redaction": {
+    "scope": "Prior fixture identifier only",
+    "original_preserved_privately": true,
+    "original_sha256": "ec24bd15dc3b27e4d4b80617650c64bdbfa13defe815c5990256a10f64834c83"
+  }
+}

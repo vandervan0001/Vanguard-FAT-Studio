@@ -11,6 +11,7 @@ from asyncua import Client, ua
 from asyncua.crypto.security_policies import SecurityPolicyBasic256Sha256
 from asyncua.crypto.validator import CertificateValidator, CertificateValidatorOptions
 
+from ..branding import APP_NAME
 from ..models import validate_tag_value
 from ..security import MachinePolicy, TargetDenied
 
@@ -80,7 +81,7 @@ class OpcUaAdapter:
         self.nodes.clear()
         client = IdentityClient(self.config.endpoint, timeout=self.config.timeout_s, identity_check=self._check_identity)
         client.application_uri = "urn:fat-studio:client"
-        client.name = "FAT Studio local virtual-PLC test client"
+        client.name = f"{APP_NAME} local virtual-PLC test client"
         self.client = client
         try:
             async with asyncio.timeout(self.config.timeout_s * 5):
@@ -104,7 +105,7 @@ class OpcUaAdapter:
                     )
                 if self.config.username_env or self.config.password_env:
                     if self.config.security_policy == "None":
-                        raise TargetDenied("Les identifiants OPC UA exigent SignAndEncrypt dans FAT Studio.")
+                        raise TargetDenied(f"Les identifiants OPC UA exigent SignAndEncrypt dans {APP_NAME}.")
                     username = os.environ.get(self.config.username_env, "")
                     password = os.environ.get(self.config.password_env, "")
                     if not username or not password:

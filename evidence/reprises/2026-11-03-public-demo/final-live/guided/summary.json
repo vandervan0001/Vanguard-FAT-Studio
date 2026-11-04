@@ -1,0 +1,62 @@
+{
+  "technical_step_passed": true,
+  "step": "guided-initial",
+  "state": "applied",
+  "actions": [
+    {
+      "action": "force",
+      "target": "p101_request",
+      "value": false,
+      "unit": "native",
+      "diagnostic": false,
+      "raw_value": false,
+      "actual_wire_value": false
+    },
+    {
+      "action": "force",
+      "target": "stop_healthy",
+      "value": true,
+      "unit": "native",
+      "diagnostic": false,
+      "raw_value": true,
+      "actual_wire_value": true
+    },
+    {
+      "action": "force",
+      "target": "lt101_raw",
+      "value": 12.0,
+      "unit": "mA",
+      "diagnostic": false,
+      "raw_value": 13824,
+      "actual_wire_value": 13824
+    }
+  ],
+  "native_values": {
+    "DB_FAT_Demo.LT101_Raw": 13824,
+    "DB_FAT_Demo.LT101_Percent": 50,
+    "DB_FAT_Demo.P101_RunCommand": false
+  },
+  "observed_steps": 0,
+  "total_steps": 5,
+  "observe_called": false,
+  "guided_completed": false,
+  "human_verdict": "not_evaluated",
+  "initial_commands": {
+    "DB_FAT_Demo.P101_RunCommand": false,
+    "DB_FAT_Demo.P101_SpeedCommand": 0,
+    "DB_FAT_Demo.P201_RunCommand": false,
+    "DB_FAT_Demo.P201_SpeedCommand": 0,
+    "DB_FAT_Demo.P202_RunCommand": false,
+    "DB_FAT_Demo.P202_SpeedCommand": 0,
+    "DB_FAT_Demo.P301_RunCommand": false,
+    "DB_FAT_Demo.P301_SpeedCommand": 0,
+    "DB_FAT_Demo.XV101_OpenCommand": false,
+    "DB_FAT_Demo.XV201_OpenCommand": false,
+    "DB_FAT_Demo.XV202_OpenCommand": false,
+    "DB_FAT_Demo.XV301_OpenCommand": false,
+    "DB_FAT_Demo.XV102_OpenCommand": false,
+    "DB_FAT_Demo.XV203_OpenCommand": false,
+    "DB_FAT_Demo.XV103_OpenCommand": false,
+    "DB_FAT_Demo.FCV302_PositionCommand": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "utc": "2026-11-03T20:19:40.293548+00:00",
+  "fixed": true,
+  "reproduced": false,
+  "before_revision": "eb0e905825476a44aaede5f004316f4ce46869407b69f6d2c8b5d08b2632b3fb",
+  "after_revision": "34f3b792cc3c781c97f28d0ed5e8be74a3357e9a181ef8eb58ed15cddb31d6a6",
+  "stale_project_download_status": 409,
+  "stale_run_export_status": 409,
+  "returned_comment": null,
+  "expected": "An export bound to the previous workspace must not silently return the divergent copied history",
+  "old_run_id_exists_in_both_workspaces": true,
+  "synthetic_result_is_not_a_human_verdict": true,
+  "product_source_changed": false,
+  "live_service_or_cpu_contacted": false
+}

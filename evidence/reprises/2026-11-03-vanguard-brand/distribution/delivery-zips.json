@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "archives": [
+    {
+      "folder": "C:\\Vanguard_FAT_Studio_2026-11-03",
+      "archive": "C:\\FAT_Studio\\.local\\Vanguard_FAT_Studio_2026-11-03.zip",
+      "files": 3209,
+      "archive_entries": 3210,
+      "manifest_sha256": "ed470beb45a35038b665777a0b6a7b47d8921ca817190d6333fb1b69942723ba",
+      "bytes": 49617249,
+      "sha256": "e301b364f023486e80e50cf5c47a6aa9082009620c2b8dec9fefb74a898d8f92",
+      "verified": "CRC, exact entry set, SHA256 of each expanded entry"
+    },
+    {
+      "folder": "C:\\Vanguard_FAT_Studio_Source_2026-11-03",
+      "archive": "C:\\FAT_Studio\\.local\\Vanguard_FAT_Studio_Source_2026-11-03.zip",
+      "files": 592,
+      "archive_entries": 593,
+      "manifest_sha256": "b2cb882da102676a066891ca07883009963ceb012fd5e7974ca922daded28cde",
+      "bytes": 25511737,
+      "sha256": "2f6ae92f72c34e56276bb5878f4c1cd4230332e0d3f6fb2583704e4257388626",
+      "verified": "CRC, exact entry set, SHA256 of each expanded entry"
+    }
+  ]
+}

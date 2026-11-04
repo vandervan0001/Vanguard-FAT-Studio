@@ -1,0 +1,784 @@
+[
+  {
+    "type": "tank",
+    "label": "Cuve",
+    "description": "Bilan volumique d'une cuve à section constante. Niveau exprimé en %.",
+    "default_params": {
+      "capacity_l": 1000.0,
+      "initial_level_pct": 25.0,
+      "high_level_pct": 90.0,
+      "low_level_pct": 10.0,
+      "demo_start_pct": 30.0,
+      "demo_stop_pct": 70.0
+    },
+    "parameters": {
+      "capacity_l": {
+        "label": "Volume utile",
+        "type": "number",
+        "min": 0.001,
+        "max": 1000000000.0,
+        "unit": "L"
+      },
+      "initial_level_pct": {
+        "label": "Niveau initial",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "high_level_pct": {
+        "label": "Seuil haut",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "low_level_pct": {
+        "label": "Seuil bas",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "demo_start_pct": {
+        "label": "Démo : reprise remplissage",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "demo_stop_pct": {
+        "label": "Démo : arrêt remplissage",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      }
+    },
+    "ports": {
+      "level": {
+        "label": "Niveau",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false
+      },
+      "volume": {
+        "label": "Volume",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "L",
+        "required": false
+      },
+      "high": {
+        "label": "Niveau haut",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "low": {
+        "label": "Niveau bas",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      }
+    },
+    "faults": []
+  },
+  {
+    "type": "pump",
+    "label": "Pompe",
+    "description": "Pompe commandée en tout-ou-rien avec inertie et défaut moteur.",
+    "default_params": {
+      "tank_id": "",
+      "role": "inlet",
+      "flow_group": "feed",
+      "max_flow_l_s": 30.0,
+      "response_s": 0.4,
+      "initial_speed_pct": 0.0,
+      "demo_control": "level",
+      "demo_command": true
+    },
+    "parameters": {
+      "tank_id": {
+        "label": "Cuve associée (identifiant)",
+        "type": "string"
+      },
+      "source_tank_id": {
+        "label": "Cuve source du transfert (vide = source extérieure)",
+        "type": "string"
+      },
+      "role": {
+        "label": "Sens du débit",
+        "type": "select",
+        "options": [
+          "inlet",
+          "outlet"
+        ]
+      },
+      "flow_group": {
+        "label": "Circuit en série",
+        "type": "string"
+      },
+      "max_flow_l_s": {
+        "label": "Débit à pleine ouverture",
+        "type": "number",
+        "min": 0,
+        "max": 100000,
+        "unit": "L/s"
+      },
+      "response_s": {
+        "label": "Constante de réponse",
+        "type": "number",
+        "min": 0,
+        "max": 120,
+        "unit": "s"
+      },
+      "demo_control": {
+        "label": "Contrôle de démonstration",
+        "type": "select",
+        "options": [
+          "level",
+          "constant"
+        ]
+      },
+      "initial_speed_pct": {
+        "label": "Vitesse initiale",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "demo_command": {
+        "label": "Démo : commande constante",
+        "type": "boolean"
+      }
+    },
+    "ports": {
+      "command": {
+        "label": "Commande marche PLC",
+        "direction": "output",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": true
+      },
+      "feedback": {
+        "label": "Retour marche simulé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "fault": {
+        "label": "Défaut moteur simulé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "manual_request": {
+        "label": "Demande manuelle simulée",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false,
+        "simulated_source": false
+      }
+    },
+    "faults": [
+      "motor_trip"
+    ]
+  },
+  {
+    "type": "valve_onoff",
+    "label": "Vanne TOR",
+    "description": "Vanne tout-ou-rien avec temps de réponse et fins de course.",
+    "default_params": {
+      "tank_id": "",
+      "role": "inlet",
+      "flow_group": "feed",
+      "max_flow_l_s": 25.0,
+      "response_s": 0.3,
+      "initial_position_pct": 0.0,
+      "demo_control": "level",
+      "demo_command": true
+    },
+    "parameters": {
+      "tank_id": {
+        "label": "Cuve associée (identifiant)",
+        "type": "string"
+      },
+      "source_tank_id": {
+        "label": "Cuve source du transfert (vide = source extérieure)",
+        "type": "string"
+      },
+      "role": {
+        "label": "Sens du débit",
+        "type": "select",
+        "options": [
+          "inlet",
+          "outlet"
+        ]
+      },
+      "flow_group": {
+        "label": "Circuit en série",
+        "type": "string"
+      },
+      "max_flow_l_s": {
+        "label": "Débit à pleine ouverture",
+        "type": "number",
+        "min": 0,
+        "max": 100000,
+        "unit": "L/s"
+      },
+      "response_s": {
+        "label": "Constante de réponse",
+        "type": "number",
+        "min": 0,
+        "max": 120,
+        "unit": "s"
+      },
+      "demo_control": {
+        "label": "Contrôle de démonstration",
+        "type": "select",
+        "options": [
+          "level",
+          "constant"
+        ]
+      },
+      "initial_position_pct": {
+        "label": "Position initiale",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "demo_command": {
+        "label": "Démo : commande constante",
+        "type": "boolean"
+      }
+    },
+    "ports": {
+      "command": {
+        "label": "Commande ouverture PLC",
+        "direction": "output",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": true
+      },
+      "position": {
+        "label": "Position simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false
+      },
+      "open": {
+        "label": "Fin de course ouvert",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "closed": {
+        "label": "Fin de course fermé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "manual_request": {
+        "label": "Demande manuelle simulée",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false,
+        "simulated_source": false
+      }
+    },
+    "faults": [
+      "valve_stuck"
+    ]
+  },
+  {
+    "type": "valve_control",
+    "label": "Vanne modulante",
+    "description": "Position 0–100 %, caractéristique HistorianSim, fermeture étanche à 0 %.",
+    "default_params": {
+      "tank_id": "",
+      "role": "outlet",
+      "flow_group": "drain",
+      "max_flow_l_s": 12.0,
+      "response_s": 0.5,
+      "initial_position_pct": 0.0,
+      "characteristic": "linear",
+      "rangeability": 50.0,
+      "demo_control": "constant",
+      "demo_command": 35.0
+    },
+    "parameters": {
+      "tank_id": {
+        "label": "Cuve associée (identifiant)",
+        "type": "string"
+      },
+      "source_tank_id": {
+        "label": "Cuve source du transfert (vide = source extérieure)",
+        "type": "string"
+      },
+      "role": {
+        "label": "Sens du débit",
+        "type": "select",
+        "options": [
+          "inlet",
+          "outlet"
+        ]
+      },
+      "flow_group": {
+        "label": "Circuit en série",
+        "type": "string"
+      },
+      "max_flow_l_s": {
+        "label": "Débit à pleine ouverture",
+        "type": "number",
+        "min": 0,
+        "max": 100000,
+        "unit": "L/s"
+      },
+      "response_s": {
+        "label": "Constante de réponse",
+        "type": "number",
+        "min": 0,
+        "max": 120,
+        "unit": "s"
+      },
+      "demo_control": {
+        "label": "Contrôle de démonstration",
+        "type": "select",
+        "options": [
+          "level",
+          "constant"
+        ]
+      },
+      "initial_position_pct": {
+        "label": "Position initiale",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "characteristic": {
+        "label": "Caractéristique de débit",
+        "type": "select",
+        "options": [
+          "linear",
+          "equal_percentage",
+          "quick_opening"
+        ]
+      },
+      "rangeability": {
+        "label": "Rangeabilité",
+        "type": "number",
+        "min": 1.001,
+        "max": 10000,
+        "unit": ""
+      },
+      "demo_command": {
+        "label": "Démo : commande constante",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      }
+    },
+    "ports": {
+      "command": {
+        "label": "Consigne position PLC",
+        "direction": "output",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": true
+      },
+      "position": {
+        "label": "Position simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false
+      },
+      "open": {
+        "label": "Fin de course ouvert",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "closed": {
+        "label": "Fin de course fermé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "manual_request": {
+        "label": "Demande manuelle simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false,
+        "simulated_source": false
+      }
+    },
+    "faults": [
+      "valve_stuck"
+    ]
+  },
+  {
+    "type": "analog_sensor",
+    "label": "Capteur analogique",
+    "description": "Mesure d'un état du procédé : valeur = source × échelle + décalage.",
+    "default_params": {
+      "source_equipment": "",
+      "source_field": "level",
+      "scale": 1.0,
+      "offset": 0.0
+    },
+    "parameters": {
+      "source_equipment": {
+        "label": "Équipement mesuré (identifiant)",
+        "type": "string"
+      },
+      "source_field": {
+        "label": "Grandeur mesurée",
+        "type": "string"
+      },
+      "scale": {
+        "label": "Échelle",
+        "type": "number",
+        "min": -1000000000.0,
+        "max": 1000000000.0,
+        "unit": ""
+      },
+      "offset": {
+        "label": "Décalage",
+        "type": "number",
+        "min": -1000000000.0,
+        "max": 1000000000.0,
+        "unit": ""
+      }
+    },
+    "ports": {
+      "value": {
+        "label": "Mesure simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL",
+          "INT",
+          "DINT"
+        ],
+        "unit": "",
+        "required": true
+      },
+      "scaled_value": {
+        "label": "Valeur d'ingénierie lue du PLC",
+        "direction": "output",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "",
+        "required": false
+      }
+    },
+    "faults": [
+      "sensor_stuck",
+      "out_of_range"
+    ]
+  },
+  {
+    "type": "digital_sensor",
+    "label": "Capteur binaire",
+    "description": "Comparaison d'une mesure de procédé à un seuil configurable.",
+    "default_params": {
+      "source_equipment": "",
+      "source_field": "level",
+      "operator": "ge",
+      "threshold": 90.0
+    },
+    "parameters": {
+      "source_equipment": {
+        "label": "Équipement mesuré (identifiant)",
+        "type": "string"
+      },
+      "source_field": {
+        "label": "Grandeur mesurée",
+        "type": "string"
+      },
+      "operator": {
+        "label": "Comparaison",
+        "type": "select",
+        "options": [
+          "ge",
+          "gt",
+          "le",
+          "lt",
+          "eq",
+          "ne"
+        ]
+      },
+      "threshold": {
+        "label": "Seuil",
+        "type": "number",
+        "min": -1000000000.0,
+        "max": 1000000000.0,
+        "unit": ""
+      }
+    },
+    "ports": {
+      "value": {
+        "label": "État capteur simulé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": true
+      }
+    },
+    "faults": [
+      "sensor_stuck"
+    ]
+  },
+  {
+    "type": "indicator",
+    "label": "Indicateur PLC",
+    "description": "Affiche une variable lue dans le PLC ; n'écrit aucune valeur.",
+    "default_params": {},
+    "parameters": {},
+    "ports": {
+      "value": {
+        "label": "État PLC",
+        "direction": "output",
+        "data_types": [
+          "BOOL",
+          "INT",
+          "DINT",
+          "REAL"
+        ],
+        "unit": "",
+        "required": true
+      }
+    },
+    "faults": []
+  },
+  {
+    "type": "pump_vfd",
+    "label": "Pompe à variateur",
+    "description": "Pompe avec marche et consigne 0–100 %, inertie, retour vitesse et défaut moteur.",
+    "default_params": {
+      "tank_id": "",
+      "role": "inlet",
+      "flow_group": "feed",
+      "max_flow_l_s": 80.0,
+      "response_s": 0.4,
+      "initial_speed_pct": 0.0,
+      "demo_control": "level",
+      "demo_command": true,
+      "demo_speed_pct": 60.0
+    },
+    "parameters": {
+      "tank_id": {
+        "label": "Cuve associée (identifiant)",
+        "type": "string"
+      },
+      "source_tank_id": {
+        "label": "Cuve source du transfert (vide = source extérieure)",
+        "type": "string"
+      },
+      "role": {
+        "label": "Sens du débit",
+        "type": "select",
+        "options": [
+          "inlet",
+          "outlet"
+        ]
+      },
+      "flow_group": {
+        "label": "Circuit en série",
+        "type": "string"
+      },
+      "max_flow_l_s": {
+        "label": "Débit à pleine ouverture",
+        "type": "number",
+        "min": 0,
+        "max": 100000,
+        "unit": "L/s"
+      },
+      "response_s": {
+        "label": "Constante de réponse",
+        "type": "number",
+        "min": 0,
+        "max": 120,
+        "unit": "s"
+      },
+      "demo_control": {
+        "label": "Contrôle de démonstration",
+        "type": "select",
+        "options": [
+          "level",
+          "constant"
+        ]
+      },
+      "initial_speed_pct": {
+        "label": "Vitesse initiale",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      },
+      "demo_command": {
+        "label": "Démo : commande constante",
+        "type": "boolean"
+      },
+      "demo_speed_pct": {
+        "label": "Démo : consigne vitesse",
+        "type": "number",
+        "min": 0,
+        "max": 100,
+        "unit": "%"
+      }
+    },
+    "ports": {
+      "command": {
+        "label": "Commande marche PLC",
+        "direction": "output",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": true
+      },
+      "speed_command": {
+        "label": "Consigne vitesse PLC",
+        "direction": "output",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": true
+      },
+      "feedback": {
+        "label": "Retour marche simulé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "speed": {
+        "label": "Vitesse simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false
+      },
+      "fault": {
+        "label": "Défaut moteur simulé",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false
+      },
+      "manual_request": {
+        "label": "Demande manuelle simulée",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": false,
+        "simulated_source": false
+      },
+      "manual_speed": {
+        "label": "Consigne manuelle simulée",
+        "direction": "input",
+        "data_types": [
+          "REAL"
+        ],
+        "unit": "%",
+        "required": false,
+        "simulated_source": false
+      }
+    },
+    "faults": [
+      "motor_trip"
+    ]
+  },
+  {
+    "type": "digital_input",
+    "label": "Bouton / entrée TOR",
+    "description": "Contact simulé, actionnable par forçage d’une entrée autorisée ; aucun signal de sécurité certifié.",
+    "default_params": {
+      "initial_value": false
+    },
+    "parameters": {
+      "initial_value": {
+        "label": "État au repos",
+        "type": "boolean"
+      }
+    },
+    "ports": {
+      "value": {
+        "label": "Contact vers PLC",
+        "direction": "input",
+        "data_types": [
+          "BOOL"
+        ],
+        "unit": "",
+        "required": true
+      }
+    },
+    "faults": []
+  }
+]

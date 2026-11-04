@@ -1,0 +1,37 @@
+{
+  "started_at_utc": "2026-11-02T22:08:58.216959+00:00",
+  "mode": "read-only",
+  "scope": "Real pinned NuGet host and official MCP SDK transport/capability listing only; no TIA project operation",
+  "profile_installed": false,
+  "server": "C:\\FAT_Studio\\.local\\tia-mcp-package-check\\tia-mcp.exe",
+  "server_info": {
+    "name": "TiaMcpServer",
+    "title": null,
+    "version": "4.3.0.0",
+    "description": null,
+    "website_url": null,
+    "icons": null
+  },
+  "tools": [
+    "get_project_status",
+    "browse_project_tree",
+    "bind_project",
+    "network_read",
+    "plc_read",
+    "hmi_read",
+    "read_cross_references",
+    "vci_read"
+  ],
+  "blocked_locally_before_call": [
+    "archive_project",
+    "compile_check",
+    "download",
+    "network_write",
+    "plc_write",
+    "run_cpu",
+    "save_project",
+    "stop_cpu"
+  ],
+  "status": "passed",
+  "finished_at_utc": "2026-11-02T22:08:59.342742+00:00"
+}

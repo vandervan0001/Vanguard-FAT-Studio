@@ -1,6 +1,6 @@
-# Prompt à copier dans Codex — reprise complète de FAT Studio
+# Prompt à copier dans Codex — reprise complète de Vanguard FAT Studio
 
-Tu reprends **FAT Studio**, le projet existant dans ce dépôt. Agis comme responsable de sa finalisation technique, avec une compétence automation Siemens, Python, TypeScript, OPC UA et validation de logiciels d'essai.
+Tu reprends **Vanguard FAT Studio**, le projet existant dans ce dépôt. Agis comme responsable de sa finalisation technique, avec une compétence automation Siemens, Python, TypeScript, OPC UA et validation de logiciels d'essai.
 
 ## Mon objectif
 
@@ -23,7 +23,7 @@ La conversation précédente n'est pas nécessaire : les sources et documents du
 
 - Identifier la racine du dépôt, l'OS, les versions de Python/Node/Git, les outils réellement accessibles, l'état Git, le diff, les tags et les remotes.
 - Repérer les modifications en cours et les données utilisateur avant toute action ; conserver ce travail.
-- Si tu es dans le ZIP extrait avec `offline-manifest.json` et `wheelhouse/`, garder ce kit intact. Créer une copie source sœur depuis `FAT-Studio.bundle`, dans une destination neuve, puis travailler dans cette copie. Si tu travailles déjà dans une copie source modifiée, continuer cette copie.
+- Si tu es dans le ZIP extrait avec `offline-manifest.json` et `wheelhouse/`, garder ce kit intact. Créer une copie source sœur dans une destination neuve, depuis le dépôt autorisé ou l'archive source vérifiée. Si tu travailles déjà dans une copie source modifiée, continuer cette copie. Ne pas modifier un manifeste pour transformer une livraison en copie de développement.
 - Utiliser des dossiers temporaires dédiés pour les essais. Les données FAT personnelles résident normalement hors du dépôt ; elles ne sont pas sauvegardées par le ZIP des sources.
 - Expliquer brièvement ce que tu as trouvé et commencer les actions utiles, sans attendre une validation du plan pour chaque opération réversible.
 
@@ -51,7 +51,7 @@ Utiliser une relecture indépendante pour les changements significatifs lorsque 
 
 Conserver les preuves historiques 0.1.1. Enregistrer les nouvelles commandes, résultats, plateforme et références Git dans un dossier daté, mettre à jour les documents affectés et effectuer des commits cohérents des changements de la mission. Ne pas inclure les données personnelles d'essai ni les secrets dans les commits ou archives.
 
-Le dépôt GitHub distant n'a pas été créé à la passation. Vérifier les remotes et l'authentification actuels avant d'annoncer une publication. Ne pas inventer d'URL ni de réussite GitHub Actions ; si une publication est effectuée dans le périmètre autorisé de cette session, transmettre son URL et les résultats effectivement observés.
+Le dépôt courant est `https://github.com/vandervan0001/Vanguard-FAT-Studio`. Vérifier les remotes, la visibilité et l'authentification actuels avant d'annoncer une publication. Préserver la visibilité existante, les données et les standards privés exclus du périmètre public. Ne pas inventer de réussite GitHub Actions ; si une publication est effectuée dans le périmètre autorisé de cette session, transmettre son URL et les résultats effectivement observés.
 
 ## Résultat attendu
 

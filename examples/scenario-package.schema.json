@@ -1,0 +1,513 @@
+{
+  "$defs": {
+    "EquipmentContract": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "tank",
+            "pump",
+            "pump_vfd",
+            "valve_onoff",
+            "valve_control",
+            "analog_sensor",
+            "digital_sensor",
+            "digital_input",
+            "indicator"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "title": "EquipmentContract",
+      "type": "object"
+    },
+    "FatStep": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "instructions": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Instructions",
+          "type": "string"
+        },
+        "expected_result": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Expected Result",
+          "type": "string"
+        },
+        "actions": {
+          "items": {
+            "$ref": "#/$defs/PreparedAction"
+          },
+          "maxItems": 100,
+          "title": "Actions",
+          "type": "array"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/PreparedCheck"
+          },
+          "maxItems": 100,
+          "title": "Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "FatStep",
+      "type": "object"
+    },
+    "PreparedAction": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "default": "force",
+          "enum": [
+            "force",
+            "release"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Target",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "unit": {
+          "default": "native",
+          "enum": [
+            "native",
+            "mA",
+            "V",
+            "engineering",
+            "percent"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "diagnostic": {
+          "default": false,
+          "title": "Diagnostic",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "target"
+      ],
+      "title": "PreparedAction",
+      "type": "object"
+    },
+    "PreparedCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "target": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Target",
+          "type": "string"
+        },
+        "operator": {
+          "default": "eq",
+          "enum": [
+            "eq",
+            "ne",
+            "gt",
+            "ge",
+            "lt",
+            "le"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Value"
+        },
+        "tolerance": {
+          "default": 0.001,
+          "maximum": 1000000000.0,
+          "minimum": 0,
+          "title": "Tolerance",
+          "type": "number"
+        }
+      },
+      "required": [
+        "target",
+        "value"
+      ],
+      "title": "PreparedCheck",
+      "type": "object"
+    },
+    "Scenario": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Description",
+          "type": "string"
+        },
+        "requirement": {
+          "default": "",
+          "maxLength": 300,
+          "title": "Requirement",
+          "type": "string"
+        },
+        "preconditions": {
+          "default": "",
+          "maxLength": 2000,
+          "title": "Preconditions",
+          "type": "string"
+        },
+        "focus_equipment": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Focus Equipment",
+          "type": "array"
+        },
+        "trend_tags": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Trend Tags",
+          "type": "array"
+        },
+        "execution_mode": {
+          "default": "timed",
+          "enum": [
+            "timed",
+            "guided"
+          ],
+          "title": "Execution Mode",
+          "type": "string"
+        },
+        "fat_steps": {
+          "items": {
+            "$ref": "#/$defs/FatStep"
+          },
+          "maxItems": 100,
+          "title": "Fat Steps",
+          "type": "array"
+        },
+        "duration_s": {
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "maximum": 86400,
+          "title": "Duration S",
+          "type": "number"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/ScenarioStep"
+          },
+          "maxItems": 2000,
+          "title": "Steps",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Scenario",
+      "type": "object"
+    },
+    "ScenarioStep": {
+      "additionalProperties": false,
+      "properties": {
+        "at_s": {
+          "maximum": 86400,
+          "minimum": 0,
+          "title": "At S",
+          "type": "number"
+        },
+        "action": {
+          "enum": [
+            "force",
+            "release",
+            "fault",
+            "clear_fault",
+            "marker",
+            "expect"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Target",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "title": "Value"
+        },
+        "operator": {
+          "default": "eq",
+          "enum": [
+            "eq",
+            "ne",
+            "gt",
+            "ge",
+            "lt",
+            "le"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "tolerance": {
+          "default": 0.001,
+          "maximum": 1000000000.0,
+          "minimum": 0,
+          "title": "Tolerance",
+          "type": "number"
+        },
+        "message": {
+          "default": "",
+          "maxLength": 4000,
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "at_s",
+        "action"
+      ],
+      "title": "ScenarioStep",
+      "type": "object"
+    },
+    "SignalScaling": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "4-20mA",
+            "0-10V",
+            "linear"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "raw_min": {
+          "default": 0.0,
+          "title": "Raw Min",
+          "type": "number"
+        },
+        "raw_max": {
+          "default": 27648.0,
+          "title": "Raw Max",
+          "type": "number"
+        },
+        "engineering_min": {
+          "default": 0.0,
+          "title": "Engineering Min",
+          "type": "number"
+        },
+        "engineering_max": {
+          "default": 100.0,
+          "title": "Engineering Max",
+          "type": "number"
+        },
+        "engineering_unit": {
+          "default": "%",
+          "maxLength": 40,
+          "title": "Engineering Unit",
+          "type": "string"
+        },
+        "underflow_raw": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Underflow Raw"
+        },
+        "overflow_raw": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Overflow Raw"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "SignalScaling",
+      "type": "object"
+    },
+    "TagContract": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "input",
+            "output"
+          ],
+          "title": "Direction",
+          "type": "string"
+        },
+        "data_type": {
+          "enum": [
+            "BOOL",
+            "INT",
+            "DINT",
+            "REAL"
+          ],
+          "title": "Data Type",
+          "type": "string"
+        },
+        "unit": {
+          "default": "",
+          "maxLength": 40,
+          "title": "Unit",
+          "type": "string"
+        },
+        "signal": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SignalScaling"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "direction",
+        "data_type"
+      ],
+      "title": "TagContract",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "fat-studio/scenarios",
+      "default": "fat-studio/scenarios",
+      "title": "Format",
+      "type": "string"
+    },
+    "version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/Scenario"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "tag_contracts": {
+      "items": {
+        "$ref": "#/$defs/TagContract"
+      },
+      "maxItems": 200,
+      "title": "Tag Contracts",
+      "type": "array"
+    },
+    "equipment_contracts": {
+      "items": {
+        "$ref": "#/$defs/EquipmentContract"
+      },
+      "maxItems": 50,
+      "title": "Equipment Contracts",
+      "type": "array"
+    }
+  },
+  "required": [
+    "scenarios"
+  ],
+  "title": "ScenarioPackage",
+  "type": "object"
+}

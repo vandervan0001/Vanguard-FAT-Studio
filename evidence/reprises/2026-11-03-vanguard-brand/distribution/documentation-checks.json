@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "documents": [
+    "README.md",
+    "README-CODEX.md",
+    "AGENTS.md",
+    "CODEX.md",
+    "CLAUDE.md",
+    "THIRD_PARTY_NOTICES.md",
+    "docs/USER_GUIDE.md",
+    "docs/AI_QUICKSTART.md",
+    "docs/AI_CONTROL.md",
+    "docs/INSTALLATION.md",
+    "docs/PROJECT_ARCHIVES.md",
+    "docs/MODEL.md",
+    "docs/ACCEPTANCE.md",
+    "docs/COMPATIBILITY.md",
+    "docs/PLCSIM_SETUP.md",
+    "docs/TIA_MCP.md",
+    "docs/TIA_VERSIONS.md",
+    "docs/DEMO_PLC.md",
+    "docs/FORMAT.md",
+    "docs/codex/PROMPT_CODEX.md",
+    "docs/codex/PROMPT_REPRISE_CODEX.md"
+  ],
+  "local_links_checked": 140,
+  "json_blocks_parsed": 5,
+  "unchanged_official_assets": 8,
+  "historical_proofs_rewritten": false
+}

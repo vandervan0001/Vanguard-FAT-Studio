@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-03T20:35:04.733Z",
+  "url": "http://127.0.0.1:8770/",
+  "viewport": null,
+  "width": 1528,
+  "height": 828,
+  "devicePixelRatio": 1.25,
+  "screenWidth": 1536,
+  "screenHeight": 960,
+  "documentWidth": 1513,
+  "clientWidth": 1513,
+  "analogRight": 1512.800048828125,
+  "run_id": "run-84fc4a8c7b974bd2a842381d398e1763",
+  "connected": true,
+  "scenario": "demo-guided-io",
+  "executed_steps": 0,
+  "reviewed_steps": 0,
+  "human_verdict": "not_evaluated",
+  "browser_errors": [],
+  "mutations": [],
+  "scope": "Actual public project on Siemens OPC UA, read-only native Edge viewport"
+}

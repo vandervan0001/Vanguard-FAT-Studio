@@ -11,7 +11,7 @@ Ce protocole couvre le banc FAT local et son option d'ingénierie. Il est à ex�
 | Affaire / installation représentée | |
 | Automaticien / témoin | |
 | Date et fuseau horaire | |
-| Commit FAT Studio et empreinte de l'archive livrée | |
+| Commit Vanguard FAT Studio et empreinte de l'archive livrée | |
 | Windows / build / architecture | |
 | Python et versions verrouillées | |
 | TIA Portal / Update / Openness | |
@@ -78,7 +78,7 @@ Le DB de démo contient BOOL/REAL. Pour INT/DINT, utiliser des variables de preu
 
 ### C3 — Sorties PLC et effet sur le procédé
 
-Faire produire une commande pompe et une commande de vanne par le programme testé, selon sa procédure normale de test. Observer les valeurs lues dans FAT Studio et l'évolution cohérente du modèle. Vérifier l'unité/échelle de la vanne modulante.
+Faire produire une commande pompe et une commande de vanne par le programme testé, selon sa procédure normale de test. Observer les valeurs lues dans Vanguard FAT Studio et l'évolution cohérente du modèle. Vérifier l'unité/échelle de la vanne modulante.
 
 **Attendu :** les commandes proviennent du PLC, l'application ne les force pas ; le niveau et les retours simulés évoluent suivant les paramètres enregistrés. Consigner le retard d'acquisition observé et la séquence de raccordement au scan PLC.
 

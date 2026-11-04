@@ -22,12 +22,12 @@ export async function initSession(signal?: AbortSignal): Promise<void> {
   const timeout = setTimeout(cancel, 5000);
   try {
     const response = await fetch('/api/session', { cache: 'no-store', signal: controller.signal });
-    if (!response.ok) throw new Error('Le service local ne répond pas. Vérifiez que FAT Studio est démarré.');
+    if (!response.ok) throw new Error('Le service local ne répond pas. Vérifiez que Vanguard FAT Studio est démarré.');
     const data: unknown = await response.json();
     if (!data || typeof data !== 'object' || !('token' in data) || typeof data.token !== 'string' || !data.token) throw new Error('Le service local n’a pas fourni de session valide. Rechargez la page.');
     csrfToken = data.token;
   } catch (error) {
-    if (controller.signal.aborted) throw new Error('Le service local ne répond pas. Vérifiez que FAT Studio est démarré, puis réessayez.');
+    if (controller.signal.aborted) throw new Error('Le service local ne répond pas. Vérifiez que Vanguard FAT Studio est démarré, puis réessayez.');
     throw error;
   } finally { clearTimeout(timeout); signal?.removeEventListener('abort', cancel); }
 }
@@ -54,12 +54,11 @@ export function api<T>(path: string, method = 'GET', body?: unknown, signal?: Ab
 }
 
 async function requestApi<T>(path: string, method: string, body: unknown, signal: AbortSignal | undefined, context: RequestContext, refreshed = false): Promise<T> {
-  const projectSensitive = /^\/(run|force|fault|markers|result)(\/|$)/.test(path) || (path === '/project' && method === 'PUT') || (path === '/mapping' && method === 'POST');
-  const runSensitive = /^\/(run|force|fault|markers|result)(\/|$)/.test(path);
+  const binary = body instanceof Blob;
   const response = await fetch(`/api${path}`, {
     method, cache: 'no-store', signal,
-    headers: { ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(method !== 'GET' ? { 'X-FAT-Token': csrfToken, ...(projectSensitive && context.projectId ? { 'X-FAT-Project-ID': context.projectId, ...(context.revision ? { 'X-FAT-Project-Revision': context.revision } : {}) } : {}), ...(runSensitive ? { 'X-FAT-Run-ID': context.runId } : {}) } : {}) },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    headers: { ...(body !== undefined ? { 'Content-Type': binary ? 'application/zip' : 'application/json' } : {}), ...(method !== 'GET' ? { 'X-FAT-Token': csrfToken } : {}), ...(method !== 'GET' || path === '/project/download' || path === '/scenarios/export' || /^\/scenarios\/[^/]+\/export$/.test(path) ? { 'X-FAT-Project-ID': context.projectId, 'X-FAT-Project-Revision': context.revision, 'X-FAT-Run-ID': context.runId } : {}) },
+    ...(body === undefined ? {} : { body: binary ? body : JSON.stringify(body) }),
   });
   // A rejected session has no side effect. Refresh once after a local server restart.
   if (response.status === 403 && method !== 'GET' && !refreshed) {
@@ -72,12 +71,12 @@ async function requestApi<T>(path: string, method: string, body: unknown, signal
   }
   try {
     const data: unknown = await response.json();
-    const projectResponse = path === '/project' || (method === 'POST' && (path === '/project/import' || path === '/projects' || path === '/demo/load' || path === '/mapping' || /^\/projects\/[^/]+\/load$/.test(path)));
+    const projectResponse = path === '/project' || (method === 'POST' && (path === '/project/import' || path === '/project/archive/import' || path === '/projects' || path === '/demo/load' || path === '/pilot/load' || path === '/mapping' || path === '/scenarios/import' || /^\/projects\/[^/]+\/load$/.test(path) || /^\/workspaces\/[^/]+\/open$/.test(path)));
     if (projectResponse && data && typeof data === 'object' && 'id' in data && typeof data.id === 'string' && 'equipment' in data && Array.isArray(data.equipment)) {
       // Never accept a newer baseline from polling state: that would hide a conflict.
       setProjectContext(data.id);
       currentProjectRevision = response.headers.get('X-FAT-Project-Revision') ?? '';
-      if (method !== 'GET') currentRunId = '';
+      if (method !== 'GET') currentRunId = response.headers.get('X-FAT-Run-ID') ?? '';
     }
     return data as T;
   }
@@ -85,11 +84,29 @@ async function requestApi<T>(path: string, method: string, body: unknown, signal
 }
 
 export function downloadText(text: string, name: string, type = 'application/json') {
-  const url = URL.createObjectURL(new Blob([text], { type }));
+  downloadBlob(new Blob([text], { type }), name);
+}
+
+function downloadBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url; link.download = name;
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+export async function downloadArchive(name: string): Promise<void> {
+  return downloadScoped('/project/archive', name, true);
+}
+
+async function downloadScoped(path: string, fallbackName: string, requireRevision = false): Promise<void> {
+  const context = { projectId: currentProjectId, revision: currentProjectRevision, runId: currentRunId };
+  const response = await fetch(`/api${path}`, { cache: 'no-store', headers: { 'X-FAT-Project-ID': context.projectId, 'X-FAT-Project-Revision': context.revision, 'X-FAT-Run-ID': context.runId } });
+  if (!response.ok) { const error = await response.json().catch(() => ({ detail: `Erreur HTTP ${response.status} du service local.` })); throw new Error(readable(error?.detail ?? error)); }
+  const revision = response.headers.get('X-FAT-Project-Revision');
+  if (context.revision && (requireRevision || revision) && revision !== context.revision) throw new Error('Le projet actif a changé ; rechargez avant d’exporter.');
+  const name = response.headers.get('Content-Disposition')?.match(/filename="([^"]+)"/i)?.[1] ?? fallbackName;
+  downloadBlob(await response.blob(), name);
 }
 
 export async function downloadMapping(): Promise<void> {
@@ -107,11 +124,7 @@ export async function downloadMapping(): Promise<void> {
   downloadText(await response.text(), 'fat-mapping.csv', 'text/csv;charset=utf-8');
 }
 
-export function download(path: string) {
-  const link = document.createElement('a');
-  link.href = `/api${path}`;
-  link.download = '';
-  document.body.append(link);
-  link.click();
-  link.remove();
+export function download(path: string): Promise<void> {
+  const kind = path.split('/').at(-1) ?? 'json';
+  return downloadScoped(path, `fat-evidence.${kind === 'report' ? 'html' : kind}`);
 }

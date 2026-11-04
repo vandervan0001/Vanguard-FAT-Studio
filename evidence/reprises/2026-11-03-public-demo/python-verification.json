@@ -1,0 +1,76 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "source_head": "cd4daba16580309a675dfa6b1ec95efe5a669038",
+  "working_tree": "modified",
+  "command": "python -m pytest -q --tb=short",
+  "final_passed": 572,
+  "final_skipped": 5,
+  "final_failures": 0,
+  "final_errors": 0,
+  "skip_reason": "Windows account cannot create symbolic links",
+  "human_acceptance_created": false,
+  "junit_working_copies": [
+    {
+      "file": "python-results-integration.xml",
+      "raw_sha256": "fc87832338911c320909edc0e748a502aca6e9f5c46386cb5d5820b1454a1119",
+      "public_sha256": "e6af08133549d199892b09936fa2ec51c4433b039e9aefd716e36336aae387c1",
+      "hostname_fields_replaced": 1,
+      "only_hostname_metadata_changed": true,
+      "raw_preserved_privately": true,
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "573",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "5",
+          "time": "230.092"
+        }
+      ],
+      "distributed": false,
+      "exclusion_reason": "Privacy-test sentinel identifiers in automatic test IDs; no program source"
+    },
+    {
+      "file": "python-final-boundaries.xml",
+      "raw_sha256": "f04d8c49e6a828d72eb6b3dcf0ce66cad0cff2259ffd035c34e77943dccb4ef3",
+      "public_sha256": "6c90c885f11279adb02be8e8e57d9291335b8ef79cf726203c967e5916700430",
+      "hostname_fields_replaced": 1,
+      "only_hostname_metadata_changed": true,
+      "raw_preserved_privately": true,
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "45",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "time": "29.103"
+        }
+      ],
+      "distributed": false,
+      "exclusion_reason": "Privacy-test sentinel identifiers in automatic test IDs; no program source"
+    },
+    {
+      "file": "python-results-final.xml",
+      "raw_sha256": "437f6bbb6dd336c5b0b0e6bcc2c3a7bbdfec45c784f34ac1ea78d47012bfad9e",
+      "public_sha256": "7b9893583f20f52cce3f5b634145542ec8bae9c4a87ab2fca06e16e20005fac4",
+      "hostname_fields_replaced": 1,
+      "only_hostname_metadata_changed": true,
+      "raw_preserved_privately": true,
+      "suites": [
+        {
+          "name": "pytest",
+          "tests": "577",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "5",
+          "time": "257.123"
+        }
+      ],
+      "distributed": false,
+      "exclusion_reason": "Privacy-test sentinel identifiers in automatic test IDs; no program source"
+    }
+  ],
+  "junit_files_distributed": false
+}

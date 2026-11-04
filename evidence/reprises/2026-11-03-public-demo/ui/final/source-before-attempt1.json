@@ -1,0 +1,109 @@
+{
+  "captured_utc": "2026-11-03T20:27:08.712183+00:00",
+  "files": [
+    {
+      "path": "frontend/src/AnimationEditor.tsx",
+      "sha256": "4f750d3b1256faa520d73df622c2cf1350fab7f74e746573f0d64ebb8291b6e5"
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "sha256": "cca344eef31e24f098fea60c4520e74e3aab7cb4e5b76548afba00edf28c9deb"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "3a9b320dd1d78414de442755df6ad8bd5a6c9762e9993ca57071b753938b944d"
+    },
+    {
+      "path": "frontend/src/fat-workbench.css",
+      "sha256": "9555af74239a1103d3868b80ac904f65fddf2ab3ecf08bb0235cbf05911ce993"
+    },
+    {
+      "path": "frontend/src/ForceField.tsx",
+      "sha256": "f6044768f5dd16081a0ff4fdd2135120347d7eea116310986e128a1ad5aab5c0"
+    },
+    {
+      "path": "frontend/src/GuidedRun.tsx",
+      "sha256": "2e0e90b4273b8673767cb1f49acb5c6affc8efa9921f13fabac1921a58a6d586"
+    },
+    {
+      "path": "frontend/src/GuidedScenarioBuilder.tsx",
+      "sha256": "199b53c0c0e85a212193cf60fe265b760798ba88cba7aa1b169e7de7dd6ef15a"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "sha256": "587776d408fae78b3606c5755c0e80fe6fdb4ecaff45b472e06ff712bf479bdf"
+    },
+    {
+      "path": "frontend/src/Panels.tsx",
+      "sha256": "84577fb0f1e30bbecf96502284cbba99371659ab78abc42da1c326e2d46da137"
+    },
+    {
+      "path": "frontend/src/PidCanvas.tsx",
+      "sha256": "9bc708b26552023e043a277926a1b4332e2917df2f663aa376beaa862cc6b998"
+    },
+    {
+      "path": "frontend/src/scenarioFormat.ts",
+      "sha256": "c0208c59061ed422161c076c5e186e63429640f34c309886fa31e2e44de49f30"
+    },
+    {
+      "path": "frontend/src/ScenarioRun.tsx",
+      "sha256": "1faff09a807effc6135c44ee9a9f88fc4a8d0c8cca99fb906273b5cef3e7b294"
+    },
+    {
+      "path": "frontend/src/signal.ts",
+      "sha256": "5142604529d4f7a99d4805ec97b5485f9c060d5c2d640cd44332a8732f0eaf69"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "sha256": "0acdb4fd0afe75a54f5841fcf28ffae048af5afecefafbbfe7d383ab6e49cb24"
+    },
+    {
+      "path": "frontend/src/TestConsole.tsx",
+      "sha256": "358eab2cd6e567d1c988efb6481a93964c365760d660320e3139c30be8838bda"
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "sha256": "b2b1dc2a0e6b84de89a98dd7aa0632c16ad4e3f2546689241428d82ad4317c4a"
+    },
+    {
+      "path": "frontend/src/useModalKeyboard.ts",
+      "sha256": "18933299ac6d74992e831c991beb83e234b80b37a8f208dc12098842b2187ff1"
+    },
+    {
+      "path": "frontend/tests/adversarial.spec.ts",
+      "sha256": "55662407c436eaf0ed38b7e0201d11fafad4c2e9133b84686ecd2904f982c8a2"
+    },
+    {
+      "path": "frontend/tests/api-errors.spec.ts",
+      "sha256": "0bd89e9b0e3c3b8816c3443048173b9a50c00844f2a09e6e8e9c526a3c400e02"
+    },
+    {
+      "path": "frontend/tests/guided-fat.spec.ts",
+      "sha256": "c1953ae426d276251c6c1cf42f2a24696196bbda23589693c3e7ee6e0da05316"
+    },
+    {
+      "path": "frontend/tests/public-workbench.spec.ts",
+      "sha256": "94f17d365446f17456621320502fa6e2e14bb7c7e8eac8d97554a3ebec0d1531"
+    },
+    {
+      "path": "frontend/tests/requirements-audit.spec.ts",
+      "sha256": "c5617e37ba0bbfa591dae5474351aa2bb4b64a42c2ceeaaafd49b29f3f12e71c"
+    },
+    {
+      "path": "frontend/tests/scenario-format.spec.ts",
+      "sha256": "40ad51f6a15f086a556db1bb231e097c496c9da229388e8e10f206326f96ae4f"
+    },
+    {
+      "path": "frontend/tests/signal.spec.ts",
+      "sha256": "abe584130d9ea1aad18596f2e16ca2af1302ec50488889797fe81251edb6590e"
+    },
+    {
+      "path": "frontend/tests/tia-version.spec.ts",
+      "sha256": "ffd3750b41bc25ec9380c2bedf0ef2df8d537763bec169503c3aae8dd416e74d"
+    },
+    {
+      "path": "frontend/tests/workbench.spec.ts",
+      "sha256": "5e0ca251d1b1bfca4b8c24ac658820679c04972f52e123c4f42f9e4b188d4e1e"
+    }
+  ]
+}

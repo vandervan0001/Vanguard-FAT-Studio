@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "scope": "Public application wheel only; final portable awaits documentation and test freeze",
+  "path": ".local/public-final-2026-11-03/wheel/local_fat_studio-0.2.1-py3-none-any.whl",
+  "sha256": "df7af8daedcf0ebff512b4c749320bc63e8c6c0b82ea74ef9002f374a8e9aaf5",
+  "size": 419570,
+  "entries": 45,
+  "source_payloads_identical": 39,
+  "source_snapshot_contains_private_modules": false,
+  "web_assets": {
+    "index-Bi1N3rC1.js": "02971c5cd0512d264c5b842b4d15371244ef4f579abc7f0600dabde3ea9629ff",
+    "index-Bi6nxg13.css": "a43b52fb1ece2cdf6230afa5a4a403321546221892940fa91f5077bc1c21d92f"
+  }
+}

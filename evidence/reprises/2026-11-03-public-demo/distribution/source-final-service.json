@@ -1,0 +1,23 @@
+{
+  "started_at_utc": "2026-11-03T20:52:43.417790+00:00",
+  "checks": [
+    "production HTML and local JS/CSS served outside source tree",
+    "demo start, pause, marker and explicit unevaluated verdict",
+    "consistent CSV, HTML and JSON exports",
+    "stop/reset preserve archived evidence",
+    "fresh process reopens saved evidence and remains idle"
+  ],
+  "health": {
+    "status": "ok",
+    "version": "0.2.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "sample_count": 4,
+  "status": "passed",
+  "finished_at_utc": "2026-11-03T20:52:51.552166+00:00",
+  "scope": "Installed application and loopback HTTP; no Siemens or external PLC",
+  "offline_install_with_PIP_NO_INDEX": true,
+  "installed_on_temporary_copy": true,
+  "sealed_source_directory_not_modified": true
+}

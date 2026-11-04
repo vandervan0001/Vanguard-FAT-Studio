@@ -1,0 +1,21 @@
+{
+  "name": "motion-design-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic local Canvas motion design and rhythmic ads, captured in Chromium and encoded with FFmpeg.",
+  "scripts": {
+    "preview": "node scripts/serve.mjs",
+    "audio": "node scripts/audio.mjs",
+    "subtitles": "node scripts/subtitles.mjs",
+    "draft": "node scripts/audio.mjs && node scripts/render.mjs --draft",
+    "check": "node scripts/check.mjs",
+    "master": "node scripts/audio.mjs && node scripts/render.mjs --master"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

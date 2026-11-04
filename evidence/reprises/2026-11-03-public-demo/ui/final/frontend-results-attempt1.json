@@ -1,0 +1,2105 @@
+{
+  "config": {
+    "configFile": "C:\\FAT_Studio\\frontend\\playwright.config.ts",
+    "rootDir": "C:/FAT_Studio/frontend/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/FAT_Studio/frontend/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/FAT_Studio/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/serve.mjs",
+      "url": "http://127.0.0.1:8766/api/health",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "adversarial.spec.ts",
+      "file": "adversarial.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "un brouillon de conclusion et de marqueur survit aux changements de section",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2219,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:18.190Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-37c7c41fe2ba6232fc87",
+          "file": "adversarial.spec.ts",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "une conclusion enregistrée est relue après rechargement et ne devient pas Non évalué",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:20.676Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-df342aca94c4e5ae7479",
+          "file": "adversarial.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "un ancien polling arrivé après Pause ne remet jamais l’écran en cours",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1548,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:22.696Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-b177c07726e80489f01a",
+          "file": "adversarial.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "enregistrer ou valider un projet inchangé conserve l’essai arrêté et ses exports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1957,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:24.268Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-5dbd5e525d64ceb9bd5b",
+          "file": "adversarial.spec.ts",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "title": "créer un procédé vide, ses tags, son scénario puis l’importer reproduit le projet",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2891,
+                  "error": {
+                    "message": "Error: locator.setInputFiles: Error: strict mode violation: locator('input[type=\"file\"][accept=\".json,application/json\"]') resolved to 2 elements:\n    1) <input hidden=\"\" type=\"file\" accept=\".json,application/json\"/> aka locator('input[type=\"file\"]').first()\n    2) <input hidden=\"\" type=\"file\" accept=\".json,application/json\" aria-label=\"Fichier de scénarios JSON\"/> aka getByLabel('Fichier de scénarios JSON')\n\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"file\"][accept=\".json,application/json\"]')\u001b[22m\n",
+                    "stack": "Error: locator.setInputFiles: Error: strict mode violation: locator('input[type=\"file\"][accept=\".json,application/json\"]') resolved to 2 elements:\n    1) <input hidden=\"\" type=\"file\" accept=\".json,application/json\"/> aka locator('input[type=\"file\"]').first()\n    2) <input hidden=\"\" type=\"file\" accept=\".json,application/json\" aria-label=\"Fichier de scénarios JSON\"/> aka getByLabel('Fichier de scénarios JSON')\n\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"file\"][accept=\".json,application/json\"]')\u001b[22m\n\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:137:3",
+                    "location": {
+                      "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                      "column": 3,
+                      "line": 137
+                    },
+                    "snippet": "  135 |   const exported = await readFile((await (await download).path())!, 'utf8');\n  136 |   expect(JSON.parse(exported)).toEqual({ format: 'fat-studio/project', version: '1.0', project: stored });\n> 137 |   await page.locator('input[type=\"file\"][accept=\".json,application/json\"]').setInputFiles({ name: 'cuve.json', mimeType: 'application/json', buffer: Buffer.from(exported) });\n      |   ^\n  138 |   await expect(page.getByRole('status')).toContainText('Projet importé');\n  139 |   await page.getByLabel('Scénario', { exact: true }).selectOption(stored.scenarios[0].id);\n  140 |   await page.getByRole('button', { name: 'Démarrer', exact: true }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                        "column": 3,
+                        "line": 137
+                      },
+                      "message": "Error: locator.setInputFiles: Error: strict mode violation: locator('input[type=\"file\"][accept=\".json,application/json\"]') resolved to 2 elements:\n    1) <input hidden=\"\" type=\"file\" accept=\".json,application/json\"/> aka locator('input[type=\"file\"]').first()\n    2) <input hidden=\"\" type=\"file\" accept=\".json,application/json\" aria-label=\"Fichier de scénarios JSON\"/> aka getByLabel('Fichier de scénarios JSON')\n\nCall log:\n\u001b[2m  - waiting for locator('input[type=\"file\"][accept=\".json,application/json\"]')\u001b[22m\n\n\n  135 |   const exported = await readFile((await (await download).path())!, 'utf8');\n  136 |   expect(JSON.parse(exported)).toEqual({ format: 'fat-studio/project', version: '1.0', project: stored });\n> 137 |   await page.locator('input[type=\"file\"][accept=\".json,application/json\"]').setInputFiles({ name: 'cuve.json', mimeType: 'application/json', buffer: Buffer.from(exported) });\n      |   ^\n  138 |   await expect(page.getByRole('status')).toContainText('Projet importé');\n  139 |   await page.getByLabel('Scénario', { exact: true }).selectOption(stored.scenarios[0].id);\n  140 |   await page.getByRole('button', { name: 'Démarrer', exact: true }).click();\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:137:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:26.248Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-créer-un-procé-0708f-mporter-reproduit-le-projet\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-créer-un-procé-0708f-mporter-reproduit-le-projet\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-créer-un-procé-0708f-mporter-reproduit-le-projet\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                    "column": 3,
+                    "line": 137
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-eaa7a52b1c6e1adb81a4",
+          "file": "adversarial.spec.ts",
+          "line": 113,
+          "column": 1
+        },
+        {
+          "title": "une perte de réseau bloque les commandes puis restaure le brouillon au retour du service",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1898,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:31.150Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-17a2b734fa67a84184c4",
+          "file": "adversarial.spec.ts",
+          "line": 145,
+          "column": 1
+        },
+        {
+          "title": "une largeur de 768 px garde les actions du banc nommées et accessibles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1205,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:33.317Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-758a241a5b816e63bea8",
+          "file": "adversarial.spec.ts",
+          "line": 158,
+          "column": 1
+        },
+        {
+          "title": "un brouillon de rapport reste attaché à son essai si un autre onglet redémarre",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1808,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:34.554Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-c769103a82545d373c93",
+          "file": "adversarial.spec.ts",
+          "line": 177,
+          "column": 1
+        },
+        {
+          "title": "une sauvegarde lente de conclusion conserve les modifications saisies pendant la requête",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1456,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:36.381Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-b447f150ce49e6d999d3",
+          "file": "adversarial.spec.ts",
+          "line": 201,
+          "column": 1
+        },
+        {
+          "title": "effacer la valeur du forçage ne force pas silencieusement la mesure à zéro",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1354,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:37.859Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-89bb3e87b288735f8064",
+          "file": "adversarial.spec.ts",
+          "line": 224,
+          "column": 1
+        },
+        {
+          "title": "les symboles montrent la pompe sans retour optionnel et la vanne partiellement ouverte",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:39.232Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-dbd17f653287a57aaae8",
+          "file": "adversarial.spec.ts",
+          "line": 235,
+          "column": 1
+        },
+        {
+          "title": "un mapping CSV exporté se réimporte et une erreur de mapping conserve les associations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1458,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:40.682Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-52e98ab81a01c5d58132",
+          "file": "adversarial.spec.ts",
+          "line": 247,
+          "column": 1
+        },
+        {
+          "title": "le mapping d’un autre projet ne peut pas être téléchargé pendant une course entre onglets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1064,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:42.161Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-afb77edf12abfa174bf0",
+          "file": "adversarial.spec.ts",
+          "line": 266,
+          "column": 1
+        },
+        {
+          "title": "un chargement retardé conserve le projet révisé et le nouvel essai d’un autre onglet",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7315,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 6000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Charger le pilote', exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 6000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Charger le pilote', exact: true })\u001b[22m\n\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:295:78",
+                    "location": {
+                      "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                      "column": 78,
+                      "line": 295
+                    },
+                    "snippet": "  293 |   await page.route('**/api/pilot/load', async route => { captured = route.request().headers(); ready(); await held; await route.continue(); });\n  294 |   await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();\n> 295 |   await page.getByRole('button', { name: 'Charger le pilote', exact: true }).click();\n      |                                                                              ^\n  296 |   await queued;\n  297 |   const revisedResponse = await request.put('/api/project', { headers: originalHeaders, data: { ...baseline, name: 'Révision plus récente à conserver' } });\n  298 |   expect(revisedResponse.ok()).toBeTruthy();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                        "column": 78,
+                        "line": 295
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 6000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Charger le pilote', exact: true })\u001b[22m\n\n\n  293 |   await page.route('**/api/pilot/load', async route => { captured = route.request().headers(); ready(); await held; await route.continue(); });\n  294 |   await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();\n> 295 |   await page.getByRole('button', { name: 'Charger le pilote', exact: true }).click();\n      |                                                                              ^\n  296 |   await queued;\n  297 |   const revisedResponse = await request.put('/api/project', { headers: originalHeaders, data: { ...baseline, name: 'Révision plus récente à conserver' } });\n  298 |   expect(revisedResponse.ok()).toBeTruthy();\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:295:78"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:43.245Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-un-chargement--4aa59-vel-essai-d’un-autre-onglet\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-un-chargement--4aa59-vel-essai-d’un-autre-onglet\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-un-chargement--4aa59-vel-essai-d’un-autre-onglet\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                    "column": 78,
+                    "line": 295
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-c0d3fd6062034a12d79c",
+          "file": "adversarial.spec.ts",
+          "line": 282,
+          "column": 1
+        },
+        {
+          "title": "un polling bloqué est signalé puis reprend sans perdre le brouillon",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7108,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:52.529Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-555fe32ed69bc056de1f",
+          "file": "adversarial.spec.ts",
+          "line": 320,
+          "column": 1
+        },
+        {
+          "title": "un brouillon JSON non appliqué reste récupérable après un conflit de projet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1822,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:27:59.904Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-855134ffcb2c6fee82a0",
+          "file": "adversarial.spec.ts",
+          "line": 334,
+          "column": 1
+        },
+        {
+          "title": "une association devenue incompatible reste explicite et peut être corrigée",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1461,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:01.758Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-6ddad37414e0fc44f67c",
+          "file": "adversarial.spec.ts",
+          "line": 348,
+          "column": 1
+        },
+        {
+          "title": "une session locale bloquée propose de réessayer et récupère au retour du service",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6871,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:03.238Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-251720776721e5c77abd",
+          "file": "adversarial.spec.ts",
+          "line": 365,
+          "column": 1
+        },
+        {
+          "title": "glisser un symbole, relier ses ports, déplacer et supprimer persiste le vrai graphe",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4783,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m7\u001b[39m\nReceived length: \u001b[31m8\u001b[39m\nReceived array:  \u001b[31m[{\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_level_eef0d1fc\", \"initial_value\": 0, \"max\": 100, \"min\": 0, \"name\": \"TK-101.level\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"%\", \"writable\": true}, {\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_volume_9418cdae\", \"initial_value\": 0, \"max\": null, \"min\": 0, \"name\": \"TK-101.volume\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"L\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_high_8c33d0ce\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.high\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_low_3e7ef415\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.low\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"output\", \"id\": \"pump_55b1f489_command_ab530841\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.command\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": false}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_feedback_b3b69b0e\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.feedback\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_fault_851e360c\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.fault\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_manual_request_a678e216\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.manual_request\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m7\u001b[39m\nReceived length: \u001b[31m8\u001b[39m\nReceived array:  \u001b[31m[{\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_level_eef0d1fc\", \"initial_value\": 0, \"max\": 100, \"min\": 0, \"name\": \"TK-101.level\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"%\", \"writable\": true}, {\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_volume_9418cdae\", \"initial_value\": 0, \"max\": null, \"min\": 0, \"name\": \"TK-101.volume\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"L\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_high_8c33d0ce\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.high\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_low_3e7ef415\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.low\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"output\", \"id\": \"pump_55b1f489_command_ab530841\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.command\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": false}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_feedback_b3b69b0e\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.feedback\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_fault_851e360c\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.fault\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_manual_request_a678e216\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.manual_request\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}]\u001b[39m\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:434:24",
+                    "location": {
+                      "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                      "column": 24,
+                      "line": 434
+                    },
+                    "snippet": "  432 |   expect(deleted.equipment.map(item => item.id)).toEqual([tankId]);\n  433 |   expect(deleted.connections).toEqual([]);\n> 434 |   expect(deleted.tags).toHaveLength(7);\n      |                        ^\n  435 | });\n  436 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                        "column": 24,
+                        "line": 434
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m7\u001b[39m\nReceived length: \u001b[31m8\u001b[39m\nReceived array:  \u001b[31m[{\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_level_eef0d1fc\", \"initial_value\": 0, \"max\": 100, \"min\": 0, \"name\": \"TK-101.level\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"%\", \"writable\": true}, {\"data_type\": \"REAL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_volume_9418cdae\", \"initial_value\": 0, \"max\": null, \"min\": 0, \"name\": \"TK-101.volume\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"L\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_high_8c33d0ce\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.high\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"tank_fe3a3729_low_3e7ef415\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"TK-101.low\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"output\", \"id\": \"pump_55b1f489_command_ab530841\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.command\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": false}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_feedback_b3b69b0e\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.feedback\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_fault_851e360c\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.fault\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}, {\"data_type\": \"BOOL\", \"direction\": \"input\", \"id\": \"pump_55b1f489_manual_request_a678e216\", \"initial_value\": false, \"max\": null, \"min\": null, \"name\": \"P-101.manual_request\", \"node_id\": \"\", \"plc_address\": \"\", \"plc_symbol\": \"\", \"signal\": null, \"unit\": \"\", \"writable\": true}]\u001b[39m\n\n  432 |   expect(deleted.equipment.map(item => item.id)).toEqual([tankId]);\n  433 |   expect(deleted.connections).toEqual([]);\n> 434 |   expect(deleted.tags).toHaveLength(7);\n      |                        ^\n  435 | });\n  436 |\n    at C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts:434:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:10.129Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-glisser-un-sym-dbb86-mer-persiste-le-vrai-graphe\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-glisser-un-sym-dbb86-mer-persiste-le-vrai-graphe\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\FAT_Studio\\frontend\\test-results\\artifacts\\adversarial-glisser-un-sym-dbb86-mer-persiste-le-vrai-graphe\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\FAT_Studio\\frontend\\tests\\adversarial.spec.ts",
+                    "column": 24,
+                    "line": 434
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-1c2456542eaefcab2c11",
+          "file": "adversarial.spec.ts",
+          "line": 379,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "api-errors.spec.ts",
+      "file": "api-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "une erreur non JSON ou un corps null reste une erreur lisible",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.126Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-1c0b9a0759835c31d5c3",
+          "file": "api-errors.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "un jeton expiré est renouvelé une seule fois et conserve le contexte projet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.196Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-e0c78788d586237b15ef",
+          "file": "api-errors.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "un renouvellement de session ne redirige pas une action vers un autre projet ou essai",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.228Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-820216487a9391fc74f9",
+          "file": "api-errors.spec.ts",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "restaurer une archive conserve les octets et le contexte capturés après renouvellement de session",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.258Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-497b2d2b4af1b3761410",
+          "file": "api-errors.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "ouvrir le dossier déjà actif conserve le run annoncé par le serveur",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.291Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-ede2dcb35a34f2b53e56",
+          "file": "api-errors.spec.ts",
+          "line": 77,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "guided-fat.spec.ts",
+      "file": "guided-fat.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "pupitre complet, symboles vectoriels, impulsion serveur et maintien libéré",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5553,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:17.350Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f42a3a1e3a421570b946-85c8aed7a2348db9271f",
+          "file": "guided-fat.spec.ts",
+          "line": 23,
+          "column": 1
+        },
+        {
+          "title": "stimuli analogiques : ingénierie, pourcentage, mA et codes de diagnostic déclarés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3751,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:23.130Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f42a3a1e3a421570b946-6e9152c27cd582ed3463",
+          "file": "guided-fat.spec.ts",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "un diagnostic attendu peut être observé conforme sans confondre hors plage et erreur de communication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2424,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:26.902Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f42a3a1e3a421570b946-0cc81b4193c5ab333e46",
+          "file": "guided-fat.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "un STEP en attente suspend les I/O et défauts, avec arrêt et rapports accessibles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12452,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:29.349Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f42a3a1e3a421570b946-f56bbfdbde55d0223d50",
+          "file": "guided-fat.spec.ts",
+          "line": 136,
+          "column": 1
+        },
+        {
+          "title": "préparer une FAT, réordonner et supprimer, puis exécuter chaque STEP avec observation humaine",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7740,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:41.820Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f42a3a1e3a421570b946-59053809c23d95c5da00",
+          "file": "guided-fat.spec.ts",
+          "line": 184,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "public-workbench.spec.ts",
+      "file": "public-workbench.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "échanger les scénarios versionnés, refuser les collisions et garder le projet physique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3389,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:49.626Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-8417b41ba198c6a47d8c",
+          "file": "public-workbench.spec.ts",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "la pause ouvre le builder, reprendre conserve le run, appliquer préserve son historique",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4616,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:53.032Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-e12b278c16a9a48a0c14",
+          "file": "public-workbench.spec.ts",
+          "line": 71,
+          "column": 1
+        },
+        {
+          "title": "archiver puis restaurer dans un nouveau dossier conserve les preuves et refuse un ancien onglet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9059,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:28:57.667Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-f843dbdfa04988792b8e",
+          "file": "public-workbench.spec.ts",
+          "line": 100,
+          "column": 1
+        },
+        {
+          "title": "animer un objet par TRUE ou FALSE et rendre une qualité invalide visible",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4930,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:06.747Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-b26816ea1e4bf591d65f",
+          "file": "public-workbench.spec.ts",
+          "line": 184,
+          "column": 1
+        },
+        {
+          "title": "le flux dessiné suit le débit du modèle, y compris vanne fermée et défaut moteur",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:11.697Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-fa509565b400096dee80",
+          "file": "public-workbench.spec.ts",
+          "line": 232,
+          "column": 1
+        },
+        {
+          "title": "une animation numérique REAL compare le seuil au Float32 réellement échangé",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3525,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:14.117Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-2e97ac269532c4cdd09e",
+          "file": "public-workbench.spec.ts",
+          "line": 250,
+          "column": 1
+        },
+        {
+          "title": "P&ID et pupitres restent dans la page à 768, 920, 1024 et 1280 pixels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7790,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:17.659Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6ab8c891a5c384cd9bdb-3ee5ef2a00769567c1fd",
+          "file": "public-workbench.spec.ts",
+          "line": 271,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "requirements-audit.spec.ts",
+      "file": "requirements-audit.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "audit public : échelles déclarées, préréglages et préparation des vues FAT",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7721,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:25.496Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "d2b138010c157fbc10ef-43646b4fa16acbfd413d",
+          "file": "requirements-audit.spec.ts",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "scenario-format.spec.ts",
+      "file": "scenario-format.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "refuse des objets à la place du texte avant de les exposer à React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.247Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-b8b15a70cd836d9fc0a3",
+          "file": "scenario-format.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "refuse un temps infini et une séquence hors ordre ou durée",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.269Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-f5e387d822ea6f915ca7",
+          "file": "scenario-format.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "préserve les vrais booléens, les valeurs négatives et les étapes au même instant",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.293Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-8578c72068dbbb6558b5",
+          "file": "scenario-format.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "signale champs inconnus et mauvaises valeurs de défaut sans les supprimer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.319Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-3dccb9824c0cf45b2d93",
+          "file": "scenario-format.spec.ts",
+          "line": 22,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "signal.spec.ts",
+      "file": "signal.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "la saisie en °C, % et mA donne le même stimulus brut et préserve l’unité affichée",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.357Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "26aa2b9036350ebb57b1-bd9e3f1b8bc47c88b641",
+          "file": "signal.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "les diagnostics utilisent les deux codes déclarés et refusent tout dépassement de stockage",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 53,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.379Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "26aa2b9036350ebb57b1-a7c79e1b9532181360ae",
+          "file": "signal.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "la prévisualisation conserve les frontières INT et REAL du protocole",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.448Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "26aa2b9036350ebb57b1-62984e78f1716b87ca65",
+          "file": "signal.spec.ts",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tia-version.spec.ts",
+      "file": "tia-version.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "la version TIA sélectionnée persiste, suit le projet exporté et revient à l’import",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2754,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:33.483Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87095c390c450e11c1a0-99446f4913961c16ec9f",
+          "file": "tia-version.spec.ts",
+          "line": 21,
+          "column": 1
+        },
+        {
+          "title": "la version TIA est verrouillée pendant un essai",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1140,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:36.257Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87095c390c450e11c1a0-78c933b7d9150d97638b",
+          "file": "tia-version.spec.ts",
+          "line": 62,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "workbench.spec.ts",
+      "file": "workbench.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "charger le laboratoire public, commander une pompe et injecter son défaut",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3037,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:37.453Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-1e923195b5d4f86307cb",
+          "file": "workbench.spec.ts",
+          "line": 30,
+          "column": 1
+        },
+        {
+          "title": "recharger un scénario automatique en pause conserve sa sélection et son plan",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3936,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:40.511Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-6e9d583e585e2242ae8c",
+          "file": "workbench.spec.ts",
+          "line": 56,
+          "column": 1
+        },
+        {
+          "title": "éditer un vrai P&ID, sauvegarder puis recharger conserve les propriétés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1695,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:44.470Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3fcc12d0268a424f50a4",
+          "file": "workbench.spec.ts",
+          "line": 87,
+          "column": 1
+        },
+        {
+          "title": "essai réel : boucle fermée, défaut, forçage, pause/reprise et exports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4558,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:46.187Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-34003f1bf3129493c10d",
+          "file": "workbench.spec.ts",
+          "line": 104,
+          "column": 1
+        },
+        {
+          "title": "un JSON de scénario invalide reste un brouillon et ne casse pas React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1406,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:50.766Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3d84e29e5c5912cace91",
+          "file": "workbench.spec.ts",
+          "line": 160,
+          "column": 1
+        },
+        {
+          "title": "un import invalide préserve le projet affiché et enregistré",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 941,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:52.194Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-e9d7f2c47e1a3114bad9",
+          "file": "workbench.spec.ts",
+          "line": 180,
+          "column": 1
+        },
+        {
+          "title": "un autre onglet change de projet : commandes bloquées et brouillon récupérable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1483,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:53.154Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-a35d61305d346a154ede",
+          "file": "workbench.spec.ts",
+          "line": 189,
+          "column": 1
+        },
+        {
+          "title": "une nouvelle révision du même projet ne remplace pas silencieusement le brouillon",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1311,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-03T20:29:54.654Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3c67dd9a1919cda0c147",
+          "file": "workbench.spec.ts",
+          "line": 204,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-03T20:27:12.318Z",
+    "duration": 164899.269,
+    "expected": 51,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "launcher": "C:\\FAT_Studio-Offline-Validation-2026-11-02\\Start-FAT.cmd",
+  "fresh_venv": true,
+  "pip_no_index": true,
+  "pip_cache_disabled": true,
+  "configured_index": "http://127.0.0.1:9",
+  "health": {
+    "status": "ok",
+    "version": "0.2.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "runtime_status": "idle",
+  "connection": {
+    "mode": "demo",
+    "connected": false,
+    "target": "Contrôleur de démonstration local — aucun PLC connecté",
+    "quality": "disconnected",
+    "last_update": null,
+    "error": null
+  }
+}

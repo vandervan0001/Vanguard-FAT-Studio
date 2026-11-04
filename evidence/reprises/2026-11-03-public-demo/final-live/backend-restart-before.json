@@ -1,0 +1,12 @@
+{
+  "utc": "2026-11-03T20:28:17.6115782Z",
+  "prior_worker": 30976,
+  "module": "python -m fat_studio serve",
+  "endpoint": "http://127.0.0.1:8770",
+  "exact_data_directory": "C:/FAT_Studio/.local/public-demo-2026-11-03/fat-data",
+  "prior_status": "stopped",
+  "prior_connected": false,
+  "prior_history_preserved": true,
+  "only_backend8770_terminated": true,
+  "other_service_or_cpu_action": false
+}

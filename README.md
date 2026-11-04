@@ -1,141 +1,53 @@
-# FAT Studio
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="frontend/public/brand/logo_vanguard_wordmark_horizontal_white.png">
+  <img alt="Vanguard" src="frontend/public/brand/logo_vanguard_wordmark_horizontal.png" width="300">
+</picture>
 
-**Banc FAT local avec P&ID interactif, simulation de procédé et connexion OPC UA à une instance PLCSIM Advanced configurée.**
+# Vanguard FAT Studio
 
-Le programme PLC reste le contrôleur du procédé. FAT Studio lit ses commandes, calcule les équipements et renvoie les capteurs simulés. Le mode **Démonstration** fournit un contrôleur distinct pour essayer l'application sans Siemens.
+**Un banc local pour tester un programme PLC avant d’avoir l’installation sous la main.**
 
-Version actuelle : **0.2.1**, le 2 novembre 2026, avec [choix V20/V21](docs/TIA_VERSIONS.md), profils d'ingénierie séparés et [correctif d'encodage Windows](evidence/reprises/2026-11-02-windows-utf8/VERIFICATION.md). La [revue adverse 0.1.1](docs/ADVERSARIAL_REVIEW.md) et ses preuves restent conservées. **TIA Portal et PLCSIM Advanced ne sont pas présents dans l'environnement de réalisation : la compilation du portage V20 et la qualification Siemens des deux versions restent à effectuer sur le poste cible.** Voir [ACCEPTANCE](docs/ACCEPTANCE.md) et les [preuves du choix V20/V21](evidence/reprises/2026-11-02-v20-v21/VERIFICATION.md).
+Reliez une CPU virtuelle à un procédé simulé. Envoyez vos entrées, suivez les commandes et les retours sur le P&ID, puis rejouez le scénario ou déroulez la FAT pas à pas. Le code du banc est gratuit et sous [licence MIT](LICENSE).
 
-## Démarrer sous Windows
+[Essayer la démo](#essayer-sans-siemens) · [Connecter PLCSIM](#connecter-tia-portal-et-plcsim) · [Utiliser Codex ou Claude](#utiliser-codex-ou-claude) · [Voir la vidéo](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/public-preview-2026-11-04) · [Contribuer](#contribuer)
 
-1. Installer **Python 3.12 x64** sur le poste. Node.js n'est pas nécessaire pour utiliser la distribution précompilée.
-2. Extraire l'archive entière dans un dossier local, ou cloner le dépôt.
-3. Double-cliquer **`Start-FAT.cmd`**.
-4. Lors du premier lancement, les dépendances verrouillées sont installées dans `.venv`. Le navigateur ouvre ensuite **http://127.0.0.1:8765**.
-5. Garder la fenêtre du serveur ouverte. La fermer arrête le banc.
+![Démo de transfert avec trois cuves, pupitre des entrées digitales à gauche et des entrées analogiques à droite](evidence/reprises/2026-11-03-vanguard-brand/ui/final/desktop/01-console.png)
 
-Si l'archive contient `wheelhouse/` et `offline-manifest.json`, la première installation utilise ces dépendances locales et vérifie leurs empreintes. Depuis un clone sans ces fichiers, elle utilise PyPI. L'exécution du banc est entièrement locale. Le kit Windows livré contient les 29 wheels runtime pour Python 3.12 x64 ; un nouveau kit se prépare avec `scripts/prepare-offline.ps1`. L'interpréteur Python, Siemens et l'option d'ingénierie TIA s'installent séparément. Voir le [guide d'installation](docs/INSTALLATION.md) pour la politique PowerShell, les postes sans Internet et le dépannage.
+## Essayer sans Siemens
 
-### Essayer la démonstration
+1. Installez **Python 3.12 x64**, puis [téléchargez les sources](https://github.com/vandervan0001/Vanguard-FAT-Studio/archive/refs/heads/main.zip) et extrayez le ZIP.
+2. Sous Windows, double-cliquez sur **Vanguard-FAT-Studio.cmd**. Au premier lancement, le script crée un environnement local et installe les dépendances verrouillées depuis PyPI. L’interface compilée est fournie.
+3. Dans [le banc local](http://127.0.0.1:8765), ouvrez la **démo laboratoire** et choisissez le scénario **Alimentation de la cuve source**. Cliquez sur **Préparer la vue**, puis sur **Démarrer**.
 
-Le projet **TK-101 · Banc de remplissage** est chargé au premier démarrage : huit équipements, treize tags et trois scénarios.
+La démo fournit trois cuves, quatre pompes, huit vannes et 75 variables. Le programme de démonstration fournit les commandes et le banc simule les niveaux et retours. Essayez un stimulus analogique de 12 mA et suivez le résultat dans les tendances.
 
-1. Choisir **Cycle de référence** dans le sélecteur de scénario.
-2. Cliquer **Démarrer** et observer la cuve, les commandes et les tendances.
-3. Le scénario s'arrête à **32 secondes simulées**. Ses assertions sont enregistrées.
-4. Ouvrir **Tendances & rapport**, ajouter un commentaire et renseigner le verdict humain.
-5. Exporter le CSV, le rapport HTML imprimable ou les preuves JSON.
-6. Réinitialiser et essayer **Défaut moteur** ou **Capteur de niveau figé**.
+Sous Linux ou macOS, lancez `bash scripts/start.sh` depuis les sources avec Python 3.12. Le [guide d’installation](docs/INSTALLATION.md) couvre aussi la construction du portable Windows et les kits hors ligne.
 
-L'absence de Siemens n'est jamais masquée : le bandeau affiche **DÉMONSTRATION** et « aucun PLC connecté ».
+## Connecter TIA Portal et PLCSIM
 
-### Linux / macOS, pour la démonstration
+Le banc échange en OPC UA avec une cible virtuelle autorisée. Le programme PLC commande le procédé. Le banc lit ses sorties et écrit les entrées simulées déclarées dans le mapping. Sur le P&ID, vous pouvez associer une animation à l’état d’un tag et retrouver la mesure, l’adresse PLC et le NodeId dans la table de variables.
 
-Depuis un clone source sans les wheels Windows, avec Python 3.12 installé :
-
-```bash
-bash scripts/start.sh
-```
-
-PLCSIM Advanced et TIA Portal restent des logiciels Windows. Le script installe le banc dans un environnement Python isolé puis sert la même interface locale. L'archive Windows contient un dépôt Git et un bundle : `git clone FAT-Studio.bundle fat-studio-source` crée une copie source sans les dépendances spécifiques à Windows.
-
-## Fonctions livrées
-
-| Domaine | Fonctionnement |
+| À tester | Dans le banc |
 | --- | --- |
-| P&ID | Palette de sept symboles, glisser-déposer, déplacement, connexions, zoom, panoramique, grille, propriétés et sauvegarde JSON |
-| Variables | BOOL, INT, DINT, REAL ; sens vu depuis le PLC ; unités, bornes, autorisation d'écriture ; mapping CSV et NodeIds |
-| Procédé | Cuve avec bilan de volume, pompe, vannes TOR/modulante, instruments analogiques/binaires et indicateur PLC |
-| Scénarios | Actions datées, forçages, libérations, défauts, marqueurs, assertions et durée ; pause/reprise/arrêt/reset |
-| Défauts | Moteur en défaut, vanne bloquée, capteur figé et signal hors plage ; état visible et journalisé |
-| Traces | Historique SQLite local, enregistrement à chaque cycle, tendances à 2 Hz, rapports HTML, CSV et JSON |
-| OPC UA | Validation des nœuds/types/droits avant écriture, identité serveur, politique locale, confirmation de cible, certificats et arrêt sur erreur |
-| TIA/IA | Czarnak MCP épinglé, clients IA en lecture seule, export/diff puis import et compilation via CLI humain séparé |
-| Livraison | Interface précompilée, scripts Windows/Linux, procédure hors ligne, exemples Siemens, tests et CI Windows/Linux |
+| Bouton, capteur ou défaut | Impulsion ou maintien BOOL. Stimulus analogique en points PLC, unités d’ingénierie, pourcentage ou signal électrique selon le profil. |
+| Séquence reproductible | Scénario temporisé avec écritures et contrôles attendus, ou FAT pas à pas avec stimuli préparés et observation du testeur. |
+| Relecture d’un essai | Tendances, rapport HTML, traces CSV et preuves JSON. Archive `.fat.zip` pour restaurer un projet et son historique dans un nouveau dossier. |
 
-Les lignes du dessin sont des connexions visuelles. Les débits utilisent les paramètres explicites **cuve / sens / groupe de débit** : les capacités en série prennent leur minimum, les branches indépendantes s'additionnent. Ce comportement évite de prétendre fournir un solveur hydraulique général. Voir [modèle de procédé](docs/MODEL.md).
+La démo a passé **31 attentes sur 31** lors de la campagne sur TIA Portal V21 et S7-PLCSIM Advanced V8. Le testeur renseigne le verdict FAT. Le P&ID sert à simuler les interactions du procédé, dans les limites du modèle décrit dans la documentation. [Configurer PLCSIM](docs/PLCSIM_SETUP.md) · [Projet TIA de démonstration](docs/DEMO_PLC.md) · [Modèle de procédé](docs/MODEL.md) · [Preuve de la campagne](evidence/reprises/2026-11-03-public-demo/final-live/VERIFICATION.md)
 
-## Connecter PLCSIM Advanced
+## Utiliser Codex ou Claude
 
-Suivre [PLCSIM_SETUP](docs/PLCSIM_SETUP.md). La procédure prévoit :
+Donnez à votre assistant le dossier du projet, vos règles de programmation et le [prompt de démarrage](docs/AI_QUICKSTART.md). Il peut préparer du code PLC à relire, créer des scénarios à partir des formats JSON et piloter le banc via le CLI ou l’API locale. L’accès d’ingénierie TIA exposé à l’assistant est en lecture seule. Le banc n’a pas besoin de clé API de modèle. [Contrat CLI et API](docs/AI_CONTROL.md) · [Formats JSON](docs/FORMAT.md)
 
-1. Relever CPU, firmware, Windows, TIA Portal, PLCSIM Advanced et configuration OPC UA.
-2. Utiliser une **copie du projet TIA**, activer sa simulation et configurer PLCSIM en TCP/IP avec l'adaptateur virtuel local isolé.
-3. Créer le DB d'échange à partir de `siemens/DB_FAT.scl` ou mapper les variables existantes. Le helper livré doit être adapté aux interfaces du programme testé ; il ne remplace pas sa logique.
-4. Exposer les variables OPC UA et relever leurs **NodeIds réels**, le namespace et l'ApplicationUri. Les exemples ne sont pas une découverte automatique.
-5. Autoriser la cible sur le poste avec `python -m fat_studio authorize-target`, après contrôle de son isolation. Un fichier projet importé ne peut pas modifier cette politique.
-6. Choisir OPC UA dans l'interface, renseigner les informations concordantes et saisir la confirmation de cible au démarrage.
+## Guides
 
-Le banc n'envoie jamais de commande RUN/STOP ou de téléchargement. Une pause ou un reset du modèle ne remet donc pas le PLC dans son état initial. Pour un rejeu réel comparable, l'ingénieur doit aussi remettre le programme PLC dans les conditions de départ prévues.
+- [Guide utilisateur](docs/USER_GUIDE.md) pour les pupitres, le P&ID, les scénarios et les rapports.
+- [Archives de projet](docs/PROJECT_ARCHIVES.md) pour sauvegarder, transférer et restaurer une FAT.
+- [Compatibilité TIA](docs/TIA_VERSIONS.md) pour distinguer les profils V20 et V21 et leur niveau de vérification.
+- [Reprendre les sources](README-CODEX.md) pour construire et tester le banc.
 
-Un serveur OPC UA local indépendant est fourni pour tester le raccordement et une perte de communication sans Siemens :
+## Contribuer
 
-```bash
-python scripts/opcua-fixture.py
-```
+Si vous trouvez un problème, indiquez votre version de TIA ou le mode démo, les étapes pour le reproduire et ce que vous attendiez. Un scénario minimal sans programme client ni secret aide à reproduire le problème. Les pull requests sont les bienvenues. [Ouvrir une issue](https://github.com/vandervan0001/Vanguard-FAT-Studio/issues) · [Consignes de contribution](AGENTS.md)
 
-Il affiche le chemin du projet exporté et la commande d'autorisation locale. Arrêter ce serveur pendant un essai permet de constater l'arrêt des écritures. Cette fixture est **un test de protocole**, pas une émulation Siemens.
-
-## Réutilisation de l'existant
-
-| Composant | Réutilisation effective | Limite |
-| --- | --- | --- |
-| [React Flow](https://github.com/xyflow/xyflow) | Éditeur de graphe, interactions et canevas | Symboles et logique métier FAT spécifiques |
-| [FreeOpcUa / asyncua](https://github.com/FreeOpcUa/opcua-asyncio) | Client et serveur OPC UA, types et chiffrement | La qualification CPU/firmware reste propre au poste |
-| [HistorianSim](https://github.com/ScottDuncanAI/HistorianSim) | Module de caractéristiques de vanne conservé identique et attribué | Aucun régulateur ou moteur batch de cet outil dans le runtime FAT |
-| [Czarnak/tia-portal-mcp](https://github.com/Czarnak/tia-portal-mcp) | Serveur existant `TiaMcpServer 4.3.0`, Openness et contrats audités | Installation séparée sur Windows/TIA V21 ; qualification à réaliser |
-| [SDK MCP officiel](https://github.com/modelcontextprotocol/python-sdk) | Transport du CLI d'ingénierie | Le CLI n'expose pas ses opérations d'écriture à un agent IA |
-| [HistorianRCA](https://github.com/ScottDuncanAI/HistorianRCA) | Référence documentaire examinée | Pas de jeu de données ni SVG repris |
-
-Les révisions, licences et choix sont consignés dans [UPSTREAM_REVIEW](docs/UPSTREAM_REVIEW.md), [upstream.lock.json](integrations/upstream.lock.json) et [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).
-
-## Claude Code / Codex et TIA Portal
-
-Voir [TIA_MCP](docs/TIA_MCP.md). Les clients IA utilisent uniquement le serveur existant en **`--access-mode read-only`**. Le serveur amont n'est pas lancé avec son mode brut par défaut.
-
-Dans **Connexion**, sélectionner la version du projet TIA. V21 utilise le paquet Czarnak 4.3.0 ; V20 dispose d'un candidat de portage à compiler sur Windows avec les DLL V20 réellement installées. L'installateur demande la version et refuse les mélanges de profils ou une compilation incompatible. Voir [l'installation et les limites V20/V21](docs/TIA_VERSIONS.md).
-
-Le CLI `fat-tia` orchestre la préparation et l'application d'une proposition : copie sandbox exacte, sources et empreintes, diff, activation d'écriture distincte, confirmation au terminal, archive avant import, contrôle de source périmée, import, compilation et audit. Le résultat de compilation ne vaut pas validation fonctionnelle.
-
-Le runtime FAT n'a pas de dépendance à un modèle IA. Si l'utilisateur emploie Claude Code/Codex avec un modèle hébergé, le contenu qu'il transmet au client peut quitter le poste ; cette décision relève de sa politique de données.
-
-## Développement et vérification
-
-```bash
-python3.12 -m venv .venv
-# Windows : .venv\Scripts\python ; Linux/macOS : .venv/bin/python
-.venv/bin/python -m pip install -r requirements-dev.lock -r requirements-engineering.lock
-.venv/bin/python -m pip install --no-deps --no-build-isolation .
-.venv/bin/python -m pytest
-.venv/bin/python -m ruff check fat_studio integrations tests scripts
-```
-
-Reconstruction de l'interface avec Node.js 22+ :
-
-```bash
-cd frontend
-npm ci
-npm run build
-cd ..
-.venv/bin/python scripts/build-web.py
-```
-
-Tests navigateur : voir [frontend/README](frontend/README.md). La [CI du 2 novembre 2026](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176) a réussi sur Windows et Ubuntu : 418 tests Python et 33 tests frontend par système. L'installation runtime Windows depuis un kit neuf, sans index pip, a aussi réussi. Voir les [preuves 0.2.1](evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) ; elles ne qualifient pas les échanges Siemens.
-
-## Documentation et preuves
-
-- [URS d'origine](docs/URS-original.md) et [décisions de reprise](docs/URS-implementation.md).
-- [FDS et architecture](docs/FDS.md), [contrat API](docs/CONTRACT.md).
-- [Matrice exigences → implémentation → preuves](docs/REQUIREMENTS_MATRIX.md).
-- [Installation](docs/INSTALLATION.md), [utilisation](docs/USER_GUIDE.md), [modèle](docs/MODEL.md).
-- [Raccordement Siemens](docs/PLCSIM_SETUP.md), [compatibilité](docs/COMPATIBILITY.md), [ingénierie MCP](docs/TIA_MCP.md).
-- [Protocole d'acceptation](docs/ACCEPTANCE.md) et [résultats exécutés](evidence/VERIFICATION.md).
-- [Revue adverse 0.1.1 : défauts reproduits, corrections et limites](docs/ADVERSARIAL_REVIEW.md).
-
-## Données et maintenance
-
-Les projets et résultats sont placés dans `%LOCALAPPDATA%\FATStudio` sous Windows, `~/.fat-studio` ailleurs, ou dans `FAT_STUDIO_DATA` si défini. Les projets sont des JSON lisibles ; le précédent enregistrement est conservé. Les essais restent dans `history.sqlite3`, y compris après un reset. Copier ce dossier serveur arrêté pour sauvegarder les preuves. Les exports JSON/CSV/HTML sont indépendants du poste.
-
-L'application accepte un seul processus par dossier de données, un seul projet actif et une seule cible PLC à la fois. Une perte de communication arrête l'essai et exige une reprise explicite dans un nouvel essai. Les mots de passe et clés privées ne sont pas stockés dans les projets ; ceux-ci contiennent uniquement les références locales approuvées.
-
-Le logiciel est un outil d'essai fonctionnel. Il ne simule pas la sécurité, les SIL, la mécanique 3D, la pression d'un réseau général ou la validation GMP d'une installation. Les modèles et résultats doivent être confrontés au procédé et au programme réellement testés.
+Le code original de Vanguard FAT Studio est sous MIT. Les composants tiers conservent leurs licences. TIA Portal et PLCSIM s’installent séparément. [Licence MIT](LICENSE) · [Notices tierces](THIRD_PARTY_NOTICES.md)

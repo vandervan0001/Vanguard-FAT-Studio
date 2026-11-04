@@ -1,0 +1,3684 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rapport FAT — Laboratoire public · PLCSIM V21 réel</title><style>
+:root{font-family:system-ui,sans-serif;color:#182b3a;background:#eef2f5}body{max-width:1150px;margin:40px auto;padding:36px;background:white}h1{font-size:30px}h2{margin-top:36px;border-bottom:2px solid #dbe4eb;padding-bottom:8px}.eyebrow{font-size:12px;letter-spacing:2px;color:#436475}.status{padding:15px;background:#edf5fb;border-left:4px solid #0b6970;font-weight:bold}dl{display:grid;grid-template-columns:180px 1fr;gap:9px}dt{font-weight:600}dd{margin:0;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #dbe4eb;padding:8px;vertical-align:top;text-align:left;overflow-wrap:anywhere}th{background:#eff4f7}pre{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}.note{padding:14px;background:#fff6e5;line-height:1.5}@media print{body{margin:0;padding:10px}details{display:block}h2{break-after:avoid}tr{break-inside:avoid}}
+</style></head><body><div class="eyebrow">FAT STUDIO · ESSAI FONCTIONNEL LOCAL</div>
+<h1>Laboratoire public · PLCSIM V21 réel</h1><div class="status">NON ÉVALUÉ</div>
+<dl><dt>Identifiant</dt><dd>run-2fe0733f5da4481da69058fd7f427a62</dd><dt>Version logiciel</dt><dd>0.2.1</dd>
+<dt>Début UTC</dt><dd>2026-11-03T19:52:04.024+00:00</dd><dt>Fin UTC</dt><dd>2026-11-03T19:52:09.256+00:00</dd>
+<dt>Instant de l'export UTC</dt><dd>2026-11-03T19:52:11.117+00:00</dd>
+<dt>Statut technique</dt><dd>completed</dd><dt>Mode / cible</dt><dd>opcua — FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840</dd>
+<dt>Scénario</dt><dd>08 · Échelles analogiques et défaut de signal</dd><dt>Pas / vitesse</dt><dd>100 ms / 1.0×</dd>
+<dt>Échantillons</dt><dd>50 cycles enregistrés</dd><dt>Assertions</dt><dd>4 réussies sur 4 évaluées</dd>
+<dt>Projet SHA-256</dt><dd>467743febbd58e42b7d688b27b6cb23971f565912f760426e3e36123f84c58bf</dd></dl>
+<p class="note">Modèle simplifié de volume et de débits ; aucune validation de sécurité ni autorisation de mise en service.
+Les assertions automatiques sont distinctes du verdict utilisateur. En OPC UA, les conditions initiales du PLC sont à rétablir manuellement avant chaque répétition ; le banc ne commande jamais RUN/STOP.</p>
+<h2>Conclusion de l'utilisateur</h2><p>Aucun commentaire renseigné.</p>
+<h2>Assertions du scénario</h2><table><thead><tr><th>Variable</th><th>Attendu</th><th>Observé</th><th>Temps simulé s</th><th>Résultat</th></tr></thead><tbody><tr><td>lt101_percent</td><td>eq 50.0</td><td>50.0</td><td>0.500</td><td>OK</td></tr><tr><td>lt201_percent</td><td>gt 100.0</td><td>108.50694274902344</td><td>2.200</td><td>OK</td></tr><tr><td>lt101_percent</td><td>eq 60.0</td><td>60.00072479248047</td><td>4.000</td><td>OK</td></tr><tr><td>lt201_percent</td><td>eq 25.0</td><td>25.0</td><td>4.000</td><td>OK</td></tr></tbody></table>
+
+<h2>Variables suivies</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Sens</th><th>Type</th><th>Unité</th><th>Adresse PLC</th><th>Symbole PLC</th><th>NodeId configuré</th></tr></thead><tbody><tr><td>StopHealthy</td><td>stop_healthy</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX0.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;StopHealthy&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;StopHealthy&quot;</td></tr><tr><td>P101_Request</td><td>p101_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX0.2</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_Request&quot;</td></tr><tr><td>P101_RequestedSpeed</td><td>p101_requested_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD2</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_RequestedSpeed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_RequestedSpeed&quot;</td></tr><tr><td>P101_RunCommand</td><td>p101_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX6.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_RunCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_RunCommand&quot;</td></tr><tr><td>P101_SpeedCommand</td><td>p101_speed_command</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD8</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_SpeedCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_SpeedCommand&quot;</td></tr><tr><td>P101_Running</td><td>p101_running</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX12.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_Running&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_Running&quot;</td></tr><tr><td>P101_SpeedFeedback</td><td>p101_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD14</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_SpeedFeedback&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_SpeedFeedback&quot;</td></tr><tr><td>P101_Fault</td><td>p101_fault</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX18.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P101_Fault&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P101_Fault&quot;</td></tr><tr><td>P201_Request</td><td>p201_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX18.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_Request&quot;</td></tr><tr><td>P201_RequestedSpeed</td><td>p201_requested_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD20</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_RequestedSpeed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_RequestedSpeed&quot;</td></tr><tr><td>P201_RunCommand</td><td>p201_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX24.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_RunCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_RunCommand&quot;</td></tr><tr><td>P201_SpeedCommand</td><td>p201_speed_command</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD26</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_SpeedCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_SpeedCommand&quot;</td></tr><tr><td>P201_Running</td><td>p201_running</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX30.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_Running&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_Running&quot;</td></tr><tr><td>P201_SpeedFeedback</td><td>p201_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD32</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_SpeedFeedback&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_SpeedFeedback&quot;</td></tr><tr><td>P201_Fault</td><td>p201_fault</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX36.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P201_Fault&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P201_Fault&quot;</td></tr><tr><td>P202_Request</td><td>p202_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX36.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_Request&quot;</td></tr><tr><td>P202_RequestedSpeed</td><td>p202_requested_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD38</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_RequestedSpeed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_RequestedSpeed&quot;</td></tr><tr><td>P202_RunCommand</td><td>p202_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX42.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_RunCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_RunCommand&quot;</td></tr><tr><td>P202_SpeedCommand</td><td>p202_speed_command</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD44</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_SpeedCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_SpeedCommand&quot;</td></tr><tr><td>P202_Running</td><td>p202_running</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX48.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_Running&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_Running&quot;</td></tr><tr><td>P202_SpeedFeedback</td><td>p202_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD50</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_SpeedFeedback&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_SpeedFeedback&quot;</td></tr><tr><td>P202_Fault</td><td>p202_fault</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX54.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P202_Fault&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P202_Fault&quot;</td></tr><tr><td>P301_Request</td><td>p301_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX54.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_Request&quot;</td></tr><tr><td>P301_RequestedSpeed</td><td>p301_requested_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD56</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_RequestedSpeed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_RequestedSpeed&quot;</td></tr><tr><td>P301_RunCommand</td><td>p301_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX60.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_RunCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_RunCommand&quot;</td></tr><tr><td>P301_SpeedCommand</td><td>p301_speed_command</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD62</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_SpeedCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_SpeedCommand&quot;</td></tr><tr><td>P301_Running</td><td>p301_running</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX66.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_Running&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_Running&quot;</td></tr><tr><td>P301_SpeedFeedback</td><td>p301_speed</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD68</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_SpeedFeedback&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_SpeedFeedback&quot;</td></tr><tr><td>P301_Fault</td><td>p301_fault</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;P301_Fault&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;P301_Fault&quot;</td></tr><tr><td>XV101_Request</td><td>xv101_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV101_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV101_Request&quot;</td></tr><tr><td>XV101_OpenCommand</td><td>xv101_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX72.2</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV101_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV101_OpenCommand&quot;</td></tr><tr><td>XV101_Open</td><td>xv101_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.3</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV101_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV101_Open&quot;</td></tr><tr><td>XV101_Closed</td><td>xv101_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.4</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV101_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV101_Closed&quot;</td></tr><tr><td>XV201_Request</td><td>xv201_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.5</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV201_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV201_Request&quot;</td></tr><tr><td>XV201_OpenCommand</td><td>xv201_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX72.6</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV201_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV201_OpenCommand&quot;</td></tr><tr><td>XV201_Open</td><td>xv201_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX72.7</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV201_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV201_Open&quot;</td></tr><tr><td>XV201_Closed</td><td>xv201_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV201_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV201_Closed&quot;</td></tr><tr><td>XV202_Request</td><td>xv202_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV202_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV202_Request&quot;</td></tr><tr><td>XV202_OpenCommand</td><td>xv202_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX73.2</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV202_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV202_OpenCommand&quot;</td></tr><tr><td>XV202_Open</td><td>xv202_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.3</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV202_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV202_Open&quot;</td></tr><tr><td>XV202_Closed</td><td>xv202_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.4</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV202_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV202_Closed&quot;</td></tr><tr><td>XV301_Request</td><td>xv301_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.5</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV301_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV301_Request&quot;</td></tr><tr><td>XV301_OpenCommand</td><td>xv301_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX73.6</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV301_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV301_OpenCommand&quot;</td></tr><tr><td>XV301_Open</td><td>xv301_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX73.7</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV301_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV301_Open&quot;</td></tr><tr><td>XV301_Closed</td><td>xv301_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV301_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV301_Closed&quot;</td></tr><tr><td>XV102_Request</td><td>xv102_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV102_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV102_Request&quot;</td></tr><tr><td>XV102_OpenCommand</td><td>xv102_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX74.2</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV102_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV102_OpenCommand&quot;</td></tr><tr><td>XV102_Open</td><td>xv102_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.3</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV102_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV102_Open&quot;</td></tr><tr><td>XV102_Closed</td><td>xv102_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.4</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV102_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV102_Closed&quot;</td></tr><tr><td>XV203_Request</td><td>xv203_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.5</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV203_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV203_Request&quot;</td></tr><tr><td>XV203_OpenCommand</td><td>xv203_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX74.6</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV203_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV203_OpenCommand&quot;</td></tr><tr><td>XV203_Open</td><td>xv203_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX74.7</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV203_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV203_Open&quot;</td></tr><tr><td>XV203_Closed</td><td>xv203_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX75.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV203_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV203_Closed&quot;</td></tr><tr><td>XV103_Request</td><td>xv103_request</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX75.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV103_Request&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV103_Request&quot;</td></tr><tr><td>XV103_OpenCommand</td><td>xv103_command</td><td>output</td><td>BOOL</td><td></td><td>%DB1.DBX75.2</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV103_OpenCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV103_OpenCommand&quot;</td></tr><tr><td>XV103_Open</td><td>xv103_open</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX75.3</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV103_Open&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV103_Open&quot;</td></tr><tr><td>XV103_Closed</td><td>xv103_closed</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX75.4</td><td>&quot;DB_FAT_Demo&quot;.&quot;XV103_Closed&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;XV103_Closed&quot;</td></tr><tr><td>FCV302_RequestedPosition</td><td>fcv302_request</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD76</td><td>&quot;DB_FAT_Demo&quot;.&quot;FCV302_RequestedPosition&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;FCV302_RequestedPosition&quot;</td></tr><tr><td>FCV302_PositionCommand</td><td>fcv302_command</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD80</td><td>&quot;DB_FAT_Demo&quot;.&quot;FCV302_PositionCommand&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;FCV302_PositionCommand&quot;</td></tr><tr><td>FCV302_PositionFeedback</td><td>fcv302_position</td><td>input</td><td>REAL</td><td>%</td><td>%DB1.DBD84</td><td>&quot;DB_FAT_Demo&quot;.&quot;FCV302_PositionFeedback&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;FCV302_PositionFeedback&quot;</td></tr><tr><td>LT101_Raw</td><td>lt101_raw</td><td>input</td><td>INT</td><td>counts</td><td>%DB1.DBW88</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT101_Raw&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT101_Raw&quot;</td></tr><tr><td>LT101_Percent</td><td>lt101_percent</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD90</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT101_Percent&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT101_Percent&quot;</td></tr><tr><td>TK101_Volume</td><td>tk101_volume</td><td>input</td><td>REAL</td><td>L</td><td>%DB1.DBD94</td><td>&quot;DB_FAT_Demo&quot;.&quot;TK101_Volume&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;TK101_Volume&quot;</td></tr><tr><td>LSL101</td><td>lsl101</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX98.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSL101&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSL101&quot;</td></tr><tr><td>LSH101</td><td>lsh101</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX98.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSH101&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSH101&quot;</td></tr><tr><td>LT201_Raw</td><td>lt201_raw</td><td>input</td><td>INT</td><td>counts</td><td>%DB1.DBW100</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT201_Raw&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT201_Raw&quot;</td></tr><tr><td>LT201_Percent</td><td>lt201_percent</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD102</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT201_Percent&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT201_Percent&quot;</td></tr><tr><td>TK201_Volume</td><td>tk201_volume</td><td>input</td><td>REAL</td><td>L</td><td>%DB1.DBD106</td><td>&quot;DB_FAT_Demo&quot;.&quot;TK201_Volume&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;TK201_Volume&quot;</td></tr><tr><td>LSL201</td><td>lsl201</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX110.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSL201&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSL201&quot;</td></tr><tr><td>LSH201</td><td>lsh201</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX110.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSH201&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSH201&quot;</td></tr><tr><td>LT301_Raw</td><td>lt301_raw</td><td>input</td><td>INT</td><td>counts</td><td>%DB1.DBW112</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT301_Raw&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT301_Raw&quot;</td></tr><tr><td>LT301_Percent</td><td>lt301_percent</td><td>output</td><td>REAL</td><td>%</td><td>%DB1.DBD114</td><td>&quot;DB_FAT_Demo&quot;.&quot;LT301_Percent&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LT301_Percent&quot;</td></tr><tr><td>TK301_Volume</td><td>tk301_volume</td><td>input</td><td>REAL</td><td>L</td><td>%DB1.DBD118</td><td>&quot;DB_FAT_Demo&quot;.&quot;TK301_Volume&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;TK301_Volume&quot;</td></tr><tr><td>LSL301</td><td>lsl301</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX122.0</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSL301&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSL301&quot;</td></tr><tr><td>LSH301</td><td>lsh301</td><td>input</td><td>BOOL</td><td></td><td>%DB1.DBX122.1</td><td>&quot;DB_FAT_Demo&quot;.&quot;LSH301&quot;</td><td>ns=3;s=&quot;DB_FAT_Demo&quot;.&quot;LSH301&quot;</td></tr></tbody></table>
+<h2>Journal et défauts injectés</h2><table><thead><tr><th>UTC</th><th>Simulation s</th><th>Événement</th><th>Description</th></tr></thead><tbody><tr><td>2026-11-03T19:52:04.027+00:00</td><td>0.000</td><td>start_requested</td><td>Démarrage demandé.<details><summary>Détails</summary><pre>{
+  &quot;mode&quot;: &quot;opcua&quot;,
+  &quot;target&quot;: &quot;FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840&quot;,
+  &quot;step_ms&quot;: 100,
+  &quot;speed&quot;: 1.0
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:04.338+00:00</td><td>0.000</td><td>started</td><td>Essai démarré. Mapping validé avant toute écriture.<details><summary>Détails</summary><pre>{}</pre></details></td></tr><tr><td>2026-11-03T19:52:04.339+00:00</td><td>0.000</td><td>model_boundary</td><td>Le PLC garde seul le contrôle. Pause/reset du banc ne change pas l&#x27;état de la CPU.<details><summary>Détails</summary><pre>{}</pre></details></td></tr><tr><td>2026-11-03T19:52:04.343+00:00</td><td>0.000</td><td>scenario_force</td><td>force : lt101_raw<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 0,
+  &quot;scheduled_s&quot;: 0.0,
+  &quot;target&quot;: &quot;lt101_raw&quot;,
+  &quot;value&quot;: 13824
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:04.737+00:00</td><td>0.500</td><td>assertion_pass</td><td>lt101_percent eq 50.0 : OK<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 1,
+  &quot;target&quot;: &quot;lt101_percent&quot;,
+  &quot;operator&quot;: &quot;eq&quot;,
+  &quot;expected&quot;: 50.0,
+  &quot;actual&quot;: 50.0,
+  &quot;passed&quot;: true,
+  &quot;message&quot;: &quot;&quot;,
+  &quot;scheduled_s&quot;: 0.5,
+  &quot;evaluated_s&quot;: 0.5,
+  &quot;quality&quot;: &quot;good&quot;
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:05.856+00:00</td><td>1.500</td><td>scenario_fault</td><td>fault : LT201<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 2,
+  &quot;scheduled_s&quot;: 1.5,
+  &quot;target&quot;: &quot;LT201&quot;,
+  &quot;value&quot;: {
+    &quot;kind&quot;: &quot;out_of_range&quot;,
+    &quot;value&quot;: 30000
+  }
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:06.463+00:00</td><td>2.200</td><td>assertion_pass</td><td>lt201_percent gt 100.0 : OK<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 3,
+  &quot;target&quot;: &quot;lt201_percent&quot;,
+  &quot;operator&quot;: &quot;gt&quot;,
+  &quot;expected&quot;: 100.0,
+  &quot;actual&quot;: 108.50694274902344,
+  &quot;passed&quot;: true,
+  &quot;message&quot;: &quot;&quot;,
+  &quot;scheduled_s&quot;: 2.2,
+  &quot;evaluated_s&quot;: 2.2,
+  &quot;quality&quot;: &quot;good&quot;
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:07.345+00:00</td><td>3.000</td><td>scenario_clear_fault</td><td>clear_fault : LT201<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 4,
+  &quot;scheduled_s&quot;: 3.0,
+  &quot;target&quot;: &quot;LT201&quot;,
+  &quot;value&quot;: null
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:07.347+00:00</td><td>3.000</td><td>scenario_release</td><td>release : lt101_raw<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 5,
+  &quot;scheduled_s&quot;: 3.0,
+  &quot;target&quot;: &quot;lt101_raw&quot;,
+  &quot;value&quot;: null
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:08.264+00:00</td><td>4.000</td><td>assertion_pass</td><td>lt101_percent eq 60.0 : OK<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 6,
+  &quot;target&quot;: &quot;lt101_percent&quot;,
+  &quot;operator&quot;: &quot;eq&quot;,
+  &quot;expected&quot;: 60.0,
+  &quot;actual&quot;: 60.00072479248047,
+  &quot;passed&quot;: true,
+  &quot;message&quot;: &quot;&quot;,
+  &quot;scheduled_s&quot;: 4.0,
+  &quot;evaluated_s&quot;: 4.0,
+  &quot;quality&quot;: &quot;good&quot;
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:08.265+00:00</td><td>4.000</td><td>assertion_pass</td><td>lt201_percent eq 25.0 : OK<details><summary>Détails</summary><pre>{
+  &quot;index&quot;: 7,
+  &quot;target&quot;: &quot;lt201_percent&quot;,
+  &quot;operator&quot;: &quot;eq&quot;,
+  &quot;expected&quot;: 25.0,
+  &quot;actual&quot;: 25.0,
+  &quot;passed&quot;: true,
+  &quot;message&quot;: &quot;&quot;,
+  &quot;scheduled_s&quot;: 4.0,
+  &quot;evaluated_s&quot;: 4.0,
+  &quot;quality&quot;: &quot;good&quot;
+}</pre></details></td></tr><tr><td>2026-11-03T19:52:09.257+00:00</td><td>5.000</td><td>scenario_completed</td><td>Scénario terminé ; écritures arrêtées. Verdict humain à renseigner.<details><summary>Détails</summary><pre>{
+  &quot;assertions_passed&quot;: 4,
+  &quot;assertions_total&quot;: 4,
+  &quot;guided_steps_reviewed&quot;: 0
+}</pre></details></td></tr></tbody></table>
+<h2>Configuration de référence</h2><details><summary>Projet et paramètres enregistrés au début de l'essai</summary><pre>{
+  &quot;schema_version&quot;: &quot;1.0&quot;,
+  &quot;id&quot;: &quot;fat-public-demo-plcsim-v21-20261103&quot;,
+  &quot;name&quot;: &quot;Laboratoire public · PLCSIM V21 réel&quot;,
+  &quot;description&quot;: &quot;CPU virtuelle FAT-DEMO-20261103 : programme public passif DB_FAT_Demo + Main, sans bibliothèque client ni séquence métier. 75 correspondances observées par export Openness et browse OPC UA réel. Basic256Sha256/SignAndEncrypt, certificat et ApplicationUri épinglés. Les scénarios techniques et étapes préparées ne constituent pas un verdict FAT humain.&quot;,
+  &quot;simulation&quot;: {
+    &quot;step_ms&quot;: 100,
+    &quot;speed&quot;: 1.0
+  },
+  &quot;equipment&quot;: [
+    {
+      &quot;id&quot;: &quot;TK101&quot;,
+      &quot;type&quot;: &quot;tank&quot;,
+      &quot;name&quot;: &quot;TK-101 · Alimentation&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 240.0,
+        &quot;y&quot;: 100.0
+      },
+      &quot;params&quot;: {
+        &quot;capacity_l&quot;: 1200.0,
+        &quot;initial_level_pct&quot;: 60.0
+      },
+      &quot;bindings&quot;: {
+        &quot;volume&quot;: &quot;tk101_volume&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;lt101_percent&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;value&quot;: 0.0,
+        &quot;effect&quot;: &quot;level&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;LT101&quot;,
+      &quot;type&quot;: &quot;analog_sensor&quot;,
+      &quot;name&quot;: &quot;LT-101 · 4–20 mA&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 50.0,
+        &quot;y&quot;: 0.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK101&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;scale&quot;: 276.48,
+        &quot;offset&quot;: 0.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lt101_raw&quot;,
+        &quot;scaled_value&quot;: &quot;lt101_percent&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSL101&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSL-101&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 430.0,
+        &quot;y&quot;: 170.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK101&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;le&quot;,
+        &quot;threshold&quot;: 10.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsl101&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSH101&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSH-101&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 430.0,
+        &quot;y&quot;: 10.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK101&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;threshold&quot;: 90.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsh101&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;TK201&quot;,
+      &quot;type&quot;: &quot;tank&quot;,
+      &quot;name&quot;: &quot;TK-201 · Cuve intermédiaire&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 780.0,
+        &quot;y&quot;: 100.0
+      },
+      &quot;params&quot;: {
+        &quot;capacity_l&quot;: 1800.0,
+        &quot;initial_level_pct&quot;: 25.0
+      },
+      &quot;bindings&quot;: {
+        &quot;volume&quot;: &quot;tk201_volume&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;lt201_percent&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;value&quot;: 0.0,
+        &quot;effect&quot;: &quot;level&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;LT201&quot;,
+      &quot;type&quot;: &quot;analog_sensor&quot;,
+      &quot;name&quot;: &quot;LT-201 · 4–20 mA&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 590.0,
+        &quot;y&quot;: 0.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK201&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;scale&quot;: 276.48,
+        &quot;offset&quot;: 0.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lt201_raw&quot;,
+        &quot;scaled_value&quot;: &quot;lt201_percent&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSL201&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSL-201&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 970.0,
+        &quot;y&quot;: 170.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK201&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;le&quot;,
+        &quot;threshold&quot;: 10.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsl201&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSH201&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSH-201&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 970.0,
+        &quot;y&quot;: 10.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK201&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;threshold&quot;: 90.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsh201&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;TK301&quot;,
+      &quot;type&quot;: &quot;tank&quot;,
+      &quot;name&quot;: &quot;TK-301 · Réception&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1320.0,
+        &quot;y&quot;: 100.0
+      },
+      &quot;params&quot;: {
+        &quot;capacity_l&quot;: 1200.0,
+        &quot;initial_level_pct&quot;: 15.0
+      },
+      &quot;bindings&quot;: {
+        &quot;volume&quot;: &quot;tk301_volume&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;lt301_percent&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;value&quot;: 0.0,
+        &quot;effect&quot;: &quot;level&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;LT301&quot;,
+      &quot;type&quot;: &quot;analog_sensor&quot;,
+      &quot;name&quot;: &quot;LT-301 · 4–20 mA&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1130.0,
+        &quot;y&quot;: 0.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK301&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;scale&quot;: 276.48,
+        &quot;offset&quot;: 0.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lt301_raw&quot;,
+        &quot;scaled_value&quot;: &quot;lt301_percent&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSL301&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSL-301&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1510.0,
+        &quot;y&quot;: 170.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK301&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;le&quot;,
+        &quot;threshold&quot;: 10.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsl301&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;LSH301&quot;,
+      &quot;type&quot;: &quot;digital_sensor&quot;,
+      &quot;name&quot;: &quot;LSH-301&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1510.0,
+        &quot;y&quot;: 10.0
+      },
+      &quot;params&quot;: {
+        &quot;source_equipment&quot;: &quot;TK301&quot;,
+        &quot;source_field&quot;: &quot;level&quot;,
+        &quot;operator&quot;: &quot;ge&quot;,
+        &quot;threshold&quot;: 90.0
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;lsh301&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;P101&quot;,
+      &quot;type&quot;: &quot;pump_vfd&quot;,
+      &quot;name&quot;: &quot;P-101 · Alimentation&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 0.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK101&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;fill101&quot;,
+        &quot;source_tank_id&quot;: &quot;&quot;,
+        &quot;max_flow_l_s&quot;: 35.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;p101_command&quot;,
+        &quot;speed_command&quot;: &quot;p101_speed_command&quot;,
+        &quot;feedback&quot;: &quot;p101_running&quot;,
+        &quot;speed&quot;: &quot;p101_speed&quot;,
+        &quot;fault&quot;: &quot;p101_fault&quot;,
+        &quot;manual_request&quot;: &quot;p101_request&quot;,
+        &quot;manual_speed&quot;: &quot;p101_requested_speed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;p101_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;rotate&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;P201&quot;,
+      &quot;type&quot;: &quot;pump_vfd&quot;,
+      &quot;name&quot;: &quot;P-201 · Transfert 1&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 500.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK201&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;transfer201&quot;,
+        &quot;source_tank_id&quot;: &quot;TK101&quot;,
+        &quot;max_flow_l_s&quot;: 30.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;p201_command&quot;,
+        &quot;speed_command&quot;: &quot;p201_speed_command&quot;,
+        &quot;feedback&quot;: &quot;p201_running&quot;,
+        &quot;speed&quot;: &quot;p201_speed&quot;,
+        &quot;fault&quot;: &quot;p201_fault&quot;,
+        &quot;manual_request&quot;: &quot;p201_request&quot;,
+        &quot;manual_speed&quot;: &quot;p201_requested_speed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;p201_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;rotate&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;P202&quot;,
+      &quot;type&quot;: &quot;pump_vfd&quot;,
+      &quot;name&quot;: &quot;P-202 · Transfert 2&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1040.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK301&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;transfer202&quot;,
+        &quot;source_tank_id&quot;: &quot;TK201&quot;,
+        &quot;max_flow_l_s&quot;: 26.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;p202_command&quot;,
+        &quot;speed_command&quot;: &quot;p202_speed_command&quot;,
+        &quot;feedback&quot;: &quot;p202_running&quot;,
+        &quot;speed&quot;: &quot;p202_speed&quot;,
+        &quot;fault&quot;: &quot;p202_fault&quot;,
+        &quot;manual_request&quot;: &quot;p202_request&quot;,
+        &quot;manual_speed&quot;: &quot;p202_requested_speed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;p202_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;rotate&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;P301&quot;,
+      &quot;type&quot;: &quot;pump_vfd&quot;,
+      &quot;name&quot;: &quot;P-301 · Vidange&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1560.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK301&quot;,
+        &quot;role&quot;: &quot;outlet&quot;,
+        &quot;flow_group&quot;: &quot;drain301&quot;,
+        &quot;source_tank_id&quot;: &quot;&quot;,
+        &quot;max_flow_l_s&quot;: 20.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;p301_command&quot;,
+        &quot;speed_command&quot;: &quot;p301_speed_command&quot;,
+        &quot;feedback&quot;: &quot;p301_running&quot;,
+        &quot;speed&quot;: &quot;p301_speed&quot;,
+        &quot;fault&quot;: &quot;p301_fault&quot;,
+        &quot;manual_request&quot;: &quot;p301_request&quot;,
+        &quot;manual_speed&quot;: &quot;p301_requested_speed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;p301_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;rotate&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV101&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-101 · Arrivée&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 240.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK101&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;fill101&quot;,
+        &quot;max_flow_l_s&quot;: 45.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv101_command&quot;,
+        &quot;manual_request&quot;: &quot;xv101_request&quot;,
+        &quot;open&quot;: &quot;xv101_open&quot;,
+        &quot;closed&quot;: &quot;xv101_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv101_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV201&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-201 · Transfert 1&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 780.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK201&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;transfer201&quot;,
+        &quot;max_flow_l_s&quot;: 40.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv201_command&quot;,
+        &quot;manual_request&quot;: &quot;xv201_request&quot;,
+        &quot;open&quot;: &quot;xv201_open&quot;,
+        &quot;closed&quot;: &quot;xv201_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv201_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV202&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-202 · Transfert 2&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1320.0,
+        &quot;y&quot;: 430.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK301&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;transfer202&quot;,
+        &quot;max_flow_l_s&quot;: 35.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv202_command&quot;,
+        &quot;manual_request&quot;: &quot;xv202_request&quot;,
+        &quot;open&quot;: &quot;xv202_open&quot;,
+        &quot;closed&quot;: &quot;xv202_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv202_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV301&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-301 · Sortie&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1560.0,
+        &quot;y&quot;: 700.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK301&quot;,
+        &quot;role&quot;: &quot;outlet&quot;,
+        &quot;flow_group&quot;: &quot;drain301&quot;,
+        &quot;max_flow_l_s&quot;: 30.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv301_command&quot;,
+        &quot;manual_request&quot;: &quot;xv301_request&quot;,
+        &quot;open&quot;: &quot;xv301_open&quot;,
+        &quot;closed&quot;: &quot;xv301_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv301_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV102&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-102 · Purge source&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 240.0,
+        &quot;y&quot;: 700.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK101&quot;,
+        &quot;role&quot;: &quot;outlet&quot;,
+        &quot;flow_group&quot;: &quot;drain101&quot;,
+        &quot;max_flow_l_s&quot;: 14.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv102_command&quot;,
+        &quot;manual_request&quot;: &quot;xv102_request&quot;,
+        &quot;open&quot;: &quot;xv102_open&quot;,
+        &quot;closed&quot;: &quot;xv102_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv102_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV203&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-203 · Purge intermédiaire&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 780.0,
+        &quot;y&quot;: 700.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK201&quot;,
+        &quot;role&quot;: &quot;outlet&quot;,
+        &quot;flow_group&quot;: &quot;drain201&quot;,
+        &quot;max_flow_l_s&quot;: 14.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv203_command&quot;,
+        &quot;manual_request&quot;: &quot;xv203_request&quot;,
+        &quot;open&quot;: &quot;xv203_open&quot;,
+        &quot;closed&quot;: &quot;xv203_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv203_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;XV103&quot;,
+      &quot;type&quot;: &quot;valve_onoff&quot;,
+      &quot;name&quot;: &quot;XV-103 · Évent illustratif&quot;,
+      &quot;description&quot;: &quot;Évent graphique sans bilan de pression.&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 0.0,
+        &quot;y&quot;: 210.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK101&quot;,
+        &quot;role&quot;: &quot;inlet&quot;,
+        &quot;flow_group&quot;: &quot;vent101&quot;,
+        &quot;max_flow_l_s&quot;: 0.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;xv103_command&quot;,
+        &quot;manual_request&quot;: &quot;xv103_request&quot;,
+        &quot;open&quot;: &quot;xv103_open&quot;,
+        &quot;closed&quot;: &quot;xv103_closed&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;xv103_command&quot;,
+        &quot;operator&quot;: &quot;eq&quot;,
+        &quot;value&quot;: true,
+        &quot;effect&quot;: &quot;highlight&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;FCV302&quot;,
+      &quot;type&quot;: &quot;valve_control&quot;,
+      &quot;name&quot;: &quot;FCV-302 · Réglage sortie&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1320.0,
+        &quot;y&quot;: 700.0
+      },
+      &quot;params&quot;: {
+        &quot;tank_id&quot;: &quot;TK301&quot;,
+        &quot;role&quot;: &quot;outlet&quot;,
+        &quot;flow_group&quot;: &quot;drain301&quot;,
+        &quot;max_flow_l_s&quot;: 30.0,
+        &quot;response_s&quot;: 0.2
+      },
+      &quot;bindings&quot;: {
+        &quot;command&quot;: &quot;fcv302_command&quot;,
+        &quot;manual_request&quot;: &quot;fcv302_request&quot;,
+        &quot;position&quot;: &quot;fcv302_position&quot;
+      },
+      &quot;animation&quot;: {
+        &quot;tag_id&quot;: &quot;fcv302_command&quot;,
+        &quot;operator&quot;: &quot;gt&quot;,
+        &quot;value&quot;: 0.0,
+        &quot;effect&quot;: &quot;position&quot;,
+        &quot;min&quot;: 0.0,
+        &quot;max&quot;: 100.0,
+        &quot;active_color&quot;: &quot;#148b78&quot;,
+        &quot;inactive_color&quot;: &quot;#738994&quot;
+      }
+    },
+    {
+      &quot;id&quot;: &quot;IO_stop_healthy&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;StopHealthy&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 50.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: true
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;stop_healthy&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_p101_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;P101_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 260.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;p101_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_p201_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;P201_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 470.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;p201_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_p202_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;P202_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 680.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;p202_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_p301_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;P301_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 890.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;p301_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv101_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV101_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1100.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv101_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv201_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV201_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1310.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv201_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv202_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV202_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 1520.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv202_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv301_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV301_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 50.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv301_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv102_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV102_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 260.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv102_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv203_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV203_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 470.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv203_request&quot;
+      },
+      &quot;animation&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;IO_xv103_request&quot;,
+      &quot;type&quot;: &quot;digital_input&quot;,
+      &quot;name&quot;: &quot;XV103_Request&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;position&quot;: {
+        &quot;x&quot;: 680.0,
+        &quot;y&quot;: 1000.0
+      },
+      &quot;params&quot;: {
+        &quot;initial_value&quot;: false
+      },
+      &quot;bindings&quot;: {
+        &quot;value&quot;: &quot;xv103_request&quot;
+      },
+      &quot;animation&quot;: null
+    }
+  ],
+  &quot;connections&quot;: [
+    {
+      &quot;id&quot;: &quot;pipe_0&quot;,
+      &quot;source&quot;: &quot;P101&quot;,
+      &quot;target&quot;: &quot;XV101&quot;,
+      &quot;label&quot;: &quot;Alimentation&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_1&quot;,
+      &quot;source&quot;: &quot;XV101&quot;,
+      &quot;target&quot;: &quot;TK101&quot;,
+      &quot;label&quot;: &quot;Eau de démonstration&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_2&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;P201&quot;,
+      &quot;label&quot;: &quot;Transfert 1&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_3&quot;,
+      &quot;source&quot;: &quot;P201&quot;,
+      &quot;target&quot;: &quot;XV201&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_4&quot;,
+      &quot;source&quot;: &quot;XV201&quot;,
+      &quot;target&quot;: &quot;TK201&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_5&quot;,
+      &quot;source&quot;: &quot;TK201&quot;,
+      &quot;target&quot;: &quot;P202&quot;,
+      &quot;label&quot;: &quot;Transfert 2&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_6&quot;,
+      &quot;source&quot;: &quot;P202&quot;,
+      &quot;target&quot;: &quot;XV202&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_7&quot;,
+      &quot;source&quot;: &quot;XV202&quot;,
+      &quot;target&quot;: &quot;TK301&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_8&quot;,
+      &quot;source&quot;: &quot;TK301&quot;,
+      &quot;target&quot;: &quot;P301&quot;,
+      &quot;label&quot;: &quot;Vidange&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_9&quot;,
+      &quot;source&quot;: &quot;P301&quot;,
+      &quot;target&quot;: &quot;XV301&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_10&quot;,
+      &quot;source&quot;: &quot;XV301&quot;,
+      &quot;target&quot;: &quot;FCV302&quot;,
+      &quot;label&quot;: &quot;Sortie&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_11&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;XV102&quot;,
+      &quot;label&quot;: &quot;Purge&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_12&quot;,
+      &quot;source&quot;: &quot;TK201&quot;,
+      &quot;target&quot;: &quot;XV203&quot;,
+      &quot;label&quot;: &quot;Purge&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_13&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;XV103&quot;,
+      &quot;label&quot;: &quot;Évent&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_14&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;LT101&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_15&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;LSL101&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_16&quot;,
+      &quot;source&quot;: &quot;TK101&quot;,
+      &quot;target&quot;: &quot;LSH101&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_17&quot;,
+      &quot;source&quot;: &quot;TK201&quot;,
+      &quot;target&quot;: &quot;LT201&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_18&quot;,
+      &quot;source&quot;: &quot;TK201&quot;,
+      &quot;target&quot;: &quot;LSL201&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_19&quot;,
+      &quot;source&quot;: &quot;TK201&quot;,
+      &quot;target&quot;: &quot;LSH201&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_20&quot;,
+      &quot;source&quot;: &quot;TK301&quot;,
+      &quot;target&quot;: &quot;LT301&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_21&quot;,
+      &quot;source&quot;: &quot;TK301&quot;,
+      &quot;target&quot;: &quot;LSL301&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;pipe_22&quot;,
+      &quot;source&quot;: &quot;TK301&quot;,
+      &quot;target&quot;: &quot;LSH301&quot;,
+      &quot;label&quot;: &quot;&quot;,
+      &quot;directed&quot;: true
+    }
+  ],
+  &quot;tags&quot;: [
+    {
+      &quot;id&quot;: &quot;stop_healthy&quot;,
+      &quot;name&quot;: &quot;StopHealthy&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;StopHealthy\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX0.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;StopHealthy\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p101_request&quot;,
+      &quot;name&quot;: &quot;P101_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX0.2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p101_requested_speed&quot;,
+      &quot;name&quot;: &quot;P101_RequestedSpeed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 60.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_RequestedSpeed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_RequestedSpeed\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p101_command&quot;,
+      &quot;name&quot;: &quot;P101_RunCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_RunCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX6.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_RunCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p101_speed_command&quot;,
+      &quot;name&quot;: &quot;P101_SpeedCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_SpeedCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD8&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_SpeedCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p101_running&quot;,
+      &quot;name&quot;: &quot;P101_Running&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Running\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX12.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Running\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p101_speed&quot;,
+      &quot;name&quot;: &quot;P101_SpeedFeedback&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_SpeedFeedback\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD14&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_SpeedFeedback\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p101_fault&quot;,
+      &quot;name&quot;: &quot;P101_Fault&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Fault\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX18.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P101_Fault\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p201_request&quot;,
+      &quot;name&quot;: &quot;P201_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX18.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p201_requested_speed&quot;,
+      &quot;name&quot;: &quot;P201_RequestedSpeed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 60.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_RequestedSpeed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD20&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_RequestedSpeed\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p201_command&quot;,
+      &quot;name&quot;: &quot;P201_RunCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_RunCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX24.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_RunCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p201_speed_command&quot;,
+      &quot;name&quot;: &quot;P201_SpeedCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_SpeedCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD26&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_SpeedCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p201_running&quot;,
+      &quot;name&quot;: &quot;P201_Running&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Running\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX30.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Running\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p201_speed&quot;,
+      &quot;name&quot;: &quot;P201_SpeedFeedback&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_SpeedFeedback\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD32&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_SpeedFeedback\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p201_fault&quot;,
+      &quot;name&quot;: &quot;P201_Fault&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Fault\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX36.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P201_Fault\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p202_request&quot;,
+      &quot;name&quot;: &quot;P202_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX36.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p202_requested_speed&quot;,
+      &quot;name&quot;: &quot;P202_RequestedSpeed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 60.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_RequestedSpeed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD38&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_RequestedSpeed\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p202_command&quot;,
+      &quot;name&quot;: &quot;P202_RunCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_RunCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX42.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_RunCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p202_speed_command&quot;,
+      &quot;name&quot;: &quot;P202_SpeedCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_SpeedCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD44&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_SpeedCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p202_running&quot;,
+      &quot;name&quot;: &quot;P202_Running&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Running\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX48.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Running\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p202_speed&quot;,
+      &quot;name&quot;: &quot;P202_SpeedFeedback&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_SpeedFeedback\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD50&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_SpeedFeedback\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p202_fault&quot;,
+      &quot;name&quot;: &quot;P202_Fault&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Fault\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX54.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P202_Fault\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p301_request&quot;,
+      &quot;name&quot;: &quot;P301_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX54.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p301_requested_speed&quot;,
+      &quot;name&quot;: &quot;P301_RequestedSpeed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 60.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_RequestedSpeed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD56&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_RequestedSpeed\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p301_command&quot;,
+      &quot;name&quot;: &quot;P301_RunCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_RunCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX60.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_RunCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p301_speed_command&quot;,
+      &quot;name&quot;: &quot;P301_SpeedCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_SpeedCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD62&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_SpeedCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;p301_running&quot;,
+      &quot;name&quot;: &quot;P301_Running&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Running\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX66.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Running\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p301_speed&quot;,
+      &quot;name&quot;: &quot;P301_SpeedFeedback&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_SpeedFeedback\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD68&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_SpeedFeedback\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;p301_fault&quot;,
+      &quot;name&quot;: &quot;P301_Fault&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Fault\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;P301_Fault\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv101_request&quot;,
+      &quot;name&quot;: &quot;XV101_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv101_command&quot;,
+      &quot;name&quot;: &quot;XV101_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv101_open&quot;,
+      &quot;name&quot;: &quot;XV101_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.3&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv101_closed&quot;,
+      &quot;name&quot;: &quot;XV101_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.4&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV101_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv201_request&quot;,
+      &quot;name&quot;: &quot;XV201_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.5&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv201_command&quot;,
+      &quot;name&quot;: &quot;XV201_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.6&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv201_open&quot;,
+      &quot;name&quot;: &quot;XV201_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX72.7&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv201_closed&quot;,
+      &quot;name&quot;: &quot;XV201_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV201_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv202_request&quot;,
+      &quot;name&quot;: &quot;XV202_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv202_command&quot;,
+      &quot;name&quot;: &quot;XV202_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv202_open&quot;,
+      &quot;name&quot;: &quot;XV202_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.3&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv202_closed&quot;,
+      &quot;name&quot;: &quot;XV202_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.4&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV202_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv301_request&quot;,
+      &quot;name&quot;: &quot;XV301_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.5&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv301_command&quot;,
+      &quot;name&quot;: &quot;XV301_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.6&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv301_open&quot;,
+      &quot;name&quot;: &quot;XV301_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX73.7&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv301_closed&quot;,
+      &quot;name&quot;: &quot;XV301_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV301_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv102_request&quot;,
+      &quot;name&quot;: &quot;XV102_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv102_command&quot;,
+      &quot;name&quot;: &quot;XV102_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv102_open&quot;,
+      &quot;name&quot;: &quot;XV102_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.3&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv102_closed&quot;,
+      &quot;name&quot;: &quot;XV102_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.4&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV102_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv203_request&quot;,
+      &quot;name&quot;: &quot;XV203_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.5&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv203_command&quot;,
+      &quot;name&quot;: &quot;XV203_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.6&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv203_open&quot;,
+      &quot;name&quot;: &quot;XV203_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX74.7&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv203_closed&quot;,
+      &quot;name&quot;: &quot;XV203_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX75.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV203_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv103_request&quot;,
+      &quot;name&quot;: &quot;XV103_Request&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Request\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX75.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Request\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv103_command&quot;,
+      &quot;name&quot;: &quot;XV103_OpenCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_OpenCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX75.2&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_OpenCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;xv103_open&quot;,
+      &quot;name&quot;: &quot;XV103_Open&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Open\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX75.3&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Open\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;xv103_closed&quot;,
+      &quot;name&quot;: &quot;XV103_Closed&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: true,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Closed\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX75.4&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;XV103_Closed\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;fcv302_request&quot;,
+      &quot;name&quot;: &quot;FCV302_RequestedPosition&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_RequestedPosition\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD76&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_RequestedPosition\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;fcv302_command&quot;,
+      &quot;name&quot;: &quot;FCV302_PositionCommand&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_PositionCommand\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD80&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_PositionCommand\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;fcv302_position&quot;,
+      &quot;name&quot;: &quot;FCV302_PositionFeedback&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 100.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_PositionFeedback\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD84&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;FCV302_PositionFeedback\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;linear&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 100.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: null,
+        &quot;overflow_raw&quot;: null
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt101_raw&quot;,
+      &quot;name&quot;: &quot;LT101_Raw&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;INT&quot;,
+      &quot;unit&quot;: &quot;counts&quot;,
+      &quot;initial_value&quot;: 16589,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 27648.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT101_Raw\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBW88&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT101_Raw\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;4-20mA&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 27648.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: -32768.0,
+        &quot;overflow_raw&quot;: 32767.0
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt101_percent&quot;,
+      &quot;name&quot;: &quot;LT101_Percent&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT101_Percent\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD90&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT101_Percent\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;tk101_volume&quot;,
+      &quot;name&quot;: &quot;TK101_Volume&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;L&quot;,
+      &quot;initial_value&quot;: 720.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 1200.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;TK101_Volume\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD94&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;TK101_Volume\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsl101&quot;,
+      &quot;name&quot;: &quot;LSL101&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSL101\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX98.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSL101\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsh101&quot;,
+      &quot;name&quot;: &quot;LSH101&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSH101\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX98.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSH101\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt201_raw&quot;,
+      &quot;name&quot;: &quot;LT201_Raw&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;INT&quot;,
+      &quot;unit&quot;: &quot;counts&quot;,
+      &quot;initial_value&quot;: 6912,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 27648.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT201_Raw\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBW100&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT201_Raw\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;4-20mA&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 27648.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: -32768.0,
+        &quot;overflow_raw&quot;: 32767.0
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt201_percent&quot;,
+      &quot;name&quot;: &quot;LT201_Percent&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT201_Percent\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD102&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT201_Percent\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;tk201_volume&quot;,
+      &quot;name&quot;: &quot;TK201_Volume&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;L&quot;,
+      &quot;initial_value&quot;: 450.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 1800.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;TK201_Volume\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD106&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;TK201_Volume\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsl201&quot;,
+      &quot;name&quot;: &quot;LSL201&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSL201\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX110.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSL201\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsh201&quot;,
+      &quot;name&quot;: &quot;LSH201&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSH201\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX110.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSH201\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt301_raw&quot;,
+      &quot;name&quot;: &quot;LT301_Raw&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;INT&quot;,
+      &quot;unit&quot;: &quot;counts&quot;,
+      &quot;initial_value&quot;: 4147,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 27648.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT301_Raw\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBW112&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT301_Raw\&quot;&quot;,
+      &quot;signal&quot;: {
+        &quot;kind&quot;: &quot;4-20mA&quot;,
+        &quot;raw_min&quot;: 0.0,
+        &quot;raw_max&quot;: 27648.0,
+        &quot;engineering_min&quot;: 0.0,
+        &quot;engineering_max&quot;: 100.0,
+        &quot;engineering_unit&quot;: &quot;%&quot;,
+        &quot;underflow_raw&quot;: -32768.0,
+        &quot;overflow_raw&quot;: 32767.0
+      },
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lt301_percent&quot;,
+      &quot;name&quot;: &quot;LT301_Percent&quot;,
+      &quot;direction&quot;: &quot;output&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;%&quot;,
+      &quot;initial_value&quot;: 0.0,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LT301_Percent\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD114&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LT301_Percent\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: false
+    },
+    {
+      &quot;id&quot;: &quot;tk301_volume&quot;,
+      &quot;name&quot;: &quot;TK301_Volume&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;REAL&quot;,
+      &quot;unit&quot;: &quot;L&quot;,
+      &quot;initial_value&quot;: 180.0,
+      &quot;min&quot;: 0.0,
+      &quot;max&quot;: 1200.0,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;TK301_Volume\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBD118&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;TK301_Volume\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsl301&quot;,
+      &quot;name&quot;: &quot;LSL301&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSL301\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX122.0&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSL301\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    },
+    {
+      &quot;id&quot;: &quot;lsh301&quot;,
+      &quot;name&quot;: &quot;LSH301&quot;,
+      &quot;direction&quot;: &quot;input&quot;,
+      &quot;data_type&quot;: &quot;BOOL&quot;,
+      &quot;unit&quot;: &quot;&quot;,
+      &quot;initial_value&quot;: false,
+      &quot;min&quot;: null,
+      &quot;max&quot;: null,
+      &quot;node_id&quot;: &quot;ns=3;s=\&quot;DB_FAT_Demo\&quot;.\&quot;LSH301\&quot;&quot;,
+      &quot;plc_address&quot;: &quot;%DB1.DBX122.1&quot;,
+      &quot;plc_symbol&quot;: &quot;\&quot;DB_FAT_Demo\&quot;.\&quot;LSH301\&quot;&quot;,
+      &quot;signal&quot;: null,
+      &quot;writable&quot;: true
+    }
+  ],
+  &quot;scenarios&quot;: [
+    {
+      &quot;id&quot;: &quot;demo-fill-source&quot;,
+      &quot;name&quot;: &quot;01 · Alimentation de la cuve source&quot;,
+      &quot;description&quot;: &quot;Les demandes manuelles traversent le PLC ; l&#x27;ouverture et la vitesse déterminent le débit simulé.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK101&quot;,
+        &quot;P101&quot;,
+        &quot;XV101&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;tk101_volume&quot;,
+        &quot;p101_command&quot;,
+        &quot;p101_speed&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 7.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p101_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p101_requested_speed&quot;,
+          &quot;value&quot;: 70.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv101_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_command&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_running&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk101_volume&quot;,
+          &quot;value&quot;: 730.0,
+          &quot;operator&quot;: &quot;gt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p101_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p101_requested_speed&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv101_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 6.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_running&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-transfer-1&quot;,
+      &quot;name&quot;: &quot;02 · Transfert source vers cuve intermédiaire&quot;,
+      &quot;description&quot;: &quot;Le volume débité de la source est crédité à la destination. Aucun transfert automatique n&#x27;est programmé.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK101&quot;,
+        &quot;P201&quot;,
+        &quot;XV201&quot;,
+        &quot;TK201&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;tk101_volume&quot;,
+        &quot;tk201_volume&quot;,
+        &quot;p201_command&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 6.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p201_requested_speed&quot;,
+          &quot;value&quot;: 100.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_command&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk101_volume&quot;,
+          &quot;value&quot;: 700.0,
+          &quot;operator&quot;: &quot;lt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk201_volume&quot;,
+          &quot;value&quot;: 475.0,
+          &quot;operator&quot;: &quot;gt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p201_requested_speed&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_command&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-transfer-2&quot;,
+      &quot;name&quot;: &quot;03 · Transfert vers la cuve de réception&quot;,
+      &quot;description&quot;: &quot;Les trois cuves restent indépendantes des traits graphiques ; le circuit déclare sa source et sa destination.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK201&quot;,
+        &quot;P202&quot;,
+        &quot;XV202&quot;,
+        &quot;TK301&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;tk201_volume&quot;,
+        &quot;tk301_volume&quot;,
+        &quot;p202_speed&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 6.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p202_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p202_requested_speed&quot;,
+          &quot;value&quot;: 80.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv202_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p202_running&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk201_volume&quot;,
+          &quot;value&quot;: 430.0,
+          &quot;operator&quot;: &quot;lt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk301_volume&quot;,
+          &quot;value&quot;: 200.0,
+          &quot;operator&quot;: &quot;gt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p202_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p202_requested_speed&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv202_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p202_command&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-drain&quot;,
+      &quot;name&quot;: &quot;04 · Vidange et vanne de réglage&quot;,
+      &quot;description&quot;: &quot;La pompe et les deux vannes sont en série ; le plus petit débit disponible limite le circuit.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK301&quot;,
+        &quot;P301&quot;,
+        &quot;XV301&quot;,
+        &quot;FCV302&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;tk301_volume&quot;,
+        &quot;fcv302_position&quot;,
+        &quot;p301_command&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 6.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p301_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p301_requested_speed&quot;,
+          &quot;value&quot;: 100.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv301_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;fcv302_request&quot;,
+          &quot;value&quot;: 50.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;fcv302_position&quot;,
+          &quot;value&quot;: 49.0,
+          &quot;operator&quot;: &quot;gt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk301_volume&quot;,
+          &quot;value&quot;: 160.0,
+          &quot;operator&quot;: &quot;lt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p301_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p301_requested_speed&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv301_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;fcv302_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p301_command&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-stop&quot;,
+      &quot;name&quot;: &quot;05 · Contact d&#x27;arrêt du démonstrateur&quot;,
+      &quot;description&quot;: &quot;Le contact de démo inhibe les commandes. Les demandes sont relâchées avant de rétablir ce contact ; aucun réarmement métier ou fonction de sécurité n&#x27;est simulé.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;P101&quot;,
+        &quot;XV101&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;stop_healthy&quot;,
+        &quot;p101_command&quot;,
+        &quot;p101_running&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 6.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p101_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv101_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_command&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;stop_healthy&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_command&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_running&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p101_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv101_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;stop_healthy&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 5.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p101_command&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-pump-fault&quot;,
+      &quot;name&quot;: &quot;06 · Défaut physique de pompe&quot;,
+      &quot;description&quot;: &quot;Le PLC passif conserve la demande ; le défaut du modèle coupe le retour et le débit. Cette différence commande/retour est attendue.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;P201&quot;,
+        &quot;TK101&quot;,
+        &quot;TK201&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;p201_command&quot;,
+        &quot;p201_running&quot;,
+        &quot;p201_fault&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 5.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.5,
+          &quot;action&quot;: &quot;fault&quot;,
+          &quot;target&quot;: &quot;P201&quot;,
+          &quot;value&quot;: {
+            &quot;kind&quot;: &quot;motor_trip&quot;
+          },
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_fault&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_running&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_command&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;clear_fault&quot;,
+          &quot;target&quot;: &quot;P201&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_fault&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;p201_running&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-valve-stuck&quot;,
+      &quot;name&quot;: &quot;07 · Vanne bloquée et débit nul&quot;,
+      &quot;description&quot;: &quot;Une vanne en série maintenue fermée bloque le transfert, même si le moteur tourne.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK101&quot;,
+        &quot;P201&quot;,
+        &quot;XV201&quot;,
+        &quot;TK201&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;tk101_volume&quot;,
+        &quot;tk201_volume&quot;,
+        &quot;xv201_command&quot;,
+        &quot;xv201_open&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 5.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;fault&quot;,
+          &quot;target&quot;: &quot;XV201&quot;,
+          &quot;value&quot;: {
+            &quot;kind&quot;: &quot;valve_stuck&quot;,
+            &quot;value&quot;: 0.0
+          },
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: true,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;xv201_open&quot;,
+          &quot;value&quot;: false,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk101_volume&quot;,
+          &quot;value&quot;: 720.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;tk201_volume&quot;,
+          &quot;value&quot;: 450.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;p201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.5,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;xv201_request&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;clear_fault&quot;,
+          &quot;target&quot;: &quot;XV201&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-analog&quot;,
+      &quot;name&quot;: &quot;08 · Échelles analogiques et défaut de signal&quot;,
+      &quot;description&quot;: &quot;La conversion linéaire est illustrée, sans alarme ou substitution métier. Une valeur hors plage et sa qualité restent visibles.&quot;,
+      &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+      &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;LT101&quot;,
+        &quot;LT201&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;lt101_raw&quot;,
+        &quot;lt101_percent&quot;,
+        &quot;lt201_raw&quot;,
+        &quot;lt201_percent&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;timed&quot;,
+      &quot;fat_steps&quot;: [],
+      &quot;duration_s&quot;: 5.0,
+      &quot;steps&quot;: [
+        {
+          &quot;at_s&quot;: 0.0,
+          &quot;action&quot;: &quot;force&quot;,
+          &quot;target&quot;: &quot;lt101_raw&quot;,
+          &quot;value&quot;: 13824,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 0.5,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;lt101_percent&quot;,
+          &quot;value&quot;: 50.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 1.5,
+          &quot;action&quot;: &quot;fault&quot;,
+          &quot;target&quot;: &quot;LT201&quot;,
+          &quot;value&quot;: {
+            &quot;kind&quot;: &quot;out_of_range&quot;,
+            &quot;value&quot;: 30000
+          },
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 2.2,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;lt201_percent&quot;,
+          &quot;value&quot;: 100.0,
+          &quot;operator&quot;: &quot;gt&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;clear_fault&quot;,
+          &quot;target&quot;: &quot;LT201&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 3.0,
+          &quot;action&quot;: &quot;release&quot;,
+          &quot;target&quot;: &quot;lt101_raw&quot;,
+          &quot;value&quot;: null,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.001,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;lt101_percent&quot;,
+          &quot;value&quot;: 60.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        },
+        {
+          &quot;at_s&quot;: 4.0,
+          &quot;action&quot;: &quot;expect&quot;,
+          &quot;target&quot;: &quot;lt201_percent&quot;,
+          &quot;value&quot;: 25.0,
+          &quot;operator&quot;: &quot;eq&quot;,
+          &quot;tolerance&quot;: 0.1,
+          &quot;message&quot;: &quot;&quot;
+        }
+      ]
+    },
+    {
+      &quot;id&quot;: &quot;demo-guided-io&quot;,
+      &quot;name&quot;: &quot;09 · FAT manuelle pas à pas&quot;,
+      &quot;description&quot;: &quot;Préparer les écritures, exécuter un STEP puis consigner ce qui a été observé.&quot;,
+      &quot;requirement&quot;: &quot;DEMO-GUIDED · Stimuli groupés, résultat attendu et observation&quot;,
+      &quot;preconditions&quot;: &quot;Nouveau modèle, cuves à leurs niveaux initiaux, demandes relâchées ; PLC de démo passif sur une cible virtuelle isolée.&quot;,
+      &quot;focus_equipment&quot;: [
+        &quot;TK101&quot;,
+        &quot;LT101&quot;,
+        &quot;P101&quot;,
+        &quot;XV101&quot;
+      ],
+      &quot;trend_tags&quot;: [
+        &quot;lt101_raw&quot;,
+        &quot;lt101_percent&quot;,
+        &quot;p101_command&quot;,
+        &quot;p101_speed&quot;
+      ],
+      &quot;execution_mode&quot;: &quot;guided&quot;,
+      &quot;fat_steps&quot;: [
+        {
+          &quot;id&quot;: &quot;guided-initial&quot;,
+          &quot;name&quot;: &quot;Vérifier le niveau à 12 mA&quot;,
+          &quot;instructions&quot;: &quot;Appliquer, attendre deux cycles d&#x27;échange puis comparer les valeurs.&quot;,
+          &quot;expected_result&quot;: &quot;LT-101 = 50 %, P-101 non commandée.&quot;,
+          &quot;actions&quot;: [
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;p101_request&quot;,
+              &quot;value&quot;: false,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;stop_healthy&quot;,
+              &quot;value&quot;: true,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;lt101_raw&quot;,
+              &quot;value&quot;: 12.0,
+              &quot;unit&quot;: &quot;mA&quot;,
+              &quot;diagnostic&quot;: false
+            }
+          ],
+          &quot;checks&quot;: [
+            {
+              &quot;target&quot;: &quot;lt101_percent&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: 50.0,
+              &quot;tolerance&quot;: 0.1
+            },
+            {
+              &quot;target&quot;: &quot;p101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            }
+          ]
+        },
+        {
+          &quot;id&quot;: &quot;guided-run&quot;,
+          &quot;name&quot;: &quot;Demander une marche à 50 %&quot;,
+          &quot;instructions&quot;: &quot;Ouvrir l&#x27;arrivée et appliquer la demande manuelle de pompe.&quot;,
+          &quot;expected_result&quot;: &quot;La commande P-101 vaut TRUE, la consigne vaut 50 %, puis le retour marche apparaît.&quot;,
+          &quot;actions&quot;: [
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;xv101_request&quot;,
+              &quot;value&quot;: true,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;p101_requested_speed&quot;,
+              &quot;value&quot;: 50.0,
+              &quot;unit&quot;: &quot;percent&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;p101_request&quot;,
+              &quot;value&quot;: true,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            }
+          ],
+          &quot;checks&quot;: [
+            {
+              &quot;target&quot;: &quot;p101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: true,
+              &quot;tolerance&quot;: 0.001
+            },
+            {
+              &quot;target&quot;: &quot;p101_speed_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: 50.0,
+              &quot;tolerance&quot;: 0.1
+            },
+            {
+              &quot;target&quot;: &quot;p101_running&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: true,
+              &quot;tolerance&quot;: 0.001
+            }
+          ]
+        },
+        {
+          &quot;id&quot;: &quot;guided-stop&quot;,
+          &quot;name&quot;: &quot;Ouvrir le contact d&#x27;arrêt&quot;,
+          &quot;instructions&quot;: &quot;Conserver les demandes et ouvrir le contact de démo.&quot;,
+          &quot;expected_result&quot;: &quot;Les commandes de pompe et vanne passent à FALSE ; le retour marche disparaît après la réponse simulée.&quot;,
+          &quot;actions&quot;: [
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;stop_healthy&quot;,
+              &quot;value&quot;: false,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            }
+          ],
+          &quot;checks&quot;: [
+            {
+              &quot;target&quot;: &quot;p101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            },
+            {
+              &quot;target&quot;: &quot;xv101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            },
+            {
+              &quot;target&quot;: &quot;p101_running&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            }
+          ]
+        },
+        {
+          &quot;id&quot;: &quot;guided-requests-off&quot;,
+          &quot;name&quot;: &quot;Relâcher les demandes&quot;,
+          &quot;instructions&quot;: &quot;Couper les demandes avant de rétablir le contact.&quot;,
+          &quot;expected_result&quot;: &quot;P-101 reste non commandée.&quot;,
+          &quot;actions&quot;: [
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;p101_request&quot;,
+              &quot;value&quot;: false,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;force&quot;,
+              &quot;target&quot;: &quot;xv101_request&quot;,
+              &quot;value&quot;: false,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            }
+          ],
+          &quot;checks&quot;: [
+            {
+              &quot;target&quot;: &quot;p101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            }
+          ]
+        },
+        {
+          &quot;id&quot;: &quot;guided-release&quot;,
+          &quot;name&quot;: &quot;Libérer les stimuli&quot;,
+          &quot;instructions&quot;: &quot;Revenir aux entrées physiques simulées ; aucune conclusion FAT n&#x27;est renseignée automatiquement.&quot;,
+          &quot;expected_result&quot;: &quot;Les commandes restent FALSE et LT-101 reprend le niveau du modèle.&quot;,
+          &quot;actions&quot;: [
+            {
+              &quot;action&quot;: &quot;release&quot;,
+              &quot;target&quot;: &quot;p101_request&quot;,
+              &quot;value&quot;: null,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;release&quot;,
+              &quot;target&quot;: &quot;xv101_request&quot;,
+              &quot;value&quot;: null,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;release&quot;,
+              &quot;target&quot;: &quot;p101_requested_speed&quot;,
+              &quot;value&quot;: null,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;release&quot;,
+              &quot;target&quot;: &quot;stop_healthy&quot;,
+              &quot;value&quot;: null,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            },
+            {
+              &quot;action&quot;: &quot;release&quot;,
+              &quot;target&quot;: &quot;lt101_raw&quot;,
+              &quot;value&quot;: null,
+              &quot;unit&quot;: &quot;native&quot;,
+              &quot;diagnostic&quot;: false
+            }
+          ],
+          &quot;checks&quot;: [
+            {
+              &quot;target&quot;: &quot;p101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            },
+            {
+              &quot;target&quot;: &quot;xv101_command&quot;,
+              &quot;operator&quot;: &quot;eq&quot;,
+              &quot;value&quot;: false,
+              &quot;tolerance&quot;: 0.001
+            }
+          ]
+        }
+      ],
+      &quot;duration_s&quot;: 120.0,
+      &quot;steps&quot;: []
+    }
+  ],
+  &quot;plc&quot;: {
+    &quot;mode&quot;: &quot;opcua&quot;,
+    &quot;demo_controller&quot;: &quot;manual_lab_v1&quot;,
+    &quot;tia_version&quot;: &quot;V21&quot;,
+    &quot;endpoint&quot;: &quot;opc.tcp://192.168.247.3:4840&quot;,
+    &quot;expected_application_uri&quot;: &quot;urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO&quot;,
+    &quot;namespace_uri&quot;: &quot;http://www.siemens.com/simatic-s7-opcua&quot;,
+    &quot;security_policy&quot;: &quot;Basic256Sha256&quot;,
+    &quot;server_certificate_sha256&quot;: &quot;bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391&quot;,
+    &quot;client_certificate&quot;: &quot;C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\opcua-client\\client-certificate.pem&quot;,
+    &quot;client_private_key&quot;: &quot;C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\opcua-client\\client-private-key.pem&quot;,
+    &quot;username_env&quot;: &quot;&quot;,
+    &quot;password_env&quot;: &quot;&quot;,
+    &quot;approved_virtual_target&quot;: &quot;FAT-DEMO-20261103&quot;,
+    &quot;timeout_s&quot;: 5.0
+  }
+}</pre></details>
+<h2>Scénario enregistré</h2><pre>{
+  &quot;id&quot;: &quot;demo-analog&quot;,
+  &quot;name&quot;: &quot;08 · Échelles analogiques et défaut de signal&quot;,
+  &quot;description&quot;: &quot;La conversion linéaire est illustrée, sans alarme ou substitution métier. Une valeur hors plage et sa qualité restent visibles.&quot;,
+  &quot;requirement&quot;: &quot;DEMO · Vérifier les échanges et le modèle de procédé&quot;,
+  &quot;preconditions&quot;: &quot;Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.&quot;,
+  &quot;focus_equipment&quot;: [
+    &quot;LT101&quot;,
+    &quot;LT201&quot;
+  ],
+  &quot;trend_tags&quot;: [
+    &quot;lt101_raw&quot;,
+    &quot;lt101_percent&quot;,
+    &quot;lt201_raw&quot;,
+    &quot;lt201_percent&quot;
+  ],
+  &quot;execution_mode&quot;: &quot;timed&quot;,
+  &quot;fat_steps&quot;: [],
+  &quot;duration_s&quot;: 5.0,
+  &quot;steps&quot;: [
+    {
+      &quot;at_s&quot;: 0.0,
+      &quot;action&quot;: &quot;force&quot;,
+      &quot;target&quot;: &quot;lt101_raw&quot;,
+      &quot;value&quot;: 13824,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.001,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 0.5,
+      &quot;action&quot;: &quot;expect&quot;,
+      &quot;target&quot;: &quot;lt101_percent&quot;,
+      &quot;value&quot;: 50.0,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.1,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 1.5,
+      &quot;action&quot;: &quot;fault&quot;,
+      &quot;target&quot;: &quot;LT201&quot;,
+      &quot;value&quot;: {
+        &quot;kind&quot;: &quot;out_of_range&quot;,
+        &quot;value&quot;: 30000
+      },
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.001,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 2.2,
+      &quot;action&quot;: &quot;expect&quot;,
+      &quot;target&quot;: &quot;lt201_percent&quot;,
+      &quot;value&quot;: 100.0,
+      &quot;operator&quot;: &quot;gt&quot;,
+      &quot;tolerance&quot;: 0.1,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 3.0,
+      &quot;action&quot;: &quot;clear_fault&quot;,
+      &quot;target&quot;: &quot;LT201&quot;,
+      &quot;value&quot;: null,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.001,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 3.0,
+      &quot;action&quot;: &quot;release&quot;,
+      &quot;target&quot;: &quot;lt101_raw&quot;,
+      &quot;value&quot;: null,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.001,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 4.0,
+      &quot;action&quot;: &quot;expect&quot;,
+      &quot;target&quot;: &quot;lt101_percent&quot;,
+      &quot;value&quot;: 60.0,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.1,
+      &quot;message&quot;: &quot;&quot;
+    },
+    {
+      &quot;at_s&quot;: 4.0,
+      &quot;action&quot;: &quot;expect&quot;,
+      &quot;target&quot;: &quot;lt201_percent&quot;,
+      &quot;value&quot;: 25.0,
+      &quot;operator&quot;: &quot;eq&quot;,
+      &quot;tolerance&quot;: 0.1,
+      &quot;message&quot;: &quot;&quot;
+    }
+  ]
+}</pre>
+<p>Les valeurs détaillées et leur qualité sont disponibles dans l'export CSV ; l'export JSON contient l'ensemble des preuves. Ce rapport est généré localement, sans service externe.</p>
+</body></html>

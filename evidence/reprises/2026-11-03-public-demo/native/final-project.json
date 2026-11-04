@@ -1,0 +1,3489 @@
+{
+  "schema_version": "1.0",
+  "id": "fat-public-demo-plcsim-v21-20261103",
+  "name": "Laboratoire public · PLCSIM V21 réel",
+  "description": "CPU virtuelle FAT-DEMO-20261103 : programme public passif DB_FAT_Demo + Main, sans bibliothèque client ni séquence métier. 75 correspondances observées par export Openness et browse OPC UA réel. Basic256Sha256/SignAndEncrypt, certificat et ApplicationUri épinglés. Les scénarios techniques et étapes préparées ne constituent pas un verdict FAT humain.",
+  "simulation": {
+    "step_ms": 100,
+    "speed": 1.0
+  },
+  "equipment": [
+    {
+      "id": "TK101",
+      "type": "tank",
+      "name": "TK-101 · Alimentation",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 240.0,
+        "y": 100.0
+      },
+      "params": {
+        "capacity_l": 1200.0,
+        "initial_level_pct": 60.0
+      },
+      "bindings": {
+        "volume": "tk101_volume"
+      },
+      "animation": {
+        "tag_id": "lt101_percent",
+        "operator": "ge",
+        "value": 0.0,
+        "effect": "level",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "LT101",
+      "type": "analog_sensor",
+      "name": "LT-101 · 4–20 mA",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 50.0,
+        "y": 0.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "scale": 276.48,
+        "offset": 0.0
+      },
+      "bindings": {
+        "value": "lt101_raw",
+        "scaled_value": "lt101_percent"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSL101",
+      "type": "digital_sensor",
+      "name": "LSL-101",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 430.0,
+        "y": 170.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "operator": "le",
+        "threshold": 10.0
+      },
+      "bindings": {
+        "value": "lsl101"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSH101",
+      "type": "digital_sensor",
+      "name": "LSH-101",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 430.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK101",
+        "source_field": "level",
+        "operator": "ge",
+        "threshold": 90.0
+      },
+      "bindings": {
+        "value": "lsh101"
+      },
+      "animation": null
+    },
+    {
+      "id": "TK201",
+      "type": "tank",
+      "name": "TK-201 · Cuve intermédiaire",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 780.0,
+        "y": 100.0
+      },
+      "params": {
+        "capacity_l": 1800.0,
+        "initial_level_pct": 25.0
+      },
+      "bindings": {
+        "volume": "tk201_volume"
+      },
+      "animation": {
+        "tag_id": "lt201_percent",
+        "operator": "ge",
+        "value": 0.0,
+        "effect": "level",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "LT201",
+      "type": "analog_sensor",
+      "name": "LT-201 · 4–20 mA",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 590.0,
+        "y": 0.0
+      },
+      "params": {
+        "source_equipment": "TK201",
+        "source_field": "level",
+        "scale": 276.48,
+        "offset": 0.0
+      },
+      "bindings": {
+        "value": "lt201_raw",
+        "scaled_value": "lt201_percent"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSL201",
+      "type": "digital_sensor",
+      "name": "LSL-201",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 970.0,
+        "y": 170.0
+      },
+      "params": {
+        "source_equipment": "TK201",
+        "source_field": "level",
+        "operator": "le",
+        "threshold": 10.0
+      },
+      "bindings": {
+        "value": "lsl201"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSH201",
+      "type": "digital_sensor",
+      "name": "LSH-201",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 970.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK201",
+        "source_field": "level",
+        "operator": "ge",
+        "threshold": 90.0
+      },
+      "bindings": {
+        "value": "lsh201"
+      },
+      "animation": null
+    },
+    {
+      "id": "TK301",
+      "type": "tank",
+      "name": "TK-301 · Réception",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1320.0,
+        "y": 100.0
+      },
+      "params": {
+        "capacity_l": 1200.0,
+        "initial_level_pct": 15.0
+      },
+      "bindings": {
+        "volume": "tk301_volume"
+      },
+      "animation": {
+        "tag_id": "lt301_percent",
+        "operator": "ge",
+        "value": 0.0,
+        "effect": "level",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "LT301",
+      "type": "analog_sensor",
+      "name": "LT-301 · 4–20 mA",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1130.0,
+        "y": 0.0
+      },
+      "params": {
+        "source_equipment": "TK301",
+        "source_field": "level",
+        "scale": 276.48,
+        "offset": 0.0
+      },
+      "bindings": {
+        "value": "lt301_raw",
+        "scaled_value": "lt301_percent"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSL301",
+      "type": "digital_sensor",
+      "name": "LSL-301",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1510.0,
+        "y": 170.0
+      },
+      "params": {
+        "source_equipment": "TK301",
+        "source_field": "level",
+        "operator": "le",
+        "threshold": 10.0
+      },
+      "bindings": {
+        "value": "lsl301"
+      },
+      "animation": null
+    },
+    {
+      "id": "LSH301",
+      "type": "digital_sensor",
+      "name": "LSH-301",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1510.0,
+        "y": 10.0
+      },
+      "params": {
+        "source_equipment": "TK301",
+        "source_field": "level",
+        "operator": "ge",
+        "threshold": 90.0
+      },
+      "bindings": {
+        "value": "lsh301"
+      },
+      "animation": null
+    },
+    {
+      "id": "P101",
+      "type": "pump_vfd",
+      "name": "P-101 · Alimentation",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 0.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "inlet",
+        "flow_group": "fill101",
+        "source_tank_id": "",
+        "max_flow_l_s": 35.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "p101_command",
+        "speed_command": "p101_speed_command",
+        "feedback": "p101_running",
+        "speed": "p101_speed",
+        "fault": "p101_fault",
+        "manual_request": "p101_request",
+        "manual_speed": "p101_requested_speed"
+      },
+      "animation": {
+        "tag_id": "p101_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "rotate",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "P201",
+      "type": "pump_vfd",
+      "name": "P-201 · Transfert 1",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 500.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK201",
+        "role": "inlet",
+        "flow_group": "transfer201",
+        "source_tank_id": "TK101",
+        "max_flow_l_s": 30.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "p201_command",
+        "speed_command": "p201_speed_command",
+        "feedback": "p201_running",
+        "speed": "p201_speed",
+        "fault": "p201_fault",
+        "manual_request": "p201_request",
+        "manual_speed": "p201_requested_speed"
+      },
+      "animation": {
+        "tag_id": "p201_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "rotate",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "P202",
+      "type": "pump_vfd",
+      "name": "P-202 · Transfert 2",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1040.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK301",
+        "role": "inlet",
+        "flow_group": "transfer202",
+        "source_tank_id": "TK201",
+        "max_flow_l_s": 26.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "p202_command",
+        "speed_command": "p202_speed_command",
+        "feedback": "p202_running",
+        "speed": "p202_speed",
+        "fault": "p202_fault",
+        "manual_request": "p202_request",
+        "manual_speed": "p202_requested_speed"
+      },
+      "animation": {
+        "tag_id": "p202_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "rotate",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "P301",
+      "type": "pump_vfd",
+      "name": "P-301 · Vidange",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1560.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK301",
+        "role": "outlet",
+        "flow_group": "drain301",
+        "source_tank_id": "",
+        "max_flow_l_s": 20.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "p301_command",
+        "speed_command": "p301_speed_command",
+        "feedback": "p301_running",
+        "speed": "p301_speed",
+        "fault": "p301_fault",
+        "manual_request": "p301_request",
+        "manual_speed": "p301_requested_speed"
+      },
+      "animation": {
+        "tag_id": "p301_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "rotate",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV101",
+      "type": "valve_onoff",
+      "name": "XV-101 · Arrivée",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 240.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "inlet",
+        "flow_group": "fill101",
+        "max_flow_l_s": 45.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv101_command",
+        "manual_request": "xv101_request",
+        "open": "xv101_open",
+        "closed": "xv101_closed"
+      },
+      "animation": {
+        "tag_id": "xv101_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV201",
+      "type": "valve_onoff",
+      "name": "XV-201 · Transfert 1",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 780.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK201",
+        "role": "inlet",
+        "flow_group": "transfer201",
+        "max_flow_l_s": 40.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv201_command",
+        "manual_request": "xv201_request",
+        "open": "xv201_open",
+        "closed": "xv201_closed"
+      },
+      "animation": {
+        "tag_id": "xv201_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV202",
+      "type": "valve_onoff",
+      "name": "XV-202 · Transfert 2",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1320.0,
+        "y": 430.0
+      },
+      "params": {
+        "tank_id": "TK301",
+        "role": "inlet",
+        "flow_group": "transfer202",
+        "max_flow_l_s": 35.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv202_command",
+        "manual_request": "xv202_request",
+        "open": "xv202_open",
+        "closed": "xv202_closed"
+      },
+      "animation": {
+        "tag_id": "xv202_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV301",
+      "type": "valve_onoff",
+      "name": "XV-301 · Sortie",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1560.0,
+        "y": 700.0
+      },
+      "params": {
+        "tank_id": "TK301",
+        "role": "outlet",
+        "flow_group": "drain301",
+        "max_flow_l_s": 30.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv301_command",
+        "manual_request": "xv301_request",
+        "open": "xv301_open",
+        "closed": "xv301_closed"
+      },
+      "animation": {
+        "tag_id": "xv301_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV102",
+      "type": "valve_onoff",
+      "name": "XV-102 · Purge source",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 240.0,
+        "y": 700.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "outlet",
+        "flow_group": "drain101",
+        "max_flow_l_s": 14.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv102_command",
+        "manual_request": "xv102_request",
+        "open": "xv102_open",
+        "closed": "xv102_closed"
+      },
+      "animation": {
+        "tag_id": "xv102_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV203",
+      "type": "valve_onoff",
+      "name": "XV-203 · Purge intermédiaire",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 780.0,
+        "y": 700.0
+      },
+      "params": {
+        "tank_id": "TK201",
+        "role": "outlet",
+        "flow_group": "drain201",
+        "max_flow_l_s": 14.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv203_command",
+        "manual_request": "xv203_request",
+        "open": "xv203_open",
+        "closed": "xv203_closed"
+      },
+      "animation": {
+        "tag_id": "xv203_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "XV103",
+      "type": "valve_onoff",
+      "name": "XV-103 · Évent illustratif",
+      "description": "Évent graphique sans bilan de pression.",
+      "unit": "",
+      "position": {
+        "x": 0.0,
+        "y": 210.0
+      },
+      "params": {
+        "tank_id": "TK101",
+        "role": "inlet",
+        "flow_group": "vent101",
+        "max_flow_l_s": 0.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "xv103_command",
+        "manual_request": "xv103_request",
+        "open": "xv103_open",
+        "closed": "xv103_closed"
+      },
+      "animation": {
+        "tag_id": "xv103_command",
+        "operator": "eq",
+        "value": true,
+        "effect": "highlight",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "FCV302",
+      "type": "valve_control",
+      "name": "FCV-302 · Réglage sortie",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1320.0,
+        "y": 700.0
+      },
+      "params": {
+        "tank_id": "TK301",
+        "role": "outlet",
+        "flow_group": "drain301",
+        "max_flow_l_s": 30.0,
+        "response_s": 0.2
+      },
+      "bindings": {
+        "command": "fcv302_command",
+        "manual_request": "fcv302_request",
+        "position": "fcv302_position"
+      },
+      "animation": {
+        "tag_id": "fcv302_command",
+        "operator": "gt",
+        "value": 0.0,
+        "effect": "position",
+        "min": 0.0,
+        "max": 100.0,
+        "active_color": "#148b78",
+        "inactive_color": "#738994"
+      }
+    },
+    {
+      "id": "IO_stop_healthy",
+      "type": "digital_input",
+      "name": "StopHealthy",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 50.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": true
+      },
+      "bindings": {
+        "value": "stop_healthy"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_p101_request",
+      "type": "digital_input",
+      "name": "P101_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 260.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "p101_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_p201_request",
+      "type": "digital_input",
+      "name": "P201_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 470.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "p201_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_p202_request",
+      "type": "digital_input",
+      "name": "P202_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 680.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "p202_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_p301_request",
+      "type": "digital_input",
+      "name": "P301_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 890.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "p301_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv101_request",
+      "type": "digital_input",
+      "name": "XV101_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1100.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv101_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv201_request",
+      "type": "digital_input",
+      "name": "XV201_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1310.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv201_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv202_request",
+      "type": "digital_input",
+      "name": "XV202_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 1520.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv202_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv301_request",
+      "type": "digital_input",
+      "name": "XV301_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 50.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv301_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv102_request",
+      "type": "digital_input",
+      "name": "XV102_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 260.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv102_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv203_request",
+      "type": "digital_input",
+      "name": "XV203_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 470.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv203_request"
+      },
+      "animation": null
+    },
+    {
+      "id": "IO_xv103_request",
+      "type": "digital_input",
+      "name": "XV103_Request",
+      "description": "",
+      "unit": "",
+      "position": {
+        "x": 680.0,
+        "y": 1000.0
+      },
+      "params": {
+        "initial_value": false
+      },
+      "bindings": {
+        "value": "xv103_request"
+      },
+      "animation": null
+    }
+  ],
+  "connections": [
+    {
+      "id": "pipe_0",
+      "source": "P101",
+      "target": "XV101",
+      "label": "Alimentation",
+      "directed": true
+    },
+    {
+      "id": "pipe_1",
+      "source": "XV101",
+      "target": "TK101",
+      "label": "Eau de démonstration",
+      "directed": true
+    },
+    {
+      "id": "pipe_2",
+      "source": "TK101",
+      "target": "P201",
+      "label": "Transfert 1",
+      "directed": true
+    },
+    {
+      "id": "pipe_3",
+      "source": "P201",
+      "target": "XV201",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_4",
+      "source": "XV201",
+      "target": "TK201",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_5",
+      "source": "TK201",
+      "target": "P202",
+      "label": "Transfert 2",
+      "directed": true
+    },
+    {
+      "id": "pipe_6",
+      "source": "P202",
+      "target": "XV202",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_7",
+      "source": "XV202",
+      "target": "TK301",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_8",
+      "source": "TK301",
+      "target": "P301",
+      "label": "Vidange",
+      "directed": true
+    },
+    {
+      "id": "pipe_9",
+      "source": "P301",
+      "target": "XV301",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_10",
+      "source": "XV301",
+      "target": "FCV302",
+      "label": "Sortie",
+      "directed": true
+    },
+    {
+      "id": "pipe_11",
+      "source": "TK101",
+      "target": "XV102",
+      "label": "Purge",
+      "directed": true
+    },
+    {
+      "id": "pipe_12",
+      "source": "TK201",
+      "target": "XV203",
+      "label": "Purge",
+      "directed": true
+    },
+    {
+      "id": "pipe_13",
+      "source": "TK101",
+      "target": "XV103",
+      "label": "Évent",
+      "directed": true
+    },
+    {
+      "id": "pipe_14",
+      "source": "TK101",
+      "target": "LT101",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_15",
+      "source": "TK101",
+      "target": "LSL101",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_16",
+      "source": "TK101",
+      "target": "LSH101",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_17",
+      "source": "TK201",
+      "target": "LT201",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_18",
+      "source": "TK201",
+      "target": "LSL201",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_19",
+      "source": "TK201",
+      "target": "LSH201",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_20",
+      "source": "TK301",
+      "target": "LT301",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_21",
+      "source": "TK301",
+      "target": "LSL301",
+      "label": "",
+      "directed": true
+    },
+    {
+      "id": "pipe_22",
+      "source": "TK301",
+      "target": "LSH301",
+      "label": "",
+      "directed": true
+    }
+  ],
+  "tags": [
+    {
+      "id": "stop_healthy",
+      "name": "StopHealthy",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"StopHealthy\"",
+      "plc_address": "%DB1.DBX0.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"StopHealthy\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p101_request",
+      "name": "P101_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Request\"",
+      "plc_address": "%DB1.DBX0.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p101_requested_speed",
+      "name": "P101_RequestedSpeed",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 60.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_RequestedSpeed\"",
+      "plc_address": "%DB1.DBD2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_RequestedSpeed\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p101_command",
+      "name": "P101_RunCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_RunCommand\"",
+      "plc_address": "%DB1.DBX6.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_RunCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p101_speed_command",
+      "name": "P101_SpeedCommand",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_SpeedCommand\"",
+      "plc_address": "%DB1.DBD8",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_SpeedCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p101_running",
+      "name": "P101_Running",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Running\"",
+      "plc_address": "%DB1.DBX12.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Running\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p101_speed",
+      "name": "P101_SpeedFeedback",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_SpeedFeedback\"",
+      "plc_address": "%DB1.DBD14",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_SpeedFeedback\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p101_fault",
+      "name": "P101_Fault",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P101_Fault\"",
+      "plc_address": "%DB1.DBX18.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P101_Fault\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p201_request",
+      "name": "P201_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Request\"",
+      "plc_address": "%DB1.DBX18.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p201_requested_speed",
+      "name": "P201_RequestedSpeed",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 60.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_RequestedSpeed\"",
+      "plc_address": "%DB1.DBD20",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_RequestedSpeed\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p201_command",
+      "name": "P201_RunCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_RunCommand\"",
+      "plc_address": "%DB1.DBX24.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_RunCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p201_speed_command",
+      "name": "P201_SpeedCommand",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_SpeedCommand\"",
+      "plc_address": "%DB1.DBD26",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_SpeedCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p201_running",
+      "name": "P201_Running",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Running\"",
+      "plc_address": "%DB1.DBX30.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Running\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p201_speed",
+      "name": "P201_SpeedFeedback",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_SpeedFeedback\"",
+      "plc_address": "%DB1.DBD32",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_SpeedFeedback\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p201_fault",
+      "name": "P201_Fault",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P201_Fault\"",
+      "plc_address": "%DB1.DBX36.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P201_Fault\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p202_request",
+      "name": "P202_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Request\"",
+      "plc_address": "%DB1.DBX36.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p202_requested_speed",
+      "name": "P202_RequestedSpeed",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 60.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_RequestedSpeed\"",
+      "plc_address": "%DB1.DBD38",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_RequestedSpeed\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p202_command",
+      "name": "P202_RunCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_RunCommand\"",
+      "plc_address": "%DB1.DBX42.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_RunCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p202_speed_command",
+      "name": "P202_SpeedCommand",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_SpeedCommand\"",
+      "plc_address": "%DB1.DBD44",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_SpeedCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p202_running",
+      "name": "P202_Running",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Running\"",
+      "plc_address": "%DB1.DBX48.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Running\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p202_speed",
+      "name": "P202_SpeedFeedback",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_SpeedFeedback\"",
+      "plc_address": "%DB1.DBD50",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_SpeedFeedback\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p202_fault",
+      "name": "P202_Fault",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P202_Fault\"",
+      "plc_address": "%DB1.DBX54.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P202_Fault\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p301_request",
+      "name": "P301_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Request\"",
+      "plc_address": "%DB1.DBX54.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p301_requested_speed",
+      "name": "P301_RequestedSpeed",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 60.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_RequestedSpeed\"",
+      "plc_address": "%DB1.DBD56",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_RequestedSpeed\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p301_command",
+      "name": "P301_RunCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_RunCommand\"",
+      "plc_address": "%DB1.DBX60.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_RunCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p301_speed_command",
+      "name": "P301_SpeedCommand",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_SpeedCommand\"",
+      "plc_address": "%DB1.DBD62",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_SpeedCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "p301_running",
+      "name": "P301_Running",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Running\"",
+      "plc_address": "%DB1.DBX66.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Running\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "p301_speed",
+      "name": "P301_SpeedFeedback",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_SpeedFeedback\"",
+      "plc_address": "%DB1.DBD68",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_SpeedFeedback\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "p301_fault",
+      "name": "P301_Fault",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"P301_Fault\"",
+      "plc_address": "%DB1.DBX72.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"P301_Fault\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv101_request",
+      "name": "XV101_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Request\"",
+      "plc_address": "%DB1.DBX72.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv101_command",
+      "name": "XV101_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_OpenCommand\"",
+      "plc_address": "%DB1.DBX72.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv101_open",
+      "name": "XV101_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Open\"",
+      "plc_address": "%DB1.DBX72.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv101_closed",
+      "name": "XV101_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV101_Closed\"",
+      "plc_address": "%DB1.DBX72.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV101_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv201_request",
+      "name": "XV201_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Request\"",
+      "plc_address": "%DB1.DBX72.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv201_command",
+      "name": "XV201_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_OpenCommand\"",
+      "plc_address": "%DB1.DBX72.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv201_open",
+      "name": "XV201_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Open\"",
+      "plc_address": "%DB1.DBX72.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv201_closed",
+      "name": "XV201_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV201_Closed\"",
+      "plc_address": "%DB1.DBX73.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV201_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv202_request",
+      "name": "XV202_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Request\"",
+      "plc_address": "%DB1.DBX73.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv202_command",
+      "name": "XV202_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_OpenCommand\"",
+      "plc_address": "%DB1.DBX73.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv202_open",
+      "name": "XV202_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Open\"",
+      "plc_address": "%DB1.DBX73.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv202_closed",
+      "name": "XV202_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV202_Closed\"",
+      "plc_address": "%DB1.DBX73.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV202_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv301_request",
+      "name": "XV301_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Request\"",
+      "plc_address": "%DB1.DBX73.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv301_command",
+      "name": "XV301_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_OpenCommand\"",
+      "plc_address": "%DB1.DBX73.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv301_open",
+      "name": "XV301_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Open\"",
+      "plc_address": "%DB1.DBX73.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv301_closed",
+      "name": "XV301_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV301_Closed\"",
+      "plc_address": "%DB1.DBX74.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV301_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv102_request",
+      "name": "XV102_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Request\"",
+      "plc_address": "%DB1.DBX74.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv102_command",
+      "name": "XV102_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_OpenCommand\"",
+      "plc_address": "%DB1.DBX74.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv102_open",
+      "name": "XV102_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Open\"",
+      "plc_address": "%DB1.DBX74.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv102_closed",
+      "name": "XV102_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV102_Closed\"",
+      "plc_address": "%DB1.DBX74.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV102_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv203_request",
+      "name": "XV203_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Request\"",
+      "plc_address": "%DB1.DBX74.5",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv203_command",
+      "name": "XV203_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_OpenCommand\"",
+      "plc_address": "%DB1.DBX74.6",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv203_open",
+      "name": "XV203_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Open\"",
+      "plc_address": "%DB1.DBX74.7",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv203_closed",
+      "name": "XV203_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV203_Closed\"",
+      "plc_address": "%DB1.DBX75.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV203_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv103_request",
+      "name": "XV103_Request",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Request\"",
+      "plc_address": "%DB1.DBX75.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Request\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv103_command",
+      "name": "XV103_OpenCommand",
+      "direction": "output",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_OpenCommand\"",
+      "plc_address": "%DB1.DBX75.2",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_OpenCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "xv103_open",
+      "name": "XV103_Open",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Open\"",
+      "plc_address": "%DB1.DBX75.3",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Open\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "xv103_closed",
+      "name": "XV103_Closed",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": true,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"XV103_Closed\"",
+      "plc_address": "%DB1.DBX75.4",
+      "plc_symbol": "\"DB_FAT_Demo\".\"XV103_Closed\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "fcv302_request",
+      "name": "FCV302_RequestedPosition",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_RequestedPosition\"",
+      "plc_address": "%DB1.DBD76",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_RequestedPosition\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "fcv302_command",
+      "name": "FCV302_PositionCommand",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_PositionCommand\"",
+      "plc_address": "%DB1.DBD80",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_PositionCommand\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "fcv302_position",
+      "name": "FCV302_PositionFeedback",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": 0.0,
+      "max": 100.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"FCV302_PositionFeedback\"",
+      "plc_address": "%DB1.DBD84",
+      "plc_symbol": "\"DB_FAT_Demo\".\"FCV302_PositionFeedback\"",
+      "signal": {
+        "kind": "linear",
+        "raw_min": 0.0,
+        "raw_max": 100.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": null,
+        "overflow_raw": null
+      },
+      "writable": true
+    },
+    {
+      "id": "lt101_raw",
+      "name": "LT101_Raw",
+      "direction": "input",
+      "data_type": "INT",
+      "unit": "counts",
+      "initial_value": 16589,
+      "min": 0.0,
+      "max": 27648.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT101_Raw\"",
+      "plc_address": "%DB1.DBW88",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT101_Raw\"",
+      "signal": {
+        "kind": "4-20mA",
+        "raw_min": 0.0,
+        "raw_max": 27648.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": -32768.0,
+        "overflow_raw": 32767.0
+      },
+      "writable": true
+    },
+    {
+      "id": "lt101_percent",
+      "name": "LT101_Percent",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT101_Percent\"",
+      "plc_address": "%DB1.DBD90",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT101_Percent\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "tk101_volume",
+      "name": "TK101_Volume",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "L",
+      "initial_value": 720.0,
+      "min": 0.0,
+      "max": 1200.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK101_Volume\"",
+      "plc_address": "%DB1.DBD94",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK101_Volume\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsl101",
+      "name": "LSL101",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL101\"",
+      "plc_address": "%DB1.DBX98.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL101\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsh101",
+      "name": "LSH101",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH101\"",
+      "plc_address": "%DB1.DBX98.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH101\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lt201_raw",
+      "name": "LT201_Raw",
+      "direction": "input",
+      "data_type": "INT",
+      "unit": "counts",
+      "initial_value": 6912,
+      "min": 0.0,
+      "max": 27648.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT201_Raw\"",
+      "plc_address": "%DB1.DBW100",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT201_Raw\"",
+      "signal": {
+        "kind": "4-20mA",
+        "raw_min": 0.0,
+        "raw_max": 27648.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": -32768.0,
+        "overflow_raw": 32767.0
+      },
+      "writable": true
+    },
+    {
+      "id": "lt201_percent",
+      "name": "LT201_Percent",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT201_Percent\"",
+      "plc_address": "%DB1.DBD102",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT201_Percent\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "tk201_volume",
+      "name": "TK201_Volume",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "L",
+      "initial_value": 450.0,
+      "min": 0.0,
+      "max": 1800.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK201_Volume\"",
+      "plc_address": "%DB1.DBD106",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK201_Volume\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsl201",
+      "name": "LSL201",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL201\"",
+      "plc_address": "%DB1.DBX110.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL201\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsh201",
+      "name": "LSH201",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH201\"",
+      "plc_address": "%DB1.DBX110.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH201\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lt301_raw",
+      "name": "LT301_Raw",
+      "direction": "input",
+      "data_type": "INT",
+      "unit": "counts",
+      "initial_value": 4147,
+      "min": 0.0,
+      "max": 27648.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT301_Raw\"",
+      "plc_address": "%DB1.DBW112",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT301_Raw\"",
+      "signal": {
+        "kind": "4-20mA",
+        "raw_min": 0.0,
+        "raw_max": 27648.0,
+        "engineering_min": 0.0,
+        "engineering_max": 100.0,
+        "engineering_unit": "%",
+        "underflow_raw": -32768.0,
+        "overflow_raw": 32767.0
+      },
+      "writable": true
+    },
+    {
+      "id": "lt301_percent",
+      "name": "LT301_Percent",
+      "direction": "output",
+      "data_type": "REAL",
+      "unit": "%",
+      "initial_value": 0.0,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LT301_Percent\"",
+      "plc_address": "%DB1.DBD114",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LT301_Percent\"",
+      "signal": null,
+      "writable": false
+    },
+    {
+      "id": "tk301_volume",
+      "name": "TK301_Volume",
+      "direction": "input",
+      "data_type": "REAL",
+      "unit": "L",
+      "initial_value": 180.0,
+      "min": 0.0,
+      "max": 1200.0,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"TK301_Volume\"",
+      "plc_address": "%DB1.DBD118",
+      "plc_symbol": "\"DB_FAT_Demo\".\"TK301_Volume\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsl301",
+      "name": "LSL301",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSL301\"",
+      "plc_address": "%DB1.DBX122.0",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSL301\"",
+      "signal": null,
+      "writable": true
+    },
+    {
+      "id": "lsh301",
+      "name": "LSH301",
+      "direction": "input",
+      "data_type": "BOOL",
+      "unit": "",
+      "initial_value": false,
+      "min": null,
+      "max": null,
+      "node_id": "ns=3;s=\"DB_FAT_Demo\".\"LSH301\"",
+      "plc_address": "%DB1.DBX122.1",
+      "plc_symbol": "\"DB_FAT_Demo\".\"LSH301\"",
+      "signal": null,
+      "writable": true
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "demo-fill-source",
+      "name": "01 · Alimentation de la cuve source",
+      "description": "Les demandes manuelles traversent le PLC ; l'ouverture et la vitesse déterminent le débit simulé.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "TK101",
+        "P101",
+        "XV101"
+      ],
+      "trend_tags": [
+        "tk101_volume",
+        "p101_command",
+        "p101_speed"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 7.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p101_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p101_requested_speed",
+          "value": 70.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv101_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.0,
+          "action": "expect",
+          "target": "p101_command",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 1.0,
+          "action": "expect",
+          "target": "p101_running",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "expect",
+          "target": "tk101_volume",
+          "value": 730.0,
+          "operator": "gt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "release",
+          "target": "p101_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "release",
+          "target": "p101_requested_speed",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "release",
+          "target": "xv101_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 6.5,
+          "action": "expect",
+          "target": "p101_running",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-transfer-1",
+      "name": "02 · Transfert source vers cuve intermédiaire",
+      "description": "Le volume débité de la source est crédité à la destination. Aucun transfert automatique n'est programmé.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "TK101",
+        "P201",
+        "XV201",
+        "TK201"
+      ],
+      "trend_tags": [
+        "tk101_volume",
+        "tk201_volume",
+        "p201_command"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 6.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p201_requested_speed",
+          "value": 100.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.0,
+          "action": "expect",
+          "target": "p201_command",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "expect",
+          "target": "tk101_volume",
+          "value": 700.0,
+          "operator": "lt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "expect",
+          "target": "tk201_volume",
+          "value": 475.0,
+          "operator": "gt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p201_requested_speed",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "xv201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "expect",
+          "target": "p201_command",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-transfer-2",
+      "name": "03 · Transfert vers la cuve de réception",
+      "description": "Les trois cuves restent indépendantes des traits graphiques ; le circuit déclare sa source et sa destination.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "TK201",
+        "P202",
+        "XV202",
+        "TK301"
+      ],
+      "trend_tags": [
+        "tk201_volume",
+        "tk301_volume",
+        "p202_speed"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 6.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p202_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p202_requested_speed",
+          "value": 80.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv202_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.0,
+          "action": "expect",
+          "target": "p202_running",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "expect",
+          "target": "tk201_volume",
+          "value": 430.0,
+          "operator": "lt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "expect",
+          "target": "tk301_volume",
+          "value": 200.0,
+          "operator": "gt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p202_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p202_requested_speed",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "xv202_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "expect",
+          "target": "p202_command",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-drain",
+      "name": "04 · Vidange et vanne de réglage",
+      "description": "La pompe et les deux vannes sont en série ; le plus petit débit disponible limite le circuit.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "TK301",
+        "P301",
+        "XV301",
+        "FCV302"
+      ],
+      "trend_tags": [
+        "tk301_volume",
+        "fcv302_position",
+        "p301_command"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 6.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p301_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p301_requested_speed",
+          "value": 100.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv301_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "fcv302_request",
+          "value": 50.0,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.5,
+          "action": "expect",
+          "target": "fcv302_position",
+          "value": 49.0,
+          "operator": "gt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "expect",
+          "target": "tk301_volume",
+          "value": 160.0,
+          "operator": "lt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p301_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "p301_requested_speed",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "xv301_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "fcv302_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "expect",
+          "target": "p301_command",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-stop",
+      "name": "05 · Contact d'arrêt du démonstrateur",
+      "description": "Le contact de démo inhibe les commandes. Les demandes sont relâchées avant de rétablir ce contact ; aucun réarmement métier ou fonction de sécurité n'est simulé.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "P101",
+        "XV101"
+      ],
+      "trend_tags": [
+        "stop_healthy",
+        "p101_command",
+        "p101_running"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 6.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p101_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv101_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.0,
+          "action": "expect",
+          "target": "p101_command",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 2.0,
+          "action": "force",
+          "target": "stop_healthy",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "expect",
+          "target": "p101_command",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "expect",
+          "target": "p101_running",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "release",
+          "target": "p101_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "release",
+          "target": "xv101_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "release",
+          "target": "stop_healthy",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 5.0,
+          "action": "expect",
+          "target": "p101_command",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-pump-fault",
+      "name": "06 · Défaut physique de pompe",
+      "description": "Le PLC passif conserve la demande ; le défaut du modèle coupe le retour et le débit. Cette différence commande/retour est attendue.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "P201",
+        "TK101",
+        "TK201"
+      ],
+      "trend_tags": [
+        "p201_command",
+        "p201_running",
+        "p201_fault"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 5.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 1.5,
+          "action": "fault",
+          "target": "P201",
+          "value": {
+            "kind": "motor_trip"
+          },
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 2.2,
+          "action": "expect",
+          "target": "p201_fault",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 2.2,
+          "action": "expect",
+          "target": "p201_running",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 2.2,
+          "action": "expect",
+          "target": "p201_command",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "release",
+          "target": "p201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "release",
+          "target": "xv201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "clear_fault",
+          "target": "P201",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.2,
+          "action": "expect",
+          "target": "p201_fault",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.2,
+          "action": "expect",
+          "target": "p201_running",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-valve-stuck",
+      "name": "07 · Vanne bloquée et débit nul",
+      "description": "Une vanne en série maintenue fermée bloque le transfert, même si le moteur tourne.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "TK101",
+        "P201",
+        "XV201",
+        "TK201"
+      ],
+      "trend_tags": [
+        "tk101_volume",
+        "tk201_volume",
+        "xv201_command",
+        "xv201_open"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 5.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "fault",
+          "target": "XV201",
+          "value": {
+            "kind": "valve_stuck",
+            "value": 0.0
+          },
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "p201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "xv201_request",
+          "value": true,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 2.0,
+          "action": "expect",
+          "target": "xv201_open",
+          "value": false,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "expect",
+          "target": "tk101_volume",
+          "value": 720.0,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "expect",
+          "target": "tk201_volume",
+          "value": 450.0,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "release",
+          "target": "p201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.5,
+          "action": "release",
+          "target": "xv201_request",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "clear_fault",
+          "target": "XV201",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-analog",
+      "name": "08 · Échelles analogiques et défaut de signal",
+      "description": "La conversion linéaire est illustrée, sans alarme ou substitution métier. Une valeur hors plage et sa qualité restent visibles.",
+      "requirement": "DEMO · Vérifier les échanges et le modèle de procédé",
+      "preconditions": "Nouvel essai, demandes manuelles relâchées, arrêt relâché. PLC de démo passif activé uniquement sur une CPU virtuelle isolée.",
+      "focus_equipment": [
+        "LT101",
+        "LT201"
+      ],
+      "trend_tags": [
+        "lt101_raw",
+        "lt101_percent",
+        "lt201_raw",
+        "lt201_percent"
+      ],
+      "execution_mode": "timed",
+      "fat_steps": [],
+      "duration_s": 5.0,
+      "steps": [
+        {
+          "at_s": 0.0,
+          "action": "force",
+          "target": "lt101_raw",
+          "value": 13824,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 0.5,
+          "action": "expect",
+          "target": "lt101_percent",
+          "value": 50.0,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 1.5,
+          "action": "fault",
+          "target": "LT201",
+          "value": {
+            "kind": "out_of_range",
+            "value": 30000
+          },
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 2.2,
+          "action": "expect",
+          "target": "lt201_percent",
+          "value": 100.0,
+          "operator": "gt",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "clear_fault",
+          "target": "LT201",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 3.0,
+          "action": "release",
+          "target": "lt101_raw",
+          "value": null,
+          "operator": "eq",
+          "tolerance": 0.001,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "expect",
+          "target": "lt101_percent",
+          "value": 60.0,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        },
+        {
+          "at_s": 4.0,
+          "action": "expect",
+          "target": "lt201_percent",
+          "value": 25.0,
+          "operator": "eq",
+          "tolerance": 0.1,
+          "message": ""
+        }
+      ]
+    },
+    {
+      "id": "demo-guided-io",
+      "name": "09 · FAT manuelle pas à pas",
+      "description": "Préparer les écritures, exécuter un STEP puis consigner ce qui a été observé.",
+      "requirement": "DEMO-GUIDED · Stimuli groupés, résultat attendu et observation",
+      "preconditions": "Nouveau modèle, cuves à leurs niveaux initiaux, demandes relâchées ; PLC de démo passif sur une cible virtuelle isolée.",
+      "focus_equipment": [
+        "TK101",
+        "LT101",
+        "P101",
+        "XV101"
+      ],
+      "trend_tags": [
+        "lt101_raw",
+        "lt101_percent",
+        "p101_command",
+        "p101_speed"
+      ],
+      "execution_mode": "guided",
+      "fat_steps": [
+        {
+          "id": "guided-initial",
+          "name": "Vérifier le niveau à 12 mA",
+          "instructions": "Appliquer, attendre deux cycles d'échange puis comparer les valeurs.",
+          "expected_result": "LT-101 = 50 %, P-101 non commandée.",
+          "actions": [
+            {
+              "action": "force",
+              "target": "p101_request",
+              "value": false,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "force",
+              "target": "stop_healthy",
+              "value": true,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "force",
+              "target": "lt101_raw",
+              "value": 12.0,
+              "unit": "mA",
+              "diagnostic": false
+            }
+          ],
+          "checks": [
+            {
+              "target": "lt101_percent",
+              "operator": "eq",
+              "value": 50.0,
+              "tolerance": 0.1
+            },
+            {
+              "target": "p101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            }
+          ]
+        },
+        {
+          "id": "guided-run",
+          "name": "Demander une marche à 50 %",
+          "instructions": "Ouvrir l'arrivée et appliquer la demande manuelle de pompe.",
+          "expected_result": "La commande P-101 vaut TRUE, la consigne vaut 50 %, puis le retour marche apparaît.",
+          "actions": [
+            {
+              "action": "force",
+              "target": "xv101_request",
+              "value": true,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "force",
+              "target": "p101_requested_speed",
+              "value": 50.0,
+              "unit": "percent",
+              "diagnostic": false
+            },
+            {
+              "action": "force",
+              "target": "p101_request",
+              "value": true,
+              "unit": "native",
+              "diagnostic": false
+            }
+          ],
+          "checks": [
+            {
+              "target": "p101_command",
+              "operator": "eq",
+              "value": true,
+              "tolerance": 0.001
+            },
+            {
+              "target": "p101_speed_command",
+              "operator": "eq",
+              "value": 50.0,
+              "tolerance": 0.1
+            },
+            {
+              "target": "p101_running",
+              "operator": "eq",
+              "value": true,
+              "tolerance": 0.001
+            }
+          ]
+        },
+        {
+          "id": "guided-stop",
+          "name": "Ouvrir le contact d'arrêt",
+          "instructions": "Conserver les demandes et ouvrir le contact de démo.",
+          "expected_result": "Les commandes de pompe et vanne passent à FALSE ; le retour marche disparaît après la réponse simulée.",
+          "actions": [
+            {
+              "action": "force",
+              "target": "stop_healthy",
+              "value": false,
+              "unit": "native",
+              "diagnostic": false
+            }
+          ],
+          "checks": [
+            {
+              "target": "p101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            },
+            {
+              "target": "xv101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            },
+            {
+              "target": "p101_running",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            }
+          ]
+        },
+        {
+          "id": "guided-requests-off",
+          "name": "Relâcher les demandes",
+          "instructions": "Couper les demandes avant de rétablir le contact.",
+          "expected_result": "P-101 reste non commandée.",
+          "actions": [
+            {
+              "action": "force",
+              "target": "p101_request",
+              "value": false,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "force",
+              "target": "xv101_request",
+              "value": false,
+              "unit": "native",
+              "diagnostic": false
+            }
+          ],
+          "checks": [
+            {
+              "target": "p101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            }
+          ]
+        },
+        {
+          "id": "guided-release",
+          "name": "Libérer les stimuli",
+          "instructions": "Revenir aux entrées physiques simulées ; aucune conclusion FAT n'est renseignée automatiquement.",
+          "expected_result": "Les commandes restent FALSE et LT-101 reprend le niveau du modèle.",
+          "actions": [
+            {
+              "action": "release",
+              "target": "p101_request",
+              "value": null,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "release",
+              "target": "xv101_request",
+              "value": null,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "release",
+              "target": "p101_requested_speed",
+              "value": null,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "release",
+              "target": "stop_healthy",
+              "value": null,
+              "unit": "native",
+              "diagnostic": false
+            },
+            {
+              "action": "release",
+              "target": "lt101_raw",
+              "value": null,
+              "unit": "native",
+              "diagnostic": false
+            }
+          ],
+          "checks": [
+            {
+              "target": "p101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            },
+            {
+              "target": "xv101_command",
+              "operator": "eq",
+              "value": false,
+              "tolerance": 0.001
+            }
+          ]
+        }
+      ],
+      "duration_s": 120.0,
+      "steps": []
+    }
+  ],
+  "plc": {
+    "mode": "opcua",
+    "demo_controller": "manual_lab_v1",
+    "tia_version": "V21",
+    "endpoint": "opc.tcp://192.168.247.3:4840",
+    "expected_application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+    "namespace_uri": "http://www.siemens.com/simatic-s7-opcua",
+    "security_policy": "Basic256Sha256",
+    "server_certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391",
+    "client_certificate": "C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\opcua-client\\client-certificate.pem",
+    "client_private_key": "C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\opcua-client\\client-private-key.pem",
+    "username_env": "",
+    "password_env": "",
+    "approved_virtual_target": "FAT-DEMO-20261103",
+    "timeout_s": 5.0
+  }
+}

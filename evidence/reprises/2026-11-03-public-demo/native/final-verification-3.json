@@ -1,0 +1,186 @@
+{
+  "utc": "2026-11-03T20:12:08.252185+00:00",
+  "passed": true,
+  "public_bundle_integrity": {
+    "verified": true,
+    "files": 7,
+    "mapped_tags": 75,
+    "canonical_enable_demo": false
+  },
+  "native_source_provenance_consistent": true,
+  "native_public_blocks_only": true,
+  "canonical_enable_demo": false,
+  "private_enable_demo_only_difference": true,
+  "public_certificate_type": "X.509 DER",
+  "public_certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391",
+  "typed_nonzero_namespace_nodes": 75,
+  "inputs_writable": 56,
+  "outputs_read_only": 19,
+  "timed_oracles_unchanged": true,
+  "timed_assertions": 31,
+  "samples": 460,
+  "real_trace_values_exact_float32": 9660,
+  "input_writes": 25760,
+  "public_cli_exit_zero_commands": 145,
+  "explicit_context_capture_count": 1,
+  "step_observe_count": 0,
+  "final_guided_observations": 0,
+  "human_verdict": "not_evaluated",
+  "generator_tests": {
+    "passed": 7,
+    "skipped": 1,
+    "skip_reason": "Windows symlink privilege unavailable"
+  },
+  "generator_ruff": "passed",
+  "local_links_checked": [
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "public-bundle/manifest.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-online-2.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "preflight-public.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "opcua-server-public.der"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-online-1.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "mapping-native-opcua.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "DB_FAT_Demo.xml"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "campaign-summary.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "public-cli-commands.jsonl"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-fill-source/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-transfer-1/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-transfer-2/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-drain/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-stop/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-pump-fault/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-valve-stuck/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "timed/demo-analog/exports/evidence.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "guided-continuation/summary.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "guided-continuation/exports/report.html"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "harness-failure.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "final-backend-state.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "original-helper-restored.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-prepare-1.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-prepare-2.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-prepare-3.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "native-prepare-4.receipt.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "final-verification-3.json"
+    },
+    {
+      "document": "evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md",
+      "target": "checksums-3.json"
+    },
+    {
+      "document": "docs/DEMO_PLC.md",
+      "target": "../fat_studio/demo_contract.py"
+    },
+    {
+      "document": "docs/DEMO_PLC.md",
+      "target": "AI_CONTROL.md"
+    },
+    {
+      "document": "docs/DEMO_PLC.md",
+      "target": "../evidence/reprises/2026-11-03-public-demo/native/VERIFICATION.md"
+    }
+  ],
+  "private_material_scan": "passed",
+  "private_material_scan_scope": "All files in this new native evidence directory",
+  "original_helper_hash_and_timestamp_restored": true,
+  "final_source_sha256": {
+    "integrations/demo_plc.py": "2ee7cdc6d2d246f3647dd2d5f07b65ada2abdd9d75004bc7070ee73212897901",
+    "tests/test_demo_plc.py": "1f862e87fd26e9e033ed75554e53ef0ce40b2119edc1ea56cbe20ac96e5711e0",
+    "docs/DEMO_PLC.md": "c10fdc1746b8aad5f894de9be196a8c44481dfb20ef8bcfa96e4ea9403a66178"
+  },
+  "checksum_manifest": "checksums-3.json",
+  "cpu_or_application_mutations_during_finalization": 0,
+  "public_context_scan": "No legacy customer/library identifier in this new evidence directory",
+  "original_receipts_preserved_privately": {
+    "preflight.json": "ec24bd15dc3b27e4d4b80617650c64bdbfa13defe815c5990256a10f64834c83",
+    "final-verification.json": "26226048eca49e4a663b82685f38432365adfd7e6387da38c5377cb4a829871b",
+    "checksums.json": "496a88c520d48e2610fcf5ba87c72824624310c82a5237eefe0775bd90ce44bc"
+  },
+  "prose_only_adjustment": {
+    "description": "Workstation-specific engineering helper name removed; public manual workflow does not require it",
+    "prior_indexes_preserved_privately": {
+      "final-verification-2.json": "c310c2071021f0df9230ec8e5ee076bdf54b7d47262f22674d959a2cb96a5ef3",
+      "checksums-2.json": "13bf6f4ec3a0423b19a81cf9323dc00279e242dba9779c3cb8dc5d6c24f649dd"
+    },
+    "native_program_or_results_changed": false,
+    "live_service_or_cpu_contacted": false
+  }
+}

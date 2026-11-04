@@ -1,0 +1,13 @@
+{
+  "utc": "2026-11-03T20:31:40.949814+00:00",
+  "passed": true,
+  "archive_sha256": "5c38800d698626d7a4700465c7e41bf711b9f328afe68d49cbf48752ed3f5bb1",
+  "archived_runs": 19,
+  "final_timed_runs_restored": 8,
+  "restored_completed_status_preserved": true,
+  "restored_active_project_mode": "demo",
+  "target_policy_or_client_key_restored": false,
+  "live_workspace_changed": false,
+  "restore_environment": "New TemporaryDirectory Store only",
+  "human_verdict": "not_evaluated"
+}

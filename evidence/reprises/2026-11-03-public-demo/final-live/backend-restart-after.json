@@ -1,0 +1,26 @@
+{
+  "utc": "2026-11-03T20:29:24.9469901Z",
+  "worker": 6688,
+  "launcher": 11432,
+  "exec_session": 67921,
+  "health": {
+    "status": "ok",
+    "version": "0.2.1",
+    "mode": "local-fat",
+    "schema_version": "1.0"
+  },
+  "status": "idle",
+  "current_project": "fat-public-demo-plcsim-v21-20261103",
+  "data": "C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\fat-data",
+  "source_sha256": {
+    "fat_studio/demo_lab.py": "ac9e42aeed10c69f103f61f3e9ae8ad0d43cd2f0d45522fc9928789dd5f019f2",
+    "fat_studio/exchange.py": "929a1720baa3a52515e2b9b5efffa92069e7555dd8c8ef62305032b339ca438b",
+    "fat_studio/assistant.py": "ba8d15d685ed9c3affa9255a5831bff4f5b6b90bd72455203239f9049e8831aa",
+    "fat_studio/app.py": "115d183c972c19ae809a590b7a4177c68e75c301b03d84045df140e55882c620",
+    "fat_studio/workspaces.py": "1c979f2aed3bd1c26c60caa2085e702c995e5724114fc4cfe0679bebdf1a5111",
+    "fat_studio/archive.py": "3a0e4fbab25d9d87f68f08f2aa3e35375c29afb7514120579bcb0a73c5405c7d",
+    "fat_studio/runtime.py": "e2015281919f88563c30644066a1a68b72a937ad4d251cc4fdeaee5927f4dd2f"
+  },
+  "only_backend8770_restarted": true,
+  "cpu_program_recompiled_or_reloaded": false
+}

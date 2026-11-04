@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-03T21:40:15.744267+00:00",
+  "url": "http://127.0.0.1:8770",
+  "project_id": "vanguard-live-20261103",
+  "project_name": "Démo Vanguard · PLCSIM V21",
+  "run_id": "run-7f50a1dddf6a44ddafec976ce6b45f7f",
+  "before_pause": {
+    "status": "running",
+    "connected": true,
+    "good_tags": 75,
+    "input_writes": 280
+  },
+  "final_status": "paused",
+  "final_connected": false,
+  "steps_executed": 0,
+  "steps_reviewed": 0,
+  "human_verdict": "not_evaluated",
+  "previous_projects_and_histories_retained": true,
+  "same_observed_mapping_and_server_certificate": true,
+  "cpu_commands_sent": 0,
+  "new_api_title": "Vanguard FAT Studio local API"
+}

@@ -1,0 +1,58 @@
+{
+  "utc": "2026-11-03T20:31:23.781567+00:00",
+  "scope": "Read-only product review, isolated TemporaryDirectory/Store/TestClient only",
+  "issues": [
+    {
+      "id": "completed-history",
+      "priority": "P1",
+      "before": "completed-history-save-failure.json",
+      "after": "after-fix-completed-history-save-failure.json",
+      "correction": "Protect completed history from post-run storage failures",
+      "resolution": "fixed_and_independently_verified"
+    },
+    {
+      "id": "workspace-export-context",
+      "priority": "P2",
+      "before": "cross-workspace-run-export-context.json",
+      "after": "after-fix-all-export-routes-and-public-client.json",
+      "correction": "Guard all run exports and public client by workspace context",
+      "resolution": "fixed_and_independently_verified"
+    },
+    {
+      "id": "archive-responsiveness",
+      "priority": "P2",
+      "before": "archive-event-loop-latency.json",
+      "after": "after-fix-archive-event-loop-latency.json",
+      "correction": "Pin a readonly snapshot and compress outside the mutation lock/event loop",
+      "resolution": "fixed_and_independently_verified"
+    },
+    {
+      "id": "active-workspace-noop",
+      "priority": "P2",
+      "before": "active-workspace-client-context.json",
+      "after": "after-fix-active-workspace-client-context.json",
+      "correction": "Retain actual run context on a no-op workspace open",
+      "resolution": "fixed_and_independently_verified"
+    }
+  ],
+  "additional_passed_receipts": [
+    "stream-across-workspace-close.json",
+    "cancelled-pause-edit.json",
+    "restore-staging-storage-failure.json",
+    "workspace-pointer-publish-failure.json"
+  ],
+  "unresolved_confirmed_findings": 0,
+  "source_changes_by_reviewer": false,
+  "live_service_or_cpu_calls_during_review": 0,
+  "native_campaign_replayed_by_review": false,
+  "human_fat_verdict_created": false,
+  "final_source_sha256": {
+    "fat_studio/app.py": "115d183c972c19ae809a590b7a4177c68e75c301b03d84045df140e55882c620",
+    "fat_studio/runtime.py": "e2015281919f88563c30644066a1a68b72a937ad4d251cc4fdeaee5927f4dd2f",
+    "fat_studio/archive.py": "3a0e4fbab25d9d87f68f08f2aa3e35375c29afb7514120579bcb0a73c5405c7d",
+    "fat_studio/workspaces.py": "1c979f2aed3bd1c26c60caa2085e702c995e5724114fc4cfe0679bebdf1a5111",
+    "fat_studio/exchange.py": "929a1720baa3a52515e2b9b5efffa92069e7555dd8c8ef62305032b339ca438b",
+    "fat_studio/assistant.py": "ba8d15d685ed9c3affa9255a5831bff4f5b6b90bd72455203239f9049e8831aa"
+  },
+  "limitation": "Synthetic failure/concurrency fixtures, no Siemens or complete application-suite qualification inferred"
+}

@@ -13,6 +13,7 @@ def number(label: str, low: float, high: float, unit: str = "") -> dict:
 
 FLOW_PARAMETERS = {
     "tank_id": {"label": "Cuve associée (identifiant)", "type": "string"},
+    "source_tank_id": {"label": "Cuve source du transfert (vide = source extérieure)", "type": "string"},
     "role": {"label": "Sens du débit", "type": "select", "options": ["inlet", "outlet"]},
     "flow_group": {"label": "Circuit en série", "type": "string"},
     "max_flow_l_s": number("Débit à pleine ouverture", 0, 100000, "L/s"),
@@ -71,13 +72,44 @@ CATALOG = [
     },
 ]
 
+CATALOG.extend([
+    {
+        "type": "pump_vfd", "label": "Pompe à variateur", "description": "Pompe avec marche et consigne 0–100 %, inertie, retour vitesse et défaut moteur.",
+        "default_params": {"tank_id": "", "role": "inlet", "flow_group": "feed", "max_flow_l_s": 80.0, "response_s": 0.4, "initial_speed_pct": 0.0, "demo_control": "level", "demo_command": True, "demo_speed_pct": 60.0},
+        "parameters": {**FLOW_PARAMETERS, "initial_speed_pct": number("Vitesse initiale", 0, 100, "%"), "demo_command": {"label": "Démo : commande constante", "type": "boolean"}, "demo_speed_pct": number("Démo : consigne vitesse", 0, 100, "%")},
+        "ports": {"command": port("Commande marche PLC", "output", ["BOOL"], required=True), "speed_command": port("Consigne vitesse PLC", "output", ["REAL"], "%", required=True), "feedback": port("Retour marche simulé", "input", ["BOOL"]), "speed": port("Vitesse simulée", "input", ["REAL"], "%"), "fault": port("Défaut moteur simulé", "input", ["BOOL"])},
+        "faults": ["motor_trip"],
+    },
+    {
+        "type": "digital_input", "label": "Bouton / entrée TOR", "description": "Contact simulé, actionnable par forçage d’une entrée autorisée ; aucun signal de sécurité certifié.",
+        "default_params": {"initial_value": False},
+        "parameters": {"initial_value": {"label": "État au repos", "type": "boolean"}},
+        "ports": {"value": port("Contact vers PLC", "input", ["BOOL"], required=True)}, "faults": [],
+    },
+])
+
+# Optional operator requests are exchange inputs, not physical signal producers.
+# They may share a tag with an explicit pushbutton without duplicating a sensor.
+for _item in CATALOG:
+    if _item["type"] in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
+        _kind = "REAL" if _item["type"] == "valve_control" else "BOOL"
+        _request = port("Demande manuelle simulée", "input", [_kind], "%" if _kind == "REAL" else "")
+        _request["simulated_source"] = False
+        _item["ports"]["manual_request"] = _request
+        if _item["type"] == "pump_vfd":
+            _speed = port("Consigne manuelle simulée", "input", ["REAL"], "%")
+            _speed["simulated_source"] = False
+            _item["ports"]["manual_speed"] = _speed
+
 CATALOG_BY_TYPE = {item["type"]: item for item in CATALOG}
+CATALOG_BY_TYPE["analog_sensor"]["ports"]["scaled_value"] = port("Valeur d'ingénierie lue du PLC", "output", ["REAL"])
 STATE_FIELDS = {
     "tank": {"level", "level_percent", "volume", "volume_l", "capacity_l", "inflow_l_s", "outflow_l_s", "overflow_l", "high", "low"},
     "pump": {"running", "speed", "flow_l_s", "fault"},
+    "pump_vfd": {"running", "speed", "flow_l_s", "fault"},
     "valve_onoff": {"position", "open", "closed", "flow_l_s", "stuck"},
     "valve_control": {"position", "open", "closed", "flow_l_s", "stuck"},
-    "analog_sensor": {"value"}, "digital_sensor": {"value"}, "indicator": {"value"},
+    "analog_sensor": {"value"}, "digital_sensor": {"value"}, "indicator": {"value"}, "digital_input": {"value"},
 }
 
 

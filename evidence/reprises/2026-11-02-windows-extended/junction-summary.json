@@ -1,0 +1,27 @@
+{
+  "recorded_at_utc": "2026-11-02T21:53:46.652100+00:00",
+  "base_commit": "ef8f96cf4a5ec248f4196411b8c4309791828fae",
+  "worktree_change": "tests/test_distribution.py: eight NTFS junction cases added",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "command": "python -m pytest tests/test_distribution.py --junitxml=evidence/reprises/2026-11-02-windows-extended/pytest-junctions.xml",
+  "passed": 25,
+  "skipped": 4,
+  "failures": 0,
+  "new_real_junction_cases_passed": 8,
+  "junction_positions": [
+    "build",
+    "build/lib",
+    "build/lib/fat_studio",
+    "build/lib/fat_studio/web"
+  ],
+  "targets": [
+    "external to source root",
+    "shared directory within source root"
+  ],
+  "symlink_cases": "not executed: Windows privilege error 1314, original skips preserved",
+  "ruff": "passed",
+  "product_code_changed": false,
+  "system_settings_changed": false,
+  "scope": "Filesystem preservation during web asset packaging; no Siemens or PLC"
+}

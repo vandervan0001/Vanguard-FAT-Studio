@@ -47,7 +47,7 @@ try {
         if ($LASTEXITCODE -ne 0) { throw "Installation du composant d'ingenierie impossible." }
     }
     & $fatVenvPython -m pip install @fatPipOptions --no-deps --no-build-isolation .
-    if ($LASTEXITCODE -ne 0) { throw "Installation du paquet FAT Studio impossible." }
+    if ($LASTEXITCODE -ne 0) { throw "Installation du paquet Vanguard FAT Studio impossible." }
     & $fatVenvPython -m fat_studio doctor
     if ($LASTEXITCODE -ne 0) { throw "Le diagnostic local a detecte une installation incomplete." }
 } finally { Pop-Location }

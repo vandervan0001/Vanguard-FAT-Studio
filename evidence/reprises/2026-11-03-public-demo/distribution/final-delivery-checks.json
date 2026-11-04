@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "portable_directory": "C:\\FAT_Studio_Public_2026-11-03",
+  "source_directory": "C:\\FAT_Studio_Public_Source_2026-11-03",
+  "portable_manifest_files": 3090,
+  "source_manifest_files": 483,
+  "source_wheels": 29,
+  "portable_manifest_sha256": "9d0298725633d78766bb7e185a18d6d2ddacff01aa0c2e7562954d5160873b93",
+  "source_manifest_sha256": "e9d3fb6f8705ee35929c9315826cf3f2a644ce9456b31115ceb2773ca94ecee8",
+  "portable_local_links_checked": 333,
+  "all_links_exist": true,
+  "sealed_directories_unchanged": true,
+  "private_engineering_and_logbook_excluded": true,
+  "archived_real_history_proof_runs": 19,
+  "global_suite_python": 572,
+  "global_suite_frontend": 54,
+  "native_assertions": 31,
+  "scope": "Final public delivery verification, no human FAT acceptance"
+}

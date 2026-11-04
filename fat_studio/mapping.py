@@ -7,10 +7,12 @@ import json
 from .models import Project, Tag
 
 
-FIELDS = ["id", "name", "direction", "data_type", "unit", "initial_value", "min", "max", "node_id", "writable"]
+LEGACY_FIELDS = ["id", "name", "direction", "data_type", "unit", "initial_value", "min", "max", "node_id", "writable"]
+ADDRESS_FIELDS = [*LEGACY_FIELDS, "plc_address", "plc_symbol"]
+FIELDS = [*ADDRESS_FIELDS, "signal"]
 ENCODING_FIELD = "_fat_csv_encoding"
 ENCODING = "apostrophe-v1"
-TEXT_FIELDS = ("name", "unit", "node_id")
+TEXT_FIELDS = ("name", "unit", "node_id", "plc_address", "plc_symbol")
 
 
 def _needs_escape(value: str) -> bool:
@@ -36,6 +38,7 @@ def export_mapping(project: Project) -> str:
         row = tag.model_dump()
         row["initial_value"] = json.dumps(row["initial_value"])
         row["writable"] = "true" if row["writable"] else "false"
+        row["signal"] = json.dumps(row["signal"], separators=(",", ":")) if row["signal"] is not None else ""
         # Explicit dialect marker keeps legacy imports literal and makes both
         # formula prefixes and original leading apostrophes exactly reversible.
         for field in TEXT_FIELDS:
@@ -57,7 +60,7 @@ def _import_mapping(project: Project, content: str) -> Project:
     reader = csv.DictReader(io.StringIO(content.lstrip("\ufeff")), strict=True)
     if reader.fieldnames is None or len(reader.fieldnames) != len(set(reader.fieldnames)):
         raise ValueError("En-tête CSV absent ou dupliqué.")
-    if set(reader.fieldnames) not in (set(FIELDS), {*FIELDS, ENCODING_FIELD}):
+    if set(reader.fieldnames) not in (set(FIELDS), {*FIELDS, ENCODING_FIELD}, set(ADDRESS_FIELDS), {*ADDRESS_FIELDS, ENCODING_FIELD}, set(LEGACY_FIELDS), {*LEGACY_FIELDS, ENCODING_FIELD}):
         raise ValueError("Colonnes CSV attendues : " + ",".join(FIELDS) + " ; encodage optionnel : " + ENCODING_FIELD)
     encoded = ENCODING_FIELD in reader.fieldnames
     tags = []
@@ -65,6 +68,9 @@ def _import_mapping(project: Project, content: str) -> Project:
         try:
             if None in row or any(value is None for value in row.values()):
                 raise ValueError("Nombre de colonnes incorrect")
+            row.setdefault("plc_address", "")
+            row.setdefault("plc_symbol", "")
+            row["signal"] = json.loads(row["signal"]) if row.get("signal") else None
             if encoded:
                 if row.pop(ENCODING_FIELD) != ENCODING:
                     raise ValueError("Marqueur d'encodage CSV inconnu ; valeur attendue : " + ENCODING)

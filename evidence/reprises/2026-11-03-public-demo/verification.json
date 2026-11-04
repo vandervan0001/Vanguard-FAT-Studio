@@ -1,0 +1,122 @@
+{
+  "utc": "2026-11-03T20:39:58.003916+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "source_head": "cd4daba16580309a675dfa6b1ec95efe5a669038",
+  "working_tree_modified": true,
+  "public_scope": "FAT environment and passive PLC demonstration only",
+  "private_engineering_preserved_and_excluded": true,
+  "python": {
+    "passed": 572,
+    "skipped": 5,
+    "failures": 0,
+    "errors": 0,
+    "receipt": "python-verification.json"
+  },
+  "frontend": {
+    "startTime": "2026-11-03T20:31:57.599Z",
+    "duration": 145770.976,
+    "expected": 54,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "native_final": {
+    "timed_scenarios": 8,
+    "assertions_passed": 31,
+    "public_cli_commands": 140,
+    "samples": 460,
+    "float32_values": 9660,
+    "archive_runs": 19,
+    "temporary_restore_passed": true,
+    "receipt": "final-live/verification.json"
+  },
+  "review": {
+    "issues_fixed": 4,
+    "unresolved_confirmed": 0,
+    "receipt": "review/summary.json"
+  },
+  "assets": [
+    {
+      "path": "fat_studio/web/index.html",
+      "size": 645,
+      "sha256": "61de0cb209ed6fcaa580a70e7ccf400de59101fde59a1545065df72c6bcff276"
+    },
+    {
+      "path": "fat_studio/web/assets/index-Bi1N3rC1.js",
+      "size": 950295,
+      "sha256": "02971c5cd0512d264c5b842b4d15371244ef4f579abc7f0600dabde3ea9629ff"
+    },
+    {
+      "path": "fat_studio/web/assets/index-Bi6nxg13.css",
+      "size": 83608,
+      "sha256": "a43b52fb1ece2cdf6230afa5a4a403321546221892940fa91f5077bc1c21d92f"
+    }
+  ],
+  "source_sha256": {
+    "fat_studio/app.py": "115d183c972c19ae809a590b7a4177c68e75c301b03d84045df140e55882c620",
+    "fat_studio/runtime.py": "e2015281919f88563c30644066a1a68b72a937ad4d251cc4fdeaee5927f4dd2f",
+    "fat_studio/assistant.py": "ba8d15d685ed9c3affa9255a5831bff4f5b6b90bd72455203239f9049e8831aa",
+    "fat_studio/archive.py": "3a0e4fbab25d9d87f68f08f2aa3e35375c29afb7514120579bcb0a73c5405c7d",
+    "fat_studio/workspaces.py": "1c979f2aed3bd1c26c60caa2085e702c995e5724114fc4cfe0679bebdf1a5111",
+    "fat_studio/exchange.py": "929a1720baa3a52515e2b9b5efffa92069e7555dd8c8ef62305032b339ca438b",
+    "fat_studio/demo_lab.py": "ac9e42aeed10c69f103f61f3e9ae8ad0d43cd2f0d45522fc9928789dd5f019f2",
+    "fat_studio/demo_contract.py": "6a33ce17be3f52e63a741bdc76e94064a36fa2752cdf3e8b802625b83ff06527",
+    "integrations/demo_plc.py": "2ee7cdc6d2d246f3647dd2d5f07b65ada2abdd9d75004bc7070ee73212897901",
+    "frontend/src/App.tsx": "3a9b320dd1d78414de442755df6ad8bd5a6c9762e9993ca57071b753938b944d",
+    "frontend/src/PidCanvas.tsx": "9bc708b26552023e043a277926a1b4332e2917df2f663aa376beaa862cc6b998",
+    "frontend/src/api.ts": "cca344eef31e24f098fea60c4520e74e3aab7cb4e5b76548afba00edf28c9deb",
+    "frontend/src/AnimationEditor.tsx": "4f750d3b1256faa520d73df622c2cf1350fab7f74e746573f0d64ebb8291b6e5"
+  },
+  "human_fat_acceptance_created": false,
+  "published_or_pushed": false,
+  "final_portable_assembly": {
+    "status": "passed",
+    "portable_manifest_files": 3090,
+    "source_manifest_files": 483,
+    "source_wheels": 29,
+    "portable_service_checks": 5,
+    "source_offline_install_service_checks": 5,
+    "final_public_cli_calls": 37,
+    "final_human_observations": 0,
+    "all_manifests_unchanged_after_tests": true,
+    "receipts": [
+      "distribution/final-delivery-checks.json",
+      "distribution/portable-final-service.json",
+      "distribution/portable-final-client.json",
+      "distribution/source-final-service.json",
+      "distribution/delivery-zips.json"
+    ]
+  },
+  "delivery_zip_artifacts": [
+    {
+      "kit": "C:\\FAT_Studio_Public_2026-11-03",
+      "zip": "C:\\FAT_Studio\\.local\\FAT_Studio_Public_2026-11-03.zip",
+      "manifest": "portable-manifest.json",
+      "manifest_sha256": "9d0298725633d78766bb7e185a18d6d2ddacff01aa0c2e7562954d5160873b93",
+      "manifested_files": 3090,
+      "zip_entries": 3091,
+      "zip_bytes": 40345988,
+      "zip_sha256": "eb9bc1a41988be6346f55a615e06421ca2393fea018e78abaa288db5aa9b8a15",
+      "all_crcs_valid": true,
+      "all_expanded_payload_hashes_match": true,
+      "kit_manifest_unchanged": true,
+      "source_kit_modified": false,
+      "zip_root_layout": "Files at archive root; extract the entire archive into a new directory"
+    },
+    {
+      "kit": "C:\\FAT_Studio_Public_Source_2026-11-03",
+      "zip": "C:\\FAT_Studio\\.local\\FAT_Studio_Public_Source_2026-11-03.zip",
+      "manifest": "offline-manifest.json",
+      "manifest_sha256": "e9d3fb6f8705ee35929c9315826cf3f2a644ce9456b31115ceb2773ca94ecee8",
+      "manifested_files": 483,
+      "zip_entries": 484,
+      "zip_bytes": 16593236,
+      "zip_sha256": "64c749439ef599c511cf280faf470f9cc0f0d07de2cf5a6eadf9b5a32b42cba2",
+      "all_crcs_valid": true,
+      "all_expanded_payload_hashes_match": true,
+      "kit_manifest_unchanged": true,
+      "source_kit_modified": false,
+      "zip_root_layout": "Files at archive root; extract the entire archive into a new directory"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-# Modèle de procédé et limites — FAT Studio 0.1.1
+# Modèle de procédé et limites
 
 ## Contrat physique
 
@@ -33,13 +33,20 @@ Une cuve vide ne délivre pas de liquide inexistant. Le débordement est comptab
 | `tank_id` | Cuve à laquelle le circuit apporte ou retire du volume. |
 | `role` | `inlet` pour l'alimentation, `outlet` pour le soutirage. |
 | `flow_group` | Nom du circuit en série. |
+| `source_tank_id` | Cuve source d’un transfert vers `tank_id` ; vide pour un apport externe. |
 | `max_flow_l_s` | Débit maximal de cet équipement selon le modèle choisi. |
 
 Pour une même cuve, un même sens et un même groupe, le débit est le **minimum** des capacités instantanées des équipements. Les groupes indépendants s'additionnent. Tous les équipements d'un circuit portent le même débit réel, limité par le volume disponible en soutirage.
 
 Exemple : P-101 peut délivrer 30 L/s et XV-101 laisse passer 25 L/s. Dans le groupe `feed`, le circuit fournit 25 L/s. Une deuxième pompe dans un groupe `feed_2` ajoute un débit indépendant. Une vanne fermée dans `feed` bloque le circuit entier.
 
-Les limites sont explicites : pas de calcul de pression, de courbe de pompe, de pertes de charge ou de hauteur géométrique ; pas de transfert conservatif automatique entre deux cuves ; pas de solveur de réseau déduit du dessin. Une alimentation représente une réserve disponible et un soutirage une évacuation. Pour un autre procédé, modifier les modèles et leurs tests avant d'utiliser des résultats comme preuve de comportement.
+Les limites sont explicites : pas de calcul de pression, de courbe de pompe, de pertes de charge ou de hauteur géométrique ; pas de solveur de réseau déduit du dessin. Un transfert entre deux cuves exige sa source et sa destination explicitement déclarées ; il n’est jamais déduit d’un trait graphique. Une alimentation représente une réserve disponible et un soutirage une évacuation. Pour un autre procédé, modifier les modèles et leurs tests avant d'utiliser des résultats comme preuve de comportement.
+
+### Transfert explicite entre cuves
+
+Un circuit d’entrée peut renseigner `source_tank_id`. Le même débit réel est alors débité de la source et crédité à la destination. Si plusieurs circuits consomment une même cuve, leurs débits sont réduits proportionnellement lorsque le volume disponible ne suffit pas. Les apports externes du cycle peuvent alimenter cette disponibilité ; un volume reçu d’un autre transfert devient disponible au cycle suivant, sans boucle algébrique instantanée.
+
+Le bilan conserve le volume transféré. Un débordement de la destination reste comptabilisé dans son `overflow_l` et ne disparaît pas dans une limitation silencieuse. Les groupes d’un même circuit doivent utiliser une seule source cohérente. Le laboratoire public illustre source vers intermédiaire, puis intermédiaire vers réception ; [DEMO_PLC.md](DEMO_PLC.md) distingue les demandes manuelles du programme passif et le procédé simulé.
 
 ## Actionneurs
 
@@ -49,7 +56,7 @@ Les limites sont explicites : pas de calcul de pression, de courbe de pompe, de 
 
 La réponse utilise un premier ordre exact : `nouvel état = cible + (ancien état − cible) × exp(−pas / réponse_s)`. `response_s` est une **constante de temps**, pas un temps total de course. Zéro donne une réponse instantanée. Les fins de course sont actifs à ≤ 0,5 % et ≥ 99,5 %.
 
-Les caractéristiques de vanne proviennent du fichier MIT HistorianSim conservé sans modification dans `fat_studio/vendor/historiansim/`. La fonction égal pourcentage amont vaut `1 / rangeability` à ouverture nulle ; FAT Studio impose séparément une fermeture étanche à zéro. Le modèle de stiction du fichier amont n'est pas utilisé dans cette version. Voir sa [provenance](../fat_studio/vendor/historiansim/PROVENANCE.md).
+Les caractéristiques de vanne proviennent du fichier MIT HistorianSim conservé sans modification dans `fat_studio/vendor/historiansim/`. La fonction égal pourcentage amont vaut `1 / rangeability` à ouverture nulle ; Vanguard FAT Studio impose séparément une fermeture étanche à zéro. Le modèle de stiction du fichier amont n'est pas utilisé dans cette version. Voir sa [provenance](../fat_studio/vendor/historiansim/PROVENANCE.md).
 
 ## Instrumentation et valeurs PLC
 
@@ -95,7 +102,13 @@ Une erreur de communication ou une annulation de l'échange interrompt l'essai, 
 
 La remise à zéro efface forces et défauts, restaure les volumes initiaux et réinitialise le contrôleur de démonstration. Elle ne remet pas à zéro le programme d'une CPU externe. Pour rejouer une FAT Siemens dans des conditions comparables, l'automaticien doit remettre aussi les états internes du programme testé dans les conditions convenues.
 
-## Démonstration TK-101
+## Laboratoire public
+
+Le projet `public-io-lab` regroupe trois cuves, quatre pompes, huit vannes et les instruments/commandes associés : 36 objets, 75 variables. Le contrôleur Python `manual_lab_v1` reproduit le pont PLC passif public. Les demandes manuelles fournissent les commandes ; le modèle produit les retours physiques. Un défaut moteur peut donc couper marche et débit alors que la demande et la commande restent actives. Les séquences de remplissage/transfert/arrêt sont dans les scénarios FAT, pas dans un standard de programmation.
+
+Les animations par variable sont des règles d’affichage en lecture seule. Elles n’interviennent ni dans les commandes ni dans le bilan physique. Leurs plages graphiques ne modifient pas les mesures enregistrées.
+
+## Exemple historique TK-101
 
 La cuve de 1 000 L démarre à 25 %. Son contrôleur fictif commande le remplissage sous 30 % et l'arrête à 70 %. FCV-101 reste à 35 % en démonstration, soit 4,2 L/s après stabilisation. Le contrôleur lit les **tags simulés**, donc il réagit aux forçages et défauts du transmetteur.
 

@@ -1,0 +1,103 @@
+Python 3.12 · Windows-x64 · kit vérifié : 43 wheels
+Python 3.12 · Windows-x64 · kit vérifié : 43 wheels
+Installation hors ligne, sans acces a un index externe.
+Looking in links: c:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\aiofiles-25.1.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 2))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\aiosqlite-0.22.1-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 3))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\annotated_doc-0.0.5-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 4))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\annotated_types-0.8.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 5))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\anyio-4.16.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 6))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\asyncua-1.1.8-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 7))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\cffi-2.1.1-cp312-cp312-win_amd64.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 8))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\click-8.5.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 9))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\cryptography-50.0.2-cp311-abi3-win_amd64.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 10))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\fastapi-0.162.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 11))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\h11-0.16.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 12))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\idna-3.20-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 13))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\opentelemetry_api-1.45.2-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 14))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\packaging-26.3-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 15))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pycparser-3.12-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 16))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pydantic-2.14.2-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 17))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pydantic_core-2.50.2-cp312-cp312-win_amd64.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 18))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pyopenssl-26.4.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 19))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\python_dateutil-4.0.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 20))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pytz-2026.6-py2.py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 21))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\setuptools-84.2.1-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 22))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\sortedcontainers-2.4.0-py2.py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 23))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\starlette-1.10.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 24))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\typing_extensions-4.16.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 25))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\typing_inspection-0.4.4-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 26))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\tzdata-2026.6-py2.py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 27))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\uvicorn-0.54.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 28))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\wheel-0.48.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 29))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\colorama-0.4.6-py2.py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements.lock (line 30))
+Installing collected packages: sortedcontainers, pytz, tzdata, typing-extensions, setuptools, pycparser, packaging, idna, h11, colorama, click, annotated-types, annotated-doc, aiosqlite, aiofiles, wheel, uvicorn, typing-inspection, python-dateutil, pydantic-core, opentelemetry-api, cffi, anyio, starlette, pydantic, cryptography, pyopenssl, fastapi, asyncua
+Successfully installed aiofiles-25.1.0 aiosqlite-0.22.1 annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.16.0 asyncua-1.1.8 cffi-2.1.1 click-8.5.0 colorama-0.4.6 cryptography-50.0.2 fastapi-0.162.0 h11-0.16.0 idna-3.20 opentelemetry-api-1.45.2 packaging-26.3 pycparser-3.12 pydantic-2.14.2 pydantic-core-2.50.2 pyopenssl-26.4.0 python-dateutil-4.0.0 pytz-2026.6 setuptools-84.2.1 sortedcontainers-2.4.0 starlette-1.10.0 typing-extensions-4.16.0 typing-inspection-0.4.4 tzdata-2026.6 uvicorn-0.54.0 wheel-0.48.0
+Looking in links: c:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse
+Requirement already satisfied: aiofiles==25.1.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 2)) (25.1.0)
+Requirement already satisfied: aiosqlite==0.22.1 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 3)) (0.22.1)
+Requirement already satisfied: annotated-doc==0.0.5 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 4)) (0.0.5)
+Requirement already satisfied: annotated-types==0.8.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 5)) (0.8.0)
+Requirement already satisfied: anyio==4.16.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 6)) (4.16.0)
+Requirement already satisfied: asyncua==1.1.8 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 7)) (1.1.8)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\attrs-26.1.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 8))
+Requirement already satisfied: cffi==2.1.1 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 9)) (2.1.1)
+Requirement already satisfied: click==8.5.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 10)) (8.5.0)
+Requirement already satisfied: cryptography==50.0.2 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 11)) (50.0.2)
+Requirement already satisfied: fastapi==0.162.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 12)) (0.162.0)
+Requirement already satisfied: h11==0.16.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 13)) (0.16.0)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\httpcore2-2.16.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 14))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\httpx2-2.16.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 15))
+Requirement already satisfied: idna==3.20 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 16)) (3.20)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\jsonschema-4.26.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 17))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\jsonschema_specifications-2025.9.1-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 18))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\mcp-2.3.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 19))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\mcp_types-2.3.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 20))
+Requirement already satisfied: opentelemetry-api==1.45.2 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 21)) (1.45.2)
+Requirement already satisfied: packaging==26.3 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 22)) (26.3)
+Requirement already satisfied: pycparser==3.12 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 23)) (3.12)
+Requirement already satisfied: pydantic==2.14.2 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 24)) (2.14.2)
+Requirement already satisfied: pydantic-core==2.50.2 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 25)) (2.50.2)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pyjwt-2.15.1-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 26))
+Requirement already satisfied: pyopenssl==26.4.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 27)) (26.4.0)
+Requirement already satisfied: python-dateutil==4.0.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 28)) (4.0.0)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\python_multipart-0.0.33-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 29))
+Requirement already satisfied: pytz==2026.6 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 30)) (2026.6)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\pywin32-312-cp312-cp312-win_amd64.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 31))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\referencing-0.37.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 32))
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\rpds_py-2026.9.1-cp312-cp312-win_amd64.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 33))
+Requirement already satisfied: setuptools==84.2.1 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 34)) (84.2.1)
+Requirement already satisfied: sortedcontainers==2.4.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 35)) (2.4.0)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\sse_starlette-3.6.0-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 36))
+Requirement already satisfied: starlette==1.10.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 37)) (1.10.0)
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse\truststore-0.10.5-py3-none-any.whl (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 38))
+Requirement already satisfied: typing-extensions==4.16.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 39)) (4.16.0)
+Requirement already satisfied: typing-inspection==0.4.4 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 40)) (0.4.4)
+Requirement already satisfied: tzdata==2026.6 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 41)) (2026.6)
+Requirement already satisfied: uvicorn==0.54.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 42)) (0.54.0)
+Requirement already satisfied: wheel==0.48.0 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 43)) (0.48.0)
+Requirement already satisfied: colorama==0.4.6 in c:\fat_studio\.local\archive-acceptance-2251\runtime-kit\.venv\lib\site-packages (from -r C:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\requirements-engineering.lock (line 44)) (0.4.6)
+Installing collected packages: truststore, rpds-py, pywin32, python-multipart, pyjwt, attrs, referencing, httpcore2, sse-starlette, mcp-types, jsonschema-specifications, httpx2, jsonschema, mcp
+Successfully installed attrs-26.1.0 httpcore2-2.16.0 httpx2-2.16.0 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 mcp-2.3.0 mcp-types-2.3.0 pyjwt-2.15.1 python-multipart-0.0.33 pywin32-312 referencing-0.37.0 rpds-py-2026.9.1 sse-starlette-3.6.0 truststore-0.10.5
+Looking in links: c:\FAT_Studio\.local\archive-acceptance-2251\runtime-kit\wheelhouse
+Processing c:\fat_studio\.local\archive-acceptance-2251\runtime-kit
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: local-fat-studio
+  Building wheel for local-fat-studio (pyproject.toml): started
+  Building wheel for local-fat-studio (pyproject.toml): finished with status 'done'
+  Created wheel for local-fat-studio: filename=local_fat_studio-0.2.1-py3-none-any.whl size=361745 sha256=dc513f725cf446123d8849f2c305fca44bcab9060c8443ffe7a259c1c2e3cd96
+  Stored in directory: C:\Users\taivb\AppData\Local\Temp\pip-ephem-wheel-cache-leggucbm\wheels\65\00\4a\3162b270b6008c377c42870552614a6bd26020a041b6de1e07
+Successfully built local-fat-studio
+Installing collected packages: local-fat-studio
+Successfully installed local-fat-studio-0.2.1
+FAT Studio 0.2.1 · Python 3.12.10 · Windows-11-10.0.26200-SP0
+Interface compilée : OK
+Données : C:\Users\taivb\AppData\Local\FATStudio
+Cibles autorisées sur ce poste : 0
+  fastapi 0.162.0
+  uvicorn 0.54.0
+  pydantic 2.14.2
+  asyncua 1.1.8
+Non vérifiée par doctor : effectuer la qualification sur le poste cible.
+Installation terminee. Lancer Start-FAT.cmd.

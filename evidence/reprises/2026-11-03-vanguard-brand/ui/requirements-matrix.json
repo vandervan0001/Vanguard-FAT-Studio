@@ -1,0 +1,205 @@
+[
+  {
+    "id": "B01",
+    "requirement": "Nom produit, titre, écran de démarrage et erreurs Vanguard FAT Studio",
+    "status": "verified",
+    "sources": [
+      "frontend/src/App.tsx:270",
+      "frontend/src/api.ts:25",
+      "frontend/index.html:7"
+    ],
+    "tests": [
+      "brand.spec.ts:5",
+      "brand.spec.ts:104"
+    ],
+    "proofs": [
+      "final/desktop/01-console.png",
+      "final/desktop/12-boot-unavailable.png"
+    ]
+  },
+  {
+    "id": "B02",
+    "requirement": "Logos officiels et favicon originaux, proportions conservées",
+    "status": "verified",
+    "sources": [
+      "frontend/public/brand",
+      "frontend/src/vanguard.css"
+    ],
+    "tests": [
+      "brand.spec.ts:5"
+    ],
+    "proofs": [
+      "brand-assets.json",
+      "final/desktop/brand-observations.json"
+    ]
+  },
+  {
+    "id": "B03",
+    "requirement": "Geist Regular, Bold et Mono locaux avec OFL ; aucune requête externe",
+    "status": "verified",
+    "sources": [
+      "frontend/src/vanguard.css:2",
+      "frontend/public/brand/OFL.txt"
+    ],
+    "tests": [
+      "brand.spec.ts:5"
+    ],
+    "proofs": [
+      "brand-assets.json",
+      "final/desktop/brand-observations.json"
+    ]
+  },
+  {
+    "id": "B04",
+    "requirement": "Bleu parent #0055DD, surfaces claires, couleurs opérationnelles conservées",
+    "status": "visually_reviewed",
+    "sources": [
+      "frontend/src/vanguard.css"
+    ],
+    "tests": [
+      "guided-fat.spec.ts",
+      "public-workbench.spec.ts"
+    ],
+    "proofs": [
+      "final/desktop/analog-diagnostic.png",
+      "final/desktop/public-animation-bad-quality.png",
+      "native/public-native-console.png"
+    ]
+  },
+  {
+    "id": "B05",
+    "requirement": "Builder P&ID, animation et édition automatique en pause",
+    "status": "verified",
+    "sources": [
+      "frontend/src/PidCanvas.tsx",
+      "frontend/src/AnimationEditor.tsx",
+      "frontend/src/vanguard.css"
+    ],
+    "tests": [
+      "public-workbench.spec.ts:71",
+      "brand.spec.ts:5"
+    ],
+    "proofs": [
+      "final/desktop/02-builder-animation.png",
+      "final/desktop/11-paused-builder.png"
+    ]
+  },
+  {
+    "id": "B06",
+    "requirement": "I/O digitales et analogiques, forçages et diagnostic conservés",
+    "status": "verified",
+    "sources": [
+      "frontend/src/TestConsole.tsx",
+      "frontend/src/ForceField.tsx"
+    ],
+    "tests": [
+      "guided-fat.spec.ts",
+      "signal.spec.ts",
+      "requirements-audit.spec.ts"
+    ],
+    "proofs": [
+      "final/desktop/pilot-console.png",
+      "final/desktop/analog-diagnostic.png",
+      "final/desktop/public-custom-engineering.png"
+    ]
+  },
+  {
+    "id": "B07",
+    "requirement": "Scénarios timed/guided, attendus, observations et courbes conservés",
+    "status": "verified",
+    "sources": [
+      "frontend/src/Panels.tsx",
+      "frontend/src/GuidedRun.tsx",
+      "frontend/src/GuidedScenarioBuilder.tsx"
+    ],
+    "tests": [
+      "brand.spec.ts:5",
+      "guided-fat.spec.ts:184",
+      "workbench.spec.ts:56"
+    ],
+    "proofs": [
+      "final/desktop/03-guided-builder.png",
+      "final/desktop/04-timed-plan.png",
+      "final/desktop/09-guided-applied.png",
+      "final/desktop/10-trends-report.png"
+    ]
+  },
+  {
+    "id": "B08",
+    "requirement": "Connexion, mapping, projets, archives et modales lisibles",
+    "status": "visually_reviewed",
+    "sources": [
+      "frontend/src/App.tsx",
+      "frontend/src/Panels.tsx",
+      "frontend/src/vanguard.css"
+    ],
+    "tests": [
+      "brand.spec.ts:5",
+      "public-workbench.spec.ts:100"
+    ],
+    "proofs": [
+      "final/desktop/05-mapping.png",
+      "final/desktop/06-connection.png",
+      "final/desktop/07-workspaces-archive.png",
+      "final/desktop/08-new-project.png",
+      "final/desktop/10b-history.png",
+      "final/desktop/13-target-confirmation.png"
+    ]
+  },
+  {
+    "id": "B09",
+    "requirement": "Fenêtres 768/920/1024/1280 et fenêtre native sans débordement horizontal",
+    "status": "verified",
+    "sources": [
+      "frontend/src/vanguard.css",
+      "frontend/src/fat-workbench.css:322"
+    ],
+    "tests": [
+      "public-workbench.spec.ts:271",
+      "adversarial.spec.ts:158",
+      "capture-native.ts:5"
+    ],
+    "proofs": [
+      "final/desktop/public-workbench-768.png",
+      "final/desktop/public-workbench-920.png",
+      "final/desktop/public-workbench-1024.png",
+      "final/desktop/public-workbench-1280.png",
+      "native/native-window.json"
+    ]
+  },
+  {
+    "id": "B10",
+    "requirement": "Vue de présentation recadrée par un cran de zoom, sans mutation du projet",
+    "status": "verified",
+    "sources": [
+      "frontend/src/PidCanvas.tsx"
+    ],
+    "tests": [
+      "framing/framing-check.spec.ts:4"
+    ],
+    "proofs": [
+      "framing/framing-geometry.json",
+      "framing/presentation-one-zoom-out.png"
+    ]
+  },
+  {
+    "id": "B11",
+    "requirement": "Paquet npm renommé, dépendances et formats techniques inchangés",
+    "status": "verified",
+    "sources": [
+      "frontend/package.json:2",
+      "frontend/package-lock.json:2",
+      "frontend/src/types.ts:43"
+    ],
+    "tests": [
+      "api-errors.spec.ts",
+      "public-workbench.spec.ts:29",
+      "scenario-format.spec.ts",
+      "tia-version.spec.ts"
+    ],
+    "proofs": [
+      "brand-assets.json",
+      "final/frontend-results-final.json"
+    ]
+  }
+]

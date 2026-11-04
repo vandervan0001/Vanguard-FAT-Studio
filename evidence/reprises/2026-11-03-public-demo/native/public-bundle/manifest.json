@@ -1,0 +1,43 @@
+{
+  "format": "fat-studio-public-demo-plc-v1",
+  "demo_version": "1.0",
+  "db_name": "DB_FAT_Demo",
+  "mapped_tags": 75,
+  "plc_blocks": [
+    "DB_FAT_Demo",
+    "Main"
+  ],
+  "canonical_enable_demo": false,
+  "files": [
+    {
+      "path": "README.md",
+      "size": 1466,
+      "sha256": "ff1007262bd8f11002f5602ed0f195d849a0352f2dfef84f848dab7d50cbf9fa"
+    },
+    {
+      "path": "demo-lab.json",
+      "size": 83815,
+      "sha256": "cbf22346b7750b8a7733d46e7e712ec7570776a1b806890410e6beedbd70b11f"
+    },
+    {
+      "path": "plc/DB_FAT_Demo.scl",
+      "size": 9663,
+      "sha256": "bfb25b7c4ea5fdc1b793c586034068fb01f963934bbb2eb675bdae33890fc670"
+    },
+    {
+      "path": "plc/Main.scl",
+      "size": 3321,
+      "sha256": "8131319f3c7bf3977a8506792da0b572e67bc701e7fe187629ec7a5761055c09"
+    },
+    {
+      "path": "plc/Program_All.scl",
+      "size": 12985,
+      "sha256": "1950c5b8e511e80c8461d74f100cf4127b6f3c8a326004a2433d33cb0b8b1595"
+    },
+    {
+      "path": "tags.csv",
+      "size": 5769,
+      "sha256": "bc3781fb8f4b21c0ea26cd60dd5c967018e4938d6af3c77b9438675a453e1fc1"
+    }
+  ]
+}

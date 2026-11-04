@@ -1,0 +1,65 @@
+TIA MCP access mode: READ-ONLY
+TIA MCP response budget: 60000 characters per value, 180000 per response
+TIA MCP worker timeout: 5 minutes
+Project opening, compilation, writes and lifecycle operations are disabled.
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (TiaMcpServer) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\FAT_Studio
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (TiaMcpServer 4.3.0.0) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (TiaMcpServer 4.3.0.0), Client (mcp 0.1.0) method 'tools/list' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (TiaMcpServer 4.3.0.0), Client (mcp 0.1.0) method 'initialize' request handler completed in 30.0167ms.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (TiaMcpServer 4.3.0.0), Client (mcp 0.1.0) method 'tools/list' request handler completed in 27.4568ms.
+info: ModelContextProtocol.Server.StdioServerTransport[1221292038]
+      Server (stream) (TiaMcpServer) transport completed reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: ModelContextProtocol.Server.StdioServerTransport[1375634372]
+      Server (stream) (TiaMcpServer) shutting down.
+info: ModelContextProtocol.Server.StdioServerTransport[1256455528]
+      Server (stream) (TiaMcpServer) shut down.
+{
+  "started_at_utc": "2026-11-02T22:08:58.216959+00:00",
+  "mode": "read-only",
+  "scope": "Real pinned NuGet host and official MCP SDK transport/capability listing only; no TIA project operation",
+  "profile_installed": false,
+  "server": "C:\\FAT_Studio\\.local\\tia-mcp-package-check\\tia-mcp.exe",
+  "server_info": {
+    "name": "TiaMcpServer",
+    "title": null,
+    "version": "4.3.0.0",
+    "description": null,
+    "website_url": null,
+    "icons": null
+  },
+  "tools": [
+    "get_project_status",
+    "browse_project_tree",
+    "bind_project",
+    "network_read",
+    "plc_read",
+    "hmi_read",
+    "read_cross_references",
+    "vci_read"
+  ],
+  "blocked_locally_before_call": [
+    "archive_project",
+    "compile_check",
+    "download",
+    "network_write",
+    "plc_write",
+    "run_cpu",
+    "save_project",
+    "stop_cpu"
+  ],
+  "status": "passed",
+  "finished_at_utc": "2026-11-02T22:08:59.342742+00:00"
+}

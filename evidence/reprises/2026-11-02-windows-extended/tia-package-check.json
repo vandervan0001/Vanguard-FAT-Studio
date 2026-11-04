@@ -1,0 +1,19 @@
+{
+  "package": "TiaMcpServer",
+  "version_cli": "4.3.0",
+  "version_mcp": "4.3.0.0",
+  "offline_install": "passed",
+  "readonly_transport": "passed",
+  "listed_tools": 8,
+  "doctor_exit_code": 1,
+  "doctor_result": "expected_missing_Siemens_prerequisites",
+  "blocking_check_ids": [
+    "tia-portal-installation",
+    "openness-assemblies",
+    "openness-user-group"
+  ],
+  "verified_profile_installed": false,
+  "project_operations_called": false,
+  "initial_probe_error": "--help alone falls through to MCP startup in default read-write mode; stdin reached EOF and process exited, no tool request was sent. Replaced by doctor --help and explicit read-only probes.",
+  "scope": "Package/host/SDK only; no native Siemens qualification"
+}

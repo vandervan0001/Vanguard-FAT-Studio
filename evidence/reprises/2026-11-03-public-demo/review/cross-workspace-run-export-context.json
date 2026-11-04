@@ -1,0 +1,15 @@
+{
+  "name": "cross-workspace-run-export-context",
+  "utc": "2026-11-03T20:09:37.493947+00:00",
+  "reproduced": true,
+  "before_revision": "d4b34806896660ea647a2e1d93897f376f305fb5edc689f0241a65aeeb46078f",
+  "after_revision": "d9589cf8f5c771ada9778d2c24400bc0eb577da8b053ee4f4c4c781fc4039821",
+  "stale_project_download_status": 409,
+  "stale_run_export_status": 200,
+  "returned_comment": "Different copied-workspace history",
+  "expected": "An export bound to the previous workspace must not silently return the divergent copied history",
+  "old_run_id_exists_in_both_workspaces": true,
+  "synthetic_result_is_not_a_human_verdict": true,
+  "product_source_changed": false,
+  "live_service_or_cpu_contacted": false
+}

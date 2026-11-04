@@ -1,0 +1,38 @@
+{
+  "utc": "2026-11-03T20:52:31.695702+00:00",
+  "scope": "ZIP creation from immutable final kit manifests, CRC and expanded-payload verification",
+  "artifacts": [
+    {
+      "kit": "C:\\FAT_Studio_Public_2026-11-03",
+      "zip": "C:\\FAT_Studio\\.local\\FAT_Studio_Public_2026-11-03.zip",
+      "manifest": "portable-manifest.json",
+      "manifest_sha256": "9d0298725633d78766bb7e185a18d6d2ddacff01aa0c2e7562954d5160873b93",
+      "manifested_files": 3090,
+      "zip_entries": 3091,
+      "zip_bytes": 40345988,
+      "zip_sha256": "eb9bc1a41988be6346f55a615e06421ca2393fea018e78abaa288db5aa9b8a15",
+      "all_crcs_valid": true,
+      "all_expanded_payload_hashes_match": true,
+      "kit_manifest_unchanged": true,
+      "source_kit_modified": false,
+      "zip_root_layout": "Files at archive root; extract the entire archive into a new directory"
+    },
+    {
+      "kit": "C:\\FAT_Studio_Public_Source_2026-11-03",
+      "zip": "C:\\FAT_Studio\\.local\\FAT_Studio_Public_Source_2026-11-03.zip",
+      "manifest": "offline-manifest.json",
+      "manifest_sha256": "e9d3fb6f8705ee35929c9315826cf3f2a644ce9456b31115ceb2773ca94ecee8",
+      "manifested_files": 483,
+      "zip_entries": 484,
+      "zip_bytes": 16593236,
+      "zip_sha256": "64c749439ef599c511cf280faf470f9cc0f0d07de2cf5a6eadf9b5a32b42cba2",
+      "all_crcs_valid": true,
+      "all_expanded_payload_hashes_match": true,
+      "kit_manifest_unchanged": true,
+      "source_kit_modified": false,
+      "zip_root_layout": "Files at archive root; extract the entire archive into a new directory"
+    }
+  ],
+  "old_kits_touched": false,
+  "published_or_pushed": false
+}

@@ -1,0 +1,30 @@
+{
+  "id": "demo-drain",
+  "run_id": "run-089eab1d60154fe0811bb05b63898366",
+  "passed": true,
+  "assertions": 3,
+  "failed": [],
+  "sim_seconds": 6.0,
+  "wall_seconds": 8.984,
+  "writes": 3360,
+  "initial_commands": {
+    "DB_FAT_Demo.P101_RunCommand": false,
+    "DB_FAT_Demo.P101_SpeedCommand": 0,
+    "DB_FAT_Demo.P201_RunCommand": false,
+    "DB_FAT_Demo.P201_SpeedCommand": 0,
+    "DB_FAT_Demo.P202_RunCommand": false,
+    "DB_FAT_Demo.P202_SpeedCommand": 0,
+    "DB_FAT_Demo.P301_RunCommand": false,
+    "DB_FAT_Demo.P301_SpeedCommand": 0,
+    "DB_FAT_Demo.XV101_OpenCommand": false,
+    "DB_FAT_Demo.XV201_OpenCommand": false,
+    "DB_FAT_Demo.XV202_OpenCommand": false,
+    "DB_FAT_Demo.XV301_OpenCommand": false,
+    "DB_FAT_Demo.XV102_OpenCommand": false,
+    "DB_FAT_Demo.XV203_OpenCommand": false,
+    "DB_FAT_Demo.XV103_OpenCommand": false,
+    "DB_FAT_Demo.FCV302_PositionCommand": 0
+  },
+  "human_verdict": "not_evaluated",
+  "context_unchanged_during_polling": true
+}

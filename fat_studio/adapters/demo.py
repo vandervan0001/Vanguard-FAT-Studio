@@ -7,10 +7,15 @@ class DemoAdapter:
     """Demonstration controller, used only when the project explicitly selects demo."""
 
     def __init__(self, project):
-        self.controller = DemoController(project)
+        if project.plc.demo_controller == "manual_lab_v1":
+            from ..demo_lab import ManualLabController
+            self.controller = ManualLabController(project)
+            self.target = "Laboratoire I/O passif · référence Python explicite, aucun PLC connecté"
+        else:
+            self.controller = DemoController(project)
+            self.target = "Contrôleur de démonstration local — aucun PLC connecté"
         self.connected = False
         self.write_count = 0
-        self.target = "Contrôleur de démonstration local — aucun PLC connecté"
 
     async def connect(self) -> None:
         self.connected = True

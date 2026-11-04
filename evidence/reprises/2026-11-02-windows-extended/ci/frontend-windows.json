@@ -1,0 +1,1283 @@
+{
+  "config": {
+    "configFile": "D:\\a\\FAT-Studio\\FAT-Studio\\frontend\\playwright.config.ts",
+    "rootDir": "D:/a/FAT-Studio/FAT-Studio/frontend/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "ci": {
+        "commitHref": "https://github.com/vandervan0001/FAT-Studio/commit/682be875662d99b37752d6174e471a72dcef451d",
+        "commitHash": "682be875662d99b37752d6174e471a72dcef451d",
+        "buildHref": "https://github.com/vandervan0001/FAT-Studio/actions/runs/41532733264"
+      },
+      "gitCommit": {
+        "shortHash": "682be87",
+        "hash": "682be875662d99b37752d6174e471a72dcef451d",
+        "subject": "Test Windows cache guards with real NTFS junctions",
+        "body": "Test Windows cache guards with real NTFS junctions\n",
+        "author": {
+          "name": "Van",
+          "email": "taiv.bis@gmail.com",
+          "time": 1793656528000
+        },
+        "committer": {
+          "name": "Van",
+          "email": "taiv.bis@gmail.com",
+          "time": 1793656528000
+        },
+        "branch": "codex/windows-local-setup"
+      },
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "D:/a/FAT-Studio/FAT-Studio/frontend/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "ci": {
+            "commitHref": "https://github.com/vandervan0001/FAT-Studio/commit/682be875662d99b37752d6174e471a72dcef451d",
+            "commitHash": "682be875662d99b37752d6174e471a72dcef451d",
+            "buildHref": "https://github.com/vandervan0001/FAT-Studio/actions/runs/41532733264"
+          },
+          "gitCommit": {
+            "shortHash": "682be87",
+            "hash": "682be875662d99b37752d6174e471a72dcef451d",
+            "subject": "Test Windows cache guards with real NTFS junctions",
+            "body": "Test Windows cache guards with real NTFS junctions\n",
+            "author": {
+              "name": "Van",
+              "email": "taiv.bis@gmail.com",
+              "time": 1793656528000
+            },
+            "committer": {
+              "name": "Van",
+              "email": "taiv.bis@gmail.com",
+              "time": 1793656528000
+            },
+            "branch": "codex/windows-local-setup"
+          },
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/a/FAT-Studio/FAT-Studio/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node tests/serve.mjs",
+      "url": "http://127.0.0.1:8766/api/health",
+      "reuseExistingServer": false,
+      "timeout": 30000,
+      "stdout": "ignore",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "adversarial.spec.ts",
+      "file": "adversarial.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "un brouillon de conclusion et de marqueur survit aux changements de section",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1762,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:01:54.660Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-37c7c41fe2ba6232fc87",
+          "file": "adversarial.spec.ts",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "une conclusion enregistrée est relue après rechargement et ne devient pas Non évalué",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1568,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:01:56.586Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-df342aca94c4e5ae7479",
+          "file": "adversarial.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "un ancien polling arrivé après Pause ne remet jamais l’écran en cours",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1266,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:01:58.173Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-b177c07726e80489f01a",
+          "file": "adversarial.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "enregistrer ou valider un projet inchangé conserve l’essai arrêté et ses exports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1563,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:01:59.452Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-5dbd5e525d64ceb9bd5b",
+          "file": "adversarial.spec.ts",
+          "line": 95,
+          "column": 1
+        },
+        {
+          "title": "créer un procédé vide, ses tags, son scénario puis l’importer reproduit le projet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4054,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:01.026Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-eaa7a52b1c6e1adb81a4",
+          "file": "adversarial.spec.ts",
+          "line": 113,
+          "column": 1
+        },
+        {
+          "title": "une perte de réseau bloque les commandes puis restaure le brouillon au retour du service",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2341,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:05.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-17a2b734fa67a84184c4",
+          "file": "adversarial.spec.ts",
+          "line": 144,
+          "column": 1
+        },
+        {
+          "title": "une largeur de 768 px garde les actions du banc nommées et accessibles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 701,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:07.444Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-758a241a5b816e63bea8",
+          "file": "adversarial.spec.ts",
+          "line": 157,
+          "column": 1
+        },
+        {
+          "title": "un brouillon de rapport reste attaché à son essai si un autre onglet redémarre",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1239,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:08.157Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-c769103a82545d373c93",
+          "file": "adversarial.spec.ts",
+          "line": 176,
+          "column": 1
+        },
+        {
+          "title": "une sauvegarde lente de conclusion conserve les modifications saisies pendant la requête",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1072,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:09.406Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-b447f150ce49e6d999d3",
+          "file": "adversarial.spec.ts",
+          "line": 200,
+          "column": 1
+        },
+        {
+          "title": "effacer la valeur du forçage ne force pas silencieusement la mesure à zéro",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1001,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:10.489Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-89bb3e87b288735f8064",
+          "file": "adversarial.spec.ts",
+          "line": 223,
+          "column": 1
+        },
+        {
+          "title": "les symboles montrent la pompe sans retour optionnel et la vanne partiellement ouverte",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1263,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:11.501Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-dbd17f653287a57aaae8",
+          "file": "adversarial.spec.ts",
+          "line": 234,
+          "column": 1
+        },
+        {
+          "title": "un mapping CSV exporté se réimporte et une erreur de mapping conserve les associations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1133,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:12.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-52e98ab81a01c5d58132",
+          "file": "adversarial.spec.ts",
+          "line": 246,
+          "column": 1
+        },
+        {
+          "title": "le mapping d’un autre projet ne peut pas être téléchargé pendant une course entre onglets",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 751,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:13.922Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-afb77edf12abfa174bf0",
+          "file": "adversarial.spec.ts",
+          "line": 265,
+          "column": 1
+        },
+        {
+          "title": "un polling bloqué est signalé puis reprend sans perdre le brouillon",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6632,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:14.683Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-555fe32ed69bc056de1f",
+          "file": "adversarial.spec.ts",
+          "line": 281,
+          "column": 1
+        },
+        {
+          "title": "un brouillon JSON non appliqué reste récupérable après un conflit de projet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1172,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:21.326Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-855134ffcb2c6fee82a0",
+          "file": "adversarial.spec.ts",
+          "line": 295,
+          "column": 1
+        },
+        {
+          "title": "une association devenue incompatible reste explicite et peut être corrigée",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 960,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:22.509Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-6ddad37414e0fc44f67c",
+          "file": "adversarial.spec.ts",
+          "line": 309,
+          "column": 1
+        },
+        {
+          "title": "une session locale bloquée propose de réessayer et récupère au retour du service",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6417,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:23.480Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-251720776721e5c77abd",
+          "file": "adversarial.spec.ts",
+          "line": 325,
+          "column": 1
+        },
+        {
+          "title": "glisser un symbole, relier ses ports, déplacer et supprimer persiste le vrai graphe",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3007,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:29.908Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c8623cf54f8234f94483-1c2456542eaefcab2c11",
+          "file": "adversarial.spec.ts",
+          "line": 339,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "api-errors.spec.ts",
+      "file": "api-errors.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "une erreur non JSON ou un corps null reste une erreur lisible",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:32.949Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-1c0b9a0759835c31d5c3",
+          "file": "api-errors.spec.ts",
+          "line": 7,
+          "column": 1
+        },
+        {
+          "title": "un jeton expiré est renouvelé une seule fois et conserve le contexte projet",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:32.966Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-e0c78788d586237b15ef",
+          "file": "api-errors.spec.ts",
+          "line": 16,
+          "column": 1
+        },
+        {
+          "title": "un renouvellement de session ne redirige pas une action vers un autre projet ou essai",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:32.998Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "da653f223dd9e6ec29a4-820216487a9391fc74f9",
+          "file": "api-errors.spec.ts",
+          "line": 32,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "scenario-format.spec.ts",
+      "file": "scenario-format.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "refuse des objets à la place du texte avant de les exposer à React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:33.054Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-b8b15a70cd836d9fc0a3",
+          "file": "scenario-format.spec.ts",
+          "line": 4,
+          "column": 1
+        },
+        {
+          "title": "refuse un temps infini et une séquence hors ordre ou durée",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:33.064Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-f5e387d822ea6f915ca7",
+          "file": "scenario-format.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "préserve les vrais booléens, les valeurs négatives et les étapes au même instant",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:33.072Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-8578c72068dbbb6558b5",
+          "file": "scenario-format.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "signale champs inconnus et mauvaises valeurs de défaut sans les supprimer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:33.092Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6704caaf7260b0879194-3dccb9824c0cf45b2d93",
+          "file": "scenario-format.spec.ts",
+          "line": 22,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "tia-version.spec.ts",
+      "file": "tia-version.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "la version TIA sélectionnée persiste, suit le projet exporté et revient à l’import",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1986,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:33.113Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87095c390c450e11c1a0-99446f4913961c16ec9f",
+          "file": "tia-version.spec.ts",
+          "line": 21,
+          "column": 1
+        },
+        {
+          "title": "la version TIA est verrouillée pendant un essai",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 930,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:35.108Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "87095c390c450e11c1a0-78c933b7d9150d97638b",
+          "file": "tia-version.spec.ts",
+          "line": 62,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "workbench.spec.ts",
+      "file": "workbench.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "éditer un vrai P&ID, sauvegarder puis recharger conserve les propriétés",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1221,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:36.072Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3fcc12d0268a424f50a4",
+          "file": "workbench.spec.ts",
+          "line": 30,
+          "column": 1
+        },
+        {
+          "title": "essai réel : boucle fermée, défaut, forçage, pause/reprise et exports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3952,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:37.310Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-34003f1bf3129493c10d",
+          "file": "workbench.spec.ts",
+          "line": 46,
+          "column": 1
+        },
+        {
+          "title": "un JSON de scénario invalide reste un brouillon et ne casse pas React",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:41.275Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3d84e29e5c5912cace91",
+          "file": "workbench.spec.ts",
+          "line": 102,
+          "column": 1
+        },
+        {
+          "title": "un import invalide préserve le projet affiché et enregistré",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 592,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:42.303Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-e9d7f2c47e1a3114bad9",
+          "file": "workbench.spec.ts",
+          "line": 122,
+          "column": 1
+        },
+        {
+          "title": "un autre onglet change de projet : commandes bloquées et brouillon récupérable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1080,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:42.905Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-a35d61305d346a154ede",
+          "file": "workbench.spec.ts",
+          "line": 131,
+          "column": 1
+        },
+        {
+          "title": "une nouvelle révision du même projet ne remplace pas silencieusement le brouillon",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-02T22:02:43.997Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "921e070f285a8b470d11-3c67dd9a1919cda0c147",
+          "file": "workbench.spec.ts",
+          "line": 146,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-02T22:01:52.516Z",
+    "duration": 52926.497,
+    "expected": 33,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

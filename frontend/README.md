@@ -1,6 +1,6 @@
-# Interface de FAT Studio
+# Interface de Vanguard FAT Studio
 
-Application locale en français, construite avec React, TypeScript et Vite. Le navigateur utilise exclusivement l’API HTTP du service FAT Studio ; il n’ouvre aucune communication directe avec le PLC. Tous les scripts, styles, symboles SVG et polices système fonctionnent hors ligne après installation.
+Application locale en français, construite avec React, TypeScript et Vite. Le navigateur utilise exclusivement l’API HTTP du service Vanguard FAT Studio ; il n’ouvre aucune communication directe avec le PLC. Tous les scripts, styles, symboles SVG, logos et polices Geist sont locaux et fonctionnent hors ligne après installation. La licence des polices est jointe dans `public/brand/OFL.txt`.
 
 ## Construire
 
@@ -17,7 +17,7 @@ Pour développer, démarrer le backend sur `127.0.0.1:8765` avec `FAT_STUDIO_DEV
 
 ## Fonctions disponibles
 
-- **P&ID** : bibliothèque de sept symboles, glisser-déposer ou clic pour ajouter, déplacements, connexions, libellés, zoom, panoramique, grille, suppression et propriétés des équipements.
+- **P&ID** : bibliothèque de neuf symboles, dont une pompe à variateur et un bouton/contact simulé, glisser-déposer ou clic pour ajouter, déplacements, connexions, libellés, zoom, panoramique, grille, suppression et propriétés des équipements.
 - **Associations PLC** : sélection de variables compatibles par port, création des tags manquants, édition des types, bornes, valeurs initiales, directions, autorisations d’écriture et NodeId OPC UA ; import/export CSV.
 - **Scénarios** : création, choix, description, durée, séquence JSON éditable et contrôlée, aperçu de la chronologie et résultats d’assertions. Un brouillon JSON non appliqué bloque sauvegarde et démarrage ; ses étapes restent téléchargeables, y compris pendant un conflit de projet.
 - **Exécution** : lancement, pause, reprise, arrêt et réinitialisation ; commandes bloquées si le service est indisponible. L’édition du modèle est verrouillée pendant l’essai et sa pause.

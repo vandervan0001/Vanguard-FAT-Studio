@@ -1,0 +1,67 @@
+{
+  "utc": "2026-11-03T19:45:44.192183+00:00",
+  "platform": "Windows 11 / TIA V21 / PLCSIM Advanced8",
+  "scope": "New public passive DB/OB1, no private equipment library or process sequence",
+  "generator_commands": [
+    "python -m pytest tests/test_demo_plc.py -q",
+    "python -m ruff check integrations/demo_plc.py tests/test_demo_plc.py",
+    "python -m integrations.demo_plc build .local/public-demo-2026-11-03/public-bundle-v2",
+    "python -m integrations.demo_plc verify .local/public-demo-2026-11-03/public-bundle-v2"
+  ],
+  "generator_tests": {
+    "passed": 4,
+    "skipped": 1,
+    "skip_reason": "Windows user cannot create symbolic links"
+  },
+  "ruff": "passed",
+  "bundle": {
+    "verified": true,
+    "files": 7,
+    "mapped_tags": 75,
+    "canonical_enable_demo": false
+  },
+  "source_hashes": {
+    "docs/DEMO_PLC.md": "dfda3677c2d0ea811d82326d5f4ce1f94db64b43b4a814f7534cb57504543730",
+    "fat_studio/demo_contract.py": "4e45d6657fcacdaa50fb22b7e18b89ad0757a497a5dea0c36e5173ebfdabdc75",
+    "fat_studio/demo_lab.py": "13f5436c47c7fdecf0fb994841eccf4fb322c664bf1bc8d764e9cc1eeb3b80d7",
+    "integrations/demo_plc.py": "7bfa29cae1303d2129bc5b12bad6fa3f359ac85e35a887d618ce54fea35ada02",
+    "tests/test_demo_plc.py": "47e60e49ed01bc8dd0e169593934021f7a1354fe0162aaa7b251a9e5deba5e93"
+  },
+  "canonical_source_sha256": "1950c5b8e511e80c8461d74f100cf4127b6f3c8a326004a2433d33cb0b8b1595",
+  "loaded_source_sha256": "b442f38fcc1e1259e1eefb0debab67be8ae78203a86f9aef22488188125f5c94",
+  "only_private_program_difference": "EnableDemo FALSE -> TRUE for the new virtual CPU only",
+  "source_provenance_field_scope": "private_or_vendor_sources_read refers only to reads by the generator invocation",
+  "public_certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391",
+  "public_certificate_subject": "CN=FAT-DEMO/OPCUA-1-2,OU=Industrial Communication,O=Siemens,C=DE",
+  "native_receipts": [
+    "native-prepare-1.receipt.json",
+    "native-prepare-2.receipt.json",
+    "native-prepare-3.receipt.json",
+    "native-prepare-4.receipt.json"
+  ],
+  "compile": {
+    "errors": 0,
+    "warnings": 3,
+    "blocks": [
+      {
+        "name": "DB_FAT_Demo",
+        "number": 1,
+        "type": "GlobalDB"
+      },
+      {
+        "name": "Main",
+        "number": 1,
+        "type": "OB"
+      }
+    ]
+  },
+  "warnings": [
+    "Guest authentication allowed by virtual server",
+    "None endpoint available on virtual server",
+    "CPU display password unset"
+  ],
+  "application_connection_requires": "Basic256Sha256 / SignAndEncrypt with project certificate pin",
+  "secrets_or_private_keys_copied": false,
+  "historical_kit_or_target_modified": false,
+  "human_fat_verdict": "not_evaluated"
+}

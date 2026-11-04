@@ -1,0 +1,12 @@
+{
+  "utc": "2026-11-03T20:24:11.499325+00:00",
+  "fixed": true,
+  "workspace_open_succeeded": true,
+  "client_baseline_unchanged_and_accurate": true,
+  "next_start_succeeded": true,
+  "next_run_distinct": true,
+  "context_recaptured": false,
+  "explicit_final_stop": true,
+  "transport": "TestClient only, no socket",
+  "live_service_or_cpu_contacted": false
+}
