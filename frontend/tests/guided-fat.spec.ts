@@ -20,6 +20,55 @@ test.beforeEach(async ({ request, page }) => {
   page.on('dialog', dialog => dialog.accept());
 });
 
+test('le pupitre explique un clic bloqué et distingue les commandes disponibles en pause', async ({ page, request }) => {
+  await boot(page);
+  const mode = page.locator('.workspace-execution');
+  const digital = page.getByRole('button', { name: 'Commutateur P101_Request', exact: true });
+  const analog = page.getByLabel('Forçage P101_RequestedSpeed', { exact: true });
+  const feedback = page.locator('.io-block-feedback');
+  const requests: string[] = [];
+  page.on('request', request => {
+    if (new URL(request.url()).pathname.startsWith('/api/force')) requests.push(request.method());
+  });
+  const clickVisibleControl = async (control: typeof digital) => {
+    await control.scrollIntoViewIfNeeded();
+    const box = (await control.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  };
+
+  const scenario = page.getByLabel('Scénario', { exact: true });
+  await scenario.selectOption('demo-fill-source');
+  await expect(mode).toHaveText('Scénario automatique · Au repos');
+  await scenario.selectOption('demo-guided-io');
+  await expect(mode).toHaveText('FAT pas à pas · Au repos');
+  await scenario.selectOption('');
+  await expect(mode).toHaveText('Essai libre · Au repos');
+  await expect(digital).toBeDisabled();
+  await clickVisibleControl(digital);
+  await expect(feedback).toContainText('Démarrez l’essai');
+  await expect(analog).toBeDisabled();
+  await clickVisibleControl(analog);
+  await expect(feedback.last()).toContainText('Démarrez l’essai');
+  expect(requests).toEqual([]);
+
+  await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
+  await expect(mode).toHaveText('Essai libre · En cours');
+  await expect(feedback).toHaveCount(0);
+  await digital.dblclick();
+  await expect.poll(async () => (await snapshot(request)).tags.p101_request.value).toBe(true);
+
+  await page.getByRole('button', { name: 'Mettre en pause', exact: true }).click();
+  await expect(mode).toHaveText('Essai libre · En pause');
+  await page.getByRole('button', { name: 'Tester les I/O', exact: true }).click();
+  await expect(digital).toBeDisabled();
+  await page.getByRole('button', { name: 'Afficher l’aide pour P101_Request', exact: true }).press('Enter');
+  await expect(feedback).toContainText('Reprendre');
+  await expect(analog).toBeEnabled();
+  await analog.fill('70');
+  await page.getByTitle('Forcer P101_RequestedSpeed', { exact: true }).click();
+  await expect.poll(async () => (await snapshot(request)).tags.p101_requested_speed.value).toBe(70);
+});
+
 test('pupitre complet, symboles vectoriels, impulsion serveur et maintien libéré', async ({ page, request }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -162,7 +211,7 @@ test('un STEP en attente suspend les I/O et défauts, avec arrêt et rapports ac
     await page.getByRole('button', { name: 'Exécuter STEP 1', exact: true }).click();
     expect((await queuedSnapshot).guided_steps?.at(-1)?.state).toBe('queued');
     await expect(page.locator('.editing-locked')).toContainText('attente du cycle d’échange');
-    for (const control of await page.locator('.digital-controls button, .analog-controls button, .analog-controls input, .analog-controls select').all()) await expect(control).toBeDisabled();
+    for (const control of await page.locator('.digital-controls button:not(.io-help-hit), .analog-controls button:not(.io-help-hit), .analog-controls input, .analog-controls select').all()) await expect(control).toBeDisabled();
     await expect(page.getByRole('button', { name: 'Injecter', exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: 'Lever', exact: true })).toBeDisabled();
     await expect(page.getByRole('button', { name: 'Arrêter l’essai', exact: true })).toBeEnabled();

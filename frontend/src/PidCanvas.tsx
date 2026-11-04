@@ -17,7 +17,7 @@ type Props = {
   project: Project; state: Snapshot | null; catalog: CatalogItem[]; locked: boolean; online: boolean;
   onChange: (update: (project: Project) => Project) => void;
   onError: (message: string) => void; onSnapshot: (state: Snapshot) => void;
-  scenario?: Scenario | null; viewRequest?: number; presentation?: boolean;
+  scenario?: Scenario | null; viewRequest?: number; presentation?: boolean; unavailable?: string;
 };
 type EquipmentNode = Node<{ equipment: Equipment; state: Record<string, unknown>; tags: Snapshot['tags']; faults: Record<string, unknown>; locked: boolean; operating: boolean; highlighted?: boolean; signalTag?: Tag; animationDataType?: Tag['data_type'] }, 'equipment'>;
 
@@ -108,7 +108,7 @@ function ProcessPipe(props: EdgeProps) {
 }
 const edgeTypes = { process: ProcessPipe };
 
-function Canvas({ project, state, catalog, locked, online, onChange, onError, onSnapshot, scenario, viewRequest, presentation }: Props) {
+function Canvas({ project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, scenario, viewRequest, presentation }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
   const [snapToGrid, setSnapToGrid] = useState(true);
@@ -212,9 +212,9 @@ function Canvas({ project, state, catalog, locked, online, onChange, onError, on
     onChange(project => ({ ...project, connections: [...project.connections, { id: uid('line'), source: connection.source, target: connection.target, label: '', directed: true }] }));
   };
 
-  const controls = { project, state, online, onError, onSnapshot };
+  const controls = { project, state, unavailable, onError, onSnapshot };
   const inspector = selected || selectedEdge || building ? <aside className="inspector panel">
-    {selected ? <Inspector key={selected.id} equipment={selected} project={project} state={state} catalog={catalog} locked={locked || !building} online={online} onChange={onChange} onError={onError} onSnapshot={onSnapshot} showForces={building} onClose={() => setSelectedId(null)} />
+    {selected ? <Inspector key={selected.id} equipment={selected} project={project} state={state} catalog={catalog} locked={locked || !building} online={online} unavailable={unavailable} onChange={onChange} onError={onError} onSnapshot={onSnapshot} showForces={building} onClose={() => setSelectedId(null)} />
       : selectedEdge ? <ConnectionInspector project={project} id={selectedEdge} locked={locked || !building} onChange={onChange} onClose={() => setSelectedEdge(null)} />
         : <><div className="panel-title">Propriétés</div><div className="inspector-empty"><ProcessSymbol type="tank" /><h3>Sélectionnez un équipement</h3><p>Ses paramètres, ses variables PLC et ses défauts de simulation apparaîtront ici.</p></div><div className="model-note"><strong>Débits et liaisons</strong><p>Les conduites sont graphiques. Le débit est défini par la cuve cible, le sens et le groupe de débit de chaque pompe ou vanne.</p><p>Dans un même groupe, l’équipement le plus limitant fixe le débit. Les groupes indépendants s’additionnent.</p></div></>}
   </aside> : null;
@@ -275,7 +275,7 @@ function ConnectionInspector({ project, id, locked, onChange, onClose }: { proje
     </div></>;
 }
 
-function Inspector({ equipment, project, state, catalog, locked, online, onChange, onError, onSnapshot, onClose, showForces = true }: Props & { equipment: Equipment; onClose: () => void; showForces?: boolean }) {
+function Inspector({ equipment, project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, onClose, showForces = true }: Props & { equipment: Equipment; onClose: () => void; showForces?: boolean }) {
   const item = catalog.find(item => item.type === equipment.type);
   const [faultKind, setFaultKind] = useState(FAULTS[equipment.type]?.[0]?.key ?? '');
   const [faultValue, setFaultValue] = useState('');
@@ -342,7 +342,7 @@ function Inspector({ equipment, project, state, catalog, locked, online, onChang
           </label>
           {incompatible && <p className="inline-error">Association incompatible : choisissez une variable {spec.data_types.join(' / ')} de sens {spec.direction === 'input' ? 'entrée PLC' : 'sortie PLC'}.</p>}
           {tag && <div className="binding-value"><span>{tag.data_type}</span><strong>{fmt(state?.tags[tag.id]?.value ?? tag.initial_value)} {tag.unit}</strong></div>}
-          {showForces && tag?.direction === 'input' && state?.run_id && <ForceField key={tag.id} tag={tag} state={state} disabled={!online || incompatible} onError={onError} onSnapshot={onSnapshot} />}
+          {showForces && tag?.direction === 'input' && state?.run_id && <ForceField key={tag.id} tag={tag} state={state} unavailable={unavailable ?? (incompatible ? 'Associez une variable compatible avant de forcer la mesure.' : undefined)} onError={onError} onSnapshot={onSnapshot} />}
         </div>;
       })}
       {!locked && <button className="button compact-button full-width" onClick={createTags} disabled={project.tags.length >= 200}><WandSparkles size={14} />Créer les tags manquants</button>}

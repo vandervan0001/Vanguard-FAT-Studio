@@ -10,12 +10,12 @@ import { GuidedScenarioBuilder, newFatStep } from './GuidedScenarioBuilder';
 import { fmt, uid, type CatalogItem, type Project, type ReportDraft, type RunResult, type Snapshot, type Tag, type Scenario, type ScenarioDraft, type ScenarioImportMode, type RunSummary, type Validation } from './types';
 
 type CommonProps = {
-  project: Project; state: Snapshot | null; locked: boolean; online: boolean;
+  project: Project; state: Snapshot | null; locked: boolean; online: boolean; unavailable?: string;
   onChange: (update: (project: Project) => Project) => void;
   onError: (message: string) => void; onSnapshot: (state: Snapshot) => void;
 };
 
-export function VariablesPanel({ project, state, locked, online, onChange, onError, onSnapshot, onImport, onExport }: CommonProps & { onImport: (csv: string) => Promise<void>; onExport: () => Promise<void> }) {
+export function VariablesPanel({ project, state, locked, online, unavailable, onChange, onError, onSnapshot, onImport, onExport }: CommonProps & { onImport: (csv: string) => Promise<void>; onExport: () => Promise<void> }) {
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState('all');
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export function VariablesPanel({ project, state, locked, online, onChange, onErr
             <p className="small-muted span-2">Le profil de diagnostic dépend du module et de sa configuration. Renseignez les codes vérifiés pour la cible testée.</p>
           </>}
           <label className="check-label"><input disabled={locked || tag.direction === 'output'} type="checkbox" checked={tag.writable} onChange={event => update(tag.id, { writable: event.target.checked })} />Écriture explicitement autorisée</label>
-          <div className="tag-action-cell">{tag.direction === 'input' && state?.run_id ? <><span>Forçage de test</span><ForceField tag={tag} state={state} disabled={!online} onSnapshot={onSnapshot} onError={onError} /></> : <span className="small-muted">{tag.direction === 'output' ? 'Variable en lecture seule.' : 'Démarrez un essai pour forcer la mesure.'}</span>}</div>
+          <div className="tag-action-cell">{tag.direction === 'input' && state?.run_id ? <><span>Forçage de test</span><ForceField tag={tag} state={state} unavailable={unavailable} onSnapshot={onSnapshot} onError={onError} /></> : <span className="small-muted">{tag.direction === 'output' ? 'Variable en lecture seule.' : 'Démarrez un essai pour forcer la mesure.'}</span>}</div>
           <div className="tag-delete-cell"><span className="mono small-muted">{tag.id}</span><button disabled={locked} className="danger-text" onClick={() => removeTag(tag)}><Trash2 size={14} />Supprimer</button></div>
         </div></td></tr>] : [])];
       })}</tbody></table>
