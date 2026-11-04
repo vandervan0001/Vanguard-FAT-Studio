@@ -64,6 +64,8 @@ Choisir une FAT puis cliquer **Préparer la vue** pour cadrer les équipements c
 
 ### Entrées digitales à gauche
 
+À côté du sélecteur de scénario, le bandeau affiche le mode d’essai et son état. Les pupitres indiquent si leurs commandes sont disponibles. Un clic sur une commande grisée affiche la raison à cet endroit, sans envoyer d’écriture. Au repos, démarrez l’essai. En pause, reprenez-le pour actionner les contacts TOR. Un forçage analogique reste possible en pause, puis les échanges reprennent avec l’essai.
+
 Le laboratoire fournit 40 entrées BOOL ; le pupitre liste toutes les variables `input` de type BOOL du projet, y compris celles sans symbole de bouton dans le dessin. L’écriture doit être autorisée pour que la commande soit active.
 
 | Geste | Effet |
