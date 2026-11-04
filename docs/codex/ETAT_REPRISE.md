@@ -2,7 +2,7 @@
 
 ## Demande en cours, 3 novembre 2026
 
-Appliquer la DA du dépôt `vandervan0001/vanguard_systems`, renommer le produit et le dépôt GitHub en **Vanguard FAT Studio**, puis livrer une vidéo LinkedIn rythmée et sous-titrée, sans voix. Le dépôt reste privé ; aucune publication LinkedIn n'est demandée. Les standards et programmes privés restent exclus de Git et des paquets publics.
+Appliquer la DA du dépôt `vandervan0001/vanguard_systems`, renommer le produit et le dépôt GitHub en **Vanguard FAT Studio**, puis livrer une vidéo LinkedIn rythmée et sous-titrée, sans voix. Les standards et programmes privés restent exclus de Git et des paquets publics.
 
 Branche source `codex/vanguard-fat-studio-brand`, HEAD initial `cd4daba16580309a675dfa6b1ec95efe5a669038`, changements précédents conservés. Checkpoint privé pré-DA : `.local/vanguard-brand-2026-11-03/source-checkpoint`, 588 fichiers et 31 593 648 octets vérifiés. Les anciennes livraisons PUBLIC/SOURCE du round 5, leurs ZIP et toutes les preuves historiques restent intacts.
 
@@ -31,7 +31,7 @@ Preuves nouvelles : `evidence/reprises/2026-11-03-vanguard-brand/`. Les preuves 
 - Portable Windows dans `C:/Vanguard_FAT_Studio_2026-11-03` et kit source dans `C:/Vanguard_FAT_Studio_Source_2026-11-03`. 3 209 fichiers portables et 592 fichiers source, dont 29 wheels. Cinq contrôles de service chacun, deux alias CLI, deux lanceurs et 19 appels du client public réussis. Le kit source a été installé sur une copie et les services de test ont été fermés.
 - ZIP dans `.local/Vanguard_FAT_Studio_2026-11-03.zip` et `.local/Vanguard_FAT_Studio_Source_2026-11-03.zip`. Ensemble exact des entrées, CRC et SHA-256 de chaque fichier décompressé vérifiés. Voir `distribution/delivery-zips.json` dans les preuves de cette reprise. Les dossiers scellés contiennent l'état documentaire au moment de l'assemblage.
 - Film dans `media/vanguard-fat-studio/exports/`. 45 s, 1080 × 1350, 30 images/s, sous-titres FR intégrés et SRT, musique originale ou silence. Les images de démo et la campagne Siemens du 3 novembre sont identifiées séparément. Planche relue à partir du master. 36 contrôles de rendu et 19 après extraction du ZIP de sources. Le serveur 8774 est fermé. Le contrôle automatique a refusé la suppression du dossier de données temporaires de capture. Ce dossier est hors livrables.
-- GitHub a repris le nom `Vanguard-FAT-Studio` avec le même ID 1443049301 et une visibilité privée. La branche `codex/vanguard-fat-studio-brand` porte le code et les médias sélectionnés. Les standards maison et fournisseurs sont hors périmètre de livraison.
+- GitHub a repris le nom `Vanguard-FAT-Studio` avec le même ID 1443049301. La visibilité était privée au renommage et l'API l'indique publique le 4 novembre. Aucune commande de changement de visibilité n'a été exécutée pendant cette reprise. La [PR brouillon](https://github.com/vandervan0001/Vanguard-FAT-Studio/pull/1) porte le code et les médias sélectionnés. Les standards maison et fournisseurs sont hors périmètre de livraison.
 
 ## Services à préserver
 

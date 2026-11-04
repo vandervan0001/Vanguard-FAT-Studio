@@ -8,4 +8,6 @@ Le film est livré avec deux MP4 de 45 s, SRT français et ZIP éditable de 113 
 
 La suite locale compte 581 tests Python réussis, cinq ignorés sur ce compte Windows et 56 tests UI réussis. La campagne TIA V21 / PLCSIM Advanced 8 du 3 novembre compte 31 attentes réussies. La passe de marque a vérifié la lecture native et la présentation a été placée en pause avant STEP 1. La validation humaine et l'essai natif V20 restent à réaliser.
 
+Le code et le film sont sur `codex/vanguard-fat-studio-brand`, à partir du commit `da7b80f7097f1a36e0a7494db7fcb4e067c5f8db`, dans la [PR brouillon n° 1](https://github.com/vandervan0001/Vanguard-FAT-Studio/pull/1). Une comparaison avec les blobs Git a vérifié les octets des 485 fichiers de marque, de preuve et de média. L'API GitHub indique maintenant le dépôt public. Le reçu de renommage consigne sa visibilité privée au moment de cette opération. Le changement de visibilité ne fait pas partie des actions de cette reprise.
+
 Pour reprendre, lire [l'état courant](../ETAT_REPRISE.md). Lancer le portable avec `Vanguard-FAT-Studio.cmd` ou vérifier le kit source avec `python scripts/check-kit.py --root <dossier>`. Sur ce poste, contrôler le contexte de l'instance dédiée sur le port 8770 avant de reprendre un essai. Garder les anciens kits, projets et preuves en place.

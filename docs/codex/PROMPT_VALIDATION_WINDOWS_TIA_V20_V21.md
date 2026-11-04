@@ -4,7 +4,7 @@ Reprends Vanguard FAT Studio sur ce PC Windows et termine la validation native d
 
 ## Référence et lecture initiale
 
-Le dépôt est privé : https://github.com/vandervan0001/Vanguard-FAT-Studio. Utilise le clone actuel s'il existe. Sinon, clone-le dans un nouveau dossier accessible en écriture, avec mon compte GitHub autorisé. Ne remplace aucun dossier existant. Vérifie la branche, `git status`, les changements locaux, les derniers commits et le remote avant de travailler. Préserve les modifications et les données ; aucun reset destructif, stash ou nettoyage global.
+Le dépôt est https://github.com/vandervan0001/Vanguard-FAT-Studio. Utilise le clone actuel s'il existe. Sinon, clone-le dans un nouveau dossier accessible en écriture. Vérifie la visibilité et l'authentification actuelles avant de pousser. Ne remplace aucun dossier existant. Vérifie la branche, `git status`, les changements locaux, les derniers commits et le remote avant de travailler. Préserve les modifications et les données. Évite les resets destructifs, stash et nettoyages globaux.
 
 Lis `AGENTS.md`, `KB.md`, `README-CODEX.md`, `docs/codex/ETAT_REPRISE.md` et la dernière note de session, puis `docs/TIA_VERSIONS.md`, `docs/TIA_MCP.md`, `docs/COMPATIBILITY.md`, `docs/PLCSIM_SETUP.md` et `docs/ACCEPTANCE.md`. Utilise les outils Windows disponibles ; l'absence d'un outil propre au précédent Mac ne bloque pas la reprise.
 
@@ -61,7 +61,7 @@ Pour tout défaut démontré, préserve la source avant édition, apporte une co
 
 Conserve un rapport **séparé pour V20 et V21**, dans un nouveau dossier daté sous `evidence/reprises/`, avec commit/état local, OS, versions, DLL et profils, commandes, observations, diagnostics, reçus et preuves de restauration. Chaque essai reçoit **réussi / échoué / non exécuté**, avec sa preuve et la prochaine action. Distingue build natif, lecture MCP depuis Codex, ingénierie, communication OPC UA et validation du programme client. Les journaux ou archives peuvent contenir des sources privées : garde les bruts localement et ne pousse que les preuves relues sans secrets, DLL Siemens ni projet client.
 
-Actualise `docs/codex/ETAT_REPRISE.md` et une note de session. Committe seulement tes chemins explicites après relecture du diff indexé, avec un message passé par fichier ; pousse les corrections et preuves admissibles dans le même dépôt privé et vérifie les références distantes. Si la version applicative change, applique la procédure de version du dépôt sans déplacer les anciens tags.
+Actualise `docs/codex/ETAT_REPRISE.md` et une note de session. Committe seulement tes chemins explicites après relecture du diff indexé, avec un message passé par fichier. Pousse les corrections et preuves admissibles dans le dépôt et vérifie les références distantes. Si la version applicative change, applique la procédure de version du dépôt sans déplacer les anciens tags.
 
 Termine par un bilan factuel V20/V21 : ce qui fonctionne réellement, les essais non exécutés, les blocages et l'action humaine restante. Arrête uniquement les services temporaires que tu as lancés, conserve les données et indique les processus/ports restants. Ne ferme pas une session TIA avec des changements non sauvegardés et n'archive pas le chat.
 
