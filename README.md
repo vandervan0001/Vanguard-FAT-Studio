@@ -1,49 +1,53 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="frontend/public/brand/logo_vanguard_wordmark_horizontal_white.png">
-  <img alt="Vanguard" src="frontend/public/brand/logo_vanguard_wordmark_horizontal.png" width="320">
+  <img alt="Vanguard" src="frontend/public/brand/logo_vanguard_wordmark_horizontal.png" width="300">
 </picture>
 
 # Vanguard FAT Studio
 
-[Dépôt du projet](https://github.com/vandervan0001/Vanguard-FAT-Studio)
+**Un banc local pour tester un programme PLC avant d’avoir l’installation sous la main.**
 
-Banc FAT local : P&ID interactif, procédé simulé, scénarios automatiques, essais pas à pas et preuves exportables. Le programme PLC fournit les commandes ; le banc calcule les capteurs et les retours simulés. Une démonstration Python permet de commencer sans Siemens.
+Reliez une CPU virtuelle à un procédé simulé. Envoyez vos entrées, suivez les commandes et les retours sur le P&ID, puis rejouez le scénario ou déroulez la FAT pas à pas. Le code du banc est gratuit et sous [licence MIT](LICENSE).
 
-## Démarrer sous Windows
+[Essayer la démo](#essayer-sans-siemens) · [Connecter PLCSIM](#connecter-tia-portal-et-plcsim) · [Utiliser Codex ou Claude](#utiliser-codex-ou-claude) · [Voir la vidéo](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/public-preview-2026-11-04) · [Contribuer](#contribuer)
 
-Avec la distribution **portable Windows x64**, extraire toute l’archive dans un dossier accessible, puis double-cliquer **Start-FAT.cmd**. Python et les dépendances sont fournis. Aucun droit administrateur, Python ou Node.js global n’est nécessaire. Utiliser [http://127.0.0.1:8765](http://127.0.0.1:8765). Garder la fenêtre ouverte ; `Ctrl+C` arrête le serveur. Les données restent dans votre profil, hors du runtime.
+![Démo de transfert avec trois cuves, pupitre des entrées digitales à gauche et des entrées analogiques à droite](evidence/reprises/2026-11-03-vanguard-brand/ui/final/desktop/01-console.png)
 
-Le lanceur **Vanguard-FAT-Studio.cmd** ouvre le même service. Le module Python reste `fat_studio` ; les commandes `vanguard-fat-studio` et `fat-studio` sont compatibles. Les dossiers de données existants et les formats d’échange gardent leurs identifiants.
+## Essayer sans Siemens
 
-Depuis les **sources**, installer Python 3.12 x64 puis lancer le même `Start-FAT.cmd`. Ce lanceur crée `.venv` avec les versions verrouillées ; il utilise les wheels du kit hors ligne si elles sont présentes. Node.js sert uniquement à reconstruire l’interface. Les deux distributions sont décrites dans [INSTALLATION.md](docs/INSTALLATION.md).
+1. Installez **Python 3.12 x64**, puis [téléchargez les sources](https://github.com/vandervan0001/Vanguard-FAT-Studio/archive/refs/heads/main.zip) et extrayez le ZIP.
+2. Sous Windows, double-cliquez sur **Vanguard-FAT-Studio.cmd**. Au premier lancement, le script crée un environnement local et installe les dépendances verrouillées depuis PyPI. L’interface compilée est fournie.
+3. Dans [le banc local](http://127.0.0.1:8765), ouvrez la **démo laboratoire** et choisissez le scénario **Alimentation de la cuve source**. Cliquez sur **Préparer la vue**, puis sur **Démarrer**.
 
-## Essayer le banc
+La démo fournit trois cuves, quatre pompes, huit vannes et 75 variables. Le programme de démonstration fournit les commandes et le banc simule les niveaux et retours. Essayez un stimulus analogique de 12 mA et suivez le résultat dans les tendances.
 
-1. Dans **Ouvrir**, charger la **démo laboratoire** : trois cuves, quatre pompes et huit vannes.
-2. Choisir un scénario, puis **Préparer la vue** et **Démarrer**.
-3. Observer les mesures, les qualités et les tendances. Le pupitre agit sur les entrées simulées autorisées.
-4. Pour une FAT pas à pas, déclencher chaque STEP puis saisir l’observation du testeur. La conclusion FAT humaine reste à renseigner séparément.
-5. Exporter les données CSV, le rapport HTML ou les preuves JSON.
+Sous Linux ou macOS, lancez `bash scripts/start.sh` depuis les sources avec Python 3.12. Le [guide d’installation](docs/INSTALLATION.md) couvre aussi la construction du portable Windows et les kits hors ligne.
 
-La démo PLC est volontairement passive : elle recopie les demandes manuelles vers ses commandes et calcule des conversions simples. Elle ne contient ni séquence de production ni standard de programmation utilisateur. Lire [DEMO_PLC.md](docs/DEMO_PLC.md) pour son contrat et sa génération. Le [guide utilisateur](docs/USER_GUIDE.md) détaille les gestes.
+## Connecter TIA Portal et PLCSIM
 
-| Besoin | Document |
+Le banc échange en OPC UA avec une cible virtuelle autorisée. Le programme PLC commande le procédé. Le banc lit ses sorties et écrit les entrées simulées déclarées dans le mapping. Sur le P&ID, vous pouvez associer une animation à l’état d’un tag et retrouver la mesure, l’adresse PLC et le NodeId dans la table de variables.
+
+| À tester | Dans le banc |
 | --- | --- |
-| Installer ou choisir le dossier de données | [INSTALLATION](docs/INSTALLATION.md) |
-| Dessiner, mapper, forcer, créer une FAT, exporter | [USER_GUIDE](docs/USER_GUIDE.md) |
-| Piloter avec votre propre assistant | [AI_QUICKSTART](docs/AI_QUICKSTART.md) et [AI_CONTROL](docs/AI_CONTROL.md) |
-| Échanger projets et scénarios JSON versionnés | [FORMAT](docs/FORMAT.md) |
-| Sauvegarder et restaurer un projet complet | [PROJECT_ARCHIVES](docs/PROJECT_ARCHIVES.md) |
-| Comprendre les bilans et les limites physiques | [MODEL](docs/MODEL.md) |
-| Préparer une cible virtuelle autorisée | [PLCSIM_SETUP](docs/PLCSIM_SETUP.md) |
-| Développer ou reprendre les sources | [README-CODEX](README-CODEX.md) et [AGENTS](AGENTS.md) |
+| Bouton, capteur ou défaut | Impulsion ou maintien BOOL. Stimulus analogique en points PLC, unités d’ingénierie, pourcentage ou signal électrique selon le profil. |
+| Séquence reproductible | Scénario temporisé avec écritures et contrôles attendus, ou FAT pas à pas avec stimuli préparés et observation du testeur. |
+| Relecture d’un essai | Tendances, rapport HTML, traces CSV et preuves JSON. Archive `.fat.zip` pour restaurer un projet et son historique dans un nouveau dossier. |
 
-Vanguard FAT Studio n’embarque aucun modèle IA et ne demande aucune clé API de modèle. Votre client Codex, Claude ou autre assistant lit les fichiers et utilise le CLI/API local avec un contexte projet/révision/essai explicite.
+La démo a passé **31 attentes sur 31** lors de la campagne sur TIA Portal V21 et S7-PLCSIM Advanced V8. Le testeur renseigne le verdict FAT. Le P&ID sert à simuler les interactions du procédé, dans les limites du modèle décrit dans la documentation. [Configurer PLCSIM](docs/PLCSIM_SETUP.md) · [Projet TIA de démonstration](docs/DEMO_PLC.md) · [Modèle de procédé](docs/MODEL.md) · [Preuve de la campagne](evidence/reprises/2026-11-03-public-demo/final-live/VERIFICATION.md)
 
-## Périmètre
+## Utiliser Codex ou Claude
 
-Les sorties PLC sont lues ; les écritures du banc visent uniquement les entrées simulées déclarées et autorisées. Importer un projet n’autorise jamais une cible sur le poste. Les adresses PLC sont documentaires et les NodeIds OPC UA doivent être réellement découverts. Une erreur de communication ou de stockage arrête les échanges sans reconnexion automatique. La pause du banc ne commande pas le STOP d’une CPU externe.
+Donnez à votre assistant le dossier du projet, vos règles de programmation et le [prompt de démarrage](docs/AI_QUICKSTART.md). Il peut préparer du code PLC à relire, créer des scénarios à partir des formats JSON et piloter le banc via le CLI ou l’API locale. L’accès d’ingénierie TIA exposé à l’assistant est en lecture seule. Le banc n’a pas besoin de clé API de modèle. [Contrat CLI et API](docs/AI_CONTROL.md) · [Formats JSON](docs/FORMAT.md)
 
-Le P&ID utilise des paramètres de volume, débit et groupes de transfert ; il ne constitue pas un solveur hydraulique général. Les contrôles automatiques et simulations de test ne valent ni réception FAT humaine, ni qualification V20, CPU physique ou sécurité fonctionnelle.
+## Guides
 
-La livraison publique contient le banc, ses formats et sa démo. Les programmes utilisateurs, bibliothèques de programmation, secrets, politiques de cible, données personnelles et notes de travail restent hors de cette livraison. [PUBLIC_CHANGELOG.md](PUBLIC_CHANGELOG.md) présente les changements publics. Les licences sont dans [LICENSE](LICENSE) et [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- [Guide utilisateur](docs/USER_GUIDE.md) pour les pupitres, le P&ID, les scénarios et les rapports.
+- [Archives de projet](docs/PROJECT_ARCHIVES.md) pour sauvegarder, transférer et restaurer une FAT.
+- [Compatibilité TIA](docs/TIA_VERSIONS.md) pour distinguer les profils V20 et V21 et leur niveau de vérification.
+- [Reprendre les sources](README-CODEX.md) pour construire et tester le banc.
+
+## Contribuer
+
+Si vous trouvez un problème, indiquez votre version de TIA ou le mode démo, les étapes pour le reproduire et ce que vous attendiez. Un scénario minimal sans programme client ni secret aide à reproduire le problème. Les pull requests sont les bienvenues. [Ouvrir une issue](https://github.com/vandervan0001/Vanguard-FAT-Studio/issues) · [Consignes de contribution](AGENTS.md)
+
+Le code original de Vanguard FAT Studio est sous MIT. Les composants tiers conservent leurs licences. TIA Portal et PLCSIM s’installent séparément. [Licence MIT](LICENSE) · [Notices tierces](THIRD_PARTY_NOTICES.md)
