@@ -1,0 +1,7 @@
+{
+  "error": "KeyError security_mode: harness expected a field absent from the public schema",
+  "correction": "Use declared security_policy=Basic256Sha256; adapter enforces SignAndEncrypt",
+  "phase": "read-only preflight before context capture, CPU command or FAT mutation",
+  "product_changed": false,
+  "automatic_retry": false
+}

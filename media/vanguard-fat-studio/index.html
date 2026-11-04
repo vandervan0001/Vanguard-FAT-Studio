@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vanguard FAT Studio — film</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./studio.css"><script type="module" src="./src/player.mjs"></script>
+</head>
+<body><main>
+  <header><strong id="brand-name">Studio motion</strong><span id="film-info"></span></header>
+  <div class="stage"><canvas id="film" aria-label="Prévisualisation du film"></canvas></div>
+  <div class="controls">
+    <button id="play-pause" type="button" disabled>Lire</button>
+    <button id="restart" type="button" disabled>Recommencer</button>
+    <input id="scrubber" type="range" min="0" step="0.001" value="0" aria-label="Temps du film" disabled>
+    <output id="time"></output><label><input id="audio-enabled" type="checkbox"> Son</label>
+  </div>
+  <p id="status" role="status">Chargement des ressources locales…</p>
+  <audio id="soundtrack" src="./exports/soundtrack.wav" preload="none"></audio>
+</main></body></html>

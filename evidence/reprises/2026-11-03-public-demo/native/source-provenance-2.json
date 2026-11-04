@@ -1,0 +1,12 @@
+{
+  "utc": "2026-11-03T19:43:23.071667+00:00",
+  "scope": "Public passive DB/OB1 only",
+  "canonical_sha256": "1950c5b8e511e80c8461d74f100cf4127b6f3c8a326004a2433d33cb0b8b1595",
+  "loaded_sha256": "b442f38fcc1e1259e1eefb0debab67be8ae78203a86f9aef22488188125f5c94",
+  "only_change": "EnableDemo FALSE -> TRUE in private source for FAT-DEMO-20261103 only",
+  "public_source_files": [
+    "integrations/demo_plc.py",
+    "fat_studio/demo_contract.py"
+  ],
+  "private_or_vendor_sources_read": false
+}

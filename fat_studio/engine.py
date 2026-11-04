@@ -50,7 +50,7 @@ class ProcessEngine:
                 volume = p["capacity_l"] * p["initial_level_pct"] / 100
                 self.equipment_state[item.id] = {"volume_l": volume, "volume": volume, "level": p["initial_level_pct"], "level_percent": p["initial_level_pct"], "capacity_l": p["capacity_l"], "inflow_l_s": 0.0, "outflow_l_s": 0.0, "overflow_l": 0.0, "high": False, "low": False}
                 self._tank_flags(item.id)
-            elif item.type == "pump":
+            elif item.type in ("pump", "pump_vfd"):
                 self.equipment_state[item.id] = {"running": p["initial_speed_pct"] > 5, "speed": p["initial_speed_pct"], "flow_l_s": 0.0, "fault": False}
             elif item.type in ("valve_onoff", "valve_control"):
                 position = p["initial_position_pct"]
@@ -100,15 +100,16 @@ class ProcessEngine:
         self._raw_values.update(validated)
         groups: dict[tuple[str, str, str], list[tuple[str, float]]] = defaultdict(list)
         for item in self.project.equipment:
-            if item.type not in ("pump", "valve_onoff", "valve_control"):
+            if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
                 continue
             p = self._params[item.id]
             state = self.equipment_state[item.id]
             faults = self.faults.get(item.id, {})
             command = self.values[item.bindings["command"]]
-            if item.type == "pump":
+            if item.type in ("pump", "pump_vfd"):
                 tripped = bool(faults.get("motor_trip", False))
-                target = 100.0 if command and not tripped else 0.0
+                speed = self.values[item.bindings["speed_command"]] if item.type == "pump_vfd" else 100.0
+                target = min(100.0, max(0.0, speed)) if command and not tripped else 0.0
                 # A motor trip drops delivered flow immediately; no residual energy model.
                 state["speed"] = 0.0 if tripped else _lag(state["speed"], target, p["response_s"], dt)
                 state["running"] = state["speed"] > 5 and not tripped
@@ -135,15 +136,51 @@ class ProcessEngine:
             groups[(p["tank_id"], p["role"], p["flow_group"])].append((item.id, available))
 
         flows = {key: min(capacity for _, capacity in devices) for key, devices in groups.items()}
+        sources = {}
+        for key, devices in groups.items():
+            source_ids = {self._params[id].get("source_tank_id", "") for id, _ in devices} - {""}
+            if len(source_ids) > 1:
+                raise ValueError("Un circuit de transfert ne peut avoir plusieurs cuves sources.")
+            sources[key] = next(iter(source_ids), "")
+        # A transfer debits its source and credits its destination by the same
+        # amount. Availability uses start-of-cycle stock + external supply;
+        # incoming transfers are usable next cycle, avoiding an algebraic loop.
+        external_in = defaultdict(float)
+        requested_out = defaultdict(float)
+        for key, flow in flows.items():
+            tank_id, role, _ = key
+            if sources[key]:
+                requested_out[sources[key]] += flow
+            elif role == "inlet":
+                external_in[tank_id] += flow
+            else:
+                requested_out[tank_id] += flow
+        factors = {}
+        for item in self.project.equipment:
+            if item.type == "tank":
+                available = self.equipment_state[item.id]["volume_l"] + external_in[item.id] * dt
+                requested = requested_out[item.id]
+                factors[item.id] = min(1.0, available / (requested * dt)) if requested > 0 else 1.0
+        actual_flows = {key: flow * (factors[sources[key]] if sources[key] else factors[key[0]] if key[1] == "outlet" else 1.0)
+                        for key, flow in flows.items()}
+        inflows = defaultdict(float)
+        outflows = defaultdict(float)
+        for key, flow in actual_flows.items():
+            tank_id, role, _ = key
+            if sources[key]:
+                outflows[sources[key]] += flow
+                inflows[tank_id] += flow
+            elif role == "inlet":
+                inflows[tank_id] += flow
+            else:
+                outflows[tank_id] += flow
         for item in self.project.equipment:
             if item.type != "tank":
                 continue
             state = self.equipment_state[item.id]
-            inflow = sum(flow for key, flow in flows.items() if key[0] == item.id and key[1] == "inlet")
-            requested_outflow = sum(flow for key, flow in flows.items() if key[0] == item.id and key[1] == "outlet")
-            available_volume = state["volume_l"] + inflow * dt
-            actual_outflow = min(requested_outflow, available_volume / dt)
-            net_volume = max(0.0, available_volume - actual_outflow * dt)
+            inflow = inflows[item.id]
+            actual_outflow = outflows[item.id]
+            net_volume = max(0.0, state["volume_l"] + (inflow - actual_outflow) * dt)
             overflow = max(0.0, net_volume - state["capacity_l"])
             state.update(volume_l=min(net_volume, state["capacity_l"]), inflow_l_s=inflow, outflow_l_s=actual_outflow, overflow_l=state["overflow_l"] + overflow)
             self._tank_flags(item.id)
@@ -151,9 +188,7 @@ class ProcessEngine:
             for key, devices in groups.items():
                 if key[0] != item.id:
                     continue
-                flow = flows[key]
-                if key[1] == "outlet" and requested_outflow > 0:
-                    flow *= actual_outflow / requested_outflow
+                flow = actual_flows[key]
                 for equipment_id, _ in devices:
                     self.equipment_state[equipment_id]["flow_l_s"] = flow
         self.time_s = round(self.time_s + dt, 9)
@@ -174,14 +209,18 @@ class ProcessEngine:
             if item.type == "tank":
                 for port, field in (("level", "level"), ("volume", "volume_l"), ("high", "high"), ("low", "low")):
                     emit(item, port, state[field])
-            elif item.type == "pump":
+            elif item.type in ("pump", "pump_vfd"):
                 emit(item, "feedback", state["running"])
                 emit(item, "fault", state["fault"])
+                if item.type == "pump_vfd":
+                    emit(item, "speed", state["speed"])
             elif item.type in ("valve_onoff", "valve_control"):
                 for port in ("position", "open", "closed"):
                     emit(item, port, state[port])
             elif item.type == "indicator":
                 state["value"] = self.values[item.bindings["value"]]
+            elif item.type == "digital_input":
+                emit(item, "value", self._params[item.id]["initial_value"])
         for item in self.project.equipment:
             if item.type not in ("analog_sensor", "digital_sensor"):
                 continue
@@ -205,17 +244,17 @@ class ProcessEngine:
             if outside_engineering_limits(tag, value):
                 self.qualities[tag.id] = "out_of_range"
         for item in self.project.equipment:
-            if item.type in ("analog_sensor", "digital_sensor"):
+            if item.type in ("analog_sensor", "digital_sensor", "digital_input"):
                 tag_id = item.bindings["value"]
                 if self.faults.get(item.id) and self.qualities[tag_id] == "good":
                     self.qualities[tag_id] = "fault"
                 self.equipment_state[item.id].update(value=self.values[tag_id], quality=self.qualities[tag_id])
 
-    def force(self, tag_id: str, value) -> None:
+    def force(self, tag_id: str, value, *, enforce_limits: bool = True) -> None:
         tag = self.tags.get(tag_id)
         if tag is None or tag.direction != "input" or not tag.writable:
             raise ValueError("Le forçage est limité aux entrées simulées explicitement autorisées.")
-        validated = validate_value(tag, value)
+        validated = validate_value(tag, value, enforce_limits=enforce_limits)
         self.forces[tag_id] = validated
         self.values[tag_id] = validated
         self.qualities[tag_id] = "forced"
@@ -310,7 +349,7 @@ class DemoController:
             elif level <= p["demo_start_pct"]:
                 self._filling[tank.id] = True
         for item in self.project.equipment:
-            if item.type not in ("pump", "valve_onoff", "valve_control"):
+            if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
                 continue
             p = self._params[item.id]
             command = p["demo_command"]
@@ -319,7 +358,7 @@ class DemoController:
                 if p["role"] == "outlet":
                     on = not on
                 command = (100.0 if on else 0.0) if item.type == "valve_control" else on
-            if item.type == "pump" and values.get(item.bindings.get("fault"), False):
+            if item.type in ("pump", "pump_vfd") and values.get(item.bindings.get("fault"), False):
                 command = False
             tag_id = item.bindings.get("command")
             if tag_id is not None:
@@ -327,4 +366,11 @@ class DemoController:
                     raise ValueError(f"Deux contrôleurs de démonstration produisent des commandes incompatibles pour {tag_id}.")
                 generated[tag_id] = command
                 result[tag_id] = command
+            if item.type == "pump_vfd":
+                speed_tag = item.bindings["speed_command"]
+                speed = p["demo_speed_pct"] if command else 0.0
+                if speed_tag in generated and generated[speed_tag] != speed:
+                    raise ValueError("Consignes de vitesse de démonstration incompatibles.")
+                generated[speed_tag] = speed
+                result[speed_tag] = speed
         return result

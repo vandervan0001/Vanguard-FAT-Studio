@@ -1,0 +1,48 @@
+// SPDX-License-Identifier: MIT. No equipment library or process sequence.
+ORGANIZATION_BLOCK "Main"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 1.0
+BEGIN
+    "DB_FAT_Demo".P101_RunCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".P101_Request;
+    IF "DB_FAT_Demo".P101_RunCommand THEN
+        "DB_FAT_Demo".P101_SpeedCommand := LIMIT(MN := REAL#0.0, IN := "DB_FAT_Demo".P101_RequestedSpeed, MX := REAL#100.0);
+    ELSE
+        "DB_FAT_Demo".P101_SpeedCommand := REAL#0.0;
+    END_IF;
+    "DB_FAT_Demo".P201_RunCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".P201_Request;
+    IF "DB_FAT_Demo".P201_RunCommand THEN
+        "DB_FAT_Demo".P201_SpeedCommand := LIMIT(MN := REAL#0.0, IN := "DB_FAT_Demo".P201_RequestedSpeed, MX := REAL#100.0);
+    ELSE
+        "DB_FAT_Demo".P201_SpeedCommand := REAL#0.0;
+    END_IF;
+    "DB_FAT_Demo".P202_RunCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".P202_Request;
+    IF "DB_FAT_Demo".P202_RunCommand THEN
+        "DB_FAT_Demo".P202_SpeedCommand := LIMIT(MN := REAL#0.0, IN := "DB_FAT_Demo".P202_RequestedSpeed, MX := REAL#100.0);
+    ELSE
+        "DB_FAT_Demo".P202_SpeedCommand := REAL#0.0;
+    END_IF;
+    "DB_FAT_Demo".P301_RunCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".P301_Request;
+    IF "DB_FAT_Demo".P301_RunCommand THEN
+        "DB_FAT_Demo".P301_SpeedCommand := LIMIT(MN := REAL#0.0, IN := "DB_FAT_Demo".P301_RequestedSpeed, MX := REAL#100.0);
+    ELSE
+        "DB_FAT_Demo".P301_SpeedCommand := REAL#0.0;
+    END_IF;
+    "DB_FAT_Demo".XV101_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV101_Request;
+    "DB_FAT_Demo".XV201_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV201_Request;
+    "DB_FAT_Demo".XV202_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV202_Request;
+    "DB_FAT_Demo".XV301_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV301_Request;
+    "DB_FAT_Demo".XV102_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV102_Request;
+    "DB_FAT_Demo".XV203_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV203_Request;
+    "DB_FAT_Demo".XV103_OpenCommand := "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy AND "DB_FAT_Demo".XV103_Request;
+    IF "DB_FAT_Demo".EnableDemo AND "DB_FAT_Demo".StopHealthy THEN
+        "DB_FAT_Demo".FCV302_PositionCommand := LIMIT(MN := REAL#0.0, IN := "DB_FAT_Demo".FCV302_RequestedPosition, MX := REAL#100.0);
+    ELSE
+        "DB_FAT_Demo".FCV302_PositionCommand := REAL#0.0;
+    END_IF;
+    "DB_FAT_Demo".LT101_Percent := SCALE_X(MIN := REAL#0.0,
+        VALUE := NORM_X(MIN := INT#0, VALUE := "DB_FAT_Demo".LT101_Raw, MAX := INT#27648), MAX := REAL#100.0);
+    "DB_FAT_Demo".LT201_Percent := SCALE_X(MIN := REAL#0.0,
+        VALUE := NORM_X(MIN := INT#0, VALUE := "DB_FAT_Demo".LT201_Raw, MAX := INT#27648), MAX := REAL#100.0);
+    "DB_FAT_Demo".LT301_Percent := SCALE_X(MIN := REAL#0.0,
+        VALUE := NORM_X(MIN := INT#0, VALUE := "DB_FAT_Demo".LT301_Raw, MAX := INT#27648), MAX := REAL#100.0);
+END_ORGANIZATION_BLOCK

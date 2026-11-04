@@ -1,0 +1,13 @@
+{
+  "port": 8774,
+  "listening": false,
+  "own_capture_process_closed": true,
+  "temporary_demo_data_retained": true,
+  "cleanup": {
+    "attempted_scope": "Only the owned TemporaryDirectory vanguard-film-demo-*; absolute parent/leaf/reparse/listener guards",
+    "result": "automatic approval review rejected",
+    "reason": "blocked by policy; no more detailed reason returned",
+    "bypass_attempted": false
+  },
+  "software_or_live_cpu_mutations": false
+}

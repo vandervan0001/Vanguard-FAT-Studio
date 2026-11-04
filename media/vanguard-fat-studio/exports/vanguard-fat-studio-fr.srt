@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:03,000
+Un banc local pour préparer vos essais PLC.
+
+2
+00:00:03,000 --> 00:00:07,000
+Commandes, retours et niveaux se lisent sur le P&ID.
+
+3
+00:00:07,000 --> 00:00:10,000
+Une impulsion de 300 ms, ou un maintien explicite.
+
+4
+00:00:10,000 --> 00:00:14,000
+12 mA correspondent ici à 13 824 points et 50 %.
+
+5
+00:00:14,000 --> 00:00:18,000
+Les attentes restent distinctes du verdict humain.
+
+6
+00:00:18,000 --> 00:00:23,000
+Écritures groupées, résultat attendu, observation à saisir.
+
+7
+00:00:23,000 --> 00:00:27,000
+Retrouvez les courbes, les valeurs et leur qualité.
+
+8
+00:00:27,000 --> 00:00:31,000
+Exportez le rapport, les traces CSV et le détail JSON.
+
+9
+00:00:31,000 --> 00:00:34,000
+L’archive restaure le projet dans un nouveau dossier.
+
+10
+00:00:34,000 --> 00:00:37,000
+Votre IA pilote le banc par l’API locale.
+
+11
+00:00:37,000 --> 00:00:41,000
+31 attentes réussies sur TIA V21 et PLCSIM Advanced 8.
+
+12
+00:00:41,000 --> 00:00:45,000
+Version en préparation. vanguard-systems.ch

@@ -1,0 +1,16 @@
+
+> fat-studio-ui@0.2.1 test
+> playwright test adversarial.spec.ts --grep créer un procédé vide|un chargement retardé|glisser un symbole
+
+
+Running 3 tests using 1 worker
+
+(node:35884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\adversarial.spec.ts:113:1 › créer un procédé vide, ses tags, son scénario puis l’importer reproduit le projet (5.2s)
+  ok 2 tests\adversarial.spec.ts:282:1 › un chargement retardé conserve le projet révisé et le nouvel essai d’un autre onglet (1.4s)
+  ok 3 tests\adversarial.spec.ts:379:1 › glisser un symbole, relier ses ports, déplacer et supprimer persiste le vrai graphe (3.9s)
+
+  3 passed (16.7s)

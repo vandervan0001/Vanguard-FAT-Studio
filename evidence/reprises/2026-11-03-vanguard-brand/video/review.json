@@ -1,0 +1,36 @@
+{
+  "scope": "MP4 decoded frame inspection; sampled visual review",
+  "drafts": {
+    "first": "Preserved privately; framed timeline/report/archive too wide",
+    "corrections": [
+      "Timeline fully contained: real names and metrics retained",
+      "Actual exported HTML report, non-evaluated human conclusion",
+      "Archive buttons entirely visible",
+      "Three real percent traces: level, speed command, speed feedback; no transformed values",
+      "Signature domain masked clear of animated line",
+      "PNG decode sequenced; awaited image-ready errors surfaced"
+    ]
+  },
+  "reviewed_times": [
+    0.2,
+    1.8,
+    5.2,
+    8.8,
+    12.8,
+    16.8,
+    17.933333,
+    21.3,
+    25.4,
+    26.933333,
+    27.3,
+    29.3,
+    31.3,
+    33.3,
+    36.4,
+    39.6,
+    43.7
+  ],
+  "root_review": "closed after requested corrections",
+  "no_human_fat_acceptance": true,
+  "human_audio_listening": false
+}

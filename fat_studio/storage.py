@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .models import Project
+from .branding import APP_NAME
 from .security import atomic_json, safe_id
 
 
@@ -40,7 +41,7 @@ class Store:
                 fcntl.flock(self._lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError as exc:
             self._lock_file.close()
-            raise ValueError("Un autre processus FAT Studio utilise déjà ce dossier de données.") from exc
+            raise ValueError(f"Un autre processus {APP_NAME} utilise déjà ce dossier de données.") from exc
         self.db = None
         try:
             self.db = sqlite3.connect(self.root / "history.sqlite3", check_same_thread=False)

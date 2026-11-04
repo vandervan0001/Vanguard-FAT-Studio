@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "platform": "Windows x64 / Python 3.12.10",
+  "command": ".venv\\Scripts\\python.exe -X utf8 -m pytest tests/test_distribution.py tests/test_cli.py tests/test_installed_smoke.py -q",
+  "passed": 69,
+  "skipped": 4,
+  "duration_s": 13.38,
+  "skip_scope": "Windows account lacks permission to create symlinks; actual NTFS junction tests passed",
+  "privacy_regressions": "Public brand and official font licence accepted; private PLC identifiers, module payloads, old controller/project/helper signatures and Unicode private location variants refused",
+  "source_changes": "Metadata, compatible aliases and launchers, explicit public payload selection, current docs; no rewrite of historical proofs or sealed deliveries",
+  "ruff": "passed on owned code/scripts/tests",
+  "scope": "Local packaging/CLI and temporary fixtures; no Siemens target, CPU operation or human FAT approval"
+}

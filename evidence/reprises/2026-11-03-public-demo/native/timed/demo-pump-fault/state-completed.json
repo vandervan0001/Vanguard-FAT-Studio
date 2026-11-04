@@ -1,0 +1,1710 @@
+{
+  "project_id": "fat-public-demo-plcsim-v21-20261103",
+  "project_revision": "a1fef53a79744b465f930707a4b3f04c9e6fa179d09784ac865386d2c8cc68f3",
+  "status": "paused",
+  "sim_time_s": 5.0,
+  "wall_time": "2026-11-03T19:51:47.268+00:00",
+  "run_id": "run-c78d60c4b9ff466d8f22220df8f436b1",
+  "connection": {
+    "mode": "opcua",
+    "connected": false,
+    "target": "FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840",
+    "quality": "paused",
+    "last_update": "2026-11-03T19:51:46.965+00:00",
+    "error": null
+  },
+  "tags": {
+    "stop_healthy": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_requested_speed": {
+      "value": 60.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_speed_command": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_running": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_speed": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p101_fault": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_requested_speed": {
+      "value": 60.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_speed_command": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_running": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_speed": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p201_fault": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_requested_speed": {
+      "value": 60.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_speed_command": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_running": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_speed": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p202_fault": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_requested_speed": {
+      "value": 60.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_speed_command": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_running": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_speed": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "p301_fault": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv101_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv101_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv101_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv101_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv201_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv201_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv201_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv201_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv202_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv202_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv202_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv202_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv301_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv301_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv301_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv301_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv102_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv102_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv102_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv102_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv203_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv203_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv203_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv203_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv103_request": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv103_command": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv103_open": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "xv103_closed": {
+      "value": true,
+      "quality": "paused",
+      "forced": false
+    },
+    "fcv302_request": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "fcv302_command": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "fcv302_position": {
+      "value": 0.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt101_raw": {
+      "value": 16072,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt101_percent": {
+      "value": 58.13079071044922,
+      "quality": "paused",
+      "forced": false
+    },
+    "tk101_volume": {
+      "value": 697.5721435546875,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsl101": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsh101": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt201_raw": {
+      "value": 7256,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt201_percent": {
+      "value": 26.24421501159668,
+      "quality": "paused",
+      "forced": false
+    },
+    "tk201_volume": {
+      "value": 472.4278259277344,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsl201": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsh201": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt301_raw": {
+      "value": 4147,
+      "quality": "paused",
+      "forced": false
+    },
+    "lt301_percent": {
+      "value": 14.999276161193848,
+      "quality": "paused",
+      "forced": false
+    },
+    "tk301_volume": {
+      "value": 180.0,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsl301": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    },
+    "lsh301": {
+      "value": false,
+      "quality": "paused",
+      "forced": false
+    }
+  },
+  "equipment": {
+    "TK101": {
+      "volume_l": 697.5721591593892,
+      "volume": 697.5721591593892,
+      "level": 58.13101326328244,
+      "level_percent": 58.13101326328244,
+      "capacity_l": 1200.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT101": {
+      "value": 16072,
+      "quality": "good"
+    },
+    "LSL101": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH101": {
+      "value": false,
+      "quality": "good"
+    },
+    "TK201": {
+      "volume_l": 472.42784084061066,
+      "volume": 472.42784084061066,
+      "level": 26.245991157811705,
+      "level_percent": 26.245991157811705,
+      "capacity_l": 1800.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT201": {
+      "value": 7256,
+      "quality": "good"
+    },
+    "LSL201": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH201": {
+      "value": false,
+      "quality": "good"
+    },
+    "TK301": {
+      "volume_l": 180.0,
+      "volume": 180.0,
+      "level": 15.0,
+      "level_percent": 15.0,
+      "capacity_l": 1200.0,
+      "inflow_l_s": 0.0,
+      "outflow_l_s": 0.0,
+      "overflow_l": 0.0,
+      "high": false,
+      "low": false
+    },
+    "LT301": {
+      "value": 4147,
+      "quality": "good"
+    },
+    "LSL301": {
+      "value": false,
+      "quality": "good"
+    },
+    "LSH301": {
+      "value": false,
+      "quality": "good"
+    },
+    "P101": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P201": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P202": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "P301": {
+      "running": false,
+      "speed": 0.0,
+      "flow_l_s": 0.0,
+      "fault": false
+    },
+    "XV101": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV201": {
+      "position": 0.0074851806990352265,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV202": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV301": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV102": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV203": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "XV103": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "FCV302": {
+      "position": 0.0,
+      "open": false,
+      "closed": true,
+      "flow_l_s": 0.0,
+      "stuck": false
+    },
+    "IO_stop_healthy": {
+      "value": true,
+      "quality": "good"
+    },
+    "IO_p101_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p201_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p202_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_p301_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv101_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv201_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv202_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv301_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv102_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv203_request": {
+      "value": false,
+      "quality": "good"
+    },
+    "IO_xv103_request": {
+      "value": false,
+      "quality": "good"
+    }
+  },
+  "faults": {},
+  "events": [
+    {
+      "id": 77,
+      "timestamp": "2026-11-03T19:51:41.716+00:00",
+      "sim_time_s": 0.0,
+      "kind": "start_requested",
+      "message": "Démarrage demandé.",
+      "details": {
+        "mode": "opcua",
+        "target": "FAT-DEMO-20261103 @ opc.tcp://192.168.247.3:4840",
+        "step_ms": 100,
+        "speed": 1.0
+      }
+    },
+    {
+      "id": 78,
+      "timestamp": "2026-11-03T19:51:42.051+00:00",
+      "sim_time_s": 0.0,
+      "kind": "started",
+      "message": "Essai démarré. Mapping validé avant toute écriture.",
+      "details": {}
+    },
+    {
+      "id": 79,
+      "timestamp": "2026-11-03T19:51:42.052+00:00",
+      "sim_time_s": 0.0,
+      "kind": "model_boundary",
+      "message": "Le PLC garde seul le contrôle. Pause/reset du banc ne change pas l'état de la CPU.",
+      "details": {}
+    },
+    {
+      "id": 80,
+      "timestamp": "2026-11-03T19:51:42.055+00:00",
+      "sim_time_s": 0.0,
+      "kind": "scenario_force",
+      "message": "force : p201_request",
+      "details": {
+        "index": 0,
+        "scheduled_s": 0.0,
+        "target": "p201_request",
+        "value": true
+      }
+    },
+    {
+      "id": 81,
+      "timestamp": "2026-11-03T19:51:42.056+00:00",
+      "sim_time_s": 0.0,
+      "kind": "scenario_force",
+      "message": "force : xv201_request",
+      "details": {
+        "index": 1,
+        "scheduled_s": 0.0,
+        "target": "xv201_request",
+        "value": true
+      }
+    },
+    {
+      "id": 82,
+      "timestamp": "2026-11-03T19:51:43.570+00:00",
+      "sim_time_s": 1.5,
+      "kind": "scenario_fault",
+      "message": "fault : P201",
+      "details": {
+        "index": 2,
+        "scheduled_s": 1.5,
+        "target": "P201",
+        "value": {
+          "kind": "motor_trip"
+        }
+      }
+    },
+    {
+      "id": 83,
+      "timestamp": "2026-11-03T19:51:44.176+00:00",
+      "sim_time_s": 2.2,
+      "kind": "assertion_pass",
+      "message": "p201_fault eq True : OK",
+      "details": {
+        "index": 3,
+        "target": "p201_fault",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      }
+    },
+    {
+      "id": 84,
+      "timestamp": "2026-11-03T19:51:44.177+00:00",
+      "sim_time_s": 2.2,
+      "kind": "assertion_pass",
+      "message": "p201_running eq False : OK",
+      "details": {
+        "index": 4,
+        "target": "p201_running",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      }
+    },
+    {
+      "id": 85,
+      "timestamp": "2026-11-03T19:51:44.178+00:00",
+      "sim_time_s": 2.2,
+      "kind": "assertion_pass",
+      "message": "p201_command eq True : OK",
+      "details": {
+        "index": 5,
+        "target": "p201_command",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      }
+    },
+    {
+      "id": 86,
+      "timestamp": "2026-11-03T19:51:45.059+00:00",
+      "sim_time_s": 3.0,
+      "kind": "scenario_release",
+      "message": "release : p201_request",
+      "details": {
+        "index": 6,
+        "scheduled_s": 3.0,
+        "target": "p201_request",
+        "value": null
+      }
+    },
+    {
+      "id": 87,
+      "timestamp": "2026-11-03T19:51:45.062+00:00",
+      "sim_time_s": 3.0,
+      "kind": "scenario_release",
+      "message": "release : xv201_request",
+      "details": {
+        "index": 7,
+        "scheduled_s": 3.0,
+        "target": "xv201_request",
+        "value": null
+      }
+    },
+    {
+      "id": 88,
+      "timestamp": "2026-11-03T19:51:45.576+00:00",
+      "sim_time_s": 3.5,
+      "kind": "scenario_clear_fault",
+      "message": "clear_fault : P201",
+      "details": {
+        "index": 8,
+        "scheduled_s": 3.5,
+        "target": "P201",
+        "value": null
+      }
+    },
+    {
+      "id": 89,
+      "timestamp": "2026-11-03T19:51:46.165+00:00",
+      "sim_time_s": 4.2,
+      "kind": "assertion_pass",
+      "message": "p201_fault eq False : OK",
+      "details": {
+        "index": 9,
+        "target": "p201_fault",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 4.2,
+        "evaluated_s": 4.2,
+        "quality": "good"
+      }
+    },
+    {
+      "id": 90,
+      "timestamp": "2026-11-03T19:51:46.165+00:00",
+      "sim_time_s": 4.2,
+      "kind": "assertion_pass",
+      "message": "p201_running eq False : OK",
+      "details": {
+        "index": 10,
+        "target": "p201_running",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 4.2,
+        "evaluated_s": 4.2,
+        "quality": "good"
+      }
+    },
+    {
+      "id": 91,
+      "timestamp": "2026-11-03T19:51:46.971+00:00",
+      "sim_time_s": 5.0,
+      "kind": "scenario_completed",
+      "message": "Scénario terminé ; écritures arrêtées. Verdict humain à renseigner.",
+      "details": {
+        "assertions_passed": 5,
+        "assertions_total": 5,
+        "guided_steps_reviewed": 0
+      }
+    }
+  ],
+  "series": [
+    {
+      "time_s": 0.1,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": false,
+        "p201_speed_command": 0.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": false,
+        "xv201_open": false,
+        "xv201_closed": true,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16589,
+        "lt101_percent": 63.49826431274414,
+        "tk101_volume": 720.0,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 6912,
+        "lt201_percent": 25.0,
+        "tk201_volume": 450.0,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 0.6,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": true,
+        "p201_speed": 55.07490158081055,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": true,
+        "xv201_open": false,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16440,
+        "lt101_percent": 59.59925079345703,
+        "tk101_volume": 713.5469360351562,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7011,
+        "lt201_percent": 25.26765251159668,
+        "tk201_volume": 456.45306396484375,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 1.1,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": true,
+        "p201_speed": 59.59572219848633,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": true,
+        "xv201_open": false,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16238,
+        "lt101_percent": 58.87948226928711,
+        "tk101_volume": 704.7559814453125,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7146,
+        "lt201_percent": 25.74869728088379,
+        "tk201_volume": 465.2440185546875,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 1.6,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": true,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": true,
+        "xv201_open": true,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 2.1,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": true,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": true,
+        "xv201_open": true,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 2.6,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": true,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": true,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": true,
+        "xv201_command": true,
+        "xv201_open": true,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 3.1,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": false,
+        "p201_requested_speed": 60.0,
+        "p201_command": true,
+        "p201_speed_command": 60.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": true,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": false,
+        "xv201_command": true,
+        "xv201_open": true,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 3.6,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": false,
+        "p201_requested_speed": 60.0,
+        "p201_command": false,
+        "p201_speed_command": 0.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": false,
+        "xv201_command": false,
+        "xv201_open": false,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 4.1,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": false,
+        "p201_requested_speed": 60.0,
+        "p201_command": false,
+        "p201_speed_command": 0.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": false,
+        "xv201_command": false,
+        "xv201_open": false,
+        "xv201_closed": false,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    },
+    {
+      "time_s": 4.6,
+      "values": {
+        "stop_healthy": true,
+        "p101_request": false,
+        "p101_requested_speed": 60.0,
+        "p101_command": false,
+        "p101_speed_command": 0.0,
+        "p101_running": false,
+        "p101_speed": 0.0,
+        "p101_fault": false,
+        "p201_request": false,
+        "p201_requested_speed": 60.0,
+        "p201_command": false,
+        "p201_speed_command": 0.0,
+        "p201_running": false,
+        "p201_speed": 0.0,
+        "p201_fault": false,
+        "p202_request": false,
+        "p202_requested_speed": 60.0,
+        "p202_command": false,
+        "p202_speed_command": 0.0,
+        "p202_running": false,
+        "p202_speed": 0.0,
+        "p202_fault": false,
+        "p301_request": false,
+        "p301_requested_speed": 60.0,
+        "p301_command": false,
+        "p301_speed_command": 0.0,
+        "p301_running": false,
+        "p301_speed": 0.0,
+        "p301_fault": false,
+        "xv101_request": false,
+        "xv101_command": false,
+        "xv101_open": false,
+        "xv101_closed": true,
+        "xv201_request": false,
+        "xv201_command": false,
+        "xv201_open": false,
+        "xv201_closed": true,
+        "xv202_request": false,
+        "xv202_command": false,
+        "xv202_open": false,
+        "xv202_closed": true,
+        "xv301_request": false,
+        "xv301_command": false,
+        "xv301_open": false,
+        "xv301_closed": true,
+        "xv102_request": false,
+        "xv102_command": false,
+        "xv102_open": false,
+        "xv102_closed": true,
+        "xv203_request": false,
+        "xv203_command": false,
+        "xv203_open": false,
+        "xv203_closed": true,
+        "xv103_request": false,
+        "xv103_command": false,
+        "xv103_open": false,
+        "xv103_closed": true,
+        "fcv302_request": 0.0,
+        "fcv302_command": 0.0,
+        "fcv302_position": 0.0,
+        "lt101_raw": 16072,
+        "lt101_percent": 58.13079071044922,
+        "tk101_volume": 697.5721435546875,
+        "lsl101": false,
+        "lsh101": false,
+        "lt201_raw": 7256,
+        "lt201_percent": 26.24421501159668,
+        "tk201_volume": 472.4278259277344,
+        "lsl201": false,
+        "lsh201": false,
+        "lt301_raw": 4147,
+        "lt301_percent": 14.999276161193848,
+        "tk301_volume": 180.0,
+        "lsl301": false,
+        "lsh301": false
+      }
+    }
+  ],
+  "result": {
+    "verdict": "not_evaluated",
+    "comment": ""
+  },
+  "scenario": {
+    "id": "demo-pump-fault",
+    "state": "completed",
+    "completed_steps": 11,
+    "completed_step_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "total_steps": 11,
+    "assertions": [
+      {
+        "index": 3,
+        "target": "p201_fault",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      },
+      {
+        "index": 4,
+        "target": "p201_running",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      },
+      {
+        "index": 5,
+        "target": "p201_command",
+        "operator": "eq",
+        "expected": true,
+        "actual": true,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 2.2,
+        "evaluated_s": 2.2,
+        "quality": "good"
+      },
+      {
+        "index": 9,
+        "target": "p201_fault",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 4.2,
+        "evaluated_s": 4.2,
+        "quality": "good"
+      },
+      {
+        "index": 10,
+        "target": "p201_running",
+        "operator": "eq",
+        "expected": false,
+        "actual": false,
+        "passed": true,
+        "message": "",
+        "scheduled_s": 4.2,
+        "evaluated_s": 4.2,
+        "quality": "good"
+      }
+    ]
+  },
+  "guided_steps": [],
+  "pulses": {},
+  "error": null,
+  "write_count": 2800,
+  "lag_ms": 0.0,
+  "model_warnings": [
+    "La topologie et l'identité doivent être qualifiées sur le poste Siemens ; l'ApplicationUri ne prouve pas à elle seule qu'une CPU est virtuelle.",
+    "Les lignes sont graphiques. Les débits utilisent cuve, sens et circuit explicitement configurés, sans solveur hydraulique général."
+  ]
+}

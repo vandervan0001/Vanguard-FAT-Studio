@@ -24,14 +24,72 @@ test.beforeEach(async ({ request, page }) => {
 async function boot(page: Page) {
   await page.goto('/');
   await expect(page.getByLabel('Nom du projet')).toHaveValue('TK-101 · Banc de remplissage');
-  await expect(page.locator('.react-flow__node')).toHaveCount(8);
+  await expect(page.locator('.react-flow__node')).toHaveCount(7);
 }
+
+test('charger le laboratoire public, commander une pompe et injecter son défaut', async ({ page, request }, testInfo) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await boot(page);
+  await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();
+  await page.getByRole('button', { name: 'Charger le laboratoire', exact: true }).click();
+  const project: Project = await (await request.get('/api/project')).json();
+  await expect(page.getByLabel('Nom du projet')).toHaveValue(project.name);
+  await expect(page.locator('.react-flow__node')).toHaveCount(project.equipment.filter(item => !['digital_input', 'indicator'].includes(item.type)).length);
+  expect(project.equipment.filter(item => item.type === 'tank')).toHaveLength(3);
+  expect(project.equipment.filter(item => ['pump', 'pump_vfd'].includes(item.type))).toHaveLength(4);
+  expect(project.tags.every(tag => !tag.node_id && !tag.plc_address)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('public-laboratory.png') });
+  await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
+  await expect(page.locator('.status-badge')).toHaveText('En cours');
+  await expect.poll(async () => (await snapshot(request)).sim_time_s).toBeGreaterThan(.3);
+  await page.locator('.digital-control[data-tag="p101_request"] .digital-push').dblclick();
+  await expect.poll(async () => (await snapshot(request)).tags.p101_command.value).toBe(true);
+  await page.locator('.react-flow__node[data-id="P101"]').click();
+  await page.getByRole('button', { name: 'Injecter', exact: true }).click();
+  await expect.poll(async () => (await snapshot(request)).tags.p101_fault.value).toBe(true);
+  await expect.poll(async () => (await snapshot(request)).tags.p101_running.value).toBe(false);
+  await page.getByRole('button', { name: 'Arrêter l’essai', exact: true }).click();
+  expect(errors).toEqual([]);
+});
+
+test('recharger un scénario automatique en pause conserve sa sélection et son plan', async ({ page, request }) => {
+  expect((await mutation(request, '/pilot/load')).ok()).toBeTruthy();
+  await page.goto('/');
+  const project: Project = await (await request.get('/api/project')).json();
+  const scenario = project.scenarios.find(item => item.id === 'demo-stop')!;
+  await expect(page.getByLabel('Nom du projet')).toHaveValue(project.name);
+  await page.getByLabel('Scénario', { exact: true }).selectOption(scenario.id);
+  await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
+  await expect.poll(async () => (await snapshot(request)).sim_time_s).toBeGreaterThanOrEqual(1);
+  await page.getByRole('button', { name: 'Mettre en pause', exact: true }).click();
+  const paused = await snapshot(request);
+  await page.reload();
+  await expect(page.getByLabel('Scénario', { exact: true })).toHaveValue(scenario.id);
+  await expect(page.locator('.palette')).toBeVisible();
+  await expect(page.getByLabel('Scénario', { exact: true })).toBeEnabled();
+  await expect(page.locator('.fat-run h3')).toHaveText(scenario.name);
+  await expect(page.locator('.fat-timeline .step-result.passed').first()).toContainText('Conforme');
+  await expect(page.locator('.fat-timeline .step-result.passed').first()).toContainText('Lu : TRUE');
+  await page.getByRole('button', { name: 'Scénarios', exact: true }).click();
+  await expect(page.getByLabel('Nom du scénario')).toHaveValue(scenario.name);
+  await expect(page.getByLabel('Nom du scénario')).toBeEnabled();
+  await page.getByRole('button', { name: 'P&ID', exact: true }).click();
+  await expect(page.getByLabel('Scénario', { exact: true })).toHaveValue(scenario.id);
+  const reloaded = await snapshot(request);
+  expect(reloaded.run_id).toBe(paused.run_id);
+  expect(reloaded.scenario.id).toBe(scenario.id);
+  expect(reloaded.sim_time_s).toBe(paused.sim_time_s);
+  await page.getByRole('button', { name: 'Arrêter l’essai', exact: true }).click();
+  await expect(page.getByLabel('Scénario', { exact: true })).toHaveValue(scenario.id);
+});
 
 test('éditer un vrai P&ID, sauvegarder puis recharger conserve les propriétés', async ({ page, request }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await boot(page);
   await page.screenshot({ path: testInfo.outputPath('pid-reviewed.png') });
+  await page.getByRole('button', { name: 'Construire', exact: true }).click();
   await page.locator('.react-flow__node[data-id="P101"]').click();
   await page.getByLabel('Nom / repère').fill('P-101 test');
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
@@ -62,7 +120,7 @@ test('essai réel : boucle fermée, défaut, forçage, pause/reprise et exports'
 
   await page.locator('.react-flow__node[data-id="LT101"]').click();
   await page.getByLabel('Forçage LevelPct').fill('42');
-  await page.getByRole('button', { name: 'Forcer', exact: true }).click();
+  await page.locator('.analog-control[data-tag="level"]').getByRole('button', { name: 'Forcer', exact: true }).click();
   await expect.poll(async () => (await snapshot(request)).tags.level.forced).toBe(true);
   await expect.poll(async () => (await snapshot(request)).tags.level.value).toBe(42);
   await page.getByRole('button', { name: 'Libérer LevelPct', exact: true }).click();
@@ -121,10 +179,10 @@ test('un JSON de scénario invalide reste un brouillon et ne casse pas React', a
 
 test('un import invalide préserve le projet affiché et enregistré', async ({ page, request }) => {
   await boot(page);
-  await page.locator('input[type="file"][accept=".json,application/json"]').setInputFiles({ name: 'invalide.json', mimeType: 'application/json', buffer: Buffer.from('{"id":"bad","name":"Ne pas charger","equipment":"oops"}') });
+  await page.locator('.projectbar input[type="file"][accept=".json,application/json"]').setInputFiles({ name: 'invalide.json', mimeType: 'application/json', buffer: Buffer.from('{"id":"bad","name":"Ne pas charger","equipment":"oops"}') });
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page.getByLabel('Nom du projet')).toHaveValue('TK-101 · Banc de remplissage');
-  await expect(page.locator('.react-flow__node')).toHaveCount(8);
+  await expect(page.locator('.react-flow__node')).toHaveCount(7);
   expect((await (await request.get('/api/project')).json()).id).toBe('tank-demo');
 });
 
@@ -139,7 +197,7 @@ test('un autre onglet change de projet : commandes bloquées et brouillon récup
   const filePromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Télécharger mon brouillon', exact: true }).click();
   const data = JSON.parse(await readFile((await (await filePromise).path())!, 'utf8'));
-  expect(data.name).toBe('Brouillon à conserver');
+  expect(data.project.name).toBe('Brouillon à conserver');
   expect((await (await request.get('/api/project')).json()).name).toBe('Autre onglet');
 });
 

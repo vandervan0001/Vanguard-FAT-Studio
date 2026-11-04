@@ -1,0 +1,10 @@
+{
+  "utc": "2026-11-03T21:34:34.533761+00:00",
+  "previous_run_id": "run-84fc4a8c7b974bd2a842381d398e1763",
+  "prior_status": "paused",
+  "final_status": "stopped",
+  "human_verdict": "not_evaluated",
+  "steps_reviewed": 0,
+  "same_data_dir": true,
+  "only_reserved_service_restarted": true
+}

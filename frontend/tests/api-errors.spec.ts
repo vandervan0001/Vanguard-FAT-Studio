@@ -35,6 +35,7 @@ test('un renouvellement de session ne redirige pas une action vers un autre proj
   const headers: Record<string, string>[] = [];
   let attempts = 0;
   globalThis.fetch = async (input, init) => {
+    if (String(input) === '/api/project') return new Response('{"id":"premier-projet","equipment":[]}', { status: 200, headers: { 'X-FAT-Project-Revision': 'premiere-revision' } });
     if (String(input) === '/api/session') {
       setProjectContext('autre-projet');
       setRunContext('autre-essai');
@@ -43,10 +44,45 @@ test('un renouvellement de session ne redirige pas une action vers un autre proj
     headers.push(init?.headers as Record<string, string>);
     return ++attempts === 1 ? new Response('{"detail":"Session expirée"}', { status: 403 }) : new Response('{"detail":"Contexte périmé"}', { status: 409 });
   };
-  await expect(api('/result', 'POST', { verdict: 'fail', comment: 'Ancien essai' })).rejects.toThrow('Contexte périmé');
+  await api('/project');
+  await expect(api('/pilot/load', 'POST', {})).rejects.toThrow('Contexte périmé');
   expect(headers).toHaveLength(2);
   for (const header of headers) {
     expect(header['X-FAT-Project-ID']).toBe('premier-projet');
+    expect(header['X-FAT-Project-Revision']).toBe('premiere-revision');
     expect(header['X-FAT-Run-ID']).toBe('premier-essai');
   }
+});
+
+test('restaurer une archive conserve les octets et le contexte capturés après renouvellement de session', async () => {
+  setProjectContext('projet-archive'); setRunContext('essai-archive');
+  const archive = new Blob([new Uint8Array([80, 75, 3, 4, 0, 255])], { type: 'application/zip' });
+  const calls: RequestInit[] = [];
+  globalThis.fetch = async (input, init) => {
+    if (String(input) === '/api/project') return new Response('{"id":"projet-archive","equipment":[]}', { headers: { 'X-FAT-Project-Revision': 'revision-espace-original' } });
+    if (String(input) === '/api/session') { setProjectContext('autre-espace'); setRunContext(null); return new Response('{"token":"archive-renouvelee"}'); }
+    calls.push(init!);
+    return calls.length === 1 ? new Response('{"detail":"Session expirée"}', { status: 403 }) : new Response('{"detail":"Contexte périmé"}', { status: 409 });
+  };
+  await api('/project');
+  await expect(api('/project/archive/import', 'POST', archive)).rejects.toThrow('Contexte périmé');
+  expect(calls).toHaveLength(2);
+  for (const call of calls) {
+    expect(call.body).toBe(archive);
+    expect(Array.from(new Uint8Array(await (call.body as Blob).arrayBuffer()))).toEqual([80, 75, 3, 4, 0, 255]);
+    expect(call.headers).toMatchObject({ 'Content-Type': 'application/zip', 'X-FAT-Project-ID': 'projet-archive', 'X-FAT-Project-Revision': 'revision-espace-original', 'X-FAT-Run-ID': 'essai-archive' });
+  }
+});
+
+test('ouvrir le dossier déjà actif conserve le run annoncé par le serveur', async () => {
+  setProjectContext('projet-identique'); setRunContext('essai-conserve');
+  const stops: Record<string, string>[] = [];
+  globalThis.fetch = async (input, init) => {
+    if (String(input) === '/api/run/stop') { stops.push(init!.headers as Record<string, string>); return new Response('{}'); }
+    return new Response('{"id":"projet-identique","equipment":[]}', { headers: { 'X-FAT-Project-Revision': 'revision-espace', 'X-FAT-Run-ID': 'essai-conserve' } });
+  };
+  await api('/project');
+  await api('/workspaces/default/open', 'POST', {});
+  await api('/run/stop', 'POST', {});
+  expect(stops[0]).toMatchObject({ 'X-FAT-Project-ID': 'projet-identique', 'X-FAT-Project-Revision': 'revision-espace', 'X-FAT-Run-ID': 'essai-conserve' });
 });

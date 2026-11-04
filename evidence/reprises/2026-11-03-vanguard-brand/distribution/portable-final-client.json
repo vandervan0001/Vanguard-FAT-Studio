@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "application": "Vanguard FAT Studio",
+  "public_client_calls": 19,
+  "commands": [
+    {
+      "command": "context",
+      "exit_code": 0
+    },
+    {
+      "command": "project",
+      "exit_code": 0
+    },
+    {
+      "command": "health",
+      "exit_code": 0
+    },
+    {
+      "command": "state",
+      "exit_code": 0
+    },
+    {
+      "command": "validate",
+      "exit_code": 0
+    },
+    {
+      "command": "start",
+      "exit_code": 0
+    },
+    {
+      "command": "pause",
+      "exit_code": 0
+    },
+    {
+      "command": "export",
+      "exit_code": 0
+    },
+    {
+      "command": "export",
+      "exit_code": 0
+    },
+    {
+      "command": "export",
+      "exit_code": 0
+    },
+    {
+      "command": "stop",
+      "exit_code": 0
+    },
+    {
+      "command": "reset",
+      "exit_code": 0
+    },
+    {
+      "command": "archive-export",
+      "exit_code": 0
+    },
+    {
+      "command": "archive-import",
+      "exit_code": 0
+    },
+    {
+      "command": "state",
+      "exit_code": 0
+    },
+    {
+      "command": "start",
+      "exit_code": 0
+    },
+    {
+      "command": "step-execute",
+      "exit_code": 0
+    },
+    {
+      "command": "state",
+      "exit_code": 0
+    },
+    {
+      "command": "stop",
+      "exit_code": 0
+    }
+  ],
+  "baseline_unchanged_by_reads": true,
+  "exports": [
+    "json",
+    "csv",
+    "report"
+  ],
+  "archive_restored_idle": true,
+  "guided_wire_value": 13824,
+  "step_observations": 0,
+  "fat_verdict": "not_evaluated",
+  "temporary_service_closed": true,
+  "scope": "Portable runtime, public assistant only, temporary demo data, no Siemens or CPU"
+}

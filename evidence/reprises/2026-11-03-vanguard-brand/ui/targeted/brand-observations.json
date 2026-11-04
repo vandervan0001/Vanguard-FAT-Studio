@@ -1,0 +1,17 @@
+{
+  "brand": {
+    "naturalWidth": 1180,
+    "naturalHeight": 300,
+    "width": 154,
+    "height": 39,
+    "font": "Geist, \"Segoe UI\", sans-serif",
+    "fontsLoaded": [
+      true,
+      true,
+      true
+    ]
+  },
+  "browser_errors": [],
+  "external_requests": [],
+  "mode": "temporary demo, port 8766; no PLC; no human observation"
+}

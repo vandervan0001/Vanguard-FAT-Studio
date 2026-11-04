@@ -1,51 +1,42 @@
-# FAT Studio — démarrer ou reprendre avec Codex
+# Vanguard FAT Studio : démarrer avec un assistant
 
-Ce dossier contient le projet complet et les éléments nécessaires pour le reprendre sans l'historique de la conversation ChatGPT.
+Pour utiliser le banc, commencer par [INSTALLATION.md](docs/INSTALLATION.md) et le [guide utilisateur](docs/USER_GUIDE.md). Pour le piloter avec votre propre IA, suivre [AI_QUICKSTART.md](docs/AI_QUICKSTART.md). [AI_CONTROL.md](docs/AI_CONTROL.md) décrit le contrat canonique CLI/API ; [AGENTS.md](AGENTS.md), [CODEX.md](CODEX.md) et [CLAUDE.md](CLAUDE.md) donnent les consignes communes.
 
-Sur le poste `C:\FAT_Studio`, la [préparation Windows sans Siemens](docs/WINDOWS_LOCAL_SETUP.md) décrit le lancement, les outils installés et les dépendances TIA déjà récupérées. Les résultats propres à ce poste sont dans [l'état courant](docs/codex/ETAT_REPRISE.md).
+Vanguard FAT Studio fournit un environnement FAT, des formats JSON et une démo PLC passive. Il ne fournit pas de standard de programmation utilisateur. Le client IA reste externe ; aucune clé API de modèle n’est nécessaire dans le banc.
 
-## Pour Tai : trois étapes
+## Reprendre les sources
 
-1. Extraire **tout** le ZIP et ouvrir le dossier `fat-studio` dans Codex, ou donner accès à ce dossier à l'agent de code utilisé.
-2. Copier le contenu de [docs/codex/PROMPT_CODEX.md](docs/codex/PROMPT_CODEX.md) dans une nouvelle conversation Codex.
-3. Laisser Codex lire [l'état de reprise](docs/codex/ETAT_REPRISE.md), vérifier le poste et continuer le travail depuis l'existant. Le prompt lui demande de conserver le kit intact et de créer une copie source avant de modifier des fichiers couverts par son manifeste.
+Lire [AGENTS.md](AGENTS.md), [l’état de reprise](docs/codex/ETAT_REPRISE.md) et les notes locales disponibles. Examiner `git status`, le diff et les derniers commits avant toute modification. Préserver les brouillons et essais présents. Une distribution avec un manifeste est une livraison vérifiée : créer une copie source distincte avant de modifier son contenu.
 
-**Après une interruption ou dans une nouvelle conversation**, utiliser [docs/codex/PROMPT_REPRISE_CODEX.md](docs/codex/PROMPT_REPRISE_CODEX.md). Il demande de relire l'état réel des fichiers, les commits et la dernière note de session avant de poursuivre.
+Sous Windows, le lanceur source `Start-FAT.cmd` utilise Python 3.12 x64. Le portable possède son propre `runtime\python.exe` et ne sert pas d’environnement de développement. Sous Linux/macOS, utiliser Python 3.12 et `bash scripts/start.sh` depuis une copie source.
 
-**Sur le PC Windows équipé de Siemens**, utiliser le [prompt de validation TIA V20/V21](docs/codex/PROMPT_VALIDATION_WINDOWS_TIA_V20_V21.md). Il reprend la référence 0.2.1 et conduit les builds natifs, les essais Openness/MCP et la qualification sur instance virtuelle, avec des résultats distincts pour chaque version.
+Le paquet est `vanguard-fat-studio`, le module reste `fat_studio`. Les deux commandes `vanguard-fat-studio` et `fat-studio` pointent vers le même CLI. Préserver `FAT_STUDIO_DATA`, les dossiers existants, les identités OPC UA et les formats `fat-studio/*` ; un changement de marque ne migre pas les données. Le dépôt courant est [Vanguard-FAT-Studio](https://github.com/vandervan0001/Vanguard-FAT-Studio). Les preuves historiques gardent les noms et liens relevés lors de leur exécution.
 
-## Contenu de l'archive initiale 0.1.1
-
-| Élément | Emplacement |
-| --- | --- |
-| Prompt initial complet | `docs/codex/PROMPT_CODEX.md` |
-| Prompt de reprise après interruption | `docs/codex/PROMPT_REPRISE_CODEX.md` |
-| État initial, prochaines tâches et commandes Windows/Bash | `docs/codex/ETAT_REPRISE.md` |
-| Consignes du dépôt pour les agents | `AGENTS.md` |
-| Code, frontend et interface compilée | `fat_studio/`, `integrations/`, `frontend/` |
-| Tests et preuves de la version 0.1.1 | `tests/`, `frontend/tests/`, `evidence/` |
-| Historique Git et sauvegarde autonome | `.git/` et `FAT-Studio.bundle` dans le ZIP |
-| Exécution Windows hors ligne | `Start-FAT.cmd`, `wheelhouse/`, `offline-manifest.json` |
-| Paquet Python compilé | `dist/local_fat_studio-0.1.1-py3-none-any.whl` |
-
-L'application actuelle est **0.2.1** : [choix V20/V21 et profils d'ingénierie](docs/TIA_VERSIONS.md), puis correctif d'encodage Windows. Les tags `v0.1.1` et `v0.1.1-codex-handoff` conservent la référence et la passation initiales ; l'état courant figure dans [ETAT_REPRISE.md](docs/codex/ETAT_REPRISE.md). Les résultats de référence ci-dessous décrivent 0.1.1 ; les nouveaux résultats sont enregistrés séparément.
-
-## Essayer directement la démonstration
-
-Sous Windows avec **Python 3.12 x64**, lancer `Start-FAT.cmd`. Node.js n'est pas requis pour l'interface précompilée. Le kit contient les dépendances Python du runtime ; il ne contient pas l'interpréteur Python, Siemens, .NET, le serveur MCP TIA, les dépendances de développement npm ou le navigateur Playwright.
-
-Sous macOS/Linux, ou pour développer, utiliser une copie source sans les wheels Windows. Depuis le dossier extrait, avec Git installé :
-
-```text
-git clone FAT-Studio.bundle ../fat-studio-source
+```powershell
+.\.venv\Scripts\python.exe -m fat_studio doctor --json
+.\.venv\Scripts\python.exe -m fat_studio.assistant --help
+.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\python.exe -m ruff check fat_studio integrations tests scripts public_distribution.py build_public.py
 ```
 
-Choisir un autre nom si cette destination existe déjà. Ouvrir ensuite `fat-studio-source` dans Codex. Le clone conserve les sources, les prompts, les preuves et les tags ; son éventuel remote `origin` désigne le **bundle local**, pas un dépôt GitHub. Les dépendances de développement s'installent selon [ETAT_REPRISE.md](docs/codex/ETAT_REPRISE.md).
+Les outils de développement viennent de `requirements-dev.lock`. Pour l’interface, utiliser `npm ci`, `npm run typecheck`, `npm run build` et `npm test` depuis `frontend/`, puis copier les assets avec `python scripts/build-web.py`. Tester le bundle livré sur des données temporaires. Une suite navigateur ne doit jamais viser une instance contenant les essais d’un utilisateur.
 
-## État de validation transmis
+## Construire une distribution publique
 
-La référence 0.1.1 a obtenu **289 tests Python**, **31 tests frontend/API cliente** et **12 assertions de démonstration réussis**, ainsi que deux installations propres sous Linux. À cette remise initiale, les scripts Windows n'avaient pas été exécutés et aucun dépôt GitHub n'avait été publié. Voir [VERIFICATION.md](evidence/VERIFICATION.md).
+`public-distribution.json` énumère les fichiers autorisés. `public_distribution.py`, les hooks de setuptools et les constructeurs de kits refusent un module inattendu ou un contenu privé détecté. La liste est à relire lorsqu’un fichier public est ajouté ; ne pas la remplacer par une copie récursive du dépôt.
 
-La reprise 0.2.1 est publiée dans le dépôt privé [vandervan0001/FAT-Studio](https://github.com/vandervan0001/FAT-Studio). Sa CI a réussi **418 tests Python et 33 tests frontend sur chacun des systèmes Windows et Ubuntu**, puis l'installation d'un kit runtime Windows neuf sans index pip. Les [preuves datées](evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) identifient le commit testé. Le portage natif V20 et la qualification TIA/PLCSIM des deux versions restent à effectuer sur le poste Siemens.
+```powershell
+.\.venv\Scripts\python.exe public_distribution.py check
+.\.venv\Scripts\python.exe -m build --no-isolation
+.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.2.1-py3-none-any.whl
+```
 
-Le ZIP contient le logiciel et ses exemples. Les projets et essais personnels déjà créés sur un autre poste, les licences, les certificats, les secrets et un vrai projet TIA utilisateur ne sont pas dans cette archive.
+L’assemblage Windows portable et le kit source hors ligne sont documentés dans [INSTALLATION.md](docs/INSTALLATION.md). Ils utilisent une destination neuve, des dépendances verrouillées et un manifeste de tailles/SHA-256. Le manifeste contrôle l’intégrité du transfert ; il ne remplace pas la confiance dans l’origine de l’archive.
+
+Les sources et données propres aux utilisateurs restent en dehors des paquets publics. Les notes de travail privées et le journal multi-agent ne sont pas redistribués. Préserver les preuves historiques dans l’espace de travail ; distribuer uniquement les preuves relues et explicitement ajoutées à la sélection publique. Ne pas transférer la qualification d’un ancien programme à la démo actuelle.
+
+## TIA et cible virtuelle
+
+Le banc OPC UA, le programme de démonstration et l’ingénierie TIA sont distincts. Lire [DEMO_PLC.md](docs/DEMO_PLC.md), [PLCSIM_SETUP.md](docs/PLCSIM_SETUP.md), [TIA_VERSIONS.md](docs/TIA_VERSIONS.md) et [TIA_MCP.md](docs/TIA_MCP.md) selon le besoin. Czarnak `TiaMcpServer` 4.3.0 reste épinglé ; l’accès IA est en lecture seule. Un import/une compilation suit les confirmations du CLI humain. Aucun chargement ni RUN/STOP CPU n’est autorisé par ce document.
+
+Les projets et scénarios s’échangent au [format JSON versionné](docs/FORMAT.md). Le projet entier se conserve dans une [archive restaurable](docs/PROJECT_ARCHIVES.md). Un fichier reçu n’autorise ni cible machine ni conclusion FAT humaine. Toute preuve doit préciser la plateforme, la version et l’opération réellement exécutée.

@@ -1,0 +1,16 @@
+{
+  "utc": "2026-11-03T21:26:13.186964+00:00",
+  "scope": "Actual existing isolated Siemens OPC UA, renamed client, read only",
+  "client_name": "Vanguard FAT Studio local virtual-PLC test client",
+  "client_uri": "urn:fat-studio:client",
+  "mapped_nodes_validated": 75,
+  "output_values_read": 19,
+  "server_certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391",
+  "application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+  "security_policy": "Basic256Sha256",
+  "message_security": "SignAndEncrypt",
+  "input_writes": 0,
+  "cpu_command_sent": false,
+  "human_verdict_created": false,
+  "passed": true
+}

@@ -8,9 +8,21 @@
 *.html text eol=lf
 *.svg text eol=lf
 *.scl text eol=lf
+examples/engineering-factory/**/*.scl.in text eol=lf
+examples/engineering-factory/**/LICENSE text eol=lf
 *.sh text eol=lf
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
 *.whl binary
 *.zip binary
 *.png binary
+# Preserve the bytes of the packaged candidate library across Windows checkouts.
+integrations/standard_library/LICENSE text eol=lf
+# The delivery receipts hash these files as captured.
+evidence/reprises/2026-11-03-public-demo/** -text whitespace=cr-at-eol
+evidence/reprises/2026-11-03-vanguard-brand/** -text whitespace=cr-at-eol
+media/vanguard-fat-studio/** -text whitespace=cr-at-eol
+frontend/public/brand/** -text whitespace=cr-at-eol
+fat_studio/web/brand/** -text whitespace=cr-at-eol
+**/OFL.txt whitespace=cr-at-eol,-blank-at-eol
+evidence/reprises/2026-11-03-public-demo/ui/final/frontend-tests-attempt1.log whitespace=cr-at-eol,-blank-at-eol

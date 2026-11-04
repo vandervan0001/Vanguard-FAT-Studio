@@ -22,14 +22,19 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from . import __version__
+from .branding import APP_NAME
 from .catalog import CATALOG
 from .demo import demo_project
+from .demo_lab import demo_lab_project
+from .exchange import ProjectPackage, ScenarioPackage, import_scenarios, project_package, read_project, scenarios_package
+from .archive import capture_archive, export_archive, prepare_archive
 from .mapping import export_mapping, import_mapping
-from .models import Project, validate_project
+from .models import PreparedAction, Project, validate_project
 from .reporting import csv_stream, html_report, json_stream
 from .runtime import RunConflict, Runtime
 from .security import MachinePolicy, TargetDenied
 from .storage import Store
+from .workspaces import active_workspace, list_workspaces, restore_workspace, select_workspace, workspace_path, workspace_summary
 
 
 class Payload(BaseModel):
@@ -48,6 +53,24 @@ class StartRequest(Payload):
 class ForceRequest(Payload):
     tag_id: str = Field(min_length=1, max_length=80)
     value: Any
+
+
+class PulseRequest(Payload):
+    tag_id: str = Field(min_length=1, max_length=80)
+    value: bool
+    duration_ms: int = Field(default=300, ge=100, le=2000)
+
+
+class StepObservationRequest(Payload):
+    verdict: Literal["pass", "fail"]
+    observation: str = Field(default="", max_length=4000)
+
+
+class StimulusRequest(Payload):
+    tag_id: str = Field(min_length=1, max_length=80)
+    value: Any
+    unit: Literal["native", "mA", "V", "engineering", "percent"] = "native"
+    diagnostic: bool = False
 
 
 class FaultRequest(Payload):
@@ -69,6 +92,11 @@ class MappingRequest(Payload):
     csv: str = Field(max_length=2_000_000)
 
 
+class ScenarioImportRequest(Payload):
+    package: ScenarioPackage
+    mode: Literal["merge", "replace"] = "merge"
+
+
 def default_data_dir() -> Path:
     if os.environ.get("FAT_STUDIO_DATA"):
         return Path(os.environ["FAT_STUDIO_DATA"]).expanduser()
@@ -83,22 +111,23 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
 
     @asynccontextmanager
     async def lifespan(application: FastAPI):
-        store = Store(folder)
+        workspace_id = active_workspace(folder)
+        store = Store(workspace_path(folder, workspace_id))
         runtime = None
         try:
             startup_error = None
             try:
                 project = store.last_project()
             except (ValueError, OSError, KeyError) as exc:
-                project = demo_project()
+                project = demo_lab_project()
                 project.id = "recovery-" + uuid.uuid4().hex[:12]
                 project.name = "Récupération — " + project.name
                 startup_error = "Le dernier projet est illisible et a été conservé intact. " + str(exc)
             needs_save = project is None or startup_error is not None
             if project is None:
-                project = demo_project()
+                project = demo_lab_project()
             policy = MachinePolicy(folder / "machine-policy.json")
-            runtime = Runtime(store, project, policy, adapter_factory)
+            runtime = Runtime(store, project, policy, adapter_factory, context_scope=str(store.root))
             # Opening an existing project is not a save: retain its previous revision.
             if needs_save:
                 store.save_project(project)
@@ -108,17 +137,32 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
             application.state.store = store
             application.state.runtime = runtime
             application.state.policy = policy
+            application.state.workspace_id = workspace_id
             application.state.mutations = asyncio.Lock()
             yield
         finally:
             try:
-                if runtime:
-                    await runtime.close()
+                current_runtime = getattr(application.state, "runtime", runtime)
+                if current_runtime:
+                    await current_runtime.close()
             finally:
-                store.close()
+                getattr(application.state, "store", store).close()
 
-    app = FastAPI(title="FAT Studio local API", version=__version__, lifespan=lifespan,
+    app = FastAPI(title=f"{APP_NAME} local API", version=__version__, lifespan=lifespan,
                   docs_url=None, redoc_url=None, openapi_url="/api/openapi.json")
+
+    def context_conflict(request: Request):
+        runtime = app.state.runtime
+        project_id = request.headers.get("x-fat-project-id")
+        if project_id is not None and project_id != runtime.project.id:
+            return JSONResponse({"detail": "Le projet actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
+        revision = request.headers.get("x-fat-project-revision")
+        if revision is not None and revision != runtime.project_revision:
+            return JSONResponse({"detail": "Le projet a été modifié dans un autre onglet ; conserver le brouillon et recharger avant d'agir."}, status_code=409)
+        run_id = request.headers.get("x-fat-run-id")
+        if run_id is not None and run_id != (runtime.run_id or ""):
+            return JSONResponse({"detail": "L'essai actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
+        return None
 
     @app.middleware("http")
     async def local_boundary(request: Request, call_next):
@@ -128,7 +172,7 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
         except ValueError:
             hostname = None
         if hostname not in ("127.0.0.1", "localhost", "::1"):
-            return JSONResponse({"detail": "Host refusé : FAT Studio est réservé au poste local."}, status_code=403)
+            return JSONResponse({"detail": f"Host refusé : {APP_NAME} est réservé au poste local."}, status_code=403)
         origin = request.headers.get("origin")
         allowed_origins = {f"http://{host}", f"https://{host}"}
         development_origin = os.environ.get("FAT_STUDIO_DEV_ORIGIN", "")
@@ -147,25 +191,25 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
             chunks, size = [], 0
             async for chunk in request.stream():
                 size += len(chunk)
-                if size > 5 * 1024 * 1024:
-                    return JSONResponse({"detail": "La requête dépasse 5 Mo."}, status_code=413)
+                limit = (100 if request.url.path == "/api/project/archive/import" else 5) * 1024 * 1024
+                if size > limit:
+                    return JSONResponse({"detail": f"La requête dépasse {limit // (1024 * 1024)} Mo."}, status_code=413)
                 chunks.append(chunk)
             request._body = b"".join(chunks)
-        guarded_read = request.method == "GET" and request.url.path == "/api/mapping"
-        if mutation or guarded_read:
+        guarded_read = request.method == "GET" and (request.url.path in ("/api/mapping", "/api/project/download", "/api/project/archive", "/api/scenarios/export")
+                         or (request.url.path.startswith("/api/scenarios/") and request.url.path.endswith("/export"))
+                         or request.url.path.startswith("/api/export/")
+                         or (request.url.path.startswith("/api/runs/") and request.url.path.rsplit("/", 1)[-1] in ("json", "csv", "report")))
+        # Archive export pins its read-only snapshot under this same lock in
+        # the route, then releases it before compression. Stop remains usable.
+        if (mutation or guarded_read) and request.url.path != "/api/project/archive":
             async with app.state.mutations:
-                project_id = request.headers.get("x-fat-project-id")
-                run_action = request.url.path.startswith(("/api/run/", "/api/force", "/api/fault", "/api/markers", "/api/result"))
-                guarded = guarded_read or run_action or (request.method == "PUT" and request.url.path == "/api/project") or (
-                    request.method == "POST" and request.url.path == "/api/mapping")
-                if guarded and project_id and project_id != app.state.runtime.project.id:
-                    return JSONResponse({"detail": "Le projet actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
-                revision = request.headers.get("x-fat-project-revision")
-                if guarded and revision and revision != app.state.runtime.project_revision:
-                    return JSONResponse({"detail": "Le projet a été modifié dans un autre onglet ; conserver le brouillon et recharger avant d'agir."}, status_code=409)
-                run_id = request.headers.get("x-fat-run-id")
-                if run_action and run_id is not None and run_id != (app.state.runtime.run_id or ""):
-                    return JSONResponse({"detail": "L'essai actif a changé dans un autre onglet ; recharger avant d'agir."}, status_code=409)
+                # Imports and project switches can race another client just like
+                # run commands. Check the captured context while holding the
+                # mutation lock, including replacements that would drop a run.
+                conflict = context_conflict(request)
+                if conflict is not None:
+                    return conflict
                 response = await call_next(request)
         else:
             response = await call_next(request)
@@ -174,7 +218,7 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
-            "img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; "
+            "img-src 'self' data:; connect-src 'self'; font-src 'self' data:; object-src 'none'; "
             "base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
         )
         if request.url.path.startswith("/api/"):
@@ -241,30 +285,136 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
 
     async def replace_project(project: Project, response: Response) -> Project:
         runtime = app.state.runtime
-        async with runtime.lock:
-            runtime.ensure_editable()
-            # Validate structure now; semantic errors stay visible and block Run, not drawing.
-            if runtime.adapter:
-                await runtime.adapter.disconnect()
-            app.state.store.save_project(project)
-            runtime.set_project(project)
-            runtime.adapter = None
-            response.headers["X-FAT-Project-Revision"] = runtime.project_revision
-            return runtime.project
+        await runtime.replace_project(project)
+        response.headers["X-FAT-Project-Revision"] = runtime.project_revision
+        return runtime.project
 
     @app.put("/api/project")
     async def save_project(project: Project, response: Response):
         return await replace_project(project, response)
 
     @app.post("/api/project/import")
-    async def import_project(project: Project, response: Response):
-        return await replace_project(project, response)
+    async def import_project(payload: dict, response: Response):
+        return await replace_project(read_project(payload), response)
 
     @app.get("/api/project/download")
     async def download_project():
         project = app.state.runtime.project
-        return Response(project.model_dump_json(indent=2), media_type="application/json",
-                        headers={"Content-Disposition": f'attachment; filename="{project.id}.json"'})
+        return Response(project_package(project).model_dump_json(indent=2), media_type="application/json",
+                        headers={"Content-Disposition": f'attachment; filename="{project.id}.fat.json"',
+                                 "X-FAT-Project-Revision": app.state.runtime.project_revision})
+
+    @app.get("/api/schemas/{kind}")
+    async def exchange_schema(kind: str):
+        schemas = {"project": ProjectPackage, "scenarios": ScenarioPackage}
+        if kind not in schemas:
+            raise HTTPException(404, "Schéma inconnu.")
+        return schemas[kind].model_json_schema()
+
+    @app.get("/api/scenarios/export")
+    @app.get("/api/scenarios/{scenario_id}/export")
+    async def export_scenarios(scenario_id: str | None = None):
+        package = scenarios_package(app.state.runtime.project, scenario_id)
+        return Response(package.model_dump_json(indent=2), media_type="application/json", headers={
+            "Content-Disposition": 'attachment; filename="scenarios.fat.json"',
+            "X-FAT-Project-Revision": app.state.runtime.project_revision})
+
+    @app.post("/api/scenarios/import")
+    async def load_scenarios(body: ScenarioImportRequest, response: Response):
+        project = import_scenarios(app.state.runtime.project, body.package, body.mode)
+        return await replace_project(project, response)
+
+    @app.get("/api/project/archive")
+    async def archive_project(request: Request):
+        async with app.state.mutations:
+            conflict = context_conflict(request)
+            if conflict is not None:
+                return conflict
+            snapshot = capture_archive(app.state.store, app.state.runtime.project)
+            revision = app.state.runtime.project_revision
+        def build():
+            try:
+                return export_archive(snapshot, snapshot.project)
+            finally:
+                snapshot.close()
+        task = asyncio.create_task(asyncio.to_thread(build))
+        try:
+            payload = await asyncio.shield(task)
+        except asyncio.CancelledError:
+            # The worker owns its reader until completion, including when a
+            # browser cancels. Never close a connection underneath that worker.
+            try:
+                await task
+            except Exception:
+                pass
+            raise
+        return Response(payload, media_type="application/zip", headers={
+            "Content-Disposition": f'attachment; filename="{snapshot.project.id}.fat.zip"',
+            "X-FAT-Project-Revision": revision})
+
+    async def open_workspace(id: str, response: Response):
+        old = app.state.runtime
+        old_store = app.state.store
+        async with old.lock:
+            if old.status == "running":
+                raise RunConflict("Mettre l'essai en pause avant de changer de dossier.")
+            if id == app.state.workspace_id:
+                response.headers["X-FAT-Project-Revision"] = old.project_revision
+                response.headers["X-FAT-Run-ID"] = old.run_id or ""
+                return old.project
+            path = workspace_path(folder, id)
+            if not path.is_dir():
+                raise ValueError("Espace local absent.")
+            new_store = Store(path)
+            try:
+                project = new_store.last_project()
+                if project is None:
+                    raise ValueError("Le dossier ne contient pas de projet.")
+                new_runtime = Runtime(new_store, project, app.state.policy, adapter_factory, context_scope=str(path.resolve()))
+                if old.status == "paused":
+                    old.event("workspace_change", "Essai conservé avant ouverture d'un autre dossier local.")
+                    if old.run_id and not old._run_finished:
+                        old.store.set_status(old.run_id, "stopped", ended=True)
+                        old._run_finished = True
+                if old.adapter:
+                    await old.adapter.disconnect()
+                await old._cancel_loop()
+                select_workspace(folder, id)
+            except asyncio.CancelledError:
+                await old._fail(RuntimeError("Changement de dossier annulé ; reprise explicite requise."))
+                new_store.close()
+                raise
+            except BaseException:
+                new_store.close()
+                raise
+            old.status = "stopped"
+            app.state.runtime = new_runtime
+            app.state.store = new_store
+            app.state.workspace_id = id
+            old_store.close()
+            response.headers["X-FAT-Project-Revision"] = new_runtime.project_revision
+            response.headers["X-FAT-Run-ID"] = ""
+            return project
+
+    @app.post("/api/project/archive/import")
+    async def restore_project_archive(request: Request, response: Response):
+        if app.state.runtime.status == "running":
+            raise RunConflict("Mettre l'essai en pause avant de restaurer une archive.")
+        plan = prepare_archive(await request.body())
+        id, _ = restore_workspace(folder, plan)
+        return await open_workspace(id, response)
+
+    @app.get("/api/workspaces")
+    async def workspaces():
+        return list_workspaces(folder, app.state.workspace_id)
+
+    @app.get("/api/workspace")
+    async def workspace():
+        return workspace_summary(folder, app.state.workspace_id, app.state.workspace_id)
+
+    @app.post("/api/workspaces/{id}/open")
+    async def load_workspace(id: str, response: Response):
+        return await open_workspace(id, response)
 
     @app.get("/api/projects")
     async def projects():
@@ -282,6 +432,11 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     @app.post("/api/demo/load")
     async def load_demo(response: Response):
         return await replace_project(demo_project(), response)
+
+    @app.post("/api/pilot/load")
+    async def load_pilot(response: Response):
+        from .demo_lab import demo_lab_project
+        return await replace_project(demo_lab_project(), response)
 
     @app.get("/api/validate")
     async def validate():
@@ -333,6 +488,23 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     @app.post("/api/force")
     async def force(body: ForceRequest):
         return await app.state.runtime.force(body.tag_id, body.value)
+
+    @app.post("/api/force/pulse")
+    async def pulse(body: PulseRequest):
+        return await app.state.runtime.pulse(body.tag_id, body.value, body.duration_ms)
+
+    @app.post("/api/force/stimulus")
+    async def stimulus(body: StimulusRequest):
+        return await app.state.runtime.stimulus(body.tag_id, PreparedAction(target=body.tag_id, value=body.value,
+                                                                         unit=body.unit, diagnostic=body.diagnostic))
+
+    @app.post("/api/run/steps/{step_id}/execute")
+    async def execute_fat_step(step_id: str):
+        return await app.state.runtime.execute_fat_step(step_id)
+
+    @app.post("/api/run/steps/{step_id}/observe")
+    async def observe_fat_step(step_id: str, body: StepObservationRequest):
+        return await app.state.runtime.observe_fat_step(step_id, body.verdict, body.observation)
 
     @app.delete("/api/force/{tag_id}")
     async def release(tag_id: str):
@@ -391,12 +563,14 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     web_dir = Path(__file__).parent / "web"
     if (web_dir / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=web_dir / "assets"), name="assets")
+    if (web_dir / "brand").is_dir():
+        app.mount("/brand", StaticFiles(directory=web_dir / "brand"), name="brand")
 
     @app.get("/", include_in_schema=False)
     async def index():
         if (web_dir / "index.html").exists():
             return FileResponse(web_dir / "index.html", headers={"Cache-Control": "no-cache"})
-        return HTMLResponse("<h1>FAT Studio</h1><p>Interface absente. Exécuter npm ci, npm run build dans frontend, puis python scripts/build-web.py.</p>", status_code=503)
+        return HTMLResponse(f"<h1>{APP_NAME}</h1><p>Interface absente. Exécuter npm ci, npm run build dans frontend, puis python scripts/build-web.py.</p>", status_code=503)
 
     @app.get("/favicon.svg", include_in_schema=False)
     async def favicon():

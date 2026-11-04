@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-03T20:19:39.803137+00:00",
+  "fixed": true,
+  "reproduced": false,
+  "expected": "Keep the already completed historical run and its finite samples unchanged",
+  "before": {
+    "status": "completed",
+    "samples": 70,
+    "ended_at": "2026-11-03T20:19:39.763+00:00"
+  },
+  "after": {
+    "status": "completed",
+    "samples": 70,
+    "ended_at": "2026-11-03T20:19:39.763+00:00"
+  },
+  "runtime_status": "error",
+  "candidate_committed": false,
+  "source_project_preserved": true,
+  "exception": "Synthetic disk failure on saving the new draft",
+  "product_source_changed": false,
+  "live_service_or_cpu_contacted": false
+}

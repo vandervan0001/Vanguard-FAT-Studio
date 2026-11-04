@@ -1,0 +1,105 @@
+{
+  "utc": "2026-11-03T21:43:26.575137+00:00",
+  "product": "Vanguard FAT Studio",
+  "source_branch": "codex/vanguard-fat-studio-brand",
+  "initial_head": "cd4daba16580309a675dfa6b1ec95efe5a669038",
+  "working_tree_modified": true,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": {
+    "passed": 581,
+    "skipped": 5,
+    "errors": 0,
+    "failures": 0,
+    "duration_seconds": 234.41,
+    "skips": "Windows symbolic-link privilege unavailable",
+    "private_log_sha256": "c9ea40345ef5886e84f976444de3f5a24707ba07a8b3755f739e460ccf776352"
+  },
+  "frontend": {
+    "passed": 56,
+    "skipped": 0,
+    "failures": 0,
+    "flaky": 0,
+    "duration_seconds": 161.480624,
+    "receipt": "ui/audit-receipt.json"
+  },
+  "brand_source": {
+    "repository": "vandervan0001/vanguard_systems",
+    "commit": "b4df8d8ed0942e98ceee643a9be210f00aca9e9f",
+    "primary": "#0055DD",
+    "fonts": "Geist",
+    "assets": [
+      {
+        "path": "fat_studio/web/brand/favicon.png",
+        "size": 55986,
+        "sha256": "374cd81a0042ec2723fbbf94491ec753b7cc3df77e2097b1dd98b5aa8d070b9e"
+      },
+      {
+        "path": "fat_studio/web/brand/Geist-Bold.ttf",
+        "size": 30204,
+        "sha256": "9e2c9fb9233a35d14efa7b84c991006f6ec2a571525ff987de3b8a1f5b131809"
+      },
+      {
+        "path": "fat_studio/web/brand/Geist-Regular.ttf",
+        "size": 30208,
+        "sha256": "688f24424467b3a81a520e48ab50d155f18757837c3adacbab6f378c66d9f1c4"
+      },
+      {
+        "path": "fat_studio/web/brand/GeistMono-Regular.ttf",
+        "size": 36808,
+        "sha256": "626e256bfdaadaeeddb0d9da16a5ce5a766c934ad38e40c275025e2b09943e8e"
+      },
+      {
+        "path": "fat_studio/web/brand/logo_vanguard.png",
+        "size": 10252,
+        "sha256": "ccf1c7fb9954d01e80b064a04fb281bf09188564cf7c86cf5f4434997b6ae37e"
+      },
+      {
+        "path": "fat_studio/web/brand/logo_vanguard_wordmark_horizontal.png",
+        "size": 21839,
+        "sha256": "c954e95174a3a961b25fb274214f21876013de35f899033aca43cf5ff66b8560"
+      },
+      {
+        "path": "fat_studio/web/brand/logo_vanguard_wordmark_horizontal_white.png",
+        "size": 18674,
+        "sha256": "f123df85e5ea9522619c6fb18c7990f6d18af8668e7c8add6c2e44b29b63d8ad"
+      },
+      {
+        "path": "fat_studio/web/brand/OFL.txt",
+        "size": 4384,
+        "sha256": "2b2da563e79400b61818402ca9f26a73d52468268b7fc715e92143c1e799737e"
+      }
+    ],
+    "original_logo_bytes_preserved": true
+  },
+  "reports": {
+    "viewports": [
+      1440,
+      390
+    ],
+    "loaded_fonts": 3,
+    "external_requests": 0,
+    "receipt": "reports/render-verification.json"
+  },
+  "native": {
+    "scope": "New client description and same certificate URI, real isolated target, read only",
+    "mappings": 75,
+    "outputs_read": 19,
+    "input_writes": 0,
+    "receipt": "native-read-only.json"
+  },
+  "backward_compatibility": {
+    "legacy_real_archive_runs": 19,
+    "original_reports_and_evidence_preserved": true,
+    "formats_unchanged": true,
+    "client_certificate_uri_unchanged": true
+  },
+  "github": {
+    "renamed": true,
+    "url": "https://github.com/vandervan0001/Vanguard-FAT-Studio",
+    "id": 1443049301,
+    "private": true,
+    "receipt": "github-rename.json"
+  },
+  "human_fat_acceptance_created": false,
+  "linkedin_post_published": false
+}

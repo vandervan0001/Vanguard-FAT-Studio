@@ -16,7 +16,7 @@ async function snapshot(request: APIRequestContext): Promise<Snapshot> {
 async function boot(page: Page) {
   await page.goto('/');
   await expect(page.getByLabel('Nom du projet')).toHaveValue('TK-101 · Banc de remplissage');
-  await expect(page.locator('.react-flow__node')).toHaveCount(8);
+  await expect(page.locator('.react-flow__node')).toHaveCount(7);
 }
 
 test.beforeEach(async ({ request, page }) => {
@@ -122,6 +122,7 @@ test('créer un procédé vide, ses tags, son scénario puis l’importer reprod
   await page.getByLabel('Niveau initial').fill('35');
   await page.getByRole('button', { name: 'Scénarios', exact: true }).click();
   await page.getByRole('button', { name: 'Nouveau scénario', exact: true }).click();
+  await page.getByLabel('Mode d’exécution').selectOption('timed');
   await page.getByLabel('Durée (s)').fill('1');
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Projet enregistré');
@@ -132,8 +133,8 @@ test('créer un procédé vide, ses tags, son scénario puis l’importer reprod
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Exporter', exact: true }).click();
   const exported = await readFile((await (await download).path())!, 'utf8');
-  expect(JSON.parse(exported)).toEqual(stored);
-  await page.locator('input[type="file"][accept=".json,application/json"]').setInputFiles({ name: 'cuve.json', mimeType: 'application/json', buffer: Buffer.from(exported) });
+  expect(JSON.parse(exported)).toEqual({ format: 'fat-studio/project', version: '1.0', project: stored });
+  await page.locator('.projectbar input[type="file"][accept=".json,application/json"]').setInputFiles({ name: 'cuve.json', mimeType: 'application/json', buffer: Buffer.from(exported) });
   await expect(page.getByRole('status')).toContainText('Projet importé');
   await page.getByLabel('Scénario', { exact: true }).selectOption(stored.scenarios[0].id);
   await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
@@ -226,7 +227,7 @@ test('effacer la valeur du forçage ne force pas silencieusement la mesure à z�
   await expect(page.locator('.status-badge')).toHaveText('En cours');
   await page.locator('.react-flow__node[data-id="LT101"]').click();
   await page.getByLabel('Forçage LevelPct').fill('');
-  await page.getByRole('button', { name: 'Forcer', exact: true }).click();
+  await page.locator('.analog-control[data-tag="level"]').getByRole('button', { name: 'Forcer', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Saisissez une valeur');
   expect((await snapshot(request)).tags.level.forced).toBe(false);
 });
@@ -278,6 +279,44 @@ test('le mapping d’un autre projet ne peut pas être téléchargé pendant une
   expect(downloads).toEqual([]);
 });
 
+test('un chargement retardé conserve le projet révisé et le nouvel essai d’un autre onglet', async ({ page, request }) => {
+  await boot(page);
+  const baselineResponse = await request.get('/api/project');
+  const baseline: Project = await baselineResponse.json();
+  const { token } = await (await request.get('/api/session')).json();
+  const originalHeaders = { 'X-FAT-Token': token, 'X-FAT-Project-ID': baseline.id, 'X-FAT-Project-Revision': baselineResponse.headers()['x-fat-project-revision'], 'X-FAT-Run-ID': '' };
+  let captured!: Record<string, string>;
+  let release!: () => void;
+  let ready!: () => void;
+  const queued = new Promise<void>(resolve => { ready = resolve; });
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/api/pilot/load', async route => { captured = route.request().headers(); ready(); await held; await route.continue(); });
+  await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();
+  await page.getByRole('button', { name: 'Charger le laboratoire', exact: true }).click();
+  await queued;
+  const revisedResponse = await request.put('/api/project', { headers: originalHeaders, data: { ...baseline, name: 'Révision plus récente à conserver' } });
+  expect(revisedResponse.ok()).toBeTruthy();
+  const revision = revisedResponse.headers()['x-fat-project-revision'];
+  const revisedHeaders = { ...originalHeaders, 'X-FAT-Project-Revision': revision };
+  const started = await request.post('/api/run/start', { headers: revisedHeaders, data: {} });
+  expect(started.ok()).toBeTruthy();
+  const recent: Snapshot = await started.json();
+  expect((await request.post('/api/run/stop', { headers: { ...revisedHeaders, 'X-FAT-Run-ID': recent.run_id! }, data: {} })).ok()).toBeTruthy();
+  const response = page.waitForResponse(response => response.url().endsWith('/api/pilot/load') && response.request().method() === 'POST');
+  release();
+  expect((await response).status()).toBe(409);
+  expect(captured['x-fat-project-id']).toBe(baseline.id);
+  expect(captured['x-fat-project-revision']).toBe(originalHeaders['X-FAT-Project-Revision']);
+  expect(captured['x-fat-run-id']).toBe('');
+  const currentProject = await request.get('/api/project');
+  expect((await currentProject.json()).name).toBe('Révision plus récente à conserver');
+  expect(currentProject.headers()['x-fat-project-revision']).toBe(revision);
+  const current = await snapshot(request);
+  expect(current.run_id).toBe(recent.run_id);
+  expect(current.status).toBe('stopped');
+  await expect(page.getByRole('alert').filter({ hasText: 'modifié dans un autre onglet' })).toBeVisible();
+});
+
 test('un polling bloqué est signalé puis reprend sans perdre le brouillon', async ({ page }) => {
   await boot(page);
   await page.getByLabel('Nom du projet').fill('Brouillon pendant requête bloquée');
@@ -312,6 +351,7 @@ test('une association devenue incompatible reste explicite et peut être corrig�
   await page.getByRole('button', { name: /^PumpCmd/ }).click();
   await page.locator('.tag-details').getByRole('combobox', { name: 'Type', exact: true }).selectOption('REAL');
   await page.getByRole('button', { name: 'P&ID', exact: true }).click();
+  await page.getByRole('button', { name: 'Construire', exact: true }).click();
   await page.locator('.react-flow__node[data-id="P101"]').click();
   const binding = page.locator('.binding-field').filter({ hasText: 'Commande marche PLC' });
   await expect(binding.getByRole('combobox')).toHaveValue('pump_cmd');
@@ -333,7 +373,7 @@ test('une session locale bloquée propose de réessayer et récupère au retour 
   } finally { release(); await page.unroute('**/api/session'); }
   await page.getByRole('button', { name: 'Réessayer', exact: true }).click();
   await expect(page.getByLabel('Nom du projet')).toHaveValue('TK-101 · Banc de remplissage');
-  await expect(page.locator('.react-flow__node')).toHaveCount(8);
+  await expect(page.locator('.react-flow__node')).toHaveCount(7);
 });
 
 test('glisser un symbole, relier ses ports, déplacer et supprimer persiste le vrai graphe', async ({ page, request }) => {
@@ -376,6 +416,7 @@ test('glisser un symbole, relier ses ports, déplacer et supprimer persiste le v
   await page.reload();
   await expect(page.locator('.react-flow__node')).toHaveCount(2);
   await expect(page.locator('.react-flow__edge')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Construire', exact: true }).click();
   await page.locator(`.react-flow__node[data-id="${pumpId}"]`).click();
   const name = page.getByLabel('Nom / repère');
   await name.fill('Pompe testX');
@@ -390,5 +431,5 @@ test('glisser un symbole, relier ses ports, déplacer et supprimer persiste le v
   const deleted: Project = await (await request.get('/api/project')).json();
   expect(deleted.equipment.map(item => item.id)).toEqual([tankId]);
   expect(deleted.connections).toEqual([]);
-  expect(deleted.tags).toHaveLength(7);
+  expect(deleted.tags).toEqual(before.tags);
 });

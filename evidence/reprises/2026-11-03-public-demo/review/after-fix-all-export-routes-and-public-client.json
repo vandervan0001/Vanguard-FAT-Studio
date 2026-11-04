@@ -1,0 +1,22 @@
+{
+  "utc": "2026-11-03T20:19:41.033002+00:00",
+  "fixed": true,
+  "response_statuses": {
+    "/api/runs/run-a855995f3c0e4bbaa4f1a937a9a19e95/json": 409,
+    "/api/export/json": 409,
+    "/api/runs/run-a855995f3c0e4bbaa4f1a937a9a19e95/csv": 409,
+    "/api/export/csv": 409,
+    "/api/runs/run-a855995f3c0e4bbaa4f1a937a9a19e95/report": 409,
+    "/api/export/report": 409
+  },
+  "same_project_and_no_active_run_in_both_workspaces": true,
+  "revision_salted_by_workspace": true,
+  "public_client_exit_code": 2,
+  "export_get_sent": false,
+  "output_file_created": false,
+  "context_recaptured": false,
+  "context_bytes_unchanged": true,
+  "error": "Contexte périmé ; relire avant une nouvelle capture explicite.",
+  "transport": "FastAPI TestClient only; no HTTP socket",
+  "live_service_or_cpu_contacted": false
+}

@@ -1,0 +1,52 @@
+{
+  "utc": "2026-11-03T19:57:28.964392+00:00",
+  "state": "native_public_demo_verified",
+  "target": "FAT-DEMO-20261103",
+  "compile": {
+    "blocks": 2,
+    "errors": 0,
+    "warnings": 3
+  },
+  "download": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "mapping": {
+    "tags": 75,
+    "writable_inputs": 56,
+    "read_only_outputs": 19,
+    "namespace_zero": false,
+    "security": "Basic256Sha256/SignAndEncrypt"
+  },
+  "timed": {
+    "passed": 8,
+    "assertions_passed": 31,
+    "samples": 460,
+    "input_writes": 25760,
+    "float32_values_verified": 9660,
+    "expectations_changed": false
+  },
+  "guided": {
+    "technical_step": "guided-initial",
+    "applied": true,
+    "stimulus_mA": 12.0,
+    "actual_wire_value": 13824,
+    "native_percent": 50.0,
+    "native_run_command": false,
+    "observed_steps": 0,
+    "total_steps": 5,
+    "human_verdict": "not_evaluated"
+  },
+  "closure": {
+    "app": "stopped",
+    "cpu": "Stop",
+    "real_opcua_project_retained": true,
+    "subsequent_presentation_is_separate": true
+  },
+  "public_cli_commands": 145,
+  "native_io_writes": 0,
+  "cpu_commands_added_to_public_product": false,
+  "old_target_or_app_mutations": 0,
+  "original_helper_restored": true,
+  "secrets_copied": false
+}

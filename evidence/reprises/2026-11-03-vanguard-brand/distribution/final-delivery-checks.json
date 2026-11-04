@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "application": "Vanguard FAT Studio",
+  "python": "3.12.10",
+  "isolated_mode": 1,
+  "portable_service_checks": 5,
+  "source_copy_service_checks": 5,
+  "public_assistant_calls": 19,
+  "step_observations": 0,
+  "portable_manifest_check": "Portable verified: 3209 files",
+  "source_manifest_check": "Python 3.12 \u00b7 Windows-x64 \u00b7 kit v\u00e9rifi\u00e9 : 29 wheels",
+  "manifests_unchanged": true,
+  "original_source_never_installed": true,
+  "data_outside_runtime": true,
+  "temporary_services_closed": true,
+  "scope": "Demo loopback only; no reserved service, Siemens target or human FAT approval"
+}

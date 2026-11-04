@@ -1,0 +1,14 @@
+{
+  "utc": "2026-11-03T20:17:30.623571+00:00",
+  "passed": true,
+  "cancellation_returned": true,
+  "cancellation_elapsed_seconds": 0.0,
+  "status": "error",
+  "original_project_preserved": true,
+  "previous_run_preserved_as_error": true,
+  "connected": false,
+  "background_task_absent": true,
+  "writes_after_cancellation": 0,
+  "synchronization_injected_in_test_only": true,
+  "live_service_or_cpu_contacted": false
+}

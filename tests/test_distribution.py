@@ -14,6 +14,8 @@ import pytest
 CHECKER = Path(__file__).resolve().parents[1] / "scripts" / "check-kit.py"
 BUILD_WEB = CHECKER.with_name("build-web.py")
 validate_kit = runpy.run_path(str(CHECKER))["validate_kit"]
+PUBLIC = runpy.run_path(str(CHECKER.parents[1] / "public_distribution.py"))
+PORTABLE = runpy.run_path(str(CHECKER.with_name("check-portable.py")))
 
 
 def test_windows_kit_uses_python_architecture_even_on_an_arm_host(monkeypatch):
@@ -101,6 +103,193 @@ def test_checker_cli_reports_incomplete_kit_as_nonzero(tmp_path):
                             capture_output=True, text=True, encoding="utf-8", timeout=10)
     assert result.returncode == 2
     assert "Kit incomplet" in result.stderr
+
+
+def public_source(root):
+    (root / "fat_studio").mkdir()
+    (root / "integrations").mkdir()
+    (root / "fat_studio/__init__.py").write_text("# public FAT runtime\n")
+    policy = {"schema": 1, "wheel_files": ["fat_studio/__init__.py"], "wheel_patterns": [],
+              "source_files": ["fat_studio/__init__.py"], "source_patterns": []}
+    (root / "public-distribution.json").write_text(json.dumps(policy))
+    return policy
+
+
+def make_public_wheel(path, extra=None):
+    import zipfile
+    entries = {"fat_studio/__init__.py": "# public runtime\n",
+               "vanguard_fat_studio-0.2.1.dist-info/METADATA": "Name: vanguard-fat-studio\nVersion: 0.2.1\n",
+               "vanguard_fat_studio-0.2.1.dist-info/WHEEL": "Wheel-Version: 1.0\n"}
+    entries.update(extra or {})
+    with zipfile.ZipFile(path, "w") as archive:
+        for name, content in entries.items():
+            archive.writestr(name, content)
+    return path
+
+
+def test_public_source_is_explicit_even_when_private_file_is_gitignored(tmp_path):
+    public_source(tmp_path)
+    assert PUBLIC["selected_files"](tmp_path, "source") == ["fat_studio/__init__.py"]
+    (tmp_path / ".gitignore").write_text("fat_studio/house.py\n")
+    (tmp_path / "fat_studio/house.py").write_text("# private programming material\n")
+    with pytest.raises(ValueError, match="Unexpected file"):
+        PUBLIC["selected_files"](tmp_path, "source")
+
+
+def test_public_selection_does_not_copy_unlisted_notes_or_sources(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    public_source(source)
+    private = source / ".local"
+    private.mkdir()
+    (private / "engineering.scl").write_text("private supplied engineering\n")
+    (source / "internal-log.md").write_text("private working notes\n")
+    destination = tmp_path / "public-copy"
+    assert PUBLIC["copy_source"](source, destination) == 1
+    assert sorted(p.relative_to(destination).as_posix() for p in destination.rglob("*") if p.is_file()) == [
+        "fat_studio/__init__.py"]
+
+
+def test_public_output_boundary_uses_resolved_path_and_asset_globs_do_not_cross_directories(tmp_path):
+    source = tmp_path / "source"
+    source.mkdir()
+    public_source(source)
+    with pytest.raises(ValueError, match="outside"):
+        PUBLIC["copy_source"](source, tmp_path / "other" / ".." / "source" / "inside")
+    assert PUBLIC["is_allowed"]("fat_studio/web/assets/index-abc.js", [], ["fat_studio/web/assets/index-*.js"])
+    assert not PUBLIC["is_allowed"]("fat_studio/web/assets/index-private/extra.js", [],
+                                    ["fat_studio/web/assets/index-*.js"])
+
+
+@pytest.mark.parametrize("name", ["fat_studio/house.py", "integrations/private.scl", ".local/backup.json",
+                                  "vanguard_fat_studio-0.2.1.dist-info/private.txt", "../escape.py"])
+def test_public_wheel_rejects_unlisted_modules_resources_and_metadata(tmp_path, name):
+    public_source(tmp_path)
+    wheel = make_public_wheel(tmp_path / "app.whl", {name: "private material\n"})
+    with pytest.raises(ValueError):
+        PUBLIC["validate_wheel"](wheel, policy_root=tmp_path)
+
+
+@pytest.mark.parametrize("private", ["Nouvelle" + "-Caledonie", "Nouvelle" + " Calédonie",
+                                     "NOUVELLE" + "-CALÉDONIE", "FB_" + "VG_Command", "DB_" + "VG_State",
+                                     "DB_" + "Pilot_IO", "standard_" + "objects_v1", "vanguard-" + "pilot-v1",
+                                     "Cycle" + "Engineering.exe", "-----BEGIN " + "PRIVATE KEY-----"],
+                         ids=["private-location", "private-location-accent", "private-location-uppercase",
+                              "private-block", "private-db", "private-exchange-db",
+                              "private-controller", "private-project", "private-helper", "private-key"])
+def test_private_content_refused_even_under_an_allowed_filename(tmp_path, private):
+    public_source(tmp_path)
+    wheel = make_public_wheel(tmp_path / "app.whl", {"fat_studio/__init__.py": private})
+    with pytest.raises(ValueError, match="refused"):
+        PUBLIC["validate_wheel"](wheel, policy_root=tmp_path)
+
+
+def test_key_scan_distinguishes_codec_header_constants_from_embedded_key_material():
+    marker = b"-----BEGIN " + b"OPENSSH PRIVATE KEY-----"
+    PUBLIC["check_content"]("codec.py", b'HEADER = b"' + marker + b'"\n')
+    with pytest.raises(ValueError, match="Private key"):
+        PUBLIC["check_content"]("data.txt", marker + b"\n")
+    with pytest.raises(ValueError, match="Private key"):
+        PUBLIC["check_content"]("embedded.py", b'KEY = """' + marker + b"\nYWJjZGVm\nYWJjZGVm\n")
+    with pytest.raises(ValueError, match="Private key"):
+        encoded = b'{"key":"' + marker + b"\\n" + b"A" * 64 + b"\\n-----END OPENSSH " + b'PRIVATE KEY-----"}'
+        PUBLIC["check_content"]("configuration.json", encoded)
+
+
+def test_public_wheel_accepts_only_reviewed_payload(tmp_path):
+    public_source(tmp_path)
+    wheel = make_public_wheel(tmp_path / "app.whl")
+    assert PUBLIC["validate_wheel"](wheel, policy_root=tmp_path) == 3
+
+
+def test_public_brand_and_official_font_licence_are_allowed_without_admitting_private_plc_code(tmp_path):
+    public_source(tmp_path)
+    content = "Vanguard FAT Studio\nCopyright 2024 The Geist Project Authors\nSIL Open Font License 1.1\n"
+    wheel = make_public_wheel(tmp_path / "app.whl", {"fat_studio/__init__.py": content})
+    assert PUBLIC["validate_wheel"](wheel, policy_root=tmp_path) == 3
+    with pytest.raises(ValueError, match="Private engineering"):
+        PUBLIC["check_content"]("brand-note.md", content.encode() + b'FUNCTION_BLOCK "FB_' + b'VG_Command"')
+
+
+def test_portable_lock_reads_top_level_wheel_metadata_with_vendored_distributions(tmp_path):
+    import zipfile
+    builder = runpy.run_path(str(CHECKER.with_name("build-portable.py")))
+    wheelhouse = tmp_path / "wheels"
+    wheelhouse.mkdir()
+    lock = tmp_path / "requirements.lock"
+    lock.write_text("setuptools==84.2.1\n")
+    wheel = wheelhouse / "setuptools-84.2.1-py3-none-any.whl"
+    with zipfile.ZipFile(wheel, "w") as archive:
+        archive.writestr("setuptools-84.2.1.dist-info/METADATA", "Name: setuptools\nVersion: 84.2.1\n")
+        archive.writestr("setuptools/_vendor/other-1.0.dist-info/METADATA", "Name: other\nVersion: 1.0\n")
+    assert builder["locked_wheels"](wheelhouse, lock) == [wheel.resolve()]
+    (wheelhouse / "unexpected.txt").write_text("not a locked wheel")
+    with pytest.raises(ValueError, match="Unexpected"):
+        builder["locked_wheels"](wheelhouse, lock)
+
+
+def test_actual_wheel_and_sdist_use_public_list_without_old_egg_info(tmp_path):
+    import tarfile
+    import zipfile
+    public_source(tmp_path)
+    (tmp_path / "README.md").write_text("Public FAT example\n")
+    for name in ("public_distribution.py", "build_public.py"):
+        (tmp_path / name).write_bytes((CHECKER.parents[1] / name).read_bytes())
+    (tmp_path / "pyproject.toml").write_text('''[build-system]
+requires=["setuptools==84.2.1","wheel==0.48.0"]
+build-backend="setuptools.build_meta"
+[project]
+name="vanguard-fat-studio"
+version="0.2.1"
+readme="README.md"
+[tool.setuptools]
+packages=["fat_studio"]
+include-package-data=false
+[tool.setuptools.cmdclass]
+build_py="build_public.PublicBuildPy"
+sdist="build_public.PublicSdist"
+''')
+    policy_path = tmp_path / "public-distribution.json"
+    policy = json.loads(policy_path.read_text())
+    policy["source_files"] += ["README.md", "pyproject.toml", "public_distribution.py", "build_public.py",
+                               "public-distribution.json"]
+    policy_path.write_text(json.dumps(policy))
+    private = tmp_path / "internal-standards.txt"
+    private.write_text("private user working material\n")
+    egg = tmp_path / "local_fat_studio.egg-info"
+    egg.mkdir()
+    (egg / "SOURCES.txt").write_text("internal-standards.txt\n")
+    result = subprocess.run([sys.executable, "-m", "build", "--no-isolation"], cwd=tmp_path,
+                            capture_output=True, text=True, encoding="utf-8", timeout=60)
+    assert result.returncode == 0, result.stderr + result.stdout
+    wheel = next((tmp_path / "dist").glob("*.whl"))
+    assert PUBLIC["validate_wheel"](wheel, policy_root=tmp_path) >= 3
+    with zipfile.ZipFile(wheel) as archive:
+        assert not any("internal-standards" in name for name in archive.namelist())
+    with tarfile.open(next((tmp_path / "dist").glob("*.tar.gz"))) as archive:
+        names = archive.getnames()
+        assert any(name.endswith("/build_public.py") for name in names)
+        assert not any("internal-standards" in name for name in names)
+
+
+@pytest.mark.parametrize("damage", ["content", "extra", "traversal"])
+def test_portable_manifest_rejects_changed_extra_or_escaping_files(tmp_path, damage):
+    file = tmp_path / "runtime.txt"
+    file.write_text("pinned runtime\n")
+    manifest = {"schema": 1, "platform": "Windows-x64", "python": "3.12.10",
+                "files": PUBLIC["file_manifest"](tmp_path)}
+    path = tmp_path / "portable-manifest.json"
+    path.write_text(json.dumps(manifest))
+    assert PORTABLE["validate_portable"](tmp_path) == 1
+    if damage == "content":
+        file.write_text("changed runtime\n")
+    elif damage == "extra":
+        (tmp_path / "not-listed.py").write_text("unreviewed code\n")
+    else:
+        manifest["files"][0]["path"] = "../runtime.txt"
+        path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError):
+        PORTABLE["validate_portable"](tmp_path)
 
 
 def make_web_build(root):

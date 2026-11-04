@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "title": "Vanguard FAT Studio · Rapport FAT · FAT LAB · Banc de transfert",
+      "width": 1440,
+      "documentWidth": 1440,
+      "fonts": [
+        {
+          "family": "Geist",
+          "weight": "400",
+          "status": "loaded"
+        },
+        {
+          "family": "Geist",
+          "weight": "700",
+          "status": "loaded"
+        },
+        {
+          "family": "Geist Mono",
+          "weight": "400",
+          "status": "loaded"
+        }
+      ],
+      "logoDecoded": true,
+      "scripts": 0,
+      "errors": [],
+      "external": []
+    },
+    {
+      "title": "Vanguard FAT Studio · Rapport FAT · FAT LAB · Banc de transfert",
+      "width": 390,
+      "documentWidth": 390,
+      "fonts": [
+        {
+          "family": "Geist",
+          "weight": "400",
+          "status": "loaded"
+        },
+        {
+          "family": "Geist",
+          "weight": "700",
+          "status": "loaded"
+        },
+        {
+          "family": "Geist Mono",
+          "weight": "400",
+          "status": "loaded"
+        }
+      ],
+      "logoDecoded": true,
+      "scripts": 0,
+      "errors": [],
+      "external": []
+    }
+  ]
+}

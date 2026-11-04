@@ -1,0 +1,11 @@
+{
+  "utc": "2026-11-03T20:17:31.338741+00:00",
+  "passed": true,
+  "response_status": 503,
+  "active_workspace": "default",
+  "original_active_pointer_preserved": true,
+  "restored_directory_preserved": true,
+  "new_store_lock_released": true,
+  "recovery_remains_explicit": true,
+  "live_service_or_cpu_contacted": false
+}

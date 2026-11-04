@@ -26,6 +26,7 @@ from fat_studio.demo import demo_project  # noqa: E402
 from fat_studio.engine import DemoController  # noqa: E402
 from fat_studio.models import PLCConfig  # noqa: E402
 from fat_studio.security import atomic_json  # noqa: E402
+from fat_studio.pilot import PilotController, pilot_project  # noqa: E402
 
 
 APPLICATION_URI = "urn:fat-studio:generic-opcua-fixture"
@@ -38,19 +39,20 @@ async def run(args):
     await server.init()
     endpoint = f"opc.tcp://127.0.0.1:{args.port}/fat-fixture/"
     server.set_endpoint(endpoint)
-    server.set_server_name("FAT Studio generic test controller — not Siemens")
+    server.set_server_name("Vanguard FAT Studio generic test controller — not Siemens")
     await server.set_application_uri(APPLICATION_URI)
     server.set_security_policy([ua.SecurityPolicyType.NoSecurity])
     # No non-loopback address or remote endpoint option is offered.
     namespace = await server.register_namespace(NAMESPACE_URI)
     exchange = await server.nodes.objects.add_object(namespace, "DB_FAT")
-    project = demo_project()
+    pilot = getattr(args, "controller", "tank") == "standard-pilot"
+    project = pilot_project() if pilot else demo_project()
     project.id = "opcua-fixture"
-    project.name = "TK-101 · Test OPC UA générique"
+    project.name = "PILOTE-01 · OPC UA générique" if pilot else "TK-101 · Test OPC UA générique"
     project.description = (
         "Test de protocole générique sur 127.0.0.1 ; ne constitue pas une qualification Siemens. "
         "Le serveur scripts/opcua-fixture.py exécute seulement le contrôleur fictif à 100 ms. "
-        "FAT Studio exécute le procédé et écrit les entrées simulées. Arrêter le serveur permet "
+        "Vanguard FAT Studio exécute le procédé et écrit les entrées simulées. Arrêter le serveur permet "
         "de vérifier le traitement d'une perte de communication."
     )
     project.plc = PLCConfig(mode="opcua", endpoint=endpoint, expected_application_uri=APPLICATION_URI,
@@ -63,7 +65,7 @@ async def run(args):
             await node.set_writable()
         tag.node_id = nodeid.to_string()
         nodes[tag.id] = node
-    controller = DemoController(project)
+    controller = PilotController(project) if pilot else DemoController(project)
     inputs = [tag for tag in project.tags if tag.direction == "input"]
     outputs = [tag for tag in project.tags if tag.direction == "output"]
     target_confirmation = f"{TARGET_NAME} @ {endpoint}"
@@ -81,10 +83,10 @@ async def run(args):
         print(json.dumps(metadata, ensure_ascii=False, indent=2), flush=True)
         print("\nServeur de test générique démarré ; aucun logiciel Siemens connecté.", flush=True)
         print("Autorisation explicite à exécuter dans un autre terminal (même --data-dir que l'application) :", flush=True)
-        print(f'fat-studio authorize-target --endpoint "{endpoint}" --application-uri "{APPLICATION_URI}" '
+        print(f'vanguard-fat-studio authorize-target --endpoint "{endpoint}" --application-uri "{APPLICATION_URI}" '
               f'--name "{TARGET_NAME}" --isolated-virtual-adapter --allow-insecure', flush=True)
         print("Confirmer : " + target_confirmation, flush=True)
-        print("Importer ensuite le JSON généré dans FAT Studio, puis lancer le scénario de référence à 1×.", flush=True)
+        print("Importer ensuite le JSON généré dans Vanguard FAT Studio, puis lancer le scénario de référence à 1×.", flush=True)
         print("Ctrl+C arrête ce serveur pour tester la perte de communication.", flush=True)
         began = time.monotonic()
         deadline = began
@@ -103,6 +105,7 @@ async def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=48450)
+    parser.add_argument("--controller", choices=("tank", "standard-pilot"), default="tank")
     parser.add_argument("--project", type=Path, default=Path(".local/opcua-fixture.project.json"))
     parser.add_argument("--ready-file", type=Path)
     parser.add_argument("--duration", type=float, default=0, help="Stop after this many seconds; 0 runs until Ctrl+C.")

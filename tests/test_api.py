@@ -14,6 +14,7 @@ def client(tmp_path):
     with TestClient(create_app(tmp_path), base_url="http://127.0.0.1") as client:
         token = client.get("/api/session").json()["token"]
         client.headers["X-FAT-Token"] = token
+        assert client.post("/api/demo/load").status_code == 200
         yield client
 
 
@@ -158,6 +159,39 @@ def test_same_project_revision_prevents_lost_update_and_stale_start(client):
     state = client.get("/api/state").json()
     assert state["status"] == "idle"
     assert state["project_revision"] == saved.headers["X-FAT-Project-Revision"]
+
+
+@pytest.mark.parametrize("replacement", ["import", "create", "demo", "pilot", "load"])
+@pytest.mark.parametrize("changed", ["project", "revision", "run"])
+def test_project_replacement_refuses_a_stale_context_without_replacing_current_work(client, replacement, changed):
+    response = client.get("/api/project")
+    original = response.json()
+    context = {"X-FAT-Project-ID": original["id"],
+               "X-FAT-Project-Revision": response.headers["X-FAT-Project-Revision"], "X-FAT-Run-ID": ""}
+    if changed == "project":
+        assert client.post("/api/projects", json={"name": "Another client's project"}).status_code == 200
+    elif changed == "revision":
+        assert client.put("/api/project", json={**original, "name": "Another client's revision"}).status_code == 200
+    else:
+        assert client.post("/api/run/start", json={}).status_code == 200
+        assert client.post("/api/run/stop", json={}).status_code == 200
+    current = client.get("/api/project").json()
+    state = client.get("/api/state").json()
+    projects = client.get("/api/projects").json()
+    path, body = {
+        "import": ("/api/project/import", original),
+        "create": ("/api/projects", {"name": "Stale new project"}),
+        "demo": ("/api/demo/load", None),
+        "pilot": ("/api/pilot/load", None),
+        "load": (f"/api/projects/{original['id']}/load", None),
+    }[replacement]
+    response = client.post(path, json=body, headers=context)
+    assert response.status_code == 409
+    assert client.get("/api/project").json() == current
+    assert client.get("/api/projects").json() == projects
+    after = client.get("/api/state").json()
+    assert (after["project_id"], after["project_revision"], after["run_id"], after["status"]) == (
+        state["project_id"], state["project_revision"], state["run_id"], state["status"])
 
 
 @pytest.mark.parametrize("pointer", [None, [], {"id": 7}, {"id": "../other"}])

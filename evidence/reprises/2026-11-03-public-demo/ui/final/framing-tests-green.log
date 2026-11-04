@@ -1,0 +1,10 @@
+
+Running 1 test using 1 worker
+
+(node:4396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:4396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 ..\evidence\reprises\2026-11-03-public-demo\ui\final\framing-check.spec.ts:4:5 › un cran de zoom dégage les instruments et la minimap sans modifier le projet (3.4s)
+
+  1 passed (9.3s)

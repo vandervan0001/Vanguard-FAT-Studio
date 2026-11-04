@@ -1,0 +1,11 @@
+{
+  "utc": "2026-11-03T20:17:31.041171+00:00",
+  "passed": true,
+  "response_status": 503,
+  "active_workspace": "default",
+  "staged_or_published_new_directories": 0,
+  "old_history_status_unchanged": true,
+  "old_history_samples_unchanged": true,
+  "failure_injected_in_test_only": true,
+  "live_service_or_cpu_contacted": false
+}

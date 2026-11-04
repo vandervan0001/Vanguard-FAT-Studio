@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-03",
+  "mode": "demo",
+  "connected_plc": false,
+  "disposable_data": true,
+  "port": 8774,
+  "ui_bundle": [
+    "index-CDBs7U1H.js",
+    "index-6ra9f6L1.css"
+  ],
+  "active_png_inputs": 80,
+  "frames": {
+    "pid": 13,
+    "bool": 8,
+    "analog": 9,
+    "timed": 13,
+    "trends": 16,
+    "report": 6,
+    "guided": 9,
+    "archive": 6
+  },
+  "analog": {
+    "raw": 13824,
+    "percent": 50,
+    "unit": "12mA"
+  },
+  "guided": {
+    "technical_step": "applied",
+    "observed_steps": 0,
+    "human_verdict": "not_evaluated"
+  },
+  "cli": {
+    "module": "fat_studio.assistant",
+    "command": "stimulus --tag lt101_raw --value 12 --unit mA",
+    "raw": 13824,
+    "percent": 50
+  },
+  "trend_selection": {
+    "tags": [
+      "P101_SpeedCommand\n%",
+      "P101_SpeedFeedback\n%",
+      "LT101_Percent\n%"
+    ],
+    "source": "actual chart-container screenshot, 3 UI-selected tags, model demo",
+    "final_time_s": 7
+  },
+  "live_services_or_cpu_mutated": false
+}

@@ -1,0 +1,50 @@
+{
+  "scope": "Video delivered separately from sealed software kits",
+  "files": [
+    {
+      "path": "media/vanguard-fat-studio/exports/vanguard-fat-studio-master.mp4",
+      "bytes": 9394472,
+      "sha256": "514288a5d27eec03a59f6d52fe569c4a61cba60e1d12abbeb020fe7b13d72b55"
+    },
+    {
+      "path": "media/vanguard-fat-studio/exports/vanguard-fat-studio-master-silent.mp4",
+      "bytes": 8206161,
+      "sha256": "a9c4cc874464842d6c1c52788fa6c8e29acf406f274623eb85723096fff02fb5"
+    },
+    {
+      "path": "media/vanguard-fat-studio/exports/vanguard-fat-studio-fr.srt",
+      "bytes": 1022,
+      "sha256": "327cbb4fae8fb6219b7e13b86deb312b1e8720656eaa94081b1b03d91031282e"
+    },
+    {
+      "path": "media/vanguard-fat-studio/exports/contact-sheet-master.png",
+      "bytes": 1293318,
+      "sha256": "6bb7a8d7a8a10b392d3b76eac635aac343dba197e696972cee371c786722cfd2"
+    },
+    {
+      "path": "media/vanguard-fat-studio/exports/poster.png",
+      "bytes": 370674,
+      "sha256": "3c0c94041f471805847ee8b631ae811989ff9915090937196a3acc3901591cd8"
+    },
+    {
+      "path": "media/vanguard-fat-studio/exports/vanguard-fat-studio-sources.zip",
+      "bytes": 7700440,
+      "sha256": "f24efb6dd2bbcb208ad2289474ee1e2129e79cc89a1f6cce5346357471a9e177"
+    },
+    {
+      "path": "media/vanguard-fat-studio/README.md",
+      "bytes": 3642,
+      "sha256": "ddab68f53addc10e701ef5d1a14c64f63ac1eb0a671c02ad1754f968b7662ff0"
+    },
+    {
+      "path": "media/vanguard-fat-studio/STORYBOARD.md",
+      "bytes": 1480,
+      "sha256": "bc3b4198370e57189b8d106e3305a524a0d40c303fc6d6c3efa85c4e9c31119f"
+    },
+    {
+      "path": "media/vanguard-fat-studio/assets/provenance.json",
+      "bytes": 2779,
+      "sha256": "c8ac893cd0c46fefa7d91b9675564e5c89d477e3f34c3c90f0cb59380db5066c"
+    }
+  ]
+}

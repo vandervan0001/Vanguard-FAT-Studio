@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 $fatRoot = Split-Path -Parent $PSScriptRoot
 if ([Environment]::OSVersion.Platform -ne "Win32NT") { throw "Preparer le kit Windows sur un poste Windows x64 avec Python 3.12 x64." }
 if (!(Test-Path -LiteralPath (Join-Path $fatRoot "fat_studio\web\index.html"))) { throw "Compiler et integrer l'interface avant de preparer le kit." }
-if (!$Destination) { $Destination = Join-Path (Split-Path -Parent $fatRoot) "fat-studio-offline-windows" }
+if (!$Destination) { $Destination = Join-Path (Split-Path -Parent $fatRoot) "vanguard-fat-studio-source-windows" }
 $fatDestination = [IO.Path]::GetFullPath($Destination)
 if ($fatDestination.StartsWith($fatRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase) -or $fatDestination -eq $fatRoot) {
     throw "Le dossier du kit doit etre en dehors du depot source."
@@ -18,24 +18,8 @@ if (!$fatPython -and (Get-Command py -ErrorAction SilentlyContinue)) {
 if (!$fatPython) { throw "Python 3.12 x64 est requis ; utiliser -Python CHEMIN si necessaire." }
 & $fatPython -c "import struct,sys,sysconfig; sys.exit(0 if sys.version_info[:2] == (3,12) and struct.calcsize('P') == 8 and sysconfig.get_platform() == 'win-amd64' else 1)"
 if ($LASTEXITCODE -ne 0) { throw "Python 3.12 x64 est requis pour generer les wheels Windows correspondantes." }
-New-Item -ItemType Directory -Path $fatDestination | Out-Null
-$fatFolders = @("fat_studio", "frontend", "integrations", "scripts", "docs", "evidence", "examples", "siemens", "tests", ".github")
-foreach ($fatFolder in $fatFolders) {
-    $fatSource = Join-Path $fatRoot $fatFolder
-    if (!(Test-Path -LiteralPath $fatSource)) { continue }
-    foreach ($fatFile in Get-ChildItem -LiteralPath $fatSource -Recurse -File -Force) {
-        $fatRelative = $fatFile.FullName.Substring($fatRoot.Length + 1)
-        if ($fatRelative -match '(^|[\\/])(__pycache__|node_modules|\.venv|\.pytest_cache|\.ruff_cache|test-results|playwright-report|\.local|\.tools)([\\/]|$)' -or $fatRelative -match '^frontend[\\/]dist([\\/]|$)' -or $fatFile.Extension -in @(".pyc", ".tsbuildinfo", ".pem", ".key", ".pfx", ".cer") -or $fatFile.Name -match '^\.env($|\.)' -or ($fatFile.Attributes -band [IO.FileAttributes]::ReparsePoint)) { continue }
-        $fatTarget = Join-Path $fatDestination $fatRelative
-        New-Item -ItemType Directory -Path (Split-Path -Parent $fatTarget) -Force | Out-Null
-        Copy-Item -LiteralPath $fatFile.FullName -Destination $fatTarget
-    }
-}
-foreach ($fatFile in Get-ChildItem -LiteralPath $fatRoot -File -Force) {
-    if ($fatFile.Name -match '^(README.*|LICENSE.*|NOTICE.*|THIRD_PARTY.*|pyproject\.toml|MANIFEST\.in|requirements.*\.lock|Start-FAT\.cmd|\.gitignore|\.gitattributes)$') {
-        Copy-Item -LiteralPath $fatFile.FullName -Destination (Join-Path $fatDestination $fatFile.Name)
-    }
-}
+& $fatPython (Join-Path $fatRoot "public_distribution.py") --root $fatRoot copy-source $fatDestination
+if ($LASTEXITCODE -ne 0) { throw "Selection publique refusee ; aucun kit ne doit etre distribue." }
 $fatWheelhouse = Join-Path $fatDestination "wheelhouse"
 New-Item -ItemType Directory -Path $fatWheelhouse | Out-Null
 $fatLocks = @("requirements.lock")

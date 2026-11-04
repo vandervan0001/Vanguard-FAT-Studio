@@ -1,0 +1,480 @@
+{
+  "status": "ui-frozen-real-demo",
+  "capture_mode": "demo",
+  "connected_plc": false,
+  "source_bundle": [
+    "index-CDBs7U1H.js",
+    "index-6ra9f6L1.css"
+  ],
+  "shots": {
+    "pid": [
+      {
+        "file": "pid-000.png",
+        "fit": "cover",
+        "sha256": "05352a62b979e2a9fa9b2bb03326b8629cd08a336a7650f85fc4708e11aaa370"
+      },
+      {
+        "file": "pid-001.png",
+        "fit": "cover",
+        "sha256": "f9fb9e48929e5ba522f74af812b949ddca107e499d0c302af4e14ff8e944ef8b"
+      },
+      {
+        "file": "pid-002.png",
+        "fit": "cover",
+        "sha256": "e820c3b9e45961cb34e47b1c86e7a8facc3ad39ab96c176aeca7a6705edc97d0"
+      },
+      {
+        "file": "pid-003.png",
+        "fit": "cover",
+        "sha256": "b3a1a0bdd1e0eae77189ff442ebeafe5f6350405a78b6b8bca98683c9df3b315"
+      },
+      {
+        "file": "pid-004.png",
+        "fit": "cover",
+        "sha256": "0bf0878320aa827e0a0c1a72ec7a83411cf0d904914cac1c599b13e060e4da9a"
+      },
+      {
+        "file": "pid-005.png",
+        "fit": "cover",
+        "sha256": "bbffaa14c19d57d2300e5e8484c11f6ce3d5d90d121c092af9d563812bc9a051"
+      },
+      {
+        "file": "pid-006.png",
+        "fit": "cover",
+        "sha256": "477404e3243bdcc1a3e35cc7ee41abf286badb31a0322003eb48fb4b85c00775"
+      },
+      {
+        "file": "pid-007.png",
+        "fit": "cover",
+        "sha256": "65a0c690cc0eec502e46b99769187d8640753dd166f3ba561f33b0aa7627afef"
+      },
+      {
+        "file": "pid-008.png",
+        "fit": "cover",
+        "sha256": "b0c10a2e39d60abda8e2be10750b988425316cd5f64c5f12fee7cc728408c6e7"
+      },
+      {
+        "file": "pid-009.png",
+        "fit": "cover",
+        "sha256": "6dd069615bd99cc28018d92bdfcf1ad2def681ba20a7a4074d3f3fb24c4e4f62"
+      },
+      {
+        "file": "pid-010.png",
+        "fit": "cover",
+        "sha256": "e12b84456447f7c08dad72feb5b9b90f2e5cca309d8201f690ffde9851ee4f48"
+      },
+      {
+        "file": "pid-011.png",
+        "fit": "cover",
+        "sha256": "cb5190de9226e0890c3290e756677c6d4d8a8e6701eff5d5a34d7c9c976264e0"
+      },
+      {
+        "file": "pid-012.png",
+        "fit": "cover",
+        "sha256": "3731d24f87f11cf2180fc2939585d91598c15a28fb7160455716e622ac14d0a7"
+      }
+    ],
+    "bool": [
+      {
+        "file": "bool-000.png",
+        "fit": "contain",
+        "sha256": "563b0b1cda04bff5a4f3bed652f0cbfbc45c5ec21371336e516aa4b6f9fa7c3d"
+      },
+      {
+        "file": "bool-001.png",
+        "fit": "contain",
+        "sha256": "d14654c5b74368b44b040bdec0a4921bcbee88601acd62861638ec2cd45bc4ba"
+      },
+      {
+        "file": "bool-002.png",
+        "fit": "contain",
+        "sha256": "d14654c5b74368b44b040bdec0a4921bcbee88601acd62861638ec2cd45bc4ba"
+      },
+      {
+        "file": "bool-003.png",
+        "fit": "contain",
+        "sha256": "c4fedcbee781272c01606b2b076af24d98db42608b11ad21e3255a211c83445f"
+      },
+      {
+        "file": "bool-004.png",
+        "fit": "contain",
+        "sha256": "c4fedcbee781272c01606b2b076af24d98db42608b11ad21e3255a211c83445f"
+      },
+      {
+        "file": "bool-005.png",
+        "fit": "contain",
+        "sha256": "d14654c5b74368b44b040bdec0a4921bcbee88601acd62861638ec2cd45bc4ba"
+      },
+      {
+        "file": "bool-006.png",
+        "fit": "contain",
+        "sha256": "d14654c5b74368b44b040bdec0a4921bcbee88601acd62861638ec2cd45bc4ba"
+      },
+      {
+        "file": "bool-007.png",
+        "fit": "contain",
+        "sha256": "d14654c5b74368b44b040bdec0a4921bcbee88601acd62861638ec2cd45bc4ba"
+      }
+    ],
+    "analog": [
+      {
+        "file": "analog-000.png",
+        "fit": "contain",
+        "sha256": "cfd4cbc8497348965cbfacc4559665548d23884ed2593208168f99ef898cbde4"
+      },
+      {
+        "file": "analog-001.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-002.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-003.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-004.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-005.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-006.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-007.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      },
+      {
+        "file": "analog-008.png",
+        "fit": "contain",
+        "sha256": "f31f892a900b9f90f910206cef2a08770a90b8b3642e141886c2c861ce64d021"
+      }
+    ],
+    "timed": [
+      {
+        "file": "timed-portrait-000.png",
+        "fit": "contain",
+        "sha256": "0e5af49a5e55e354540687377fa6470c9a65d1c8477ff2eb1f7f9b0793b6ab93"
+      },
+      {
+        "file": "timed-portrait-001.png",
+        "fit": "contain",
+        "sha256": "596a9f5e89d14961be1224f06fdb929ab399504ea380a47d0dcfcdb21b57685e"
+      },
+      {
+        "file": "timed-portrait-002.png",
+        "fit": "contain",
+        "sha256": "6b85a63a02d942a613998be12ce57fdb7047a3d5904884cf6cb8406ae8397a42"
+      },
+      {
+        "file": "timed-portrait-003.png",
+        "fit": "contain",
+        "sha256": "6f2f37fa319f6b30d97900d8b5899a5dc28ed4c5bf879a97fc51d20efc98f986"
+      },
+      {
+        "file": "timed-portrait-004.png",
+        "fit": "contain",
+        "sha256": "4e9bef5db5abf6d7896259a1bbc0b7bb187a8f5356951265f60a64e8fb31865b"
+      },
+      {
+        "file": "timed-portrait-005.png",
+        "fit": "contain",
+        "sha256": "75b97e590ecc610d2a87c31634da341c4b06a6883ff5345c242f7df434d09a37"
+      },
+      {
+        "file": "timed-portrait-006.png",
+        "fit": "contain",
+        "sha256": "b89e8f0d6294f6801ae7e27c992a79eddb1832e8312478115eccb3fee1f925f6"
+      },
+      {
+        "file": "timed-portrait-007.png",
+        "fit": "contain",
+        "sha256": "6e331a400b53dc03b08e95822c8fab201a41dfefbb8699e80f24dcb1e831b091"
+      },
+      {
+        "file": "timed-portrait-008.png",
+        "fit": "contain",
+        "sha256": "faa58d56b595a190028dc57352f54b358f5941f842413468858c7ed9fe12e4b8"
+      },
+      {
+        "file": "timed-portrait-009.png",
+        "fit": "contain",
+        "sha256": "4c6edc4a51d710b6fcbb850a85e39df899751e2c486494e92394d047763b8ff7"
+      },
+      {
+        "file": "timed-portrait-010.png",
+        "fit": "contain",
+        "sha256": "d967f2e6cfd71183b48a3d417d3fe0fc0c6a975615e336b7e6132be567173676"
+      },
+      {
+        "file": "timed-portrait-011.png",
+        "fit": "contain",
+        "sha256": "599d9728c053e8da957b818372d4eb6838f898d28f6be8b0dc7804a53de4f2d8"
+      },
+      {
+        "file": "timed-portrait-012.png",
+        "fit": "contain",
+        "sha256": "0154e8e51768e31e909ff4ebaa3451bd259c75b623c83ed11fae0a0d102b032b"
+      }
+    ],
+    "trends": [
+      {
+        "file": "trends-chart-000.png",
+        "fit": "contain",
+        "sim_time_s": 1.2,
+        "sha256": "8f8cddc7dadc6873cc6d76096d39d258cfa22ac308e81c540b60cb90d9311172"
+      },
+      {
+        "file": "trends-chart-001.png",
+        "fit": "contain",
+        "sim_time_s": 1.7,
+        "sha256": "911a299b7c2bba390cb27cbbd11b6e9876ec08a113c798a8d99109c37e072c3f"
+      },
+      {
+        "file": "trends-chart-002.png",
+        "fit": "contain",
+        "sim_time_s": 2.1,
+        "sha256": "e0870b7fbace335135fa2d26eb7fb02edaba68fd92a8632212f00b12f25e829f"
+      },
+      {
+        "file": "trends-chart-003.png",
+        "fit": "contain",
+        "sim_time_s": 2.5,
+        "sha256": "11c16c02377d92822b10d985e212d1ba7627ff9e7098a68ebb2c5d82ce1d6342"
+      },
+      {
+        "file": "trends-chart-004.png",
+        "fit": "contain",
+        "sim_time_s": 3,
+        "sha256": "cab7f3f08498b98b2f4c235414b4dbf66212516de232ac6b203c9de5d1dfc53f"
+      },
+      {
+        "file": "trends-chart-005.png",
+        "fit": "contain",
+        "sim_time_s": 3.4,
+        "sha256": "4e34f5dd52ffad9a19ce7c94379336903ad34efc4bfa9c92bfc5feb8d954fe58"
+      },
+      {
+        "file": "trends-chart-006.png",
+        "fit": "contain",
+        "sim_time_s": 3.9,
+        "sha256": "98ddc8d9f966c4d705e932639d9f60a629ac39e45e22690b43cfc01caf36eec9"
+      },
+      {
+        "file": "trends-chart-007.png",
+        "fit": "contain",
+        "sim_time_s": 4.3,
+        "sha256": "98ddc8d9f966c4d705e932639d9f60a629ac39e45e22690b43cfc01caf36eec9"
+      },
+      {
+        "file": "trends-chart-008.png",
+        "fit": "contain",
+        "sim_time_s": 4.8,
+        "sha256": "11f339928be14f19ffe128afab6a8210d83ef5d94cab44e4ad129f8985818ff6"
+      },
+      {
+        "file": "trends-chart-009.png",
+        "fit": "contain",
+        "sim_time_s": 5.2,
+        "sha256": "3d9fb9323a64488be711bd90cc709b8c501f54f4a3a49eb235fd613cb0da15dc"
+      },
+      {
+        "file": "trends-chart-010.png",
+        "fit": "contain",
+        "sim_time_s": 5.7,
+        "sha256": "e20aa75fd9872ef9fc8812a9109cf461fc062df69ba351227fd52f4b87e692dc"
+      },
+      {
+        "file": "trends-chart-011.png",
+        "fit": "contain",
+        "sim_time_s": 6.1,
+        "sha256": "cbc00e2244f4b8345361db0bb00eefb68b73dc50f92c8930d18a4efb30e24014"
+      },
+      {
+        "file": "trends-chart-012.png",
+        "fit": "contain",
+        "sim_time_s": 6.6,
+        "sha256": "5865d5a01c619087ad5b3888180048509db2d015eea9d3d8b54d14e5155438df"
+      },
+      {
+        "file": "trends-chart-013.png",
+        "fit": "contain",
+        "sim_time_s": 7,
+        "sha256": "91f28a3e562103f7333601590ceac3a65cfa9aea0c3b393ba55565e92520224f"
+      },
+      {
+        "file": "trends-chart-014.png",
+        "fit": "contain",
+        "sim_time_s": 7,
+        "sha256": "3d624259e567ed8427be559de2ab7fc38f593a7554c4b4e94a1b10749adbf549"
+      },
+      {
+        "file": "trends-chart-015.png",
+        "fit": "contain",
+        "sim_time_s": 7,
+        "sha256": "3d624259e567ed8427be559de2ab7fc38f593a7554c4b4e94a1b10749adbf549"
+      }
+    ],
+    "report": [
+      {
+        "file": "report-portrait-000.png",
+        "fit": "cover",
+        "sha256": "bd76ee15186359c6134474fb3fbedf261b8cfd8d6d3b8bb6339215153f0fb8d7"
+      },
+      {
+        "file": "report-portrait-001.png",
+        "fit": "cover",
+        "sha256": "7aa55f3763f7daf234ed4c03b7a6a0d776f83ebc34822d3059b6fd4eaa0fa24b"
+      },
+      {
+        "file": "report-portrait-002.png",
+        "fit": "cover",
+        "sha256": "9596958019da0c9a46a7d4d0c9b0fd5348e370155caeb31f2aa7b35437215b7d"
+      },
+      {
+        "file": "report-portrait-003.png",
+        "fit": "cover",
+        "sha256": "e947aad9aa3741c59cb27c0b9e3c399efdaca31e0376495c1fdba611466210ed"
+      },
+      {
+        "file": "report-portrait-004.png",
+        "fit": "cover",
+        "sha256": "6a6bc870073f7f17f652e405af84a119b8246df7f7c601f86ca2aa6ad5c2c2b5"
+      },
+      {
+        "file": "report-portrait-005.png",
+        "fit": "cover",
+        "sha256": "b25d035fd8b07701c47e9a27e91d01c5bac55b12193d2f4ded9274cc61777e45"
+      }
+    ],
+    "guided": [
+      {
+        "file": "guided-portrait-000.png",
+        "fit": "contain",
+        "sha256": "e54f9e6f30420a7e0651f26dfd247970191b99a66b76be16857162f642d4a92e"
+      },
+      {
+        "file": "guided-portrait-001.png",
+        "fit": "contain",
+        "sha256": "772c53ad397193482ea975ae136172a012257f1cedf8440618c8ffcf77fe9a27"
+      },
+      {
+        "file": "guided-portrait-002.png",
+        "fit": "contain",
+        "sha256": "1c3c6205d84f6295a8299125485fa845923b73880130dd41914f4d0db2d9d2ca"
+      },
+      {
+        "file": "guided-portrait-003.png",
+        "fit": "contain",
+        "sha256": "1c3c6205d84f6295a8299125485fa845923b73880130dd41914f4d0db2d9d2ca"
+      },
+      {
+        "file": "guided-portrait-004.png",
+        "fit": "contain",
+        "sha256": "644635561382647338a7176cc5002d5056472b7fe90b7535ef005505e004b62f"
+      },
+      {
+        "file": "guided-portrait-005.png",
+        "fit": "contain",
+        "sha256": "5bb3a848aacf3a93e1d120ded2880336a93357f72248acaf27ff0f7ec7362359"
+      },
+      {
+        "file": "guided-portrait-006.png",
+        "fit": "contain",
+        "sha256": "5bb3a848aacf3a93e1d120ded2880336a93357f72248acaf27ff0f7ec7362359"
+      },
+      {
+        "file": "guided-portrait-007.png",
+        "fit": "contain",
+        "sha256": "2b225f35fb123cb379fb83b6ed3829fb907c9e252535974e8db15d937d255385"
+      },
+      {
+        "file": "guided-portrait-008.png",
+        "fit": "contain",
+        "sha256": "c40d396e83fe77a0cab5c031317e3ba8416413daa1e11c8c1de39359b0d0c011"
+      }
+    ],
+    "archive": [
+      {
+        "file": "archive-000.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      },
+      {
+        "file": "archive-001.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      },
+      {
+        "file": "archive-002.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      },
+      {
+        "file": "archive-003.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      },
+      {
+        "file": "archive-004.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      },
+      {
+        "file": "archive-005.png",
+        "fit": "contain",
+        "sha256": "0560c28f4da48f678a7e12ca32b3f7256867c6faf8d37ae3d3ba6abbcd49a0d7"
+      }
+    ]
+  },
+  "transcript": {
+    "source": "python -m fat_studio.assistant, actual demo commands and selected response fields",
+    "mode": "demo",
+    "lines": [
+      "$ python -m fat_studio.assistant",
+      "  --url http://127.0.0.1:8774",
+      "  stimulus --tag lt101_raw",
+      "  --value 12 --unit mA",
+      "",
+      "  lt101_raw.value : 13824",
+      "  lt101_percent   : 50 %",
+      "  qualité         : forced",
+      "  mode            : démonstration"
+    ]
+  },
+  "capture_date": "2026-11-03",
+  "disclosure": "Interface démonstration uniquement. Aucune connexion PLC dans ces captures. Le mapping DB public est observé, pas une preuve de connexion pendant le film.",
+  "portrait_correction": {
+    "viewport": [
+      1000,
+      1200
+    ],
+    "capture_mode": "demo",
+    "timed_controls": 4,
+    "guided_observed_steps": 0,
+    "human_verdict": "not_evaluated",
+    "report": "actual exported HTML, locally rendered"
+  },
+  "trend_selection": {
+    "tags": [
+      "P101_SpeedCommand\n%",
+      "P101_SpeedFeedback\n%",
+      "LT101_Percent\n%"
+    ],
+    "source": "actual chart-container screenshot, 3 UI-selected tags, model demo",
+    "final_time_s": 7
+  }
+}

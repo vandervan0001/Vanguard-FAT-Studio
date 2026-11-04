@@ -50,7 +50,7 @@ Activer le serveur OPC UA supporté par la CPU/firmware retenus. Configurer les 
 
 Limiter les droits du client aux variables nécessaires. Relever les **NodeIds réels**, l'URI de namespace, l'**ApplicationUri** serveur et son certificat. Une chaîne ressemblant à `ns=3;s="DB_FAT"."LevelPct"` dans le projet fourni est un exemple, pas une adresse garantie par Siemens. Le numéro de namespace peut changer ; l'URI de namespace configurée permet sa résolution avant validation.
 
-FAT Studio prend en charge `None` ou **Basic256Sha256 / SignAndEncrypt**. Si un nom utilisateur est nécessaire, le chiffrement est obligatoire dans cet adaptateur. Le projet conserve seulement les noms de variables d'environnement, jamais le mot de passe. Les chemins de certificat client et de clé privée pointent vers des fichiers sur le poste ; le serveur doit faire confiance au certificat client selon sa configuration.
+Vanguard FAT Studio prend en charge `None` ou **Basic256Sha256 / SignAndEncrypt**. Si un nom utilisateur est nécessaire, le chiffrement est obligatoire dans cet adaptateur. Le projet conserve seulement les noms de variables d'environnement, jamais le mot de passe. Les chemins de certificat client et de clé privée pointent vers des fichiers sur le poste ; le serveur doit faire confiance au certificat client selon sa configuration.
 
 En mode chiffré, l'empreinte épinglée ne suffit pas : le certificat serveur doit être dans sa période de validité et son SAN URI doit correspondre à l'ApplicationUri observée. Vérifier également l'horloge du poste. L'identité retournée par `CreateSession` est contrôlée avant l'activation authentifiée. Une erreur d'identité ou de certificat doit être corrigée sur la cible et dans sa politique approuvée ; aucun repli anonyme n'est effectué. Le modèle de confiance reste l'épinglage local, sans consultation CA/CRL/OCSP.
 
@@ -95,7 +95,7 @@ Uniquement pour la configuration isolée convenue, autoriser explicitement `None
 
 Cette commande ne désactive aucune protection Siemens et n'ouvre pas de port Windows. Elle enregistre l'accord pour cet endpoint précis. L'ApplicationUri avec `None` n'est pas une identité cryptographiquement authentifiée. Le contrôle de topologie reste indispensable.
 
-## 5. Configurer FAT Studio
+## 5. Configurer Vanguard FAT Studio
 
 Dans **Connexion** :
 
@@ -112,7 +112,7 @@ Avant la première écriture, l'adaptateur vérifie la cible autorisée, l'ident
 
 Réaliser et consigner les contrôles suivants sur l'instance virtuelle :
 
-1. Faire produire une commande par le programme existant et constater sa lecture dans FAT Studio.
+1. Faire produire une commande par le programme existant et constater sa lecture dans Vanguard FAT Studio.
 2. Observer une mesure simulée dans `DB_FAT` puis dans le bloc qui la consomme réellement. Une variable visible dans un DB ne prouve pas à elle seule que la séquence testée l'utilise.
 3. Tester chaque type utilisé. Le DB de démonstration utilise BOOL et REAL ; ajouter des variables de preuve distinctes INT/DINT si ces types sont requis par le projet réel.
 4. Vérifier qu'aucun autre bloc n'écrase les entrées simulées à chaque cycle.

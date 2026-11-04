@@ -1,0 +1,70 @@
+{
+  "utc": "2026-11-03T20:18:12.826698+00:00",
+  "platform": "Windows-x64",
+  "source_head": "cd4daba16580309a675dfa6b1ec95efe5a669038",
+  "working_tree_modified": true,
+  "scope": "Public distribution prototypes only; no Siemens operation and no human FAT approval",
+  "python_embed": {
+    "version": "3.12.10",
+    "archive_sha256": "4acbed6dd1c744b0376e3b1cf57ce906f9dc9e95e68824584c8099a63025a3c3",
+    "archive_size": 11133606,
+    "official_url": "https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip",
+    "digest_source": "https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip.sigstore",
+    "digest_matches_archive": true,
+    "signature_independently_verified": false,
+    "psf_license_retained": true
+  },
+  "source_isolation": {
+    "checkpoint_manifest_verified": true,
+    "private_roots_moved": 47,
+    "files_preserved": 381,
+    "bytes_preserved": 22137047,
+    "all_post_move_hashes_verified": true,
+    "old_sealed_kits_untouched": true,
+    "generated_build_cache_files_preserved": 64
+  },
+  "tests": {
+    "command": "python -X utf8 -m pytest -q tests/test_archive.py tests/test_distribution.py tests/test_installed_smoke.py",
+    "passed": 69,
+    "skipped": 4,
+    "skip_reason": "Windows symbolic-link privilege unavailable; actual NTFS junction tests passed",
+    "duration_s": 18.88
+  },
+  "targeted_regressions": [
+    "completed timed + completed guided + stopped runs archived/restored together (red then green)",
+    "empty project archives without fabricated scenario",
+    "guided actual_wire_value preserved without an observation",
+    "ignored modules and stale egg-info excluded from actual wheel/sdist",
+    "PEM key material refused while codec header constants accepted",
+    "portable requirements use top-level wheel metadata despite vendored metadata",
+    "independent readonly global snapshot survives writer changes and close"
+  ],
+  "prototype": {
+    "application_wheel_public_entries": 45,
+    "portable_manifest_files": 2830,
+    "minimal_path_system32": true,
+    "isolated_interpreter": true,
+    "imports_from_portable_app_only": true,
+    "start_cmd_integrity_exit": 0,
+    "integrity_passed_after_http_and_cli": true,
+    "service_checks": 5,
+    "public_cli_calls_passed": 39,
+    "offline_cli_project_and_archive_commands_passed": 6,
+    "guided_observations": 0,
+    "global_result": "not_evaluated"
+  },
+  "documentation": {
+    "local_links_checked_before_final_receipts": 293,
+    "powershell_blocks_parsed": 36,
+    "json_blocks_parsed_and_validated": 5
+  },
+  "limitations": [
+    "Prototype wheel and UI bundle are intermediate; rebuild the final artifact after source/UI/docs freeze",
+    "No global Python/frontend suite rerun by this worker",
+    "Checksums detect transfer integrity, not publisher authenticity or human acceptance"
+  ],
+  "source_kit_prototype": {
+    "offline_install_with_PIP_NO_INDEX": true,
+    "service_checks_passed": 5
+  }
+}

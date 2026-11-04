@@ -101,7 +101,15 @@ def main() -> int:
                 return content, response.headers
 
         def command(path, body=None):
-            return json.loads(request(path, {} if body is None else body)[0])
+            response = json.loads(request(path, {} if body is None else body)[0])
+            # A successful mutation owns the new baseline, including reset's
+            # explicitly empty run. Reads never recapture a different context.
+            for field, header in (("project_id", "X-FAT-Project-ID"),
+                                  ("project_revision", "X-FAT-Project-Revision"),
+                                  ("run_id", "X-FAT-Run-ID")):
+                if field in response:
+                    context[header] = str(response[field] or "")
+            return response
 
         def boot(log):
             pid_file = directory / ("worker-" + uuid4().hex + ".pid")
@@ -110,7 +118,7 @@ def main() -> int:
                 "Path(sys.argv[1]).write_text(str(os.getpid()),encoding='ascii');"
                 "from fat_studio.cli import main;raise SystemExit(main(sys.argv[2:]))"
             )
-            process = subprocess.Popen([python, "-X", "utf8", "-c", bootstrap, str(pid_file),
+            process = subprocess.Popen([python, "-B", "-X", "utf8", "-c", bootstrap, str(pid_file),
                                         "serve", "--host", "127.0.0.1",
                                         "--port", str(port), "--data-dir", str(data), "--no-browser"],
                                        cwd=directory, env=env, stdout=log, stderr=subprocess.STDOUT)
@@ -145,15 +153,23 @@ def main() -> int:
             process, worker_handle = boot(log)
             try:
                 html = request("/")[0].decode()
+                title = re.search(r"<title>([^<]+)</title>", html)
+                assert title and title[1].startswith("Vanguard FAT Studio"), "Installed product title is missing"
                 assets = re.findall(r'(?:src|href)="(/assets/[^\"]+)"', html)
                 assert len(assets) >= 2, "Production HTML does not reference JS/CSS"
                 for asset in assets:
                     assert request(asset)[0], "Empty bundled asset"
+                for name in ("logo_vanguard.png", "logo_vanguard_wordmark_horizontal.png",
+                             "logo_vanguard_wordmark_horizontal_white.png", "favicon.png",
+                             "Geist-Regular.ttf", "Geist-Bold.ttf", "GeistMono-Regular.ttf", "OFL.txt"):
+                    assert request("/brand/" + name)[0], "Missing local brand asset: " + name
                 result["checks"].append("production HTML and local JS/CSS served outside source tree")
                 context["X-FAT-Token"] = json.loads(request("/api/session")[0])["token"]
                 raw, headers = request("/api/project")
                 project = json.loads(raw)
-                assert len(project["equipment"]) == 8 and len(project["tags"]) == 13
+                assert project["id"] == "public-io-lab"
+                assert len(project["equipment"]) == 36 and len(project["tags"]) == 75
+                assert project["plc"]["mode"] == "demo" and project["plc"]["demo_controller"] == "manual_lab_v1"
                 context.update({"X-FAT-Project-ID": project["id"],
                                 "X-FAT-Project-Revision": headers["X-FAT-Project-Revision"], "X-FAT-Run-ID": ""})
                 started = command("/api/run/start")
@@ -167,7 +183,9 @@ def main() -> int:
                 evidence = json.loads(request("/api/export/json")[0])
                 assert evidence["sample_count"] >= 2 and evidence["sample_count"] == len(evidence["samples"])
                 assert evidence["result"]["verdict"] == "not_evaluated"
-                assert "Installed distribution smoke test" in request("/api/export/report")[0].decode()
+                report = request("/api/export/report")[0].decode()
+                assert "Installed distribution smoke test" in report and "Vanguard FAT Studio" in report
+                assert "data:image/png;base64," in report and "data:font/ttf;base64," in report
                 assert b"timestamp" in request("/api/export/csv")[0]
                 assert command("/api/run/stop")["status"] == "stopped"
                 assert command("/api/run/reset")["run_id"] is None

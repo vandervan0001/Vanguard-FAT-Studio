@@ -8,6 +8,8 @@ import json
 import os
 import platform
 import re
+import tempfile
+import uuid
 import sys
 import threading
 import time
@@ -15,8 +17,83 @@ import webbrowser
 from pathlib import Path
 
 from . import __version__
+from .branding import APP_NAME
 from .models import PLCConfig
 from .security import MachinePolicy, TargetDenied, validate_endpoint
+
+
+def _new_directory(destination: Path, build) -> dict:
+    destination = destination.expanduser().absolute()
+    if destination.exists() or destination.is_symlink() or destination.is_junction():
+        raise ValueError("Choisir un nouveau dossier ; aucun projet existant n'est écrasé.")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    expected = destination.resolve()
+    with tempfile.TemporaryDirectory(prefix=".fat-project-stage-", dir=destination.parent) as temporary:
+        staged = Path(temporary) / "project"
+        assert staged.resolve().is_relative_to(Path(temporary).resolve())
+        result = build(staged)
+        if destination.exists() or destination.resolve() != expected:
+            raise ValueError("La destination du projet a changé pendant la préparation.")
+        staged.rename(destination)
+    return {**result, "path": str(destination)}
+
+
+def _new_project(args) -> int:
+    from .demo_lab import demo_lab_project
+    from .models import Project
+    from .storage import Store
+
+    project = demo_lab_project() if args.demo else Project(id="p-" + uuid.uuid4().hex[:16], name=args.name)
+    project.name = args.name
+    def build(path):
+        store = Store(path)
+        try:
+            store.save_project(project)
+        finally:
+            store.close()
+        return dict(status="created", project_id=project.id, demo=args.demo, connected=False)
+    print(json.dumps(_new_directory(args.directory, build), ensure_ascii=False, indent=2))
+    return 0
+
+
+def _archive_create(args) -> int:
+    from .archive import export_archive
+    from .storage import Store
+    from .workspaces import active_workspace, workspace_path
+
+    if args.output.exists():
+        raise ValueError("Choisir un nouveau fichier d'archive.")
+    root = _data_dir(args)
+    store = Store(workspace_path(root, active_workspace(root)))
+    try:
+        project = store.last_project()
+        if project is None:
+            raise ValueError("Aucun projet dans ce dossier.")
+        data = export_archive(store, project)
+    finally:
+        store.close()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with args.output.open("xb") as stream:
+        stream.write(data)
+    print(json.dumps(dict(output=str(args.output), bytes=len(data), project_id=project.id), indent=2))
+    return 0
+
+
+def _archive_restore(args) -> int:
+    from .archive import prepare_archive, restore_archive
+    from .storage import Store
+
+    plan = prepare_archive(args.file.read_bytes())
+    def build(path):
+        store = Store(path)
+        try:
+            project = restore_archive(store, plan)
+        finally:
+            store.close()
+        return dict(status="restored", project_id=project.id, archived_runs=plan.run_count, connected=False,
+                    archive_sha256=plan.archive_sha256)
+    print(json.dumps(_new_directory(args.output, build), ensure_ascii=False, indent=2))
+    return 0
 
 
 def default_data_dir() -> Path:
@@ -55,7 +132,7 @@ def _doctor(args) -> int:
     except (ValueError, OSError) as exc:
         policy, policy_error = [], str(exc)
     result = {
-        "application": "FAT Studio", "version": __version__, "python": platform.python_version(),
+        "application": APP_NAME, "version": __version__, "python": platform.python_version(),
         "platform": platform.platform(), "dependencies": packages, "missing_dependencies": missing,
         "web_ready": (web / "index.html").is_file(), "web_path": str(web), "data_dir": str(directory),
         "authorized_target_count": len(policy), "policy_error": policy_error,
@@ -64,7 +141,7 @@ def _doctor(args) -> int:
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     else:
-        print(f"FAT Studio {__version__} · Python {result['python']} · {result['platform']}")
+        print(f"{APP_NAME} {__version__} · Python {result['python']} · {result['platform']}")
         print(f"Interface compilée : {'OK' if result['web_ready'] else 'ABSENTE'}")
         print(f"Données : {directory}")
         print(f"Cibles autorisées sur ce poste : {len(policy)}")
@@ -150,13 +227,13 @@ def _serve(args) -> int:
             if server.started and not server.should_exit:
                 webbrowser.open(url)
         threading.Thread(target=open_when_ready, name="fat-browser", daemon=True).start()
-    print(f"FAT Studio : {url}\nDonnées : {directory}\nArrêt du service : Ctrl+C")
+    print(f"{APP_NAME} : {url}\nDonnées : {directory}\nArrêt du service : Ctrl+C")
     server.run()
     return 0
 
 
 def parser() -> argparse.ArgumentParser:
-    root = argparse.ArgumentParser(prog="fat-studio", description="Banc FAT local : démonstration, simulation et qualification PLCSIM Advanced.")
+    root = argparse.ArgumentParser(prog="vanguard-fat-studio", description=f"{APP_NAME}, banc FAT local : démonstration et simulation pour essais PLCSIM Advanced.")
     root.add_argument("--version", action="version", version=__version__)
     commands = root.add_subparsers(dest="command")
     serve = commands.add_parser("serve", help="Démarrer l'interface locale")
@@ -169,6 +246,19 @@ def parser() -> argparse.ArgumentParser:
     doctor.add_argument("--data-dir", type=Path)
     doctor.add_argument("--json", action="store_true")
     doctor.set_defaults(handler=_doctor)
+    create = commands.add_parser("new-project", help="Créer un dossier de projet FAT local neuf")
+    create.add_argument("directory", type=Path)
+    create.add_argument("--name", required=True)
+    create.add_argument("--demo", action="store_true")
+    create.set_defaults(handler=_new_project)
+    archive_create = commands.add_parser("archive-create", help="Archiver un dossier fermé ; pour un banc actif utiliser le client IA archive-export")
+    archive_create.add_argument("--data-dir", type=Path, required=True)
+    archive_create.add_argument("--output", type=Path, required=True)
+    archive_create.set_defaults(handler=_archive_create)
+    archive_restore = commands.add_parser("archive-restore", help="Restaurer une archive dans un nouveau dossier, au repos")
+    archive_restore.add_argument("file", type=Path)
+    archive_restore.add_argument("--output", type=Path, required=True)
+    archive_restore.set_defaults(handler=_archive_restore)
     authorize = commands.add_parser("authorize-target", help="Autoriser une cible virtuelle dans la politique du poste")
     authorize.add_argument("--endpoint", required=True)
     authorize.add_argument("--application-uri", required=True)
@@ -186,6 +276,9 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     arguments = sys.argv[1:] if argv is None else argv
     args = parser().parse_args(arguments if arguments else ["serve"])
     try:

@@ -1,0 +1,18 @@
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [
+    {
+      "path": "plc",
+      "message": "La topologie et l'identité doivent être qualifiées sur le poste Siemens ; l'ApplicationUri ne prouve pas à elle seule qu'une CPU est virtuelle."
+    },
+    {
+      "path": "connections",
+      "message": "Les lignes sont graphiques. Les débits utilisent cuve, sens et circuit explicitement configurés, sans solveur hydraulique général."
+    },
+    {
+      "path": "plc",
+      "message": "L'existence, les types et les droits des NodeIds seront vérifiés en ligne au démarrage, avant écriture."
+    }
+  ]
+}

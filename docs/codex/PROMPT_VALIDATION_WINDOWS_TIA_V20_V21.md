@@ -1,10 +1,10 @@
 # Prompt de reprise sur Windows — validation TIA V20/V21
 
-Reprends FAT Studio sur ce PC Windows et termine la validation native de l'intégration TIA Portal V20/V21. Continue le projet existant, corrige les défauts démontrés et conserve les preuves. Ne t'arrête pas à un plan ou à un inventaire.
+Reprends Vanguard FAT Studio sur ce PC Windows et termine la validation native de l'intégration TIA Portal V20/V21. Continue le projet existant, corrige les défauts démontrés et conserve les preuves. Ne t'arrête pas à un plan ou à un inventaire.
 
 ## Référence et lecture initiale
 
-Le dépôt est privé : https://github.com/vandervan0001/FAT-Studio. Utilise le clone actuel s'il existe. Sinon, clone-le dans un nouveau dossier accessible en écriture, avec mon compte GitHub autorisé. Ne remplace aucun dossier existant. Vérifie la branche, `git status`, les changements locaux, les derniers commits et le remote avant de travailler. Préserve les modifications et les données ; aucun reset destructif, stash ou nettoyage global.
+Le dépôt est privé : https://github.com/vandervan0001/Vanguard-FAT-Studio. Utilise le clone actuel s'il existe. Sinon, clone-le dans un nouveau dossier accessible en écriture, avec mon compte GitHub autorisé. Ne remplace aucun dossier existant. Vérifie la branche, `git status`, les changements locaux, les derniers commits et le remote avant de travailler. Préserve les modifications et les données ; aucun reset destructif, stash ou nettoyage global.
 
 Lis `AGENTS.md`, `KB.md`, `README-CODEX.md`, `docs/codex/ETAT_REPRISE.md` et la dernière note de session, puis `docs/TIA_VERSIONS.md`, `docs/TIA_MCP.md`, `docs/COMPATIBILITY.md`, `docs/PLCSIM_SETUP.md` et `docs/ACCEPTANCE.md`. Utilise les outils Windows disponibles ; l'absence d'un outil propre au précédent Mac ne bloque pas la reprise.
 

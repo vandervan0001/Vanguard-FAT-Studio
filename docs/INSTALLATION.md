@@ -1,142 +1,114 @@
-# Installer et démarrer FAT Studio
+# Installer et démarrer Vanguard FAT Studio
 
-**État de vérification au 2 novembre 2026 : la CI 0.2.1 a réussi 418 tests Python et 33 tests frontend sur chacun des systèmes Windows et Ubuntu. Sous Windows, les scripts PowerShell ont été parsés et un kit runtime neuf a été préparé puis installé sans index pip ; le contrôle du service installé, des exports et de la persistance a réussi.** Voir les [preuves Windows/Ubuntu](../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md), les [preuves initiales Linux](../evidence/VERIFICATION.md) et la [reprise macOS ARM64](../evidence/reprises/2026-11-02-macos-arm64/VERIFICATION.md). La compilation du portage V20 et les échanges TIA Portal/PLCSIM Advanced des deux versions restent à qualifier selon [ACCEPTANCE.md](ACCEPTANCE.md).
+## Portable Windows x64 : démarrage sans installation
 
-## Premier démarrage sur Windows
+Le portable contient Python officiel **3.12.10 x64**, les dépendances verrouillées, l’application et son interface compilée. Il ne demande ni Python ou Node.js global, ni droits administrateur, ni connexion Internet pour démarrer. Siemens reste une installation distincte, nécessaire uniquement aux essais qui l’utilisent.
 
-La livraison contient l'interface compilée. **Python 3.12 x64 est le seul prérequis du banc de démonstration.** Node.js, TIA Portal, PLCSIM Advanced, .NET et un compte IA ne sont pas nécessaires pour cette démonstration.
+`Vanguard-FAT-Studio.cmd` est un second nom pour `Start-FAT.cmd`. Les deux lanceurs utilisent les mêmes options et les mêmes données.
 
-1. Installer Python 3.12 x64 depuis la distribution officielle approuvée par votre IT. Le lanceur `py` facilite sa détection.
-2. Extraire l'archive complète ou cloner le dépôt dans un dossier accessible en écriture, par exemple `C:\FAT\fat-studio`.
-3. Double-cliquer **`Start-FAT.cmd`**.
-4. Au premier lancement, le script crée `.venv`, installe les versions de `requirements.lock`, installe le paquet local et ouvre **http://127.0.0.1:8765**.
-5. La cuve TK-101 est proposée en démonstration. Choisir **01 · Cycle de référence**, puis **Démarrer**.
+1. Extraire **toute** l’archive portable dans un dossier local, par exemple `C:\FAT\Vanguard-FAT-Studio`.
+2. Garder ensemble `Start-FAT.cmd`, `runtime/`, `app/`, `scripts/` et `portable-manifest.json`.
+3. Double-cliquer **Start-FAT.cmd**. Le lanceur vérifie les fichiers avant de charger l’application.
+4. Ouvrir [http://127.0.0.1:8765](http://127.0.0.1:8765) si le navigateur ne s’ouvre pas automatiquement.
+5. Garder la console ouverte. `Ctrl+C` arrête le service. Fermer seulement l’onglet ne termine pas un essai en cours.
 
-Laisser la fenêtre du serveur ouverte pendant l'utilisation. **Ctrl+C** dans cette fenêtre arrête le service. Fermer seulement l'onglet du navigateur n'arrête pas un essai en cours.
+Les données sont stockées par défaut dans `%LOCALAPPDATA%\FATStudio`, **hors du runtime**. Le dossier du portable peut être remplacé lors d’une mise à jour sans remplacer vos projets. Conserver néanmoins une [archive de projet](PROJECT_ARCHIVES.md) avant toute mise à jour.
 
-Depuis un clone source sans `wheelhouse/`, une connexion Internet est nécessaire à la première installation des dépendances. L'archive Windows livrée contient les wheels runtime et peut effectuer cette installation sans Internet. Le fonctionnement après installation est local. Aucun CDN, police distante, analytics ni API IA n'est requis par l'interface FAT.
-
-### Politique PowerShell
-
-Le lanceur utilise `RemoteSigned` pour son processus et respecte les stratégies Windows imposées par l'organisation. Si Windows signale que les scripts de l'archive sont bloqués, vérifier leur provenance et utiliser le déblocage de l'archive autorisé par l'IT, puis réextraire les fichiers. Une stratégie d'entreprise qui interdit leur exécution doit être traitée avec l'administrateur. Le logiciel ne modifie pas les stratégies globales.
-
-### Commandes utiles
-
-Depuis le dossier du dépôt :
+Dans PowerShell, depuis le dossier du portable :
 
 ```powershell
-# Installation ou mise à jour après un git pull
+.\Start-FAT.cmd --check
+.\Start-FAT.cmd --port 8767 --no-browser
+.\Start-FAT.cmd --data-dir 'D:\FAT\Mon projet' --port 8767
+.\runtime\python.exe -B -X utf8 -m fat_studio doctor --json
+```
+
+Un `--data-dir` situé dans le runtime portable est refusé par son lanceur. Choisir un dossier de projet indépendant. Pour le client IA, utiliser `runtime\python.exe` et placer le contexte et les exports dans un autre dossier ; lire [AI_QUICKSTART.md](AI_QUICKSTART.md).
+
+Le runtime utilise un fichier Python `._pth` isolé : il ne dépend ni du Python global, ni de `PYTHONPATH`, ni des paquets d’un autre utilisateur. Ne pas modifier ce fichier ou installer des paquets dans le portable. Le manifeste repère les fichiers modifiés ou ajoutés ; il ne remplace pas la confiance dans la provenance du ZIP. En cas d’erreur d’intégrité, conserver les données et réextraire une livraison complète dans un nouveau dossier.
+
+Python 3.12.10 est épinglé pour reproduire cette livraison ; ce n’est pas une promesse de dernière version de sécurité disponible. Son remplacement demande une nouvelle construction et ses contrôles. Le SHA-256 de l’archive, la provenance officielle et la licence PSF sont conservés dans `portable-python.lock.json` et `runtime/LICENSE.txt`.
+
+## Depuis les sources : Python 3.12
+
+La distribution source et le kit source hors ligne utilisent un Python **3.12 x64 déjà installé**. L’interface compilée est fournie ; Node.js ne sert qu’au développement.
+
+Le nom du paquet est `vanguard-fat-studio`. Après installation, `vanguard-fat-studio --help` et `fat-studio --help` ouvrent le même CLI ; `python -m fat_studio` reste disponible. Le nom de marque ne change ni `%LOCALAPPDATA%\FATStudio`, ni `~/.fat-studio`, ni `FAT_STUDIO_DATA`, ni le contenu des archives déjà créées.
+
+1. Installer Python 3.12 x64 selon la politique de votre poste.
+2. Extraire la copie source complète dans un dossier accessible en écriture.
+3. Double-cliquer **Start-FAT.cmd**. Le premier lancement crée `.venv`, installe les versions verrouillées et ouvre le banc sur le port 8765.
+
+```powershell
 .\scripts\setup.ps1
-
-# Choisir explicitement l'interpréteur
-.\scripts\setup.ps1 -Python "C:\Python312\python.exe"
-
-# Port différent, sans ouvrir le navigateur
-.\scripts\start.ps1 -Port 8770 -NoBrowser
-
-# Choisir un dossier de données
-.\scripts\start.ps1 -DataDir "D:\FAT\donnees"
-
-# Réinstaller les dépendances et le paquet
+.\scripts\setup.ps1 -Python 'C:\Python312\python.exe'
+.\scripts\start.ps1 -Port 8767 -NoBrowser
+.\scripts\start.ps1 -DataDir 'D:\FAT\Mon projet'
 .\scripts\start.ps1 -Repair
-
-# Diagnostic d'installation, sans connexion à Siemens
 .\.venv\Scripts\python.exe -m fat_studio doctor --json
 ```
 
-Le lancement normal n'installe pas l'assistance d'ingénierie. Pour cette option, lire [TIA_VERSIONS.md](TIA_VERSIONS.md), puis utiliser `setup.ps1 -Engineering` depuis un clone source avec Internet ou un kit préparé avec `-Engineering`. L'installateur MCP demande V20 ou V21, ou accepte `-TiaVersion`. Le kit runtime d'origine est refusé pour cette option : il ne contient pas les dépendances MCP. TIA Portal de la version choisie, Openness et la passerelle restent des installations distinctes. V20 exige la compilation du portage contre les DLL V20 du poste ; une incompatibilité bloque l'installation.
+Le lanceur source utilise PowerShell avec `RemoteSigned` limité au processus et respecte les stratégies imposées par l’organisation. Si Windows bloque un fichier téléchargé, contrôler sa provenance et utiliser la procédure de déblocage approuvée sur le poste. Aucun changement global de politique, UAC ou pare-feu n’est effectué par ce lanceur.
 
-## Linux et macOS : démonstration et développement
+Le kit source contient `wheelhouse/` et `offline-manifest.json`. `scripts/check-kit.py` vérifie interpréteur, plateforme, chemins, doublons et empreintes avant pip. L’installation utilise `--no-index` et ne se rabat pas sur Internet si une wheel manque. Une copie source sans wheelhouse nécessite PyPI pour sa première installation.
 
-La démonstration et les tests de protocole sont portables ; l'intégration Siemens s'utilise sur le poste Windows qualifié. Utiliser un clone source sans `wheelhouse/` Windows. Depuis le dossier extrait de la livraison, `git clone FAT-Studio.bundle ../fat-studio-source` restitue le dépôt sans les wheels ni l'environnement Windows ; lancer ensuite les commandes dans ce nouveau dossier. Un kit de la mauvaise plateforme est refusé avant l'installation des dépendances.
-
-```bash
-bash scripts/start.sh
-```
-
-Le script utilise Python 3.12, crée l'environnement si nécessaire, installe les dépendances et démarre le même service. Exemples :
+Sous Linux/macOS, utiliser une copie source sans les wheels Windows, avec Python 3.12 :
 
 ```bash
-bash scripts/start.sh --no-browser --port 8770
-bash scripts/start.sh --data-dir "$PWD/fat-data"
-.venv/bin/python -m fat_studio doctor
+bash scripts/start.sh --no-browser --port 8767
+.venv/bin/python -m fat_studio doctor --json
 ```
 
-Après mise à jour du dépôt, réinstaller explicitement :
+## Dossiers de projets et sauvegardes
 
-```bash
-.venv/bin/python -m pip install -r requirements.lock
-.venv/bin/python -m pip install --no-deps --no-build-isolation .
-```
-
-## Emplacement des projets et des essais
-
-| Plateforme | Dossier par défaut |
+| Emplacement | Contenu |
 | --- | --- |
-| Windows | `%LOCALAPPDATA%\FATStudio` |
-| Linux / macOS | `~/.fat-studio` |
-| Toutes | `--data-dir` ou variable `FAT_STUDIO_DATA` pour choisir un autre dossier |
+| Dossier de données actif | Projets JSON, SQLite d’essais et références locales |
+| `%LOCALAPPDATA%\FATStudio` | Racine par défaut sous Windows |
+| `~/.fat-studio` | Racine par défaut sous Linux/macOS |
+| `--data-dir` ou `FAT_STUDIO_DATA` | Choix explicite du dossier de données |
+| Archive `.fat.zip` | Configuration et preuves du seul projet sélectionné |
 
-Les projets sont des JSON lisibles dans `projects/`. Les essais, échantillons et événements sont enregistrés dans `history.sqlite3`. La politique d'autorisation PLC est propre au poste dans `machine-policy.json` ; elle ne fait pas partie des projets importables.
+Un serveur détient un verrou sur le dossier de données ; deux serveurs ne peuvent pas l’utiliser simultanément. Le logiciel permet d’ouvrir des dossiers FAT locaux et de restaurer une archive dans un **nouveau** dossier, au repos. Les autorisations de cible restent indépendantes des projets importés. Lire [PROJECT_ARCHIVES.md](PROJECT_ARCHIVES.md) et [FORMAT.md](FORMAT.md).
 
-Pour une sauvegarde complète, arrêter le service puis copier le dossier de données. Pour versionner un projet dans Git, utiliser **Exporter** dans l'interface et conserver ce JSON dans le dépôt de votre affaire. Éviter de versionner l'historique SQLite ou les clés privées. La version précédente d'un projet écrasé est conservée sous `*.previous.json`.
+Une sauvegarde brute du dossier de données nécessite l’arrêt du serveur pour copier SQLite proprement. Elle peut contenir plusieurs projets et des références propres au poste. Pour transmettre un projet, privilégier l’archive sélectionnée, relue avant partage. Ne pas mettre historique SQLite, secrets ou clés privées dans le dépôt public du logiciel.
 
-## Préparer une installation sans Internet
+## Construire un portable pour distribution
 
-La préparation se fait sur **un poste Windows x64 avec Python 3.12 x64 et accès Internet**. Elle collecte les wheels correspondant à cette plateforme ; ce kit n'est pas un kit Linux/macOS.
+Cette étape concerne le développeur sur **Windows x64 avec Python 3.12**. Partir d’une wheel publique construite après le gel du code, de l’interface et des documents. Le constructeur refuse une destination existante ou située dans les sources.
 
 ```powershell
-.\scripts\prepare-offline.ps1 -Destination "D:\Livraison\FAT-Studio-Windows"
-
-# Inclure aussi les dépendances Python de l'option ingénierie
-.\scripts\prepare-offline.ps1 -Destination "D:\Livraison\FAT-Studio-Windows-IA" -Engineering
+.\.venv\Scripts\python.exe public_distribution.py check
+.\.venv\Scripts\python.exe -m build --wheel --no-isolation
+.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.2.1-py3-none-any.whl
+.\.venv\Scripts\python.exe -m pip download --disable-pip-version-check --only-binary=:all: --no-deps --dest D:\FAT-Build\wheels -r requirements.lock
+.\.venv\Scripts\python.exe scripts/build-portable.py --wheel dist\vanguard_fat_studio-0.2.1-py3-none-any.whl --wheelhouse D:\FAT-Build\wheels --output D:\Livraison\Vanguard-FAT-Studio-Portable
 ```
 
-Le dossier produit contient le code Python et frontend, la documentation, les preuves de livraison, les assets web compilés, les dépendances Python dans `wheelhouse/` et un manifeste SHA-256. Les dépendances Node et le dossier de construction `frontend/dist` ne sont pas copiés ; l'interface utilisable est déjà dans `fat_studio/web`. Le script refuse une destination existante. Copier le dossier complet vers le poste isolé, fournir séparément l'installateur Python validé par l'IT si nécessaire, puis lancer `Start-FAT.cmd`.
+`build-portable.py` télécharge uniquement l’archive Python officielle épinglée si elle n’est pas déjà fournie avec `--python-archive CHEMIN`. Il vérifie sa taille et son SHA-256 avant extraction. Le dossier des wheels doit contenir exactement les paquets et versions de `requirements.lock`. L’installation utilise ces fichiers avec `--no-index --no-deps` ; les paquets ne sont pas cherchés sur un index pendant l’assemblage. L’archive Python peut aussi être transférée en amont pour une construction hors ligne.
 
-Avant d'appeler pip, l'installation vérifie Python 3.12 64 bits, la plateforme, les chemins relatifs, les doublons, les empreintes et la liste des wheels. Sous Windows, l'architecture vérifiée est celle de l'interpréteur (`win-amd64`), y compris s'il fonctionne sur un hôte ARM. Cette détection n'est pas une qualification de Windows ARM. Le validateur partagé est `scripts/check-kit.py` ; il accepte les manifestes UTF-8 avec ou sans BOM et les dossiers comportant espaces ou accents.
+La sélection publique est explicite dans `public-distribution.json`. Le constructeur vérifie la wheel de l’application, copie uniquement les documents autorisés, conserve les licences et les wheels d’origine, puis écrit `portable-manifest.json`. Il exécute ensuite le contrôle de cette livraison avec son propre interpréteur. Un échec laisse une construction incomplète dans sa destination neuve ; ne pas la distribuer.
 
-Le kit doit contenir à la fois `wheelhouse/` et `offline-manifest.json`. L'installation passe `--no-index` à pip ; elle ne tente pas de se rabattre sur Internet si une dépendance manque. Le manifeste détecte une corruption des fichiers ; il ne remplace pas une signature de distribution approuvée. Modifier un fichier répertorié invalide son empreinte : pour développer, utiliser un clone source, puis produire un nouveau kit.
+Après construction, tester depuis **un autre dossier**, avec un `PATH` minimal, un dossier de données temporaire et sans dépendance au dépôt source. Le contrôle doit couvrir le service, une séquence de démo, les exports et une restauration d’archive. Seuls les contrôles effectivement exécutés peuvent être annoncés.
 
-La préparation exclut notamment les environnements Python, `node_modules`, caches, résultats Playwright, fichiers `.env`, certificats et clés. Les fichiers projet et secrets doivent malgré tout rester dans leurs dossiers de données prévus, hors des sources à distribuer.
+Pour produire un kit **source** hors ligne :
 
-Ce kit ne redistribue pas Siemens, .NET ni `tia-portal-mcp`. Pour un poste d'ingénierie totalement hors ligne, préparer ces composants séparément selon leurs licences et la procédure IT. Voir la matrice dans [COMPATIBILITY.md](COMPATIBILITY.md).
-
-## Reconstruire l'interface et la wheel
-
-Cette étape concerne les développeurs. La version Node utilisée par CI est **22**, et les dépendances frontend sont verrouillées par `frontend/package-lock.json`.
-
-```bash
-cd frontend
-npm ci
-npm run build
-cd ..
-python scripts/build-web.py
-python -m pip install -r requirements.lock -r requirements-dev.lock -r requirements-engineering.lock
-python -m pip install --no-deps --no-build-isolation .
-python -m pytest
-python -m build --wheel --no-isolation
+```powershell
+.\scripts\prepare-offline.ps1 -Destination 'D:\Livraison\Vanguard-FAT-Studio-Source' -Python '.\.venv\Scripts\python.exe'
 ```
 
-Les assets compilés sont copiés dans `fat_studio/web` et inclus dans la wheel. Aucun serveur Vite n'est nécessaire en exploitation. La CI construit l'interface et exécute les tests sur Windows et Ubuntu. Sa branche Windows prépare aussi un kit neuf, interdit les index pip, exécute `setup.ps1`, puis vérifie le service installé depuis l'extérieur des sources avec `scripts/smoke-installed.py`. La [CI 41471993176](https://github.com/vandervan0001/FAT-Studio/actions/runs/41471993176) a réussi toutes ces étapes pour le code `b55bfded63dc5572da8d3409409210381cc50c34`, version 0.2.1. Les [preuves sélectionnées](../evidence/reprises/2026-11-02-windows-ci/VERIFICATION.md) conservent les résultats des deux systèmes et le rapport d'installation Windows.
+L’option `-Engineering` ajoute les dépendances Python verrouillées de l’ingénierie TIA, sans embarquer Siemens, .NET ou un serveur MCP installé. Lire [TIA_VERSIONS.md](TIA_VERSIONS.md), [TIA_MCP.md](TIA_MCP.md) et [COMPATIBILITY.md](COMPATIBILITY.md). L’IA TIA reste en lecture seule ; installer une option ne donne aucun droit de chargement ou de commande CPU.
 
-## Dépannage
+## Dépanner
 
-| Symptôme | Action |
+| Observation | Action |
 | --- | --- |
-| Python introuvable / mauvaise version | Installer Python 3.12 x64 ou préciser `setup.ps1 -Python` ; ne pas réutiliser un `.venv` créé avec une autre version. |
-| `Interface compilée absente` | Utiliser la livraison complète ou reconstruire l'interface avec les commandes ci-dessus. |
-| Port 8765 occupé | Fermer l'autre instance ou choisir `-Port 8770` / `--port 8770`. |
-| Page inaccessible | Vérifier que la console du serveur tourne et ouvrir l'URL indiquée par celle-ci. |
-| `Service indisponible` dans l'interface | Les valeurs affichées sont anciennes ; vérifier le serveur avant de reprendre un essai. |
-| Kit hors ligne incomplet | Repréparer le kit sur la bonne plateforme ; une wheel Linux ne remplace pas une wheel Windows. |
-| Empreinte incorrecte ou wheel non répertoriée | Réextraire la livraison complète ou préparer un nouveau kit ; ne pas supprimer le manifeste pour forcer l'installation. |
-| Option ingénierie refusée dans le kit runtime | Préparer le kit avec `-Engineering`, ou installer depuis un clone source connecté. |
-| Projet signalé invalide | Corriger les diagnostics de **Connexion** ; l'enregistrement d'un brouillon incomplet reste possible. |
-| Cible OPC UA refusée | Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md), vérifier la politique locale et l'identité observée. |
+| Portable incomplet ou modifié | Réextraire toute la livraison dans un nouveau dossier ; conserver les données séparées. |
+| Python introuvable dans les sources | Préciser Python 3.12 x64 avec `setup.ps1 -Python`, ou utiliser la distribution portable. |
+| Page inaccessible | Lire l’URL et le message de la console ; vérifier qu’elle est ouverte. |
+| Port occupé | Identifier le service déjà présent puis choisir un autre port ; ne pas arrêter un processus inconnu. |
+| Dossier de données verrouillé | Identifier le serveur qui l’utilise et travailler dans un autre dossier ou l’arrêter volontairement. |
+| Mauvaise plateforme de wheels | Repréparer un kit pour la plateforme voulue ; ne pas enlever le manifeste. |
+| Erreur OPC UA | Vérifier la cible autorisée, l’identité et les NodeIds selon [PLCSIM_SETUP.md](PLCSIM_SETUP.md). |
 
-### Références d'outillage
-
-- [Python : création d'environnements virtuels](https://docs.python.org/3.12/library/venv.html).
-- [pip : installation depuis des paquets locaux](https://pip.pypa.io/en/stable/user_guide/#installing-from-local-packages).
-- Contrats des actions CI consultés : [checkout v6](https://github.com/actions/checkout/blob/v6/action.yml), [setup-python v6](https://github.com/actions/setup-python/blob/v6/action.yml), [setup-node v6](https://github.com/actions/setup-node/blob/v6/action.yml), [upload-artifact v6](https://github.com/actions/upload-artifact/blob/v6/action.yml).
+Références : [distribution officielle Python 3.12.10](https://www.python.org/downloads/release/python-31210/), [paquet Python embarquable](https://docs.python.org/3.12/using/windows.html#the-embeddable-package), [installation pip depuis des paquets locaux](https://pip.pypa.io/en/stable/user_guide/#installing-from-local-packages).

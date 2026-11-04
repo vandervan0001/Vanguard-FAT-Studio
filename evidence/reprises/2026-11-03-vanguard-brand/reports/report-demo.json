@@ -1,0 +1,11 @@
+{
+  "mode": "demo",
+  "scenario": "demo-fill-source",
+  "assertions": 4,
+  "passed": true,
+  "human_verdict": "not_evaluated",
+  "inline_logo": true,
+  "embedded_fonts": 3,
+  "self_contained": true,
+  "user_data_contacted": false
+}

@@ -1,0 +1,28 @@
+{
+  "utc": "2026-11-03T20:34:24.671234+00:00",
+  "url": "http://127.0.0.1:8770",
+  "scope": "Fresh live presentation after completed verification campaign",
+  "run_id": "run-84fc4a8c7b974bd2a842381d398e1763",
+  "project_id": "fat-public-demo-plcsim-v21-20261103",
+  "project_revision": "afb72b8a5a56c0f2d2201f4f0abbafe492ab795e4fbb53bc27c029fd609dd223",
+  "status": "running",
+  "scenario": "demo-guided-io",
+  "connected": true,
+  "good_tags": 75,
+  "guided_steps_executed": 0,
+  "guided_steps_reviewed": 0,
+  "human_verdict": "not_evaluated",
+  "cpu": {
+    "name": "FAT-DEMO-20261103",
+    "id": 1,
+    "state": "Run",
+    "license": "OK",
+    "network": "TCPIPSingleAdapter",
+    "storage": "C:\\FAT_Studio\\.local\\public-demo-2026-11-03\\cpu-storage",
+    "ip": [
+      "192.168.247.3"
+    ]
+  },
+  "previous_campaign_preserved": true,
+  "step_or_observe_called": false
+}

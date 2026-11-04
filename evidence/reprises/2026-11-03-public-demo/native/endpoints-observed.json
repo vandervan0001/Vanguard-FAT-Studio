@@ -1,0 +1,25 @@
+{
+  "endpoints": [
+    {
+      "url": "opc.tcp://192.168.247.3:4840",
+      "application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+      "security_mode": "None_",
+      "security_policy": "http://opcfoundation.org/UA/SecurityPolicy#None",
+      "certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391"
+    },
+    {
+      "url": "opc.tcp://192.168.247.3:4840",
+      "application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+      "security_mode": "Sign",
+      "security_policy": "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+      "certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391"
+    },
+    {
+      "url": "opc.tcp://192.168.247.3:4840",
+      "application_uri": "urn:SIMATIC.S7-1500.OPC-UA.Application:FAT-DEMO",
+      "security_mode": "SignAndEncrypt",
+      "security_policy": "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256",
+      "certificate_sha256": "bc9b4c3aacd92c1e50ae9c1efd09383b54c7e4324d050cc92b3e33c81e99e391"
+    }
+  ]
+}

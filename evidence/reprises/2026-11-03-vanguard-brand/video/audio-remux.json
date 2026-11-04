@@ -1,0 +1,20 @@
+{
+  "reason": "Refresh WAV after final timing markers, preserving all encoded video packets",
+  "same_pcm_from_unpacked_sources": true,
+  "pcm_sha256": "cf31ef76d0c413b0b077c0cf2953681ed6aa9767ac2e9b6de016417758218949",
+  "human_listening": false,
+  "variants": [
+    {
+      "variant": "draft",
+      "video_packet_sha256": "371592030e268521c661f54f075917723374491d90848b75a1c258d6de492309",
+      "video_unchanged": true,
+      "audio_file": "vanguard-fat-studio-draft.mp4"
+    },
+    {
+      "variant": "master",
+      "video_packet_sha256": "0742403fe04c510d710e3803e347b5b3211415f214919674609dbd0f67e8240f",
+      "video_unchanged": true,
+      "audio_file": "vanguard-fat-studio-master.mp4"
+    }
+  ]
+}

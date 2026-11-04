@@ -1,0 +1,328 @@
+{
+  "product": "Vanguard FAT Studio",
+  "iteration": 6,
+  "workstream": "frontend",
+  "captured_at": "2026-11-03T21:26:26.330926+00:00",
+  "platform": {
+    "system": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.10",
+    "node": "22.23.4",
+    "npm": "10.9.9",
+    "playwright": "1.56.1"
+  },
+  "git": {
+    "branch": "codex/vanguard-fat-studio-brand",
+    "head": "cd4daba16580309a675dfa6b1ec95efe5a669038",
+    "state": "shared working tree with prior changes preserved; no commit/reset/push by frontend worker"
+  },
+  "brand": {
+    "parent_commit": "b4df8d8ed0942e98ceee643a9be210f00aca9e9f",
+    "blue": "#0055DD",
+    "pale": "#EFF4FB",
+    "assets_copied_unchanged": 8,
+    "local_fonts": [
+      "Geist Regular",
+      "Geist Bold",
+      "Geist Mono Regular"
+    ],
+    "dependency_lock_unchanged_except_npm_name": true
+  },
+  "commands": [
+    {
+      "command": "npm --prefix frontend run typecheck",
+      "result": "passed"
+    },
+    {
+      "command": "npm --prefix frontend run build; .venv/Scripts/python.exe scripts/build-web.py",
+      "result": "passed, copied final bundle; Vite chunk warning above 500 kB retained"
+    },
+    {
+      "command": "npm test -- brand.spec.ts (FAT_E2E_BASE_URL removed)",
+      "result": "2 passed",
+      "receipt": "targeted/results.json"
+    },
+    {
+      "command": "npx playwright test --config tests/native.playwright.config.ts (cwd frontend)",
+      "result": "1 passed",
+      "receipt": "native/results.json"
+    },
+    {
+      "command": "npm test (cwd frontend; FAT_E2E_BASE_URL removed)",
+      "result": {
+        "startTime": "2026-11-03T21:21:19.337Z",
+        "duration": 161480.624,
+        "expected": 56,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "receipt": "final/frontend-results-final.json"
+    },
+    {
+      "command": "npx --prefix frontend playwright test --config evidence/reprises/2026-11-03-vanguard-brand/ui/framing/framing.playwright.config.ts",
+      "result": "1 passed",
+      "receipt": "framing/framing-results.json"
+    },
+    {
+      "command": "git diff --check -- frontend",
+      "result": "passed; existing CRLF/LF notices only"
+    },
+    {
+      "command": "Python byte comparison of supplied/public/delivered brand assets and package locks",
+      "result": "8 original assets identical; dependency locks unchanged except package name"
+    }
+  ],
+  "initial_findings": [
+    {
+      "issue": "Backend did not serve /brand, logo decode and font loading failed on initial delivered bundle",
+      "reproduction": "brand-route-red/results.json",
+      "correction": "orchestrator mounted /brand StaticFiles; same image and font checks then passed"
+    },
+    {
+      "issue": "New visual harness exact Variables & mapping locator omitted variable count",
+      "correction": "locator accepts accessible label with count; no product change"
+    },
+    {
+      "issue": "Target-confirmation preview requires a valid mapping, which the unmapped public demo deliberately lacks",
+      "correction": "only this visual preview mocks validation and asserts no /run/start request; no NodeId, target or PLC qualification invented"
+    },
+    {
+      "issue": "First native invocation from repository root resolved relative config in the wrong directory",
+      "correction": "rerun from frontend; passed without product change"
+    }
+  ],
+  "native_window": {
+    "viewport": null,
+    "windowBounds": {
+      "left": -7,
+      "top": -7,
+      "width": 1552,
+      "height": 928,
+      "windowState": "maximized"
+    },
+    "browser_version": "Edg/156.0.4314.58",
+    "width": 1528,
+    "height": 828,
+    "screenWidth": 1536,
+    "screenHeight": 960,
+    "devicePixelRatio": 1.25,
+    "documentWidth": 1513,
+    "browser_errors": [],
+    "mode": "temporary demo fixture on port 8766; no PLC"
+  },
+  "visual_review": {
+    "screens": "builder, paused editor, BOOL/analog consoles, guided/timed plans, mapping, connection, trends, boot error, new/open/archive/history/target confirmation",
+    "responsive_widths": [
+      768,
+      920,
+      1024,
+      1280
+    ],
+    "presentation_one_zoom_out": {
+      "lt101": {
+        "x": 230.3337860107422,
+        "y": 218.21780395507812,
+        "width": 63.33649826049805,
+        "height": 12.747827529907227
+      },
+      "valve": {
+        "x": 1247.609375,
+        "y": 616.7547607421875,
+        "width": 64.40996551513672,
+        "height": 55.01689529418945
+      },
+      "banner": {
+        "x": 18,
+        "y": 168,
+        "width": 212.625,
+        "height": 22.80000114440918
+      },
+      "topline": {
+        "x": 16,
+        "y": 139,
+        "width": 1480.800048828125,
+        "height": 27.200000762939453
+      },
+      "minimap": {
+        "x": 1371.800048828125,
+        "y": 640.2000122070312,
+        "width": 120,
+        "height": 80
+      },
+      "lt101_hidden": false,
+      "valve_hidden": false
+    },
+    "representative_states_reviewed": true
+  },
+  "changed_frontend_files_since_pre_brand_checkpoint": [
+    {
+      "path": "frontend/index.html",
+      "bytes": 625,
+      "sha256": "2ce869030dd434b328a0ae1b111f62bb30f873b334bee014a9c8676a4ffff0ce"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "bytes": 85998,
+      "sha256": "01b3a6240c56f72a5f3cc2b544f91166c66f3df906b200ff35b5ce973ac20aae"
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 785,
+      "sha256": "a394142515d70de7c3301909c258187d85b7c058469df0139f08b26fd205abc2"
+    },
+    {
+      "path": "frontend/public/brand/favicon.png",
+      "bytes": 55986,
+      "sha256": "374cd81a0042ec2723fbbf94491ec753b7cc3df77e2097b1dd98b5aa8d070b9e"
+    },
+    {
+      "path": "frontend/public/brand/Geist-Bold.ttf",
+      "bytes": 30204,
+      "sha256": "9e2c9fb9233a35d14efa7b84c991006f6ec2a571525ff987de3b8a1f5b131809"
+    },
+    {
+      "path": "frontend/public/brand/Geist-Regular.ttf",
+      "bytes": 30208,
+      "sha256": "688f24424467b3a81a520e48ab50d155f18757837c3adacbab6f378c66d9f1c4"
+    },
+    {
+      "path": "frontend/public/brand/GeistMono-Regular.ttf",
+      "bytes": 36808,
+      "sha256": "626e256bfdaadaeeddb0d9da16a5ce5a766c934ad38e40c275025e2b09943e8e"
+    },
+    {
+      "path": "frontend/public/brand/logo_vanguard.png",
+      "bytes": 10252,
+      "sha256": "ccf1c7fb9954d01e80b064a04fb281bf09188564cf7c86cf5f4434997b6ae37e"
+    },
+    {
+      "path": "frontend/public/brand/logo_vanguard_wordmark_horizontal.png",
+      "bytes": 21839,
+      "sha256": "c954e95174a3a961b25fb274214f21876013de35f899033aca43cf5ff66b8560"
+    },
+    {
+      "path": "frontend/public/brand/logo_vanguard_wordmark_horizontal_white.png",
+      "bytes": 18674,
+      "sha256": "f123df85e5ea9522619c6fb18c7990f6d18af8668e7c8add6c2e44b29b63d8ad"
+    },
+    {
+      "path": "frontend/public/brand/OFL.txt",
+      "bytes": 4384,
+      "sha256": "2b2da563e79400b61818402ca9f26a73d52468268b7fc715e92143c1e799737e"
+    },
+    {
+      "path": "frontend/README.md",
+      "bytes": 7442,
+      "sha256": "3832714d99fce507897cbcbd12ad14fd83ea5207b83aedf818aad8986414b010"
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "bytes": 7968,
+      "sha256": "87a6f379c0a7b41fe60cf425ae13af38cc530ab3d62996a4bac3aecec2b5fcd3"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 36735,
+      "sha256": "143ec860d2433d8965e778c22bb75d5fd7152107fac4bb3183b6e5dd75b30bd1"
+    },
+    {
+      "path": "frontend/src/fat-workbench.css",
+      "bytes": 34625,
+      "sha256": "f51ee836490f341844eb4c820c74e67a929f01cd9336c37e3598b6e9d387cc59"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "bytes": 313,
+      "sha256": "f6889ea0095211010dda5be36d83d4945349f90a32a4eef96296e8c02b642116"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "bytes": 43075,
+      "sha256": "b819889d8fe8e7baae7dfd445cce7f932c1cc0d7d1a5ab1513da81bde1e2d80a"
+    },
+    {
+      "path": "frontend/src/vanguard.css",
+      "bytes": 11497,
+      "sha256": "e125cbab07e869180cbd651f85caf97a8e24f455b77992ad3826658779df6eee"
+    },
+    {
+      "path": "frontend/tests/brand.spec.ts",
+      "bytes": 8183,
+      "sha256": "784314234fe3811600e15939e29a970587e6908f33f7368dfbc7fa8d1858b591"
+    }
+  ],
+  "removed_files_since_pre_brand_checkpoint": [
+    "frontend/public/favicon.svg"
+  ],
+  "delivered_files": [
+    {
+      "path": "fat_studio/web/assets/index-6ra9f6L1.css",
+      "bytes": 93462,
+      "sha256": "35ced3e286c8c4be5e4f33a2fb0e6f1bedc4ab731742cf15d4457e59dd1d77b1"
+    },
+    {
+      "path": "fat_studio/web/assets/index-CDBs7U1H.js",
+      "bytes": 950434,
+      "sha256": "cd411b8c23911c581ca3642fc92608a83555d25f224a9259fef675e6668a5ca9"
+    },
+    {
+      "path": "fat_studio/web/assets/THIRD_PARTY_LICENSES.txt",
+      "bytes": 77273,
+      "sha256": "6893935721aedbb6b01047fea05cc0ed11ed08325c22095c9975063efc86f95f"
+    },
+    {
+      "path": "fat_studio/web/brand/favicon.png",
+      "bytes": 55986,
+      "sha256": "374cd81a0042ec2723fbbf94491ec753b7cc3df77e2097b1dd98b5aa8d070b9e"
+    },
+    {
+      "path": "fat_studio/web/brand/Geist-Bold.ttf",
+      "bytes": 30204,
+      "sha256": "9e2c9fb9233a35d14efa7b84c991006f6ec2a571525ff987de3b8a1f5b131809"
+    },
+    {
+      "path": "fat_studio/web/brand/Geist-Regular.ttf",
+      "bytes": 30208,
+      "sha256": "688f24424467b3a81a520e48ab50d155f18757837c3adacbab6f378c66d9f1c4"
+    },
+    {
+      "path": "fat_studio/web/brand/GeistMono-Regular.ttf",
+      "bytes": 36808,
+      "sha256": "626e256bfdaadaeeddb0d9da16a5ce5a766c934ad38e40c275025e2b09943e8e"
+    },
+    {
+      "path": "fat_studio/web/brand/logo_vanguard.png",
+      "bytes": 10252,
+      "sha256": "ccf1c7fb9954d01e80b064a04fb281bf09188564cf7c86cf5f4434997b6ae37e"
+    },
+    {
+      "path": "fat_studio/web/brand/logo_vanguard_wordmark_horizontal.png",
+      "bytes": 21839,
+      "sha256": "c954e95174a3a961b25fb274214f21876013de35f899033aca43cf5ff66b8560"
+    },
+    {
+      "path": "fat_studio/web/brand/logo_vanguard_wordmark_horizontal_white.png",
+      "bytes": 18674,
+      "sha256": "f123df85e5ea9522619c6fb18c7990f6d18af8668e7c8add6c2e44b29b63d8ad"
+    },
+    {
+      "path": "fat_studio/web/brand/OFL.txt",
+      "bytes": 4384,
+      "sha256": "2b2da563e79400b61818402ca9f26a73d52468268b7fc715e92143c1e799737e"
+    },
+    {
+      "path": "fat_studio/web/index.html",
+      "bytes": 723,
+      "sha256": "b320680e1fb6c02dac01d313f362d95c833d1139f4cd9538089a10d4612de6f7"
+    }
+  ],
+  "limits": [
+    "Only TemporaryDirectory demo data on loopback port 8766; no call to 8768, 8770 or a PLC by this worker.",
+    "Native refers to a real maximized Windows Edge window, not Siemens qualification.",
+    "The target-confirmation visual preview uses synthetic validation, and no connection is attempted.",
+    "Existing default presentation fit may overlap LT101 and XV301 with overlays; one user zoom-out clears both, demonstrated without changing product code.",
+    "No new human FAT observation or global acceptance is inferred. Some existing regression tests submit synthetic observations in temporary fixtures.",
+    "No packaging, old kit/proof rewrite, publication or video edit by this worker."
+  ],
+  "status": "frontend sources, tests and delivered assets frozen; evidence finalization complete"
+}

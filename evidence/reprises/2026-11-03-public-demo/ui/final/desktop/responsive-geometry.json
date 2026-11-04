@@ -1,0 +1,110 @@
+[
+  {
+    "width": 768,
+    "digital": {
+      "x": 0,
+      "y": 913,
+      "width": 384,
+      "height": 380
+    },
+    "analog": {
+      "x": 384,
+      "y": 913,
+      "width": 384,
+      "height": 380
+    },
+    "canvas": {
+      "x": 0,
+      "y": 243,
+      "width": 768,
+      "height": 670
+    },
+    "inspector": {
+      "x": 454,
+      "y": 283,
+      "width": 300,
+      "height": 501
+    }
+  },
+  {
+    "width": 920,
+    "digital": {
+      "x": 0,
+      "y": 918,
+      "width": 460,
+      "height": 380
+    },
+    "analog": {
+      "x": 460,
+      "y": 918,
+      "width": 460,
+      "height": 380
+    },
+    "canvas": {
+      "x": 0,
+      "y": 248,
+      "width": 920,
+      "height": 670
+    },
+    "inspector": {
+      "x": 606,
+      "y": 322,
+      "width": 300,
+      "height": 501
+    }
+  },
+  {
+    "width": 1024,
+    "digital": {
+      "x": 0,
+      "y": 888,
+      "width": 512,
+      "height": 380
+    },
+    "analog": {
+      "x": 512,
+      "y": 888,
+      "width": 512,
+      "height": 380
+    },
+    "canvas": {
+      "x": 0,
+      "y": 218,
+      "width": 1024,
+      "height": 670
+    },
+    "inspector": {
+      "x": 710,
+      "y": 305,
+      "width": 300,
+      "height": 501
+    }
+  },
+  {
+    "width": 1280,
+    "digital": {
+      "x": 0,
+      "y": 237,
+      "width": 210,
+      "height": 673
+    },
+    "analog": {
+      "x": 1020,
+      "y": 237,
+      "width": 260,
+      "height": 673
+    },
+    "canvas": {
+      "x": 210,
+      "y": 237,
+      "width": 810,
+      "height": 673
+    },
+    "inspector": {
+      "x": 706,
+      "y": 237,
+      "width": 300,
+      "height": 504
+    }
+  }
+]

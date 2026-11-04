@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "date": "2026-11-03",
+  "format": {
+    "duration_s": 45,
+    "width": 1080,
+    "height": 1350,
+    "fps": 30,
+    "decoded_video_frames": 1350,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "matrix": "BT709",
+    "faststart": true
+  },
+  "pipeline_checks": 36,
+  "pipeline_all_pass": true,
+  "encoded_exports_inspected": 4,
+  "source_archive": {
+    "entries": 113,
+    "all_sha256_match": true,
+    "current_sources_match": true,
+    "roundtrip_checks": 19,
+    "deterministic_rgba_equal": true,
+    "deterministic_rgba_sha256": "bd523b1fa76bd186c8e9168c5d0ab10685367d4c6f901b5d9d782af04e5cea06"
+  },
+  "capture": {
+    "mode": "demo",
+    "connected_plc": false,
+    "images": 80,
+    "observed_guided_steps": 0,
+    "human_verdict": "not_evaluated"
+  },
+  "audio": {
+    "reason": "Refresh WAV after final timing markers, preserving all encoded video packets",
+    "same_pcm_from_unpacked_sources": true,
+    "pcm_sha256": "cf31ef76d0c413b0b077c0cf2953681ed6aa9767ac2e9b6de016417758218949",
+    "human_listening": false,
+    "variants": [
+      {
+        "variant": "draft",
+        "video_packet_sha256": "371592030e268521c661f54f075917723374491d90848b75a1c258d6de492309",
+        "video_unchanged": true,
+        "audio_file": "vanguard-fat-studio-draft.mp4"
+      },
+      {
+        "variant": "master",
+        "video_packet_sha256": "0742403fe04c510d710e3803e347b5b3211415f214919674609dbd0f67e8240f",
+        "video_unchanged": true,
+        "audio_file": "vanguard-fat-studio-master.mp4"
+      }
+    ]
+  },
+  "audio_measurements": [
+    {
+      "file": "vanguard-fat-studio-draft.mp4",
+      "truePeakDbfs": -3.3,
+      "integratedLufs": -17
+    },
+    {
+      "file": "vanguard-fat-studio-master.mp4",
+      "truePeakDbfs": -3.3,
+      "integratedLufs": -17
+    }
+  ],
+  "decoded_sample_review": {
+    "master_keyframes": 25,
+    "master_transition_images": 33,
+    "reviewed_from_encoded_mp4": true,
+    "human_listening": false
+  },
+  "assets": {
+    "original_logos_and_fonts_sha256_verified": true,
+    "fonts_license": "SIL OFL1.1",
+    "code_and_music_license": "MIT project",
+    "logos": "Vanguard Systems brand identity"
+  },
+  "temporary_service": {
+    "port": 8774,
+    "closed": true,
+    "data_removed": false
+  },
+  "software_or_live_cpu_mutations": false,
+  "publication": "none"
+}

@@ -1,0 +1,67 @@
+{
+  "mode": "temporary local demonstration only",
+  "tag_count": 75,
+  "geometry": {
+    "digitalBox": {
+      "x": 0,
+      "y": 258,
+      "width": 240,
+      "height": 713
+    },
+    "canvasBox": {
+      "x": 240,
+      "y": 258,
+      "width": 920,
+      "height": 713
+    },
+    "analogBox": {
+      "x": 1160,
+      "y": 258,
+      "width": 280,
+      "height": 713
+    }
+  },
+  "measurements": [
+    {
+      "unit": "V",
+      "value": 5,
+      "raw": 13824,
+      "observed": {
+        "value": 13824,
+        "quality": "forced",
+        "forced": true
+      }
+    },
+    {
+      "unit": "engineering",
+      "value": 25,
+      "raw": 20736,
+      "observed": {
+        "value": 20736,
+        "quality": "forced",
+        "forced": true
+      }
+    },
+    {
+      "unit": "percent",
+      "value": 50,
+      "raw": 13824,
+      "observed": {
+        "value": 13824,
+        "quality": "forced",
+        "forced": true
+      }
+    },
+    {
+      "unit": "native",
+      "value": 6912,
+      "raw": 6912,
+      "observed": {
+        "value": 6912,
+        "quality": "forced",
+        "forced": true
+      }
+    }
+  ],
+  "browser_errors": []
+}

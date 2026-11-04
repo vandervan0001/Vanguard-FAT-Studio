@@ -97,10 +97,25 @@ def test_doctor_reports_installation_without_claiming_siemens_validation(tmp_pat
     result = main(["doctor", "--json", "--data-dir", str(tmp_path)])
     report = json.loads(capsys.readouterr().out)
     assert result in (0, 1)
+    assert report["application"] == "Vanguard FAT Studio"
     assert report["authorized_target_count"] == 0
     assert report["data_dir"] == str(tmp_path.resolve())
     assert "Non vérifiée" in report["siemens_validation"]
     assert not (tmp_path / "machine-policy.json").exists()
+
+
+def test_public_cli_brand_keeps_both_entry_points_and_existing_data_location(tmp_path, monkeypatch):
+    import sys
+    import tomllib
+
+    project = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    assert project["name"] == "vanguard-fat-studio"
+    assert project["scripts"]["vanguard-fat-studio"] == project["scripts"]["fat-studio"] == "fat_studio.cli:main"
+    assert parser().prog == "vanguard-fat-studio"
+    monkeypatch.delenv("FAT_STUDIO_DATA", raising=False)
+    monkeypatch.setattr(sys, "platform", "win32")
+    monkeypatch.setenv("LOCALAPPDATA", str(tmp_path))
+    assert default_data_dir() == (tmp_path / "FATStudio").resolve()
 
 
 def test_siemens_exchange_declarations_match_demo_tags():

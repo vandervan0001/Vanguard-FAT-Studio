@@ -35,13 +35,13 @@ test('la version TIA sélectionnée persiste, suit le projet exporté et revient
   await page.getByRole('button', { name: 'Exporter', exact: true }).click();
   const file = await downloaded;
   const json = await readFile((await file.path())!, 'utf8');
-  expect((JSON.parse(json) as Project).plc.tia_version).toBe('V20');
+  expect(JSON.parse(json)).toMatchObject({ format: 'fat-studio/project', version: '1.0', project: { plc: { tia_version: 'V20' } } });
 
   await version.selectOption('V21');
   await save.click();
   await expect(page.getByRole('status')).toContainText('Projet enregistré');
   await expect.poll(async () => ((await (await request.get('/api/project')).json()) as Project).plc.tia_version).toBe('V21');
-  await page.locator('input[type="file"][accept=".json,application/json"]').setInputFiles({
+  await page.locator('.projectbar input[type="file"][accept=".json,application/json"]').setInputFiles({
     name: 'tia-v20.json', mimeType: 'application/json', buffer: Buffer.from(json),
   });
   await expect(page.getByRole('status')).toContainText('Projet importé');
@@ -65,7 +65,7 @@ test('la version TIA est verrouillée pendant un essai', async ({ page }) => {
   await expect(page.locator('.status-badge')).toHaveText('En cours');
   await expect(version).toBeDisabled();
   await page.getByRole('button', { name: 'Mettre en pause', exact: true }).click();
-  await expect(version).toBeDisabled();
+  await expect(version).toBeEnabled();
   await page.getByRole('button', { name: 'Arrêter l’essai', exact: true }).click();
   await expect(version).toBeEnabled();
 });
