@@ -90,7 +90,7 @@ test('identité Vanguard locale et écrans du banc conservés', async ({ page, r
   await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('Confirmer la cible virtuelle');
   await shot('13-target-confirmation');
-  await page.getByRole('button', { name: 'Annuler', exact: true }).click();
+  await page.getByRole('button', { name: 'Refuser', exact: true }).click();
   expect(attemptedConnection).toBe(false);
   await page.unroute('**/api/validate');
   await page.unroute('**/api/run/start');

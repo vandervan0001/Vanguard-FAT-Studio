@@ -227,6 +227,10 @@ Les adresses absolues sont documentaires. Elles ne sont pas converties en NodeId
 
 Le laboratoire utilise des symboles du contrat public `DB_FAT_Demo`. Les adresses et NodeIds d’une copie native doivent venir de son export et de sa découverte réels selon [DEMO_PLC.md](DEMO_PLC.md). Ne pas transposer un offset d’un autre DB ou d’un DB optimisé.
 
+### Préparer les droits d’écriture
+
+Dans **Variables & mapping**, **Autorisations d’écriture** ouvre une revue de toutes les entrées simulées. Utiliser **Tout autoriser**, **Tout refuser** ou cocher chaque entrée. Avec un filtre, les boutons ne changent que les résultats affichés ; les autres choix sont conservés. **Appliquer la sélection** met à jour le brouillon, puis **Enregistrer** sauvegarde le projet avec ses contrôles de contexte habituels. **Annuler** ou Échap conserve les droits précédents. Les sorties PLC restent en lecture seule. Une entrée refusée bloque la validation et le démarrage du projet, conformément au contrat actuel.
+
 ### Déclarer une conversion électrique
 
 Dans **Variables & mapping**, ouvrir une variable numérique puis choisir **Conversion analogique** : **Brut ↔ unité ingénierie**, **4–20 mA** ou **0–10 V**. Renseigner :
@@ -351,6 +355,10 @@ Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md) pour la préparation native et [ACCEPT
 4. Dans **Connexion**, choisir **PLCSIM Advanced · OPC UA** puis remplir les mêmes informations. Les identifiants utilisateur sont référencés par noms de variables d’environnement ; les valeurs secrètes ne vont pas dans le projet.
 5. Dans Variables, associer les NodeIds découverts. Valider le projet. La validation en ligne des nœuds, types et droits intervient au démarrage avant les écritures.
 6. Démarrer ; recopier exactement le nom de cible et l’endpoint demandés. Vérifier une commande lue et une mesure écrite avant la campagne.
+
+Pour préparer plusieurs essais sur la même cible, cocher **Autoriser plusieurs essais dans cet onglet** dans la confirmation. **Tout sélectionner** couvre l’essai libre et les scénarios du projet ; décocher ceux à exclure, ou choisir **Garder cet essai uniquement**. **Refuser** annule le démarrage et retire l’accord précédent. Chaque essai se démarre manuellement ; les observations et verdicts restent séparés.
+
+Le bandeau **Cible autorisée dans cet onglet** affiche la cible et permet de **Révoquer l’accord** pour les prochains démarrages. Révoquer ne coupe pas un essai déjà en cours ; utiliser **Arrêter l’essai** pour cela. L’accord reste en mémoire dans cet onglet : recharger la page, modifier ou remplacer le projet, rencontrer une erreur ou perdre la connexion le retire. Un scénario exclu demande une nouvelle confirmation. Le serveur reçoit toujours la confirmation exacte et vérifie à nouveau politique locale, identité, certificat et mapping à chaque connexion. Cet accord ne crée aucune autorisation de poste et ne se transmet ni aux archives ni au client IA.
 
 Un projet importé ne peut pas autoriser une cible sur le poste. Le mode OPC UA conserve la vitesse à 1× ; aucune garantie de synchronisation avec le scan PLC n’est déduite du pas choisi.
 

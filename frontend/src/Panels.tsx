@@ -19,6 +19,18 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState('all');
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [permissions, setPermissions] = useState<Record<string, boolean> | null>(null);
+  const [permissionSearch, setPermissionSearch] = useState('');
+  useModalKeyboard(permissions !== null, () => setPermissions(null));
+  const inputs = project.tags.filter(tag => tag.direction === 'input');
+  const writableCount = inputs.filter(tag => tag.writable).length;
+  const permissionTags = inputs.filter(tag => `${tag.name} ${tag.id} ${tag.node_id} ${tag.plc_symbol ?? ''}`.toLowerCase().includes(permissionSearch.trim().toLowerCase()));
+  const permissionChanges = inputs.filter(tag => permissions && permissions[tag.id] !== tag.writable).length;
+  const openPermissions = () => {
+    setPermissionSearch('');
+    setPermissions(Object.fromEntries(inputs.map(tag => [tag.id, tag.writable])));
+  };
+  const setVisiblePermissions = (allowed: boolean) => setPermissions(current => current && ({ ...current, ...Object.fromEntries(permissionTags.map(tag => [tag.id, allowed])) }));
   const input = useRef<HTMLInputElement>(null);
   const tags = project.tags.filter(tag => (direction === 'all' || tag.direction === direction) && `${tag.name} ${tag.id} ${tag.node_id} ${tag.plc_address ?? ''} ${tag.plc_symbol ?? ''}`.toLowerCase().includes(search.toLowerCase()));
   const update = (id: string, patch: Partial<Tag>) => onChange(project => ({ ...project, tags: project.tags.map(tag => tag.id === id ? { ...tag, ...patch } : tag) }));
@@ -37,6 +49,7 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
     </div>
     <input ref={input} type="file" accept=".csv,text/csv" hidden onChange={event => { const file = event.target.files?.[0]; if (file && file.size > 2_000_000) onError('Le fichier CSV dépasse 2 Mo.'); else if (file) void file.text().then(onImport).catch(error => onError(String(error))); event.target.value = ''; }} />
     <div className="information-strip"><ArrowLeftRight size={19} /><div><strong>Entrée PLC</strong> : mesure simulée écrite vers le programme. <strong>Sortie PLC</strong> : commande lue depuis le programme. Le banc ne force jamais une sortie PLC.</div></div>
+    <div className="permission-summary"><div><strong>{writableCount} / {inputs.length} entrées autorisées en écriture</strong><p>Préparez les droits de toutes les entrées en une seule revue.</p></div><button className="button" disabled={locked || !inputs.length} onClick={openPermissions}><ShieldCheck size={16} />Autorisations d’écriture</button></div>
     <div className="table-toolbar"><div className="search-field"><Search size={16} /><input aria-label="Rechercher une variable" placeholder="Rechercher un tag, un NodeId…" value={search} onChange={event => setSearch(event.target.value)} /></div>
       <div className="segmented">{[['all', 'Toutes'], ['input', 'Entrées PLC'], ['output', 'Sorties PLC']].map(([key, name]) => <button key={key} className={direction === key ? 'active' : ''} onClick={() => setDirection(key)}>{name}</button>)}</div><span className="small-muted">{tags.length} / {project.tags.length} variables</span></div>
     <div className="mapping-note">Les adresses %I, %Q et %DB documentent le programme. Les échanges utilisent le NodeId OPC UA découvert et validé. Un DB optimisé peut être adressé par symbole sans offset absolu.</div>
@@ -79,6 +92,20 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
       })}</tbody></table>
       {!tags.length && <div className="empty-state"><ArrowLeftRight size={28} /><h3>{project.tags.length ? 'Aucun résultat' : 'Aucune variable définie'}</h3><p>{project.tags.length ? 'Essayez un autre terme de recherche.' : 'Créez vos variables ici, ou utilisez « Créer les tags manquants » dans les propriétés d’un équipement.'}</p></div>}
     </div>
+    {permissions && <div className="modal-backdrop"><section className="modal permissions-modal" role="dialog" aria-modal="true" aria-labelledby="permissions-title" aria-describedby="permissions-description">
+      <div className="modal-heading"><h2 id="permissions-title">Autorisations d’écriture</h2><button className="icon-button" aria-label="Fermer les autorisations" onClick={() => setPermissions(null)}><X size={18} /></button></div>
+      <p id="permissions-description">Choisissez les entrées simulées que le banc pourra écrire. Les sorties PLC restent en lecture seule. Cette sélection sera ajoutée au brouillon du projet.</p>
+      <label>Filtrer les entrées<input value={permissionSearch} onChange={event => setPermissionSearch(event.target.value)} placeholder="Nom, identifiant, symbole ou NodeId" /></label>
+      <div className="button-row permission-bulk"><button className="button" disabled={locked || !permissionTags.length} onClick={() => setVisiblePermissions(true)}>{permissionSearch.trim() ? 'Autoriser les résultats' : 'Tout autoriser'}</button><button className="button" disabled={locked || !permissionTags.length} onClick={() => setVisiblePermissions(false)}>{permissionSearch.trim() ? 'Refuser les résultats' : 'Tout refuser'}</button><span className="small-muted">{permissionTags.length} / {inputs.length} entrées affichées</span></div>
+      <div className="permission-list">{permissionTags.map(tag => <label className="permission-row" key={tag.id}><input type="checkbox" disabled={locked} checked={permissions[tag.id] ?? false} onChange={event => setPermissions(current => current && ({ ...current, [tag.id]: event.target.checked }))} /><span><strong>{tag.name}</strong><small>{tag.id} · {tag.data_type}{tag.node_id ? ` · ${tag.node_id}` : ''}</small></span></label>)}{!permissionTags.length && <p>Aucune entrée trouvée. Modifiez le filtre.</p>}</div>
+      <p className="small-muted" aria-live="polite">{inputs.filter(tag => permissions[tag.id]).length} / {inputs.length} entrées autorisées · {permissionChanges} modification(s)</p>
+      <p className="small-muted">Une entrée refusée bloque la validation et le démarrage du projet. Ces droits ne remplacent pas l’autorisation locale ni la confirmation de la cible virtuelle au démarrage.</p>
+      <div className="modal-actions"><button className="button" onClick={() => setPermissions(null)}>Annuler</button><button className="button primary" disabled={locked || !permissionChanges} onClick={() => {
+        if (locked) return;
+        onChange(current => ({ ...current, tags: current.tags.map(tag => tag.direction === 'input' && Object.hasOwn(permissions, tag.id) ? { ...tag, writable: permissions[tag.id] } : tag) }));
+        setPermissions(null);
+      }}>Appliquer la sélection</button></div>
+    </section></div>}
   </section>;
 }
 

@@ -43,6 +43,9 @@ export default function App() {
   const [newName, setNewName] = useState('');
   const [confirmTarget, setConfirmTarget] = useState(false);
   const [targetText, setTargetText] = useState('');
+  const [rememberTarget, setRememberTarget] = useState(false);
+  const [approvedScenarios, setApprovedScenarios] = useState<string[]>([]);
+  const [targetApproval, setTargetApproval] = useState<{ revision: string; confirmation: string; scenarios: string[] } | null>(null);
   const [showLivePanel, setShowLivePanel] = useState(false);
   const [viewRequest, setViewRequest] = useState(0);
   const [presentation, setPresentation] = useState(false);
@@ -57,6 +60,7 @@ export default function App() {
   const reportPending = reportDraft.resultDirty || reportDraft.marker !== '' || guidedPending;
   const locked = state?.status === 'running';
   const serviceUnavailable = networkError || projectConflict;
+  useEffect(() => { if (serviceUnavailable || state?.status === 'error' || error) setTargetApproval(null); }, [serviceUnavailable, state?.status, error]);
   const editorDisabled = Boolean(locked || busy || serviceUnavailable);
   useModalKeyboard(projectsModal !== null || confirmTarget, () => { if (!busy) { setProjectsModal(null); setConfirmTarget(false); } });
 
@@ -154,6 +158,7 @@ export default function App() {
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 4500); return () => clearTimeout(timer); }, [notice]);
 
   const onChange = useCallback((update: (project: Project) => Project) => {
+    setTargetApproval(null);
     setProject(current => current ? update(current) : current);
     setDirty(true); setValidation(null);
   }, []);
@@ -173,7 +178,7 @@ export default function App() {
     if (actionBusy.current) return;
     actionBusy.current = true;
     setBusy(true); setError(null);
-    try { await action(); } catch (error) { setError(errorMessage(error)); } finally { actionBusy.current = false; setBusy(false); }
+    try { await action(); } catch (error) { setTargetApproval(null); setError(errorMessage(error)); } finally { actionBusy.current = false; setBusy(false); }
   };
 
   const save = () => act(async () => { const wasPaused = stateRef.current?.status === 'paused' && dirty; await saveProject(); setNotice(wasPaused ? 'Modifications appliquées. Essai précédent conservé ; démarrez un nouvel essai.' : 'Projet enregistré.'); });
@@ -189,6 +194,7 @@ export default function App() {
   }, [saveProject, editorDisabled, scenarioPending, busy]);
 
   const replaceProject = async (loaded: Project) => {
+    setTargetApproval(null);
     setProject(loaded); setProjectConflict(false); setDirty(false); setScenarioId(''); setScenarioDraft(null); setValidation(null); setProjectsModal(null); setActiveTab('pid');
     stateRef.current = null; setState(null);
     await refreshState();
@@ -219,8 +225,11 @@ export default function App() {
     await saveProject();
     const result = await api<Validation>('/validate'); setValidation(result);
     if (!result.valid) { setActiveTab('connection'); throw new Error(`Le projet contient ${result.errors.length} erreur(s). Corrigez les points indiqués dans Connexion.`); }
-    if (project.plc.mode === 'opcua' && !confirmation) { setTargetText(''); setConfirmTarget(true); return; }
-    receiveSnapshot(await api<Snapshot>('/run/start', 'POST', { ...(scenarioId ? { scenario_id: scenarioId } : {}), ...(confirmation ? { target_confirmation: confirmation } : {}) }));
+    const reusable = targetApproval?.revision === getProjectRevision() && targetApproval.scenarios.includes(scenarioId) ? targetApproval.confirmation : '';
+    const targetConfirmation = confirmation || reusable;
+    if (project.plc.mode === 'opcua' && !targetConfirmation) { setTargetText(''); setRememberTarget(false); setApprovedScenarios([scenarioId]); setConfirmTarget(true); return; }
+    receiveSnapshot(await api<Snapshot>('/run/start', 'POST', { ...(scenarioId ? { scenario_id: scenarioId } : {}), ...(targetConfirmation ? { target_confirmation: targetConfirmation } : {}) }));
+    if (confirmation) setTargetApproval(rememberTarget ? { revision: getProjectRevision(), confirmation, scenarios: approvedScenarios } : null);
     setConfirmTarget(false); setNotice('Essai démarré.');
   });
   const control = (action: 'pause' | 'resume' | 'stop' | 'reset') => act(async () => {
@@ -311,6 +320,7 @@ export default function App() {
     {notice && <div className="toast" role="status"><Check size={17} />{notice}<button className="icon-button" onClick={() => setNotice('')} aria-label="Fermer la notification"><X size={15} /></button></div>}
 
     <main>
+    {targetApproval && targetApproval.revision === getProjectRevision() && <div className="information-strip target-approval"><Shield size={18} /><div><strong>Cible autorisée dans cet onglet</strong><p>{targetApproval.confirmation} · {targetApproval.scenarios.length} mode(s) ou scénario(s). Les contrôles de connexion restent actifs.</p></div><button className="button" onClick={() => setTargetApproval(null)}>Révoquer l’accord</button></div>}
       {currentStatus === 'paused' && <div className="pause-edit-banner"><PencilRulerIcon /><span><strong>Essai en pause.</strong> Le P&ID est modifiable. {dirty ? 'Appliquez les modifications pour clore cet essai et en préparer un nouveau. Les preuves précédentes restent conservées.' : 'Reprendre continue cet essai. Enregistrer une modification prépare un nouvel essai.'}</span>{dirty && <button className="button compact-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}>Appliquer en pause</button>}</div>}
       {activeTab === 'pid' && <>
         <div className="workspace-toolbar"><div className="workspace-label"><span className="small-dot" /><strong>Vue procédé</strong></div><span className="workspace-execution" data-state={serviceUnavailable ? 'error' : currentStatus}>{executionMode} · {executionStatus}</span><div className="workspace-actions"><div className="scenario-selector"><ListChecks size={15} /><label htmlFor="active-scenario">Scénario</label><select id="active-scenario" value={displayedScenarioId} disabled={editorDisabled} onChange={event => chooseScenario(event.target.value)}><option value="">Essai libre</option>{project.scenarios.map(scenario => <option key={scenario.id} value={scenario.id}>{scenario.name}</option>)}</select></div><button className="button presentation-toggle" aria-pressed={presentation} onClick={() => setPresentation(value => !value)}>{presentation ? <Minimize2 size={14} /> : <Maximize2 size={14} />}{presentation ? 'Quitter la présentation' : 'Mode présentation'}</button></div></div>
@@ -333,7 +343,9 @@ export default function App() {
         : <><div className="demo-project public-demo-project"><div><strong>Laboratoire · Transfert de liquides</strong><p>Trois cuves, quatre pompes, huit vannes et instruments. Demandes manuelles, retours physiques et FAT préparées, sans séquence métier imposée.</p></div><button className="button primary" disabled={busy} onClick={() => void loadPilot()}>Charger le laboratoire</button></div><div className="archive-actions"><strong>Archiver le projet complet</strong><p>L’archive .fat.zip contient le P&ID, les variables, les animations, les scénarios, le mapping et l’historique de ce projet. Enregistrez-la dans le dossier de votre choix.</p><div className="button-row"><button className="button" disabled={busy || scenarioPending} onClick={() => void exportArchive()}><ArrowDownToLine size={15} />Exporter l’archive FAT</button><button className="button" disabled={busy || scenarioPending} onClick={() => archiveInput.current?.click()}><Upload size={15} />Restaurer une archive FAT</button></div><p>La restauration crée un nouveau dossier local et l’ouvre au repos. L’ancien espace reste disponible. Les secrets et autorisations du poste ne sont pas importés.</p></div><div className="workspace-list"><h3>Dossiers FAT locaux</h3>{workspaces.map(workspace => <div className="workspace-item" data-workspace={workspace.id} key={workspace.id}><FolderOpen size={17} /><div><strong>{workspace.name}</strong><small>{workspace.path}</small>{workspace.error && <small className="failed-text">{workspace.error}</small>}</div><button className="button compact-button" disabled={busy || workspace.active || Boolean(workspace.error)} onClick={() => void openWorkspace(workspace.id)} aria-label={`Ouvrir le dossier ${workspace.name}`}>{workspace.active ? 'Actif' : 'Ouvrir'}</button></div>)}</div><h3 className="saved-projects-title">Projets de l’espace actif</h3><div className="project-list">{projects.map(entry => <button key={entry.id} onClick={() => void loadProject(entry.id)} disabled={busy}><FolderOpen size={20} /><span><strong>{entry.name}</strong><small>{entry.updated_at ? new Date(entry.updated_at).toLocaleString('fr-CH') : entry.id}</small></span>{entry.id === project.id && <span className="type-label">Ouvert</span>}</button>)}{!projects.length && <p className="empty-inline">Aucun projet enregistré.</p>}</div><div className="demo-project"><div><strong>Exemple TK-101</strong><p>Cuve, pompe, vannes et trois scénarios de référence.</p></div><button className="button" disabled={busy} onClick={() => void loadDemo()}>Charger la démo</button></div><p className="small-muted">Les projets s’exportent en JSON versionné 1.0. L’import accepte aussi les anciens fichiers de projet.</p></>}
     </section></div>}
 
-    {confirmTarget && <div className="modal-backdrop"><section className="modal target-modal" role="dialog" aria-modal="true" aria-labelledby="target-title"><div className="modal-heading"><h2 id="target-title">Confirmer la cible virtuelle</h2><button className="icon-button" onClick={() => setConfirmTarget(false)} aria-label="Annuler la connexion"><X size={18} /></button></div>{error && <DialogError message={error} onClose={() => setError(null)} />}<div className="target-identity"><span>INSTANCE APPROUVÉE</span><strong>{project.plc.approved_virtual_target || 'Nom non renseigné'}</strong><code>{expectedTarget}</code><small>{project.plc.expected_application_uri}</small></div><p>Le banc va lire les commandes PLC et écrire uniquement les entrées simulées autorisées. Vérifiez que cette cible appartient à l’instance PLCSIM Advanced de votre poste.</p><label>Recopiez exactement la cible pour confirmer<input autoFocus className="mono" value={targetText} onChange={event => setTargetText(event.target.value)} placeholder={expectedTarget} /></label><div className="modal-actions"><button className="button" onClick={() => setConfirmTarget(false)}>Annuler</button><button className="button primary" disabled={busy || targetText !== expectedTarget} onClick={() => void start(targetText)}><Shield size={16} />Connecter et démarrer</button></div></section></div>}
+    {confirmTarget && <div className="modal-backdrop"><section className="modal target-modal" role="dialog" aria-modal="true" aria-labelledby="target-title"><div className="modal-heading"><h2 id="target-title">Confirmer la cible virtuelle</h2><button className="icon-button" onClick={() => setConfirmTarget(false)} aria-label="Annuler la connexion"><X size={18} /></button></div>{error && <DialogError message={error} onClose={() => setError(null)} />}<div className="target-identity"><span>INSTANCE APPROUVÉE</span><strong>{project.plc.approved_virtual_target || 'Nom non renseigné'}</strong><code>{expectedTarget}</code><small>{project.plc.expected_application_uri}</small></div><p>Le banc va lire les commandes PLC et écrire uniquement les entrées simulées autorisées. Vérifiez que cette cible appartient à l’instance PLCSIM Advanced de votre poste.</p><label>Recopiez exactement la cible pour confirmer<input autoFocus className="mono" value={targetText} onChange={event => setTargetText(event.target.value)} placeholder={expectedTarget} /></label><label className="check-label"><input type="checkbox" checked={rememberTarget} disabled={busy} onChange={event => setRememberTarget(event.target.checked)} />Autoriser plusieurs essais dans cet onglet</label>
+      {rememberTarget && <div className="target-scope"><p>Choisissez les essais couverts par cet accord. Il expire au rechargement, à la modification du projet ou après une erreur. Chaque démarrage reste manuel.</p><div className="button-row"><button className="button" disabled={busy} onClick={() => setApprovedScenarios(['', ...project.scenarios.map(scenario => scenario.id)])}>Tout sélectionner</button><button className="button" disabled={busy} onClick={() => setApprovedScenarios([scenarioId])}>Garder cet essai uniquement</button></div><div className="permission-list">{[{ id: '', name: 'Essai libre' }, ...project.scenarios].map(scenario => <label className="permission-row" key={scenario.id}><input type="checkbox" disabled={busy || scenario.id === scenarioId} checked={approvedScenarios.includes(scenario.id)} onChange={event => setApprovedScenarios(current => event.target.checked ? [...current, scenario.id] : current.filter(id => id !== scenario.id))} /><span>{scenario.name}{scenario.id === scenarioId ? ' (démarrage demandé)' : ''}</span></label>)}</div><p>Les observations et verdicts FAT restent à saisir par le testeur.</p></div>}
+      <div className="modal-actions"><button className="button" disabled={busy} onClick={() => { setTargetApproval(null); setConfirmTarget(false); }}>Refuser</button><button className="button primary" disabled={busy || serviceUnavailable || targetText !== expectedTarget} onClick={() => void start(targetText)}><Shield size={16} />Connecter et démarrer</button></div></section></div>}
   </div>;
 }
 
