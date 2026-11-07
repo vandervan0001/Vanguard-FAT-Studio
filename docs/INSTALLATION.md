@@ -112,3 +112,17 @@ L’option `-Engineering` ajoute les dépendances Python verrouillées de l’in
 | Erreur OPC UA | Vérifier la cible autorisée, l’identité et les NodeIds selon [PLCSIM_SETUP.md](PLCSIM_SETUP.md). |
 
 Références : [distribution officielle Python 3.12.10](https://www.python.org/downloads/release/python-31210/), [paquet Python embarquable](https://docs.python.org/3.12/using/windows.html#the-embeddable-package), [installation pip depuis des paquets locaux](https://pip.pypa.io/en/stable/user_guide/#installing-from-local-packages).
+
+## Mettre à jour un portable existant
+
+La livraison du 7 novembre 2026 conserve la version applicative 0.2.1 et ajoute la revue groupée des autorisations. Le nom daté du ZIP, le commit source et le SHA-256 publiés dans la release identifient cette construction. La version affichée par `/api/health` ne suffit pas à distinguer ces deux portables.
+
+1. Dans l’ancien banc, enregistrer les brouillons et exporter une archive FAT des projets à conserver avec leur historique.
+2. Arrêter l’essai, puis fermer le serveur avant d’ouvrir le nouveau portable sur le même dossier de données.
+3. Extraire entièrement le nouveau ZIP dans un **nouveau dossier**. Ne pas fusionner les fichiers avec l’ancien portable : chaque manifeste décrit sa propre livraison.
+4. Lancer `Vanguard-FAT-Studio.cmd`. Le dossier de données habituel est conservé (`%LOCALAPPDATA%\FATStudio`). Si l’ancien lancement utilisait `--data-dir` ou `FAT_STUDIO_DATA`, conserver ce même chemin. Les archives exportées peuvent aussi être restaurées depuis **Ouvrir**.
+5. Vérifier le projet actif et le mode avant de démarrer. Les autorisations locales de cible ne sont pas contenues dans le ZIP. L’accord groupé de l’interface doit être donné dans le nouvel onglet.
+
+Pour revenir au portable précédent, arrêter le nouveau serveur puis lancer l’ancien dossier intact avec le dossier de données voulu. Cette mise à jour ne change pas le schéma de stockage ; les archives exportées restent la copie de sauvegarde du projet et de ses essais. Les données ne doivent pas être copiées dans `runtime/`, `app/` ou à l’intérieur du manifeste.
+
+Les notes de release donnent le ZIP courant, son SHA-256, les sources exactes et le reçu des vérifications. Les archives automatiques « Source code » de GitHub suivent le tag historique de la release ; utiliser la référence source indiquée pour reconstruire ce portable.

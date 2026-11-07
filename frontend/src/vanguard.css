@@ -169,6 +169,22 @@ td { color: #52657f; }
 .boot-screen h1 { color: #202a3d; font-weight: 700; }
 .boot-screen > p { color: #66758e; }
 .boot-loading { color: var(--brand-blue); }
+.permission-summary { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0; }
+.permission-summary p { margin: 4px 0 0; color: #66758e; font-size: 12px; }
+.permissions-modal { width: 680px; }
+.permissions-modal > p { font-size: 12px; line-height: 1.6; }
+.permission-bulk { margin: 14px 0; flex-wrap: wrap; }
+.permission-list { max-height: 32dvh; overflow: auto; border: 1px solid #dbe4f2; border-radius: 6px; }
+.permission-row { display: flex; flex-direction: row; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #edf0f6; }
+.permission-row input { flex: 0 0 auto; }
+.permission-row span { min-width: 0; overflow-wrap: anywhere; }
+.permission-row small { display: block; color: #66758e; font-weight: 400; margin-top: 4px; }
+.permission-list > p { padding: 12px; }
+.target-scope { margin-top: 16px; }
+.target-scope p,.target-approval p { font-size: 12px; line-height: 1.6; margin: 8px 0; }
+.target-scope .permission-list { margin-top: 12px; }
+.target-approval { margin: 12px 26px; flex-wrap: wrap; }
+.target-approval > div { flex: 1; overflow-wrap: anywhere; }
 
 @media (max-width: 1200px) {
   .topbar { gap: 18px; }

@@ -1,5 +1,10 @@
 # Changements publics
 
+## Portable du 7 novembre 2026 (application 0.2.1)
+
+- Confirmation de cible réutilisable dans un onglet pour les seuls essais choisis, avec révocation et expiration après modification du projet, rechargement ou erreur. Les contrôles serveur restent exécutés à chaque connexion.
+- Revue groupée des droits d’écriture des entrées simulées, sélection filtrée et annulation avant application au brouillon.
+
 ## Aperçu public 0.2.1
 
 - Nom courant Vanguard FAT Studio, identité visuelle Vanguard et polices Geist locales ; noms et résultats des preuves historiques conservés.
