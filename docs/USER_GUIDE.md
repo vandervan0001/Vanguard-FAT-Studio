@@ -182,17 +182,32 @@ Dans **Scénarios**, **Exporter tous les scénarios** produit une enveloppe JSON
 ### Dessiner et paramétrer
 
 1. Cliquer **Nouveau**, donner un nom puis **Créer le projet**. Le projet commence vide en démonstration.
-2. Dans **P&ID**, sélectionner **Construire** et déposer les équipements depuis la palette.
-3. Déplacer les symboles, les relier par les points de connexion et utiliser le zoom/panoramique pour organiser la vue. Sélectionner un équipement pour afficher ses propriétés.
-4. Renseigner ses paramètres physiques et associer ses ports à des variables compatibles. **Créer les tags manquants**, lorsqu’il est proposé dans les propriétés, prépare les variables nécessaires ; vérifier ensuite leur type, leurs limites et leurs droits.
-5. Pour les pompes/vannes, définir explicitement cuve associée, sens et groupe de débit. Pour un transfert, renseigner aussi la cuve source ; ne pas attendre qu’un trait du dessin crée ce bilan.
+2. Dans **P&ID → Construire**, utiliser **Insérer un circuit de remplissage** pour commencer avec une cuve, une pompe et une vanne. Pour composer un autre procédé, rechercher un équipement dans la bibliothèque, puis cliquer dessus ou le glisser sur le dessin. Les ajouts au clic occupent une place libre et reçoivent un repère disponible.
+3. Déplacer les symboles et utiliser le zoom/panoramique pour organiser la vue. Pour tracer une conduite, sélectionner le premier équipement, choisir le second dans **Relier à**, puis cliquer **Tracer la liaison**. Les points de connexion du dessin restent utilisables.
+4. Sélectionner un équipement et ouvrir **Lier les tags automate** en haut de ses propriétés. Associer ses rôles aux variables existantes ou créer les tags manquants selon le parcours ci-dessous.
+5. Renseigner les paramètres physiques. Pour les pompes/vannes, choisir la cuve par son nom, le sens et le groupe de débit. Pour un transfert, choisir aussi la **Cuve source du transfert** ; **Source extérieure** signifie qu’aucune autre cuve du modèle n’est débitée.
 6. Enregistrer avec le bouton ou `Ctrl+S` (`Cmd+S` sur macOS), puis valider dans **Connexion**.
 
 La bibliothèque comprend neuf types : cuve, pompe, pompe à variateur, vanne TOR, vanne modulante, capteur analogique, capteur binaire, bouton/contact et indicateur PLC. Les paramètres et ports disponibles dépendent du type. Le catalogue actif est aussi accessible par l’API pour un assistant.
 
+Le circuit de départ est proposé seulement lorsque le P&ID est vide. Il prépare trois équipements, deux conduites et treize tags locaux. La pompe et la vanne sont configurées en série vers la cuve, avec un même groupe de débit. Les tags déjà présents sont conservés. Le bouton ne démarre pas d’essai et ne change pas le mode de connexion du projet. Dans un nouveau projet en démonstration, enregistrer puis cliquer **Démarrer** permet de voir le remplissage, sans automate ni TIA Portal. Les NodeIds créés restent vides.
+
 Les traits sont des connexions visuelles. Les groupes de débit explicitement déclarés fixent le calcul : minimum des capacités des équipements en série, somme des branches indépendantes. Lire [MODEL.md](MODEL.md) pour le bilan de cuve et les limites du modèle. Le P&ID ne calcule pas un réseau hydraulique général.
 
 Un brouillon incomplet peut être enregistré ; les erreurs sémantiques restent visibles et empêchent son démarrage. La limite du format est de 50 équipements et 200 variables par projet.
+
+### Lier un équipement aux tags automate
+
+1. Sélectionner l’équipement dans **Construire**, puis **Lier les tags automate**. À gauche figurent ses rôles : commande, retour, défaut, niveau, etc. La mention **requis** distingue les associations nécessaires ; le compteur inclut aussi les rôles facultatifs.
+2. Choisir un rôle. La liste présente seulement les tags dont le sens et le type conviennent. Rechercher par nom, symbole PLC, adresse ou NodeId, puis cliquer le tag voulu. Deux tags de même nom affichent aussi leur identifiant pour pouvoir les distinguer.
+3. Pour aller plus vite, cliquer **Proposer depuis le repère**. Par exemple, la commande de `P-101` peut correspondre à `P101_RunCommand` et son retour à `P101_Running`. Les propositions utilisent les noms et symboles PLC, complètent seulement les rôles libres et exigent une correspondance unique. Relire les associations proposées ; les cas ambigus restent à choisir.
+4. Si le tag n’existe pas, utiliser **Créer un tag BOOL/REAL/…** pour le rôle sélectionné, ou **Créer les tags manquants** pour tous les rôles encore libres. Un choix de type apparaît lorsque le rôle en accepte plusieurs. Les nouveaux tags n’ont pas de NodeId ; ils peuvent être renommés et leurs limites réglées dans **Variables & mapping**.
+5. Pour une connexion OPC UA, déplier **NodeId OPC UA de…** et coller l’identifiant réellement découvert sur le serveur. Cette modification concerne le tag et toutes ses utilisations. Aucun NodeId ni aucune échelle analogique ne sont déduits d’une adresse Siemens. En démonstration, ce champ peut rester vide.
+6. Cliquer **Appliquer au brouillon**, puis **Enregistrer** dans le projet. **Annuler**, la croix ou Échap abandonne les changements de cette fenêtre, y compris les tags qu’elle venait de préparer.
+
+Une entrée déjà produite par un autre équipement est signalée et ne peut pas être choisie comme second producteur physique. Les commandes PLC restent en lecture seule ; plusieurs équipements peuvent les lire. Les demandes manuelles ne sont pas considérées comme des producteurs physiques. Vérifier les droits d’écriture des entrées dans **Variables & mapping** avant une connexion.
+
+Si le projet change ou devient verrouillé, la sélection reste visible dans la fenêtre et l’application est désactivée. Relire le projet avant de refaire les associations. Le logiciel ne reprend pas automatiquement une opération interrompue. Les listes d’association dans les propriétés restent disponibles pour les modifications ponctuelles.
 
 ### Animer un symbole depuis une variable
 

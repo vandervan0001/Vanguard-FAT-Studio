@@ -45,7 +45,7 @@ export type ScenarioPackage = { format: 'fat-studio/scenarios'; version: '1.0'; 
 export type ScenarioImportMode = 'merge' | 'replace';
 export type CatalogItem = {
   type: EquipmentType; label: string; description: string; default_params: Record<string, Parameter>;
-  ports: Record<string, { label: string; direction: 'input' | 'output'; data_types: string[]; required: boolean; unit?: string }>;
+  ports: Record<string, { label: string; direction: 'input' | 'output'; data_types: string[]; required: boolean; unit?: string; simulated_source?: boolean }>;
   parameters: Record<string, { label: string; type: 'number' | 'string' | 'boolean' | 'select'; min?: number; max?: number; options?: (string | {value: string; label: string})[]; unit?: string }>;
 };
 export type Validation = { valid: boolean; errors: { path: string; message: string }[]; warnings: { path: string; message: string }[] };

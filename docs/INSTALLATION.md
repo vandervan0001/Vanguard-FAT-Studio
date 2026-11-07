@@ -115,7 +115,7 @@ Références : [distribution officielle Python 3.12.10](https://www.python.org/d
 
 ## Mettre à jour un portable existant
 
-La livraison du 7 novembre 2026 conserve la version applicative 0.2.1 et ajoute la revue groupée des autorisations. Le nom daté du ZIP, le commit source et le SHA-256 publiés dans la release identifient cette construction. La version affichée par `/api/health` ne suffit pas à distinguer ces deux portables.
+Les constructions du 7 novembre 2026 conservent la version applicative 0.2.1. La première ajoute les autorisations groupées ; la construction P&ID ajoute le circuit de départ, la bibliothèque filtrable et la fenêtre de liaison des tags automate. Le nom du ZIP, le commit source et le SHA-256 publiés dans la release identifient chaque construction. La version affichée par `/api/health` ne suffit pas à les distinguer.
 
 1. Dans l’ancien banc, enregistrer les brouillons et exporter une archive FAT des projets à conserver avec leur historique.
 2. Arrêter l’essai, puis fermer le serveur avant d’ouvrir le nouveau portable sur le même dossier de données.

@@ -186,6 +186,57 @@ td { color: #52657f; }
 .target-approval { margin: 12px 26px; flex-wrap: wrap; }
 .target-approval > div { flex: 1; overflow-wrap: anywhere; }
 
+/* Build a circuit and review PLC bindings without leaving the P&ID. */
+.pid-starter { margin: 0 12px 14px; padding: 12px; border: 1px solid var(--brand-line); border-radius: 8px; background: var(--brand-pale); }
+.pid-starter strong { color: #254974; font-size: 12px; }
+.pid-starter p { font-size: 11px; line-height: 1.5; color: #566c88; margin: 6px 0 10px; }
+.pid-starter .button { width: 100%; white-space: normal; line-height: 1.5; text-align: left; }
+.palette-search { display: flex; flex-direction: row; align-items: center; gap: 6px; margin: 0 12px 12px; color: #566c88; }
+.palette-search input { min-width: 0; width: 100%; font-size: 11px; padding: 8px; }
+.binding-launch { padding: 13px; margin: 12px 0 18px; border: 1px solid var(--brand-line); border-radius: 7px; background: var(--brand-pale); }
+.binding-launch strong { font-size: 12px; color: #254974; }
+.binding-launch p { font-size: 11px; line-height: 1.5; margin: 6px 0 12px; color: #566c88; }
+.quick-connection { margin-bottom: 18px; padding-bottom: 8px; border-bottom: 1px solid #e0e7f1; }
+.quick-connection .button { margin-top: 8px; }
+.binding-modal { width: min(1000px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 24px; }
+.binding-modal > p { font-size: 12px; line-height: 1.6; }
+.binding-modal h2 { margin-top: 6px; }
+.binding-toolbar { flex-wrap: wrap; margin: 16px 0; }
+.binding-notice { padding: 9px 12px; border-radius: 6px; background: var(--brand-pale); color: #254974; }
+.binding-workspace { display: grid; grid-template-columns: 280px minmax(0, 1fr); border: 1px solid #dbe4f2; border-radius: 9px; overflow: hidden; }
+.binding-roles { padding: 10px; background: #f5f8fd; border-right: 1px solid #dbe4f2; max-height: 51dvh; overflow-y: auto; }
+.binding-roles button { display: block; position: relative; width: 100%; padding: 12px 28px 12px 12px; margin-bottom: 6px; text-align: left; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #304d73; overflow-wrap: anywhere; }
+.binding-roles button.active { border-color: #91b2ed; background: white; box-shadow: 0 1px 4px #153a6810; }
+.binding-roles button > span { display: block; font-size: 12px; font-weight: 650; }
+.binding-roles em { font-size: 10px; font-style: normal; color: #73582a; }
+.binding-roles small { display: block; font-size: 11px; margin-top: 5px; color: #637795; }
+.binding-roles svg { position: absolute; right: 9px; top: 14px; color: #078a75; }
+.binding-picker { min-width: 0; padding: 18px; max-height: 51dvh; overflow-y: auto; }
+.binding-picker h3 { font-size: 15px; color: #254974; margin: 0 0 8px; }
+.binding-search { display: flex; flex-direction: row; align-items: center; gap: 10px; margin: 14px 0 10px; }
+.binding-search input { width: 100%; min-width: 0; }
+.binding-candidates { max-height: 230px; overflow-y: auto; border: 1px solid #dbe4f2; border-radius: 6px; }
+.binding-candidates button { display: block; text-align: left; width: 100%; background: white; border: 0; border-bottom: 1px solid #e8edf5; padding: 11px 12px; color: #304d73; font-size: 12px; overflow-wrap: anywhere; }
+.binding-candidates button.selected { background: #eaf1ff; box-shadow: inset 3px 0 var(--brand-blue); }
+.binding-candidates button > span { float: right; font-size: 10px; margin-left: 10px; }
+.binding-candidates button small { display: block; font-size: 11px; margin-top: 4px; font-weight: 400; color: #637795; }
+.binding-candidates button:disabled { opacity: .65; }
+.binding-candidates > p { padding: 14px; font-size: 12px; line-height: 1.6; }
+.binding-create { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.binding-create select { width: 90px; }
+.binding-address { margin-top: 16px; font-size: 12px; overflow-wrap: anywhere; }
+.binding-address summary { cursor: pointer; color: #315b99; }
+.binding-address label { margin-top: 12px; }
+.binding-actions { align-items: center; flex-wrap: wrap; }
+.binding-actions > span { margin-right: auto; }
+@media (max-width: 760px) {
+  .binding-workspace { grid-template-columns: minmax(0, 1fr); }
+  .binding-roles { display: flex; overflow-x: auto; max-height: 135px; border-right: 0; border-bottom: 1px solid #dbe4f2; }
+  .binding-roles button { min-width: 190px; margin-bottom: 0; }
+  .binding-picker { max-height: 43dvh; }
+  .binding-modal { padding: 16px; }
+}
+
 @media (max-width: 1200px) {
   .topbar { gap: 18px; }
   .brand-wordmark { width: 138px; }

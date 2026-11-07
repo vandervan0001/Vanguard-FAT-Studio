@@ -118,6 +118,7 @@ test('archiver puis restaurer dans un nouveau dossier conserve les preuves et re
     await stale.route('**/api/state', route => route.fulfill({ json: retained }));
     await stale.getByLabel('Nom du projet').fill('Brouillon de l’espace original');
     await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();
+    await expect(page.getByRole('dialog').getByRole('button', { name: 'Restaurer une archive FAT', exact: true })).toBeEnabled();
     const invalid = page.waitForResponse(response => response.url().endsWith('/api/project/archive/import'));
     await page.getByLabel('Archive FAT à restaurer', { exact: true }).setInputFiles({ name: 'invalide.fat.zip', mimeType: 'application/zip', buffer: Buffer.from('Ce fichier ne contient pas une archive ZIP.') });
     expect((await invalid).status()).toBe(400);

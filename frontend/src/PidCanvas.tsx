@@ -4,7 +4,7 @@ import {
   Handle, Position, MarkerType, useReactFlow, BaseEdge, getSmoothStepPath,
   type Node, type NodeProps, type NodeChange, type EdgeChange, type Connection, type EdgeProps,
 } from '@xyflow/react';
-import { CircleHelp, GripVertical, Plus, Trash2, Unlink, WandSparkles, X, Zap, RotateCcw, PencilRuler, Radio } from 'lucide-react';
+import { CircleHelp, GripVertical, Plus, Search, Trash2, Unlink, WandSparkles, X, Zap, RotateCcw, PencilRuler, Radio, Link2 } from 'lucide-react';
 import { api } from './api';
 import { fmt, uid, type CatalogItem, type Equipment, type EquipmentType, type Project, type Snapshot, type Tag, type Scenario } from './types';
 import { DigitalInputs, AnalogInputs, PlcOutputs } from './TestConsole';
@@ -12,6 +12,8 @@ import { ForceField } from './ForceField';
 import { scenarioFocus } from './ScenarioRun';
 import { AnimationEditor, animationReading } from './AnimationEditor';
 import { diagnosticLabel, diagnosticProfile, displayValue, engineeringUnit } from './signal';
+import { BindingEditor } from './BindingEditor';
+import { compatibleTag, fillCircuit, freePosition, makeEquipment, missingPortTags } from './pidBuilder';
 
 type Props = {
   project: Project; state: Snapshot | null; catalog: CatalogItem[]; locked: boolean; online: boolean;
@@ -22,7 +24,6 @@ type Props = {
 type EquipmentNode = Node<{ equipment: Equipment; state: Record<string, unknown>; tags: Snapshot['tags']; faults: Record<string, unknown>; locked: boolean; operating: boolean; highlighted?: boolean; signalTag?: Tag; animationDataType?: Tag['data_type'] }, 'equipment'>;
 
 const TYPE_LABELS: Record<EquipmentType, string> = { tank: 'Cuve', pump: 'Pompe', pump_vfd: 'Pompe à variateur', valve_onoff: 'Vanne TOR', valve_control: 'Vanne modulante', analog_sensor: 'Capteur analogique', digital_sensor: 'Capteur binaire', digital_input: 'Bouton / entrée TOR', indicator: 'Indicateur' };
-const PREFIX: Record<EquipmentType, string> = { tank: 'TK', pump: 'P', pump_vfd: 'VFD', valve_onoff: 'XV', valve_control: 'CV', analog_sensor: 'AI', digital_sensor: 'DI', digital_input: 'PB', indicator: 'ST' };
 const FAULTS: Partial<Record<EquipmentType, { key: string; label: string }[]>> = {
   pump: [{ key: 'motor_trip', label: 'Défaut moteur' }],
   pump_vfd: [{ key: 'motor_trip', label: 'Défaut moteur' }],
@@ -114,9 +115,16 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
   const [snapToGrid, setSnapToGrid] = useState(true);
   const [building, setBuilding] = useState(!project.equipment.length);
   const [showConsoles, setShowConsoles] = useState(false);
+  const [librarySearch, setLibrarySearch] = useState('');
+  const [fitAdded, setFitAdded] = useState(false);
   const [measurements, setMeasurements] = useState<Record<string, { width: number; height: number }>>({});
   const canvasRef = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition, fitView } = useReactFlow();
+  useEffect(() => {
+    if (!fitAdded) return;
+    const timer = setTimeout(() => { void fitView({ padding: .2, maxZoom: 1, duration: 200 }); setFitAdded(false); }, 90);
+    return () => clearTimeout(timer);
+  }, [fitAdded, project.equipment.length, fitView]);
   const focusedIds = useMemo(() => scenario ? scenarioFocus(project, scenario) : [], [project, scenario]);
   useEffect(() => { if (state?.status === 'running') setBuilding(false); else if (state?.status === 'paused') setBuilding(true); }, [state?.status]);
   useEffect(() => {
@@ -160,14 +168,11 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
     if (project.equipment.length >= 50) { onError('Le projet est limité à 50 équipements.'); return; }
     const item = catalog.find(item => item.type === type);
     if (!item) return;
-    const id = uid(type);
-    const count = project.equipment.filter(equipment => equipment.type === type).length + 101;
-    onChange(project => ({ ...project, equipment: [...project.equipment, {
-      id, type, name: `${PREFIX[type]}-${count}`, description: '', unit: '',
-      position: position ?? screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 }),
-      params: { ...item.default_params }, bindings: {},
-    }] }));
-    setSelectedId(id);
+    const bounds = canvasRef.current?.getBoundingClientRect();
+    const centre = screenToFlowPosition({ x: bounds ? bounds.x + bounds.width / 2 : window.innerWidth / 2, y: bounds ? bounds.y + bounds.height / 2 : window.innerHeight / 2 });
+    const equipment = makeEquipment(item, project.equipment, position ?? freePosition(project.equipment, { x: centre.x - 75, y: centre.y - 90 }));
+    onChange(project => ({ ...project, equipment: [...project.equipment, equipment] }));
+    setSelectedId(equipment.id); setSelectedEdge(null); if (!position) setFitAdded(true);
   };
 
   const onNodesChange = useCallback((changes: NodeChange<EquipmentNode>[]) => {
@@ -221,15 +226,20 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
   return <div className={`workbench ${building ? 'building-mode' : 'operating-mode'} ${presentation && !building ? 'presented-workbench' : ''} ${presentation && !showConsoles && !building ? 'consoles-hidden' : ''}`}>
     {building ? <aside className="palette panel">
       <div className="panel-title">Bibliothèque <span className="subtle-count">{String(catalog.length).padStart(2, '0')}</span></div>
-      <p className="panel-hint">Glissez un équipement<br />sur le P&ID.</p>
+      <p className="panel-hint">Cliquez pour ajouter, ou glissez à l’endroit voulu.</p>
+      {!project.equipment.length && <div className="pid-starter"><strong>Partir d’un circuit</strong><p>Cuve, pompe, vanne, conduites et tags locaux prêts à modifier.</p><button className="button primary compact-button" disabled={locked} onClick={() => {
+        try { const next = fillCircuit(project, catalog); onChange(current => current === project ? next : current); setSelectedId(next.equipment.find(item => item.type === 'pump')!.id); setFitAdded(true); }
+        catch (error) { onError(error instanceof Error ? error.message : String(error)); }
+      }}>Insérer un circuit de remplissage</button></div>}
+      <label className="palette-search"><Search size={14} /><input aria-label="Rechercher un équipement" placeholder="Cuve, pompe, capteur…" value={librarySearch} onChange={event => setLibrarySearch(event.target.value)} /></label>
       <div className="palette-items">
-        {catalog.map(item => <button key={item.type} className="palette-item" draggable={!locked && project.equipment.length < 50} disabled={locked || project.equipment.length >= 50}
+        {catalog.filter(item => `${item.label} ${item.description}`.toLocaleLowerCase().includes(librarySearch.trim().toLocaleLowerCase())).map(item => <button key={item.type} className="palette-item" draggable={!locked && project.equipment.length < 50} disabled={locked || project.equipment.length >= 50}
           onDragStart={event => { event.dataTransfer.setData('application/fat-equipment', item.type); event.dataTransfer.effectAllowed = 'move'; }}
           onClick={() => addEquipment(item.type)} title={`${item.description}\nCliquer ou glisser pour ajouter`}>
           <ProcessSymbol type={item.type} compact /><span>{item.label}</span><GripVertical size={13} className="drag-hint" />
         </button>)}
       </div>
-      <div className="palette-note"><CircleHelp size={15} /><p>Reliez les points latéraux pour dessiner une conduite.</p></div>
+      <div className="palette-note"><CircleHelp size={15} /><p>Reliez les points latéraux, ou choisissez « Relier à » dans les propriétés.</p></div>
       <label className="check-label grid-choice"><input type="checkbox" checked={snapToGrid} onChange={event => setSnapToGrid(event.target.checked)} />Aligner sur la grille</label>
       <div className="keyboard-help"><kbd>Suppr</kbd> supprimer<br /><kbd>Molette</kbd> zoomer<br /><kbd>Glisser fond</kbd> déplacer</div>
     </aside> : <DigitalInputs {...controls} />}
@@ -280,21 +290,14 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
   const [faultKind, setFaultKind] = useState(FAULTS[equipment.type]?.[0]?.key ?? '');
   const [faultValue, setFaultValue] = useState('');
   const [busy, setBusy] = useState(false);
+  const [bindingOpen, setBindingOpen] = useState(false);
+  const [connectionTarget, setConnectionTarget] = useState('');
   const change = (patch: Partial<Equipment>) => onChange(project => ({ ...project, equipment: project.equipment.map(entry => entry.id === equipment.id ? { ...entry, ...patch } : entry) }));
   const faults = state?.faults[equipment.id] ?? {};
   const waitingForCycle = state?.guided_steps?.at(-1)?.state === 'queued';
   const createTags = () => {
     if (!item) return;
-    const bindings = { ...equipment.bindings };
-    const tags: Tag[] = [];
-    Object.entries(item.ports).forEach(([port, spec]) => {
-      if (bindings[port]) return;
-      const dataType = spec.data_types[0] as Tag['data_type'];
-      const id = uid(`${equipment.id}_${port}`);
-      const unit = spec.unit ?? '';
-      tags.push({ id, name: `${equipment.name}.${port}`, direction: spec.direction, data_type: dataType, unit, initial_value: dataType === 'BOOL' ? false : 0, min: dataType === 'BOOL' ? null : 0, max: unit === '%' ? 100 : null, node_id: '', writable: spec.direction === 'input' });
-      bindings[port] = id;
-    });
+    const { bindings, tags } = missingPortTags(equipment, item);
     if (project.tags.length + tags.length > 200) { onError('Ces variables dépasseraient la limite de 200 tags par projet.'); return; }
     onChange(project => ({ ...project, tags: [...project.tags, ...tags], equipment: project.equipment.map(entry => entry.id === equipment.id ? { ...entry, bindings } : entry) }));
   };
@@ -308,21 +311,26 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
     <div className="inspector-body">
       <span className="type-label">{item?.label ?? TYPE_LABELS[equipment.type]}</span>
       <label>Nom / repère<input disabled={locked} value={equipment.name} onChange={event => change({ name: event.target.value })} /></label>
+      {item && <div className="binding-launch"><strong>{Object.entries(item.ports).filter(([port, spec]) => project.tags.some(tag => tag.id === equipment.bindings[port] && compatibleTag(tag, spec))).length} / {Object.keys(item.ports).length} rôles associés</strong><p>Choisissez les tags existants ou préparez les tags de cet équipement.</p><button className="button primary full-width" disabled={locked} onClick={() => setBindingOpen(true)}><Link2 size={15} />Lier les tags automate</button></div>}
+      {!locked && <div className="quick-connection"><label>Relier à<select aria-label="Relier à" value={connectionTarget} onChange={event => setConnectionTarget(event.target.value)}><option value="">Choisir un équipement</option>{project.equipment.filter(entry => entry.id !== equipment.id && !project.connections.some(edge => edge.source === equipment.id && edge.target === entry.id)).map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select></label><button className="button compact-button" disabled={!connectionTarget || project.connections.length >= 200} onClick={() => {
+        if (!project.equipment.some(entry => entry.id === connectionTarget) || project.connections.some(edge => edge.source === equipment.id && edge.target === connectionTarget)) return;
+        onChange(current => ({ ...current, connections: [...current.connections, { id: uid('line'), source: equipment.id, target: connectionTarget, label: '', directed: true }] })); setConnectionTarget('');
+      }}><Link2 size={14} />Tracer la liaison</button><p className="small-muted">Conduite graphique. La cuve et le circuit du modèle se règlent ci-dessous.</p></div>}
       <label>Description<input disabled={locked} value={equipment.description ?? ''} placeholder="Fonction dans le procédé" onChange={event => change({ description: event.target.value })} /></label>
       <label>Unité d’affichage<input disabled={locked} value={equipment.unit ?? ''} placeholder="%, L, bar…" onChange={event => change({ unit: event.target.value })} /></label>
 
       <AnimationEditor equipment={equipment} project={project} state={state} locked={locked} onChange={animation => change({ animation })} />
 
       <h4>Paramètres du modèle</h4>
-      {Object.entries({ ...item?.default_params, ...equipment.params }).map(([key, value]) => {
+      {Object.entries({ ...item?.default_params, ...(item?.parameters.source_tank_id ? { source_tank_id: '' } : {}), ...equipment.params }).map(([key, value]) => {
         const spec = item?.parameters[key];
-        const label = spec?.label ?? key;
-        const isEquipment = key === 'tank_id' || key === 'source_equipment';
+        const label = (spec?.label ?? key).replace(' (identifiant)', '');
+        const isEquipment = key === 'tank_id' || key === 'source_equipment' || key === 'source_tank_id';
         const options = spec?.options;
         return <label key={key} className={typeof value === 'boolean' ? 'check-label' : ''}>
           {typeof value !== 'boolean' && <span>{label}{spec?.unit && <small>{spec.unit}</small>}</span>}
           {typeof value === 'boolean' ? <><input type="checkbox" disabled={locked} checked={value} onChange={event => change({ params: { ...equipment.params, [key]: event.target.checked } })} />{label}</>
-            : isEquipment ? <select disabled={locked} value={String(value)} onChange={event => change({ params: { ...equipment.params, [key]: event.target.value } })}><option value="">— Choisir —</option>{project.equipment.filter(entry => entry.id !== equipment.id && (key !== 'tank_id' || entry.type === 'tank')).map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select>
+            : isEquipment ? <select disabled={locked} value={String(value)} onChange={event => change({ params: { ...equipment.params, [key]: event.target.value } })}><option value="">{key === 'source_tank_id' ? 'Source extérieure' : '— Choisir —'}</option>{project.equipment.filter(entry => entry.id !== equipment.id && (key === 'source_equipment' || entry.type === 'tank')).map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select>
               : options ? <select disabled={locked} value={String(value)} onChange={event => change({ params: { ...equipment.params, [key]: event.target.value } })}>{options.map(option => <option key={typeof option === 'string' ? option : option.value} value={typeof option === 'string' ? option : option.value}>{typeof option === 'string' ? option : option.label}</option>)}</select>
                 : <input disabled={locked} type={typeof value === 'number' ? 'number' : 'text'} step="any" min={spec?.min} max={spec?.max} value={String(value)} onChange={event => change({ params: { ...equipment.params, [key]: typeof value === 'number' ? Number(event.target.value) : event.target.value } })} />}
         </label>;
@@ -359,6 +367,7 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
       </>}
       <div className="inspector-footer"><span className="mono">{equipment.id}</span><button className="danger-text" disabled={locked} onClick={() => { if (window.confirm(`Supprimer ${equipment.name} et ses liaisons graphiques ? Ses tags seront conservés.`)) { onChange(project => ({ ...project, equipment: project.equipment.filter(entry => entry.id !== equipment.id), connections: project.connections.filter(connection => connection.source !== equipment.id && connection.target !== equipment.id) })); onClose(); } }}><Trash2 size={14} />Supprimer</button></div>
     </div>
+    {bindingOpen && item && <BindingEditor project={project} equipment={equipment} item={item} catalog={catalog} locked={locked} onChange={onChange} onClose={() => setBindingOpen(false)} />}
   </>;
 }
 
