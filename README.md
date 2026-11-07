@@ -15,13 +15,15 @@ Reliez une CPU virtuelle à un procédé simulé. Envoyez vos entrées, suivez l
 
 ## Essayer sans Siemens
 
-1. Installez **Python 3.12 x64**, puis [téléchargez les sources](https://github.com/vandervan0001/Vanguard-FAT-Studio/archive/refs/heads/main.zip) et extrayez le ZIP.
-2. Sous Windows, double-cliquez sur **Vanguard-FAT-Studio.cmd**. Au premier lancement, le script crée un environnement local et installe les dépendances verrouillées depuis PyPI. L’interface compilée est fournie.
+1. Sous Windows, [téléchargez le portable indiqué en tête de la release](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/public-preview-2026-11-04) et extrayez tout le ZIP dans un nouveau dossier. Python est inclus.
+2. Ouvrez le dossier **Vanguard-FAT-Studio**, puis double-cliquez sur **Vanguard-FAT-Studio.cmd**. La démo fonctionne sans automate ni TIA Portal.
 3. Dans [le banc local](http://127.0.0.1:8765), ouvrez la **démo laboratoire** et choisissez le scénario **Alimentation de la cuve source**. Cliquez sur **Préparer la vue**, puis sur **Démarrer**.
 
 La démo fournit trois cuves, quatre pompes, huit vannes et 75 variables. Le programme de démonstration fournit les commandes et le banc simule les niveaux et retours. Essayez un stimulus analogique de 12 mA et suivez le résultat dans les tendances.
 
-Sous Linux ou macOS, lancez `bash scripts/start.sh` depuis les sources avec Python 3.12. Le [guide d’installation](docs/INSTALLATION.md) couvre aussi la construction du portable Windows et les kits hors ligne.
+Pour dessiner votre propre procédé, créez un projet puis choisissez **Insérer un circuit de remplissage** dans **P&ID → Construire**. Sélectionnez un équipement et ouvrez **Lier les tags automate** pour rechercher les variables compatibles, proposer des associations depuis le repère ou créer les tags manquants. [Parcours détaillé](docs/USER_GUIDE.md#7-créer-le-pid-et-ses-variables)
+
+Pour travailler depuis les [sources](https://github.com/vandervan0001/Vanguard-FAT-Studio/archive/refs/heads/main.zip), installez Python 3.12 x64. Le lanceur Windows prépare les dépendances verrouillées au premier démarrage ; sous Linux ou macOS, lancez `bash scripts/start.sh`. Le [guide d’installation](docs/INSTALLATION.md) couvre les mises à jour et les kits hors ligne.
 
 ## Connecter TIA Portal et PLCSIM
 
