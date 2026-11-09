@@ -62,6 +62,9 @@ class OpcUaAdapter:
         self.write_count = 0
         self.target = f"{self.config.approved_virtual_target} @ {self.config.endpoint}"
 
+    def _create_client(self) -> IdentityClient:
+        return IdentityClient(self.config.endpoint, timeout=self.config.timeout_s, identity_check=self._check_identity)
+
     def _check_identity(self, application_uri: str, certificate: bytes | None) -> None:
         if application_uri != self.config.expected_application_uri:
             raise TargetDenied(f"ApplicationUri serveur inattendue : {application_uri!r}. Aucune écriture effectuée.")
@@ -79,7 +82,7 @@ class OpcUaAdapter:
             raise TargetDenied(f"Confirmer exactement la cible : {self.target}")
         self.policy.authorize(self.config, self.confirmation)
         self.nodes.clear()
-        client = IdentityClient(self.config.endpoint, timeout=self.config.timeout_s, identity_check=self._check_identity)
+        client = self._create_client()
         client.application_uri = "urn:fat-studio:client"
         client.name = f"{APP_NAME} local virtual-PLC test client"
         self.client = client

@@ -46,7 +46,10 @@ export function api<T>(path: string, method = 'GET', body?: unknown, signal?: Ab
   // Retain the target of the user's action while queued or refreshing an expired session.
   const context = { projectId: currentProjectId, revision: currentProjectRevision, runId: expectedRunId === undefined ? currentRunId : expectedRunId ?? '' };
   const request = () => requestApi<T>(path, method, body, signal, context);
-  if (method === 'GET') return request();
+  // Draft checks and discovery are context-guarded reads. They must not hide a
+  // failed state poll or invalidate a snapshot as if a run command had occurred.
+  const preview = method === 'POST' && ['/validate/preview', '/mapping/preview', '/opcua/browse'].includes(path);
+  if (method === 'GET' || preview) return request();
   mutationVersion++;
   const result = mutations.then(request, request).finally(() => { mutationVersion++; });
   mutations = result.catch(() => undefined);

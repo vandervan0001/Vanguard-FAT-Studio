@@ -175,7 +175,9 @@ test('un diagnostic attendu peut être observé conforme sans confondre hors pla
   await expect.poll(async () => (await snapshot(request)).tags.lt101_raw.quality).toBe('out_of_range');
   await expect(page.getByRole('button', { name: 'Conforme', exact: true })).toBeEnabled();
   await page.getByLabel('Observation du testeur').fill('Code haut du profil observé, diagnostic attendu.');
+  const observationSaved = page.waitForResponse(response => response.url().endsWith('/api/run/steps/diagnostic-1/observe') && response.request().method() === 'POST');
   await page.getByRole('button', { name: 'Conforme', exact: true }).click();
+  expect((await observationSaved).ok()).toBeTruthy();
   const final = await snapshot(request);
   expect(final.guided_steps?.[0].checks[0].passed).toBe(true);
   expect(final.guided_steps?.[0].verdict).toBe('pass');

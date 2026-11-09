@@ -2,6 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowDownToLine, ArrowLeftRight, ChartNoAxesCombined, Check, ChevronDown, CircleAlert, CircleHelp, Clock3, FilePlus2, FolderOpen, ListChecks, LoaderCircle, Maximize2, Minimize2, Network, Pause, Play, RotateCcw, Save, Settings2, Shield, Square, Upload, Workflow, X } from 'lucide-react';
 import { api, downloadArchive, downloadMapping, downloadText, getMutationVersion, getProjectContext, getProjectRevision, initSession, setRunContext } from './api';
 import { useModalKeyboard } from './useModalKeyboard';
+import { Home, Undo2, Redo2 } from 'lucide-react';
+import { Welcome, FirstRunGuide } from './Welcome';
+import { Readiness, type Correction } from './Readiness';
+import { acknowledgeDraft, draftTab, readDraft, writeDraft, removeDraft, type LocalDraft } from './draftStore';
+import { fillCircuit } from './pidBuilder';
+import './ux.css';
 import PidCanvas from './PidCanvas';
 import { ScenarioRun } from './ScenarioRun';
 import { ConnectionPanel, ScenariosPanel, TrendChart, TrendsPanel, VariablesPanel } from './Panels';
@@ -51,6 +57,19 @@ export default function App() {
   const [presentation, setPresentation] = useState(false);
   const [scenarioPanelVersion, setScenarioPanelVersion] = useState(0);
   const [bootAttempt, setBootAttempt] = useState(0);
+  const [welcome, setWelcome] = useState(false);
+  const [guideProject, setGuideProject] = useState('');
+  const [focusRequest, setFocusRequest] = useState<(Correction & { nonce: number }) | undefined>();
+  const [workspaceScope, setWorkspaceScope] = useState('');
+  const [storageReady, setStorageReady] = useState(false);
+  const [recovery, setRecovery] = useState<LocalDraft | null>(null);
+  const [storageError, setStorageError] = useState('');
+  const [draftStored, setDraftStored] = useState(false);
+  const [editorTab] = useState(draftTab);
+  const history = useRef<{ past: Project[]; future: Project[] }>({ past: [], future: [] });
+  const [, historyChanged] = useState(0);
+  const projectRef = useRef(project); projectRef.current = project;
+  const savedProject = useRef('');
   const fileInput = useRef<HTMLInputElement>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const stateRef = useRef<Snapshot | null>(null);
@@ -61,7 +80,7 @@ export default function App() {
   const locked = state?.status === 'running';
   const serviceUnavailable = networkError || projectConflict;
   useEffect(() => { if (serviceUnavailable || state?.status === 'error' || error) setTargetApproval(null); }, [serviceUnavailable, state?.status, error]);
-  const editorDisabled = Boolean(locked || busy || serviceUnavailable);
+  const editorDisabled = Boolean(locked || busy || serviceUnavailable || recovery);
   useModalKeyboard(projectsModal !== null || confirmTarget, () => { if (!busy) { setProjectsModal(null); setConfirmTarget(false); } });
 
   const receiveSnapshot = useCallback((data: Snapshot) => {
@@ -101,15 +120,26 @@ export default function App() {
     const boot = async () => {
       try {
         await initSession(controller.signal);
-        const [projectData, catalogData, stateData] = await Promise.all([
+        const [projectData, catalogData, stateData, spaces] = await Promise.all([
           api<Project>('/project', 'GET', undefined, controller.signal),
           api<CatalogItem[]>('/catalog', 'GET', undefined, controller.signal),
           api<Snapshot>('/state', 'GET', undefined, controller.signal),
+          api<WorkspaceSummary[]>('/workspaces', 'GET', undefined, controller.signal).catch(() => []),
         ]);
         if (active) {
           const mismatch = Boolean((stateData.project_id && stateData.project_id !== projectData.id) || (stateData.project_revision && getProjectRevision() && stateData.project_revision !== getProjectRevision()));
           stateRef.current = null; latestSnapshotTime.current = 0; setState(null);
           setProject(projectData); setCatalog(catalogData);
+          setReportDraft(reportFor(null)); setGuidedObservations({});
+          savedProject.current = JSON.stringify(projectData); history.current = { past: [], future: [] };
+          const scope = spaces.find(space => space.active)?.path ?? '';
+          setWorkspaceScope(scope); setWorkspaces(spaces);
+          try {
+            setRecovery(scope ? readDraft(scope, projectData.id, editorTab) : null);
+            setWelcome(!localStorage.getItem('vanguard:welcome-seen') && stateData.status !== 'running');
+            setGuideProject(localStorage.getItem('vanguard:first-demo') ?? '');
+          } catch { setStorageError('La récupération locale est indisponible dans ce navigateur. Enregistrez ou téléchargez vos brouillons.'); }
+          setStorageReady(true);
           if (!mismatch) receiveSnapshot(stateData);
           setError(null); setNetworkError(false); setProjectConflict(mismatch); setDirty(false);
           setScenarioId(!mismatch ? stateData.scenario.id ?? '' : ''); setScenarioDraft(null);
@@ -119,7 +149,7 @@ export default function App() {
     };
     void boot();
     return () => { active = false; clearTimeout(timeout); controller.abort(); };
-  }, [bootAttempt, receiveSnapshot]);
+  }, [bootAttempt, receiveSnapshot, editorTab]);
 
   useEffect(() => {
     if (initializing || !project) return;
@@ -157,17 +187,48 @@ export default function App() {
 
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 4500); return () => clearTimeout(timer); }, [notice]);
 
+  useEffect(() => {
+    if (!storageReady || initializing || !workspaceScope || !project || recovery) return;
+    try {
+      if (dirty || scenarioPending || reportPending) {
+        writeDraft({ version: 1, scope: workspaceScope, revision: getProjectRevision(), updatedAt: new Date().toISOString(), project, projectDirty: dirty, scenario: scenarioDraft, report: reportDraft, observations: guidedObservations, tab: editorTab });
+        setDraftStored(true);
+      } else { removeDraft(workspaceScope, project.id, editorTab); setDraftStored(false); }
+      setStorageError('');
+    } catch { setDraftStored(false); setStorageError('Le navigateur ne peut pas conserver le brouillon. Enregistrez le projet ou téléchargez une copie avant de fermer.'); }
+  }, [project, dirty, scenarioDraft, scenarioPending, reportPending, reportDraft, guidedObservations, workspaceScope, storageReady, initializing, recovery, editorTab]);
+
+  const dismissWelcome = () => { setWelcome(false); try { localStorage.setItem('vanguard:welcome-seen', '1'); } catch { /* The home button remains available. */ } };
+
   const onChange = useCallback((update: (project: Project) => Project) => {
+    const current = projectRef.current;
+    if (!current) return;
+    const next = update(current);
+    if (JSON.stringify(next) === JSON.stringify(current)) return;
+    history.current = { past: [...history.current.past.slice(-99), current], future: [] };
+    projectRef.current = next;
+    setWelcome(false);
     setTargetApproval(null);
-    setProject(current => current ? update(current) : current);
+    setProject(next);
     setDirty(true); setValidation(null);
   }, []);
+
+  const moveHistory = (direction: 'undo' | 'redo') => {
+    if (editorDisabled || scenarioPending || !project) return;
+    const source = direction === 'undo' ? history.current.past : history.current.future;
+    const next = source.at(-1);
+    if (!next) return;
+    history.current = direction === 'undo' ? { past: source.slice(0, -1), future: [...history.current.future, project] } : { past: [...history.current.past, project], future: source.slice(0, -1) };
+    projectRef.current = next; setProject(next); setDirty(JSON.stringify(next) !== savedProject.current);
+    setTargetApproval(null); setValidation(null); setWelcome(false); historyChanged(value => value + 1);
+  };
 
   const saveProject = useCallback(async (): Promise<Project> => {
     if (!project) throw new Error('Aucun projet chargé.');
     if (scenarioPending) throw new Error('Appliquez les étapes JSON du scénario avant de sauvegarder.');
     if (!dirty) return project;
     const saved = await api<Project>('/project', 'PUT', project);
+    savedProject.current = JSON.stringify(saved); history.current = { past: [], future: [] };
     setProject(saved); setDirty(false);
     stateRef.current = null; setState(null);
     await refreshState();
@@ -188,18 +249,31 @@ export default function App() {
         event.preventDefault();
         if (!editorDisabled && !scenarioPending) void save();
       }
+      if ((event.ctrlKey || event.metaKey) && ['z', 'y'].includes(event.key.toLowerCase()) && !document.querySelector('[role="dialog"]') && !(event.target instanceof HTMLElement && (['INPUT', 'TEXTAREA', 'SELECT'].includes(event.target.tagName) || event.target.isContentEditable))) {
+        event.preventDefault(); moveHistory(event.key.toLowerCase() === 'y' || event.shiftKey ? 'redo' : 'undo');
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [saveProject, editorDisabled, scenarioPending, busy]);
 
   const replaceProject = async (loaded: Project) => {
+    setStorageReady(false); setRecovery(null); setDraftStored(false); setWelcome(false); setFocusRequest(undefined);
+    setReportDraft(reportFor(null)); setGuidedObservations({});
+    history.current = { past: [], future: [] }; savedProject.current = JSON.stringify(loaded);
     setTargetApproval(null);
     setProject(loaded); setProjectConflict(false); setDirty(false); setScenarioId(''); setScenarioDraft(null); setValidation(null); setProjectsModal(null); setActiveTab('pid');
     stateRef.current = null; setState(null);
     await refreshState();
+    try {
+      const spaces = await api<WorkspaceSummary[]>('/workspaces');
+      const scope = spaces.find(space => space.active)?.path ?? '';
+      setWorkspaceScope(scope); setWorkspaces(spaces);
+      setRecovery(scope ? readDraft(scope, loaded.id, editorTab) : null);
+    } catch { setWorkspaceScope(''); setStorageError('Impossible d’identifier le dossier actif pour la récupération locale. Enregistrez votre projet.'); }
+    setStorageReady(true);
   };
-  const canReplace = () => !(dirty || scenarioPending) || window.confirm('Les modifications non enregistrées seront perdues. Continuer ?');
+  const canReplace = () => !(dirty || scenarioPending || reportPending) || window.confirm('Quitter les modifications non enregistrées ? Un brouillon récupérable reste sur ce navigateur si sa sauvegarde locale a réussi.');
   const openProjects = () => act(async () => { const [projects, workspaces] = await Promise.all([api<ProjectSummary[]>('/projects'), api<WorkspaceSummary[]>('/workspaces')]); setProjects(projects); setWorkspaces(workspaces); setProjectsModal('open'); });
   const openWorkspace = (id: string) => act(async () => { if (canReplace()) { await replaceProject(await api<Project>(`/workspaces/${encodeURIComponent(id)}/open`, 'POST', {})); setNotice('Dossier FAT ouvert au repos.'); } });
   const exportArchive = () => act(async () => { const saved = await saveProject(); await downloadArchive(`${saved.id}.fat.zip`); setNotice('Archive FAT téléchargée.'); });
@@ -213,6 +287,30 @@ export default function App() {
   const loadProject = (id: string) => act(async () => { if (canReplace()) await replaceProject(await api<Project>(`/projects/${encodeURIComponent(id)}/load`, 'POST', {})); });
   const loadDemo = () => act(async () => { if (canReplace()) { await replaceProject(await api<Project>('/demo/load', 'POST', {})); setNotice('Démonstration TK-101 chargée.'); } });
   const loadPilot = () => act(async () => { if (canReplace()) { await replaceProject(await api<Project>('/pilot/load', 'POST', {})); setNotice('Laboratoire chargé · commandes manuelles en démonstration, aucun PLC connecté.'); } });
+  const firstDemo = () => act(async () => {
+    if (!canReplace()) return;
+    const empty = await api<Project>('/projects', 'POST', { name: 'Mon premier essai · Cuve, pompe et vanne' });
+    const circuit = fillCircuit(empty, catalog);
+    circuit.plc = { ...circuit.plc, mode: 'demo', demo_controller: 'manual_lab_v1' };
+    circuit.description = 'Démonstration manuelle locale. Démarrer, commander la pompe et la vanne, puis observer le niveau et un défaut moteur.';
+    const saved = await api<Project>('/project', 'PUT', circuit);
+    await replaceProject(saved); setGuideProject(saved.id); dismissWelcome();
+    try { localStorage.setItem('vanguard:first-demo', saved.id); } catch { /* Guidance remains available in this tab. */ }
+    setNotice('Votre circuit est prêt. Cliquez sur Démarrer.');
+  });
+  const restoreDraft = () => act(async () => {
+    if (!recovery || locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending) return;
+    if (recovery.revision !== getProjectRevision()) throw new Error('Le projet enregistré a changé. Téléchargez ce brouillon pour le relire avant de l’importer.');
+    if ((recovery.report.resultDirty || recovery.report.marker || Object.keys(recovery.observations).length) && recovery.report.runId !== stateRef.current?.run_id) throw new Error('L’essai a changé. Les observations restent dans le brouillon téléchargeable.');
+    const checked = await api<Validation & { project: Project }>('/validate/preview', 'POST', recovery.project);
+    if (recovery.revision !== getProjectRevision()) throw new Error('Le projet a changé pendant la vérification. Brouillon conservé.');
+    onChange(() => checked.project); setDirty(recovery.projectDirty);
+    setScenarioDraft(recovery.scenario); if (recovery.scenario) { setScenarioId(recovery.scenario.scenarioId); setActiveTab('scenarios'); setScenarioPanelVersion(value => value + 1); }
+    setReportDraft(recovery.report); setGuidedObservations(recovery.observations);
+    const restored = recovery; setRecovery(null);
+    if (restored.tab !== editorTab) { try { writeDraft({ ...restored, project: checked.project, tab: editorTab, updatedAt: new Date().toISOString() }); acknowledgeDraft(restored); } catch { setStorageError('Copie locale impossible. Enregistrez ou téléchargez le brouillon.'); } }
+    setNotice('Brouillon repris. Le projet enregistré et les preuves restent inchangés.');
+  });
   const importFile = async (file: File) => act(async () => {
     if (!canReplace()) return;
     if (file.size > 5 * 1024 * 1024) throw new Error('Le fichier projet dépasse 5 Mo.');
@@ -242,7 +340,14 @@ export default function App() {
       setScenarioDraft(null);
     }
     setActiveTab(tab);
+    dismissWelcome();
     window.scrollTo({ top: 0 });
+  };
+  const correct = (target: Correction) => {
+    if (scenarioPending) { setError('Appliquez ou conservez le brouillon des étapes avant d’ouvrir une correction.'); return; }
+    dismissWelcome(); setPresentation(false); setActiveTab(target.tab);
+    if (target.scenarioId) setScenarioId(target.scenarioId);
+    setFocusRequest({ ...target, nonce: Date.now() });
   };
   const exportProject = () => act(async () => { const saved = await saveProject(); const packaged = await api<ProjectPackage>('/project/download'); downloadText(JSON.stringify(packaged, null, 2) + '\n', `${saved.id}.json`); });
   const exportScenarios = (id?: string) => act(async () => {
@@ -294,19 +399,19 @@ export default function App() {
   const executionStatus = serviceUnavailable ? (projectConflict ? 'Autre projet actif' : 'Hors ligne')
     : scenarioCompleted ? 'Terminé' : state?.guided_steps?.at(-1)?.state === 'queued' ? 'STEP en attente'
     : currentStatus === 'idle' ? 'Au repos' : STATUS_LABELS[currentStatus];
-  return <div className={`app-shell ${presentation && activeTab === 'pid' && currentStatus !== 'paused' ? 'presentation-mode' : ''}`}>
+  return <div className={`app-shell ${presentation && activeTab === 'pid' && currentStatus !== 'paused' ? 'presentation-mode' : ''} ${!welcome && guideProject === project.id && project.plc.mode === 'demo' ? 'guided-demo' : ''}`}>
     <header className="topbar"><div className="brand" aria-label="Vanguard FAT Studio"><img className="brand-wordmark" src="/brand/logo_vanguard_wordmark_horizontal.png" alt="Vanguard" width={154} height={40} /><div className="brand-product"><strong>FAT Studio</strong><small>BANC FAT LOCAL</small></div></div>
       <div className="mode-badge"><Shield size={14} /><span>MODE FAT</span><span className="mode-divider" /><strong>{project.plc.mode === 'demo' ? 'DÉMONSTRATION' : 'PLCSIM ADVANCED'}</strong></div>
       <div className="run-controls"><div className="run-clock"><Clock3 size={15} /><span>{elapsed(state?.sim_time_s ?? 0)}</span></div>
-        <button className="run-button start-button" disabled={busy || serviceUnavailable || scenarioPending || currentStatus === 'running' || scenarioCompleted || (currentStatus === 'paused' && dirty)} title={currentStatus === 'paused' && dirty ? 'Appliquez les modifications pour préparer un nouvel essai.' : undefined} onClick={() => void (currentStatus === 'paused' ? control('resume') : start())}><Play size={16} fill="currentColor" />{scenarioCompleted ? 'Terminé' : currentStatus === 'paused' ? 'Reprendre' : 'Démarrer'}</button>
+        <button className="run-button start-button" disabled={Boolean(recovery) || busy || serviceUnavailable || scenarioPending || currentStatus === 'running' || scenarioCompleted || (currentStatus === 'paused' && dirty)} title={currentStatus === 'paused' && dirty ? 'Appliquez les modifications pour préparer un nouvel essai.' : undefined} onClick={() => void (currentStatus === 'paused' ? control('resume') : start())}><Play size={16} fill="currentColor" />{scenarioCompleted ? 'Terminé' : currentStatus === 'paused' ? 'Reprendre' : 'Démarrer'}</button>
         <button className="run-button" title="Mettre en pause" disabled={busy || serviceUnavailable || currentStatus !== 'running'} onClick={() => void control('pause')} aria-label="Mettre en pause"><Pause size={18} /></button>
         <button className="run-button stop-button" title="Arrêter l’essai" disabled={busy || serviceUnavailable || !['running', 'paused', 'error'].includes(currentStatus)} onClick={() => void control('stop')} aria-label="Arrêter l’essai"><Square size={15} fill="currentColor" /></button>
-        <button className="run-button" title="Réinitialiser le modèle" disabled={busy || serviceUnavailable || currentStatus === 'running'} onClick={() => void control('reset')} aria-label="Réinitialiser le modèle"><RotateCcw size={17} /></button>
+        <button className="run-button" title="Réinitialiser le modèle" disabled={Boolean(recovery) || busy || serviceUnavailable || currentStatus === 'running'} onClick={() => void control('reset')} aria-label="Réinitialiser le modèle"><RotateCcw size={17} /></button>
       </div>
     </header>
 
-    <div className="projectbar"><div className="project-identity"><span className="project-icon"><FolderOpen size={22} /></span><div><input className="project-name" disabled={editorDisabled} aria-label="Nom du projet" value={project.name} onChange={event => onChange(project => ({ ...project, name: event.target.value }))} /><div className="project-subtitle"><span>{project.equipment.length} équipements</span><span>·</span><span>{project.tags.length} variables</span><span className={dirty ? 'unsaved-text' : 'saved-text'}>{dirty ? '• Modifications non enregistrées' : <><Check size={11} /> Enregistré</>}</span></div></div></div>
-      <div className="project-actions"><button className="button ghost" aria-label="Nouveau" title="Nouveau projet" disabled={editorDisabled} onClick={() => { setNewName(''); setProjectsModal('new'); }}><FilePlus2 size={16} /><span>Nouveau</span></button><button className="button ghost" aria-label="Ouvrir" title="Ouvrir un projet" disabled={editorDisabled} onClick={() => void openProjects()}><FolderOpen size={16} /><span>Ouvrir</span></button><button className="button ghost" aria-label="Importer" title="Importer un projet" disabled={editorDisabled} onClick={() => fileInput.current?.click()}><Upload size={16} /><span>Importer</span></button><button className="button ghost" aria-label="Exporter" title="Exporter le projet" disabled={busy || serviceUnavailable || scenarioPending || (dirty && editorDisabled)} onClick={() => void exportProject()}><ArrowDownToLine size={16} /><span>Exporter</span></button><span className="toolbar-separator" /><button className="button save-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}><Save size={16} /><span>{currentStatus === 'paused' && dirty ? 'Appliquer en pause' : 'Enregistrer'}</span></button></div>
+    <div className="projectbar"><div className="project-identity"><span className="project-icon"><FolderOpen size={22} /></span><div><input className="project-name" disabled={editorDisabled} aria-label="Nom du projet" value={project.name} onChange={event => onChange(project => ({ ...project, name: event.target.value }))} /><div className="project-subtitle"><span>{project.equipment.length} équipements</span><span>·</span><span>{project.tags.length} variables</span><span className={dirty ? 'unsaved-text' : 'saved-text'}>{dirty ? '• Modifications non enregistrées' : <><Check size={11} /> Enregistré</>}</span>{draftStored && <span className="draft-storage-status">Brouillon récupérable sur ce navigateur</span>}</div></div></div>
+      <div className="project-actions"><button className="button ghost" aria-label="Accueil" title="Accueil" onClick={() => setWelcome(value => !value)}><Home size={16} /><span>Accueil</span></button><div className="edit-history"><button className="button ghost" aria-label="Annuler la modification" title="Annuler la modification (Ctrl+Z hors des champs)" disabled={editorDisabled || scenarioPending || !history.current.past.length} onClick={() => moveHistory('undo')}><Undo2 size={16} /></button><button className="button ghost" aria-label="Rétablir la modification" title="Rétablir la modification (Ctrl+Maj+Z)" disabled={editorDisabled || scenarioPending || !history.current.future.length} onClick={() => moveHistory('redo')}><Redo2 size={16} /></button></div><button className="button ghost" aria-label="Nouveau" title="Nouveau projet" disabled={editorDisabled} onClick={() => { setNewName(''); setProjectsModal('new'); }}><FilePlus2 size={16} /><span>Nouveau</span></button><button className="button ghost" aria-label="Ouvrir" title="Ouvrir un projet" disabled={editorDisabled} onClick={() => void openProjects()}><FolderOpen size={16} /><span>Ouvrir</span></button><button className="button ghost" aria-label="Importer" title="Importer un projet" disabled={editorDisabled} onClick={() => fileInput.current?.click()}><Upload size={16} /><span>Importer</span></button><button className="button ghost" aria-label="Exporter" title="Exporter le projet" disabled={busy || serviceUnavailable || scenarioPending || (dirty && editorDisabled)} onClick={() => void exportProject()}><ArrowDownToLine size={16} /><span>Exporter</span></button><span className="toolbar-separator" /><button className="button save-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}><Save size={16} /><span>{currentStatus === 'paused' && dirty ? 'Appliquer en pause' : 'Enregistrer'}</span></button></div>
       <input ref={fileInput} type="file" accept=".json,application/json" hidden onChange={event => { const file = event.target.files?.[0]; if (file) void importFile(file); event.target.value = ''; }} />
       <input ref={archiveInput} type="file" aria-label="Archive FAT à restaurer" accept=".zip,application/zip" hidden onChange={event => { const file = event.target.files?.[0]; if (file) void importArchive(file); event.target.value = ''; }} />
     </div>
@@ -320,19 +425,26 @@ export default function App() {
     {notice && <div className="toast" role="status"><Check size={17} />{notice}<button className="icon-button" onClick={() => setNotice('')} aria-label="Fermer la notification"><X size={15} /></button></div>}
 
     <main>
+      {storageError && <div className="draft-storage-error" role="alert">{storageError}<button className="text-link" onClick={downloadDraft}>Télécharger mon brouillon</button></div>}
+      {recovery && <section className="draft-recovery" aria-label="Brouillon retrouvé"><div><strong>Brouillon retrouvé</strong><p>{new Date(recovery.updatedAt).toLocaleString('fr-CH')} · {recovery.revision !== getProjectRevision() ? 'Le projet enregistré a changé. Conservez une copie pour comparer les modifications.' : 'Vous pouvez reprendre vos modifications sans changer le projet enregistré.'}</p></div><div className="button-row"><button className="button primary" disabled={locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending || recovery.revision !== getProjectRevision()} onClick={() => void restoreDraft()}>Reprendre le brouillon</button><button className="button" onClick={() => downloadText(JSON.stringify(recovery, null, 2), `${recovery.project.id}-brouillon-complet.json`)}>Télécharger le brouillon</button><button className="button" onClick={() => { try { acknowledgeDraft(recovery); } catch { /* Retained if storage is unavailable. */ } setRecovery(null); }}>Continuer sans reprendre</button></div></section>}
+      <fieldset className="workspace-scope" disabled={Boolean(recovery)} aria-label="Espace de travail">
+      {welcome && <Welcome project={project} disabled={editorDisabled} onDemo={() => void firstDemo()} onCreate={() => { dismissWelcome(); setNewName(''); setProjectsModal('new'); }} onResume={dismissWelcome} onOpen={() => { dismissWelcome(); void openProjects(); }} />}
+      {!welcome && guideProject === project.id && project.plc.mode === 'demo' && <FirstRunGuide project={project} state={dirty ? null : state} disabled={busy || serviceUnavailable || dirty} onCommand={(tag_id, value) => void act(async () => { receiveSnapshot(await api<Snapshot>('/force', 'POST', { tag_id, value })); })} onFault={(equipment_id, active) => void act(async () => { receiveSnapshot(await api<Snapshot>(active ? '/fault' : `/fault/${encodeURIComponent(equipment_id)}`, active ? 'POST' : 'DELETE', active ? { equipment_id, kind: 'motor_trip', value: true } : undefined)); })} onDismiss={() => { setGuideProject(''); try { localStorage.removeItem('vanguard:first-demo'); } catch { /* Ignore unavailable preference storage. */ } }} />}
+      {!welcome && currentStatus !== 'running' && !presentation && <Readiness project={project} catalog={catalog} revision={getProjectRevision()} enabled={!serviceUnavailable && !busy} onCorrect={correct} />}
     {targetApproval && targetApproval.revision === getProjectRevision() && <div className="information-strip target-approval"><Shield size={18} /><div><strong>Cible autorisée dans cet onglet</strong><p>{targetApproval.confirmation} · {targetApproval.scenarios.length} mode(s) ou scénario(s). Les contrôles de connexion restent actifs.</p></div><button className="button" onClick={() => setTargetApproval(null)}>Révoquer l’accord</button></div>}
       {currentStatus === 'paused' && <div className="pause-edit-banner"><PencilRulerIcon /><span><strong>Essai en pause.</strong> Le P&ID est modifiable. {dirty ? 'Appliquez les modifications pour clore cet essai et en préparer un nouveau. Les preuves précédentes restent conservées.' : 'Reprendre continue cet essai. Enregistrer une modification prépare un nouvel essai.'}</span>{dirty && <button className="button compact-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}>Appliquer en pause</button>}</div>}
       {activeTab === 'pid' && <>
         <div className="workspace-toolbar"><div className="workspace-label"><span className="small-dot" /><strong>Vue procédé</strong></div><span className="workspace-execution" data-state={serviceUnavailable ? 'error' : currentStatus}>{executionMode} · {executionStatus}</span><div className="workspace-actions"><div className="scenario-selector"><ListChecks size={15} /><label htmlFor="active-scenario">Scénario</label><select id="active-scenario" value={displayedScenarioId} disabled={editorDisabled} onChange={event => chooseScenario(event.target.value)}><option value="">Essai libre</option>{project.scenarios.map(scenario => <option key={scenario.id} value={scenario.id}>{scenario.name}</option>)}</select></div><button className="button presentation-toggle" aria-pressed={presentation} onClick={() => setPresentation(value => !value)}>{presentation ? <Minimize2 size={14} /> : <Maximize2 size={14} />}{presentation ? 'Quitter la présentation' : 'Mode présentation'}</button></div></div>
-        <PidCanvas {...props} catalog={catalog} key={project.id} scenario={activeScenario} viewRequest={viewRequest} presentation={presentation && currentStatus !== 'paused'} />
+        <PidCanvas {...props} catalog={catalog} key={project.id} scenario={activeScenario} viewRequest={viewRequest} presentation={(presentation || (!welcome && guideProject === project.id && project.plc.mode === 'demo')) && currentStatus !== 'paused'} focusRequest={focusRequest?.tab === 'pid' ? focusRequest : undefined} />
         <ScenarioRun project={project} state={dirty ? null : state} scenario={activeScenario} online={props.online && !dirty} onSnapshot={receiveSnapshot} onError={setError} observations={guidedObservations} onObservationChange={(key, text) => setGuidedObservations(current => ({ ...current, [key]: text }))} onPrepare={() => { setViewRequest(value => value + 1); setShowLivePanel(true); }} />
         <div className="live-panel-heading"><button onClick={() => setShowLivePanel(value => !value)}><Activity size={16} />Acquisition de l’essai<ChevronDown size={15} className={showLivePanel ? 'rotate-180' : ''} /></button><div>{totalForces > 0 && <span className="forced-counter">{totalForces} forçage{totalForces > 1 ? 's' : ''}</span>}{totalFaults > 0 && <span className="fault-counter">{totalFaults} défaut{totalFaults > 1 ? 's' : ''}</span>}<button className="text-link" onClick={() => changeTab('trends')}>Ouvrir tendances & rapport →</button></div></div>
         {showLivePanel && <div className="live-overview"><div><TrendChart project={project} state={state} compact preferredTags={activeScenario?.trend_tags} /></div><div className="live-events"><div className="live-events-title">Derniers événements</div>{(state?.events ?? []).slice(-4).reverse().map(event => <div key={event.id}><time>{fmt(event.sim_time_s)} s</time><p>{event.message}</p></div>)}{!state?.events.length && <p className="small-muted">Démarrez l’essai pour suivre les actions et les diagnostics.</p>}</div></div>}
       </>}
-      {activeTab === 'tags' && <VariablesPanel {...props} onImport={importMapping} onExport={exportMapping} />}
-      {activeTab === 'scenarios' && <ScenariosPanel {...props} key={`${project.id}:${scenarioPanelVersion}`} selectedId={displayedScenarioId} onSelect={chooseScenario} onDraftChange={setScenarioDraft} onExport={exportScenarios} onImport={importScenarios} pending={scenarioPending} />}
+      {activeTab === 'tags' && <VariablesPanel {...props} catalog={catalog} focusRequest={focusRequest?.tab === 'tags' ? focusRequest : undefined} onImport={importMapping} onExport={exportMapping} />}
+      {activeTab === 'scenarios' && <ScenariosPanel {...props} key={`${project.id}:${scenarioPanelVersion}`} selectedId={displayedScenarioId} onSelect={chooseScenario} onDraftChange={setScenarioDraft} onExport={exportScenarios} onImport={importScenarios} pending={scenarioPending} initialDraft={scenarioDraft} />}
       {activeTab === 'trends' && <TrendsPanel {...props} draft={reportDraft} onDraftChange={changeReportDraft} />}
-      {activeTab === 'connection' && <ConnectionPanel {...props} validation={validation} onValidate={validate} catalog={catalog} />}
+      {activeTab === 'connection' && <ConnectionPanel {...props} validation={validation} onValidate={validate} catalog={catalog} focusField={focusRequest?.tab === 'connection' && focusRequest.field ? { field: focusRequest.field, nonce: focusRequest.nonce } : undefined} />}
+      </fieldset>
     </main>
 
     <footer className="statusbar"><div><span className={`small-dot ${state?.connection.connected && !serviceUnavailable ? 'green' : ''}`} /><strong>{project.plc.mode === 'demo' ? 'Contrôleur de démonstration' : 'OPC UA · ' + (state?.connection.connected ? 'connecté' : 'déconnecté')}</strong><span className="footer-divider" /><span>{project.plc.mode === 'demo' ? 'Aucun automate raccordé' : state?.connection.target || project.plc.endpoint}</span></div><div><span>Pas : {project.simulation.step_ms} ms</span><span>Vitesse : ×{project.simulation.speed}</span><span>{fmt(state?.write_count ?? 0, 0)} écritures</span><Network size={13} /><span>Local · 127.0.0.1</span></div></footer>

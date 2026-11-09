@@ -16,6 +16,24 @@ Le service sert son interface et son API sur une adresse de boucle locale. L’U
 
 La documentation d’une ancienne version ne remplace pas cette découverte. La validation locale d’un projet ne prouve ni les NodeIds, ni les droits de la CPU, ni l’exécution d’une FAT Siemens.
 
+## Aperçus de configuration et découverte OPC UA depuis 0.3.0
+
+Ces routes POST exigent le jeton local et les trois en-têtes projet/révision/essai décrits plus bas, même si elles ne sauvegardent rien. Le projet fourni doit avoir l’identifiant du projet actif. Un conflit ne déclenche ni recapture ni nouvelle tentative automatique. Les réponses d’aperçu ne changent pas la révision attendue du client.
+
+| Route | Corps JSON | Effet et réponse |
+| --- | --- | --- |
+| `POST /api/validate/preview` | Projet complet | Validation locale du brouillon et de la politique du poste ; renvoie `valid`, `errors`, `warnings`, `project` normalisé avec les valeurs par défaut. Aucune sauvegarde ni communication OPC UA. |
+| `POST /api/mapping/preview` | `project`, `csv`, `mode` (`merge` ou `replace`) | Produit un projet proposé et la liste `changes` avec champs modifiés, blocages et raisons. Fusion par identifiant stable ; une fusion conserve les tags absents du CSV. Les changements de contrat et suppressions de tags utilisés sont bloqués. Aucun enregistrement. |
+| `POST /api/opcua/browse` | `project`, `confirmation`, `node_id` (défaut `i=85`), `offset` (défaut 0) | Lit les métadonnées d’un dossier de la cible configurée. Renvoie noms, NodeIds, types scalaires, droits et possibilités de sélection. Aucune valeur de procédé lue ou écrite, aucun essai démarré. |
+
+L’essai doit être arrêté pour préparer une fusion CSV ou explorer les nœuds : ces opérations sont refusées pendant son exécution ou sa pause. La validation de brouillon reste une lecture locale. Appliquer une proposition exige ensuite une sauvegarde explicite avec `PUT /api/project` et le contexte toujours attendu ; la préparation d’un aperçu n’autorise pas cette sauvegarde par elle-même.
+
+Pour l’exploration, `confirmation` vaut exactement `approved_virtual_target + " @ " + endpoint`. L’identité et le certificat sont vérifiés avant l’authentification selon le contrat OPC UA existant. La politique de cible du poste reste obligatoire et indépendante du projet envoyé. Cette confirmation autorise uniquement la lecture demandée, aucun démarrage ni autre opération.
+
+Le dossier Objets (`i=85`) sert de racine. Les variables du namespace 0, références externes, tableaux, structures et types non pris en charge ne peuvent pas être associés. Seuls les scalaires booléen, Int16, Int32 et Float correspondent respectivement à BOOL, INT, DINT et REAL. Le navigateur contrôle aussi le namespace configuré et les droits nécessaires au rôle du tag. Il ne déduit aucune échelle analogique ni aucun NodeId d’une adresse Siemens.
+
+Les pages contiennent au plus 100 entrées ; `offset` avance de 100 jusqu’à 1 900. L’opération est bornée à 20 secondes puis ferme sa connexion. Une erreur conserve le brouillon et demande une nouvelle action volontaire. Les helpers du CLI existant ne changent pas ; découvrir ces routes dans OpenAPI pour les clients HTTP.
+
 ## CLI pour les assistants
 
 Depuis la racine du dossier, utiliser le Python de son environnement :

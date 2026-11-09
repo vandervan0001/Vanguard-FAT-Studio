@@ -1,0 +1,37 @@
+.modal.circuit-modal { width: min(940px, calc(100vw - 32px)); max-width: 100%; }
+.circuit-tabs { display: flex; gap: 8px; margin: 18px 0; }
+.circuit-tabs > button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border: 1px solid #c9d8eb; border-radius: 9px; background: #f7f9fc; color: #24446e; font: inherit; cursor: pointer; }
+.circuit-tabs > button.active { color: #0055dd; background: #edf4ff; border-color: #0055dd; }
+.circuit-editor { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(240px, 1fr); gap: 24px; }
+.circuit-editor p { line-height: 1.5; }
+.circuit-editor label { min-width: 0; }
+.circuit-template-list { display: grid; gap: 8px; }
+.circuit-template-list > button { display: flex; flex-direction: column; align-items: start; gap: 5px; padding: 12px 14px; border: 1px solid #d9e2ed; background: #fff; border-radius: 9px; text-align: left; font: inherit; cursor: pointer; }
+.circuit-template-list > button.active { border-color: #0055dd; background: #edf4ff; }
+.circuit-template-list strong { color: #14385f; }
+.circuit-template-list span { color: #52677f; font-size: 12px; line-height: 1.5; }
+.circuit-scenario { margin-top: 16px; }
+.circuit-preview { padding: 16px; background: #f3f7fc; border: 1px solid #d9e2ed; border-radius: 10px; align-self: start; min-width: 0; }
+.circuit-preview h3 { margin-top: 0; font-size: 15px; }
+.circuit-preview p { font-size: 12px; }
+.circuit-path { display: flex; flex-direction: column; gap: 9px; padding-left: 20px; overflow-wrap: anywhere; }
+.circuit-path li { padding-left: 3px; color: #153c6a; font-weight: 600; }
+.circuit-tanks { display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr); align-items: center; gap: 8px; }
+.circuit-tanks select { width: 100%; min-width: 0; }
+.circuit-actuators { border: 1px solid #d9e2ed; border-radius: 9px; margin: 16px 0; padding: 12px; max-height: 220px; overflow-y: auto; }
+.circuit-actuators legend { color: #52677f; font-size: 12px; padding: 0 5px; }
+.circuit-actuators label { margin: 7px 0; }
+.circuit-actuators small { margin-left: 8px; color: #60758f; }
+.circuit-order { padding: 0; list-style: none; display: grid; gap: 4px; }
+.circuit-order li { display: flex; align-items: center; padding: 5px 8px; border: 1px solid #e0e8f2; border-radius: 6px; }
+.circuit-order li > span { flex: 1; font-size: 12px; }
+.circuit-launch { display: grid; gap: 7px; margin: 12px 0; }
+.circuit-launch .button { justify-content: center; }
+.circuit-duplicate { margin: 16px 0 8px; }
+.circuit-duplicate .button { width: 100%; }
+.inspector [data-model-field].focus-target { outline: 2px solid #0055dd; outline-offset: 5px; border-radius: 3px; }
+@media (max-width: 760px) {
+  .circuit-editor { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .circuit-preview { padding: 12px; }
+  .circuit-tabs > button { font-size: 12px; }
+}

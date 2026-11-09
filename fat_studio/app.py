@@ -28,8 +28,9 @@ from .demo import demo_project
 from .demo_lab import demo_lab_project
 from .exchange import ProjectPackage, ScenarioPackage, import_scenarios, project_package, read_project, scenarios_package
 from .archive import capture_archive, export_archive, prepare_archive
-from .mapping import export_mapping, import_mapping
+from .mapping import export_mapping, import_mapping, preview_mapping
 from .models import PreparedAction, Project, validate_project
+from .opcua_browser import browse_metadata
 from .reporting import csv_stream, html_report, json_stream
 from .runtime import RunConflict, Runtime
 from .security import MachinePolicy, TargetDenied
@@ -90,6 +91,18 @@ class ResultRequest(Payload):
 
 class MappingRequest(Payload):
     csv: str = Field(max_length=2_000_000)
+
+
+class MappingPreviewRequest(MappingRequest):
+    project: Project
+    mode: Literal["merge", "replace"] = "merge"
+
+
+class BrowseRequest(Payload):
+    project: Project
+    node_id: str = Field(default="i=85", min_length=1, max_length=1000)
+    offset: int = Field(default=0, ge=0, le=1900)
+    confirmation: str = Field(min_length=1, max_length=1100)
 
 
 class ScenarioImportRequest(Payload):
@@ -440,15 +453,46 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
 
     @app.get("/api/validate")
     async def validate():
-        result = validate_project(app.state.runtime.project)
-        if app.state.runtime.project.plc.mode == "opcua":
+        return validate_draft(app.state.runtime.project)
+
+    def validate_draft(project: Project):
+        result = validate_project(project)
+        if project.plc.mode == "opcua":
             try:
-                app.state.policy.authorize(app.state.runtime.project.plc)
+                app.state.policy.authorize(project.plc)
             except ValueError as exc:
                 result["errors"].append({"path": "plc", "message": str(exc)})
                 result["valid"] = False
             result["warnings"].append({"path": "plc", "message": "L'existence, les types et les droits des NodeIds seront vérifiés en ligne au démarrage, avant écriture."})
         return result
+
+    def guard_preview(request: Request, project: Project, *, idle: bool = False):
+        # New preview routes require an explicit baseline even though they do not save.
+        for header in ("x-fat-project-id", "x-fat-project-revision", "x-fat-run-id"):
+            if header not in request.headers:
+                raise HTTPException(409, "Contexte projet/révision/essai requis. Conservez le brouillon et relisez le projet.")
+        if project.id != app.state.runtime.project.id:
+            raise HTTPException(409, "Le brouillon ne correspond pas au projet actif.")
+        if idle and app.state.runtime.status in ("running", "paused"):
+            raise HTTPException(409, "Arrêtez l'essai avant cet aperçu ; aucune reprise automatique ne sera effectuée.")
+
+    @app.post("/api/validate/preview")
+    async def validate_preview(project: Project, request: Request):
+        guard_preview(request, project)
+        return {**validate_draft(project), "project": project.model_dump(mode="json")}
+
+    @app.post("/api/mapping/preview")
+    async def mapping_preview(body: MappingPreviewRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        return preview_mapping(body.project, body.csv, body.mode)
+
+    @app.post("/api/opcua/browse")
+    async def opcua_browse(body: BrowseRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        try:
+            return await browse_metadata(body.project, app.state.policy, body.confirmation, body.node_id, body.offset)
+        except (TimeoutError, OSError, ConnectionError) as exc:
+            raise HTTPException(400, "Exploration OPC UA interrompue. Vérifiez la cible et relancez volontairement la lecture.") from exc
 
     @app.get("/api/mapping")
     async def mapping_export():

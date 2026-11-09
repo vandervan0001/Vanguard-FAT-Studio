@@ -7,6 +7,9 @@ import { parseScenarioSteps } from './scenarioFormat';
 import { ForceField } from './ForceField';
 import { ScenarioTimeline } from './ScenarioRun';
 import { GuidedScenarioBuilder, newFatStep } from './GuidedScenarioBuilder';
+import { GlobalBindings } from './GlobalBindings';
+import { MappingImport } from './MappingImport';
+import { OpcUaBrowser } from './OpcUaBrowser';
 import { fmt, uid, type CatalogItem, type Project, type ReportDraft, type RunResult, type Snapshot, type Tag, type Scenario, type ScenarioDraft, type ScenarioImportMode, type RunSummary, type Validation } from './types';
 
 type CommonProps = {
@@ -15,13 +18,45 @@ type CommonProps = {
   onError: (message: string) => void; onSnapshot: (state: Snapshot) => void;
 };
 
-export function VariablesPanel({ project, state, locked, online, unavailable, onChange, onError, onSnapshot, onImport, onExport }: CommonProps & { onImport: (csv: string) => Promise<void>; onExport: () => Promise<void> }) {
+function tagFieldLabel(field: string) {
+  const labels: Record<string, string> = { name: 'Nom', direction: 'Sens', data_type: 'Type', unit: 'Unité', initial_value: 'Valeur initiale', min: 'Minimum', max: 'Maximum', plc_address: 'Adresse Siemens', plc_symbol: 'Symbole PLC', node_id: 'NodeId OPC UA', signal: 'Conversion analogique', kind: 'Conversion analogique', raw_min: 'Brut minimum', raw_max: 'Brut maximum', engineering_min: 'Minimum ingénierie', engineering_max: 'Maximum ingénierie', engineering_unit: 'Unité ingénierie', underflow_raw: 'Code du profil à 0', overflow_raw: 'Code du profil à 24', writable: 'Écriture explicitement autorisée' };
+  return labels[field.split('.').at(-1)!] ?? 'Nom';
+}
+
+function focusLabel(container: HTMLElement, prefix: string) {
+  const labels = Array.from(container.querySelectorAll<HTMLLabelElement>('label'));
+  const label = labels.find(label => Array.from(label.childNodes).filter(node => node.nodeType === Node.TEXT_NODE).map(node => node.textContent).join('').trim().startsWith(prefix)) ?? labels[0];
+  if (!label) return;
+  let parent: HTMLElement | null = label.parentElement;
+  while (parent && parent !== container) { if (parent instanceof HTMLDetailsElement) parent.open = true; parent = parent.parentElement; }
+  label.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  label.querySelector<HTMLElement>('input, select, textarea')?.focus({ preventScroll: true });
+  label.classList.add('quickfix-highlight');
+  setTimeout(() => label.classList.remove('quickfix-highlight'), 1800);
+}
+
+export function VariablesPanel({ project, state, locked, online, unavailable, onChange, onError, onSnapshot, onExport, catalog = [], focusRequest }: CommonProps & { onImport?: (csv: string) => Promise<void>; onExport: () => Promise<void>; catalog?: CatalogItem[]; focusRequest?: { tagId?: string; field?: string; nonce: number } }) {
   const [search, setSearch] = useState('');
   const [direction, setDirection] = useState('all');
   const [expanded, setExpanded] = useState<string | null>(null);
   const [permissions, setPermissions] = useState<Record<string, boolean> | null>(null);
   const [permissionSearch, setPermissionSearch] = useState('');
+  const [globalBindings, setGlobalBindings] = useState(false);
+  const [importCsv, setImportCsv] = useState<string | null>(null);
+  const [browseTagId, setBrowseTagId] = useState<string | null>(null);
+  const [browseBase, setBrowseBase] = useState<Project | null>(null);
+  const panel = useRef<HTMLElement>(null);
+  useModalKeyboard(browseTagId !== null, () => setBrowseTagId(null));
   useModalKeyboard(permissions !== null, () => setPermissions(null));
+  useEffect(() => {
+    if (!focusRequest?.tagId) return;
+    setDirection('all'); setSearch(''); setExpanded(focusRequest.tagId);
+    const timer = setTimeout(() => {
+      const row = Array.from(panel.current?.querySelectorAll<HTMLElement>('[data-tag-details]') ?? []).find(row => row.dataset.tagDetails === focusRequest.tagId);
+      if (row) focusLabel(row, tagFieldLabel(focusRequest.field ?? 'name'));
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [focusRequest]);
   const inputs = project.tags.filter(tag => tag.direction === 'input');
   const writableCount = inputs.filter(tag => tag.writable).length;
   const permissionTags = inputs.filter(tag => `${tag.name} ${tag.id} ${tag.node_id} ${tag.plc_symbol ?? ''}`.toLowerCase().includes(permissionSearch.trim().toLowerCase()));
@@ -43,11 +78,12 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
     if (!window.confirm(`Supprimer ${tag.name} ? Les associations à cette variable seront retirées. Vérifiez ensuite les scénarios.`)) return;
     onChange(project => ({ ...project, tags: project.tags.filter(entry => entry.id !== tag.id), equipment: project.equipment.map(equipment => ({ ...equipment, bindings: Object.fromEntries(Object.entries(equipment.bindings).filter(([, id]) => id !== tag.id)) })) }));
   };
-  return <section className="page-panel">
+  return <section className="page-panel" ref={panel}>
     <div className="section-heading"><div><div className="eyebrow">INTERFACE D’ÉCHANGE</div><h2>Variables & mapping PLC</h2><p>Déclarez les variables autorisées et associez-les aux équipements du P&ID.</p></div>
       <div className="button-row"><button className="button" disabled={!online} onClick={() => void onExport()}><ArrowDownToLine size={16} />Exporter CSV</button><button className="button" disabled={locked} onClick={() => input.current?.click()}><Upload size={16} />Importer CSV</button><button className="button primary" disabled={locked || project.tags.length >= 200} onClick={addTag}><Plus size={16} />Nouvelle variable</button></div>
     </div>
-    <input ref={input} type="file" accept=".csv,text/csv" hidden onChange={event => { const file = event.target.files?.[0]; if (file && file.size > 2_000_000) onError('Le fichier CSV dépasse 2 Mo.'); else if (file) void file.text().then(onImport).catch(error => onError(String(error))); event.target.value = ''; }} />
+    <input ref={input} type="file" accept=".csv,text/csv" hidden onChange={event => { const file = event.target.files?.[0]; if (file && file.size > 2_000_000) onError('Le fichier CSV dépasse 2 Mo.'); else if (file) void file.text().then(setImportCsv).catch(error => onError(String(error))); event.target.value = ''; }} />
+    <div className="button-row"><button className="button" disabled={locked || !catalog.length || !project.equipment.length} onClick={() => setGlobalBindings(true)}>Revoir toutes les liaisons aux tags</button></div>
     <div className="information-strip"><ArrowLeftRight size={19} /><div><strong>Entrée PLC</strong> : mesure simulée écrite vers le programme. <strong>Sortie PLC</strong> : commande lue depuis le programme. Le banc ne force jamais une sortie PLC.</div></div>
     <div className="permission-summary"><div><strong>{writableCount} / {inputs.length} entrées autorisées en écriture</strong><p>Préparez les droits de toutes les entrées en une seule revue.</p></div><button className="button" disabled={locked || !inputs.length} onClick={openPermissions}><ShieldCheck size={16} />Autorisations d’écriture</button></div>
     <div className="table-toolbar"><div className="search-field"><Search size={16} /><input aria-label="Rechercher une variable" placeholder="Rechercher un tag, un NodeId…" value={search} onChange={event => setSearch(event.target.value)} /></div>
@@ -63,7 +99,7 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
           <td className="mono muted">{tag.data_type}</td><td><strong className="mono">{fmt(live?.value ?? tag.initial_value)}</strong>{live?.forced && <span className="inline-forced">F</span>}</td>
           <td><span className={`quality-value ${live?.quality && /bad|stale|error|disconnected/i.test(live.quality) ? 'bad' : ''}`}><span />{live?.quality ?? 'Initial'}</span></td>
           <td>{tag.unit || '—'}</td><td className="plc-address-cell"><code>{tag.plc_address || 'À renseigner'}</code>{tag.plc_symbol && <small>{tag.plc_symbol}</small>}</td><td className="mono node-id">{tag.node_id || <span className="small-muted">À découvrir sur le serveur</span>}</td><td><button className="icon-button" title="Éditer la variable" onClick={() => setExpanded(expanded === tag.id ? null : tag.id)}>{expanded === tag.id ? <X size={16} /> : <ArrowLeftRight size={16} />}</button></td>
-        </tr>, ...(expanded === tag.id ? [<tr key={`${tag.id}-details`} className="tag-details"><td colSpan={9}><div className="tag-detail-grid">
+        </tr>, ...(expanded === tag.id ? [<tr key={`${tag.id}-details`} className="tag-details" data-tag-details={tag.id}><td colSpan={9}><div className="tag-detail-grid">
           <label>Nom<input disabled={locked} value={tag.name} onChange={event => update(tag.id, { name: event.target.value })} /></label>
           <label>Sens<select disabled={locked} value={tag.direction} onChange={event => update(tag.id, { direction: event.target.value as Tag['direction'], writable: event.target.value === 'input' })}><option value="input">Entrée simulée → PLC</option><option value="output">Commande PLC → modèle</option></select></label>
           <label>Type<select disabled={locked} value={tag.data_type} onChange={event => { const data_type = event.target.value as Tag['data_type']; update(tag.id, { data_type, initial_value: data_type === 'BOOL' ? false : 0, min: data_type === 'BOOL' ? null : 0, max: data_type === 'BOOL' ? null : data_type === 'INT' ? 32767 : data_type === 'DINT' ? 2147483647 : 100, signal: null }); }}>{['BOOL', 'INT', 'DINT', 'REAL'].map(type => <option key={type}>{type}</option>)}</select></label>
@@ -74,6 +110,7 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
           <label>Adresse Siemens<input className="mono" disabled={locked} value={tag.plc_address ?? ''} placeholder="%I1.0 · %IW264 · %DB43.DBX1.2" onChange={event => update(tag.id, { plc_address: event.target.value })} /></label>
           <label className="span-2">Symbole PLC<input className="mono" disabled={locked} value={tag.plc_symbol ?? ''} placeholder={'"DB_FAT_Demo".P101_Request'} onChange={event => update(tag.id, { plc_symbol: event.target.value })} /></label>
           <label className="span-2">NodeId OPC UA<input className="mono" disabled={locked} value={tag.node_id} placeholder={'ns=3;s="DB_FAT"."Level"'} onChange={event => update(tag.id, { node_id: event.target.value })} /></label>
+          {project.plc.mode === 'opcua' && <div className="span-2"><button className="button" disabled={locked || !online || state?.status === 'paused'} onClick={() => { setBrowseBase(project); setBrowseTagId(tag.id); }}>Choisir le NodeId sur le serveur</button></div>}
           <label>Conversion analogique<select aria-label={`Conversion analogique ${tag.name}`} disabled={locked || tag.data_type === 'BOOL'} value={tag.signal?.kind ?? ''} onChange={event => update(tag.id, { signal: event.target.value ? { engineering_min: 0, engineering_max: 100, engineering_unit: '%', underflow_raw: null, overflow_raw: null, ...tag.signal, kind: event.target.value as '4-20mA' | '0-10V' | 'linear', raw_min: tag.signal?.raw_min ?? tag.min ?? 0, raw_max: tag.signal?.raw_max ?? tag.max ?? 27648 } : null })}><option value="">Aucune conversion</option><option value="linear">Brut ↔ unité ingénierie</option><option value="4-20mA">4–20 mA</option><option value="0-10V">0–10 V</option></select></label>
           {tag.signal && <>
             <label>Brut minimum{tag.signal.kind === '4-20mA' ? ' (4 mA)' : tag.signal.kind === '0-10V' ? ' (0 V)' : ''}<input disabled={locked} type="number" step={tag.data_type === 'REAL' ? 'any' : 1} value={tag.signal.raw_min} onChange={event => update(tag.id, { signal: { ...tag.signal!, raw_min: Number(event.target.value) } })} /></label>
@@ -92,6 +129,9 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
       })}</tbody></table>
       {!tags.length && <div className="empty-state"><ArrowLeftRight size={28} /><h3>{project.tags.length ? 'Aucun résultat' : 'Aucune variable définie'}</h3><p>{project.tags.length ? 'Essayez un autre terme de recherche.' : 'Créez vos variables ici, ou utilisez « Créer les tags manquants » dans les propriétés d’un équipement.'}</p></div>}
     </div>
+    {globalBindings && <GlobalBindings project={project} catalog={catalog} locked={locked} onChange={onChange} onClose={() => setGlobalBindings(false)} />}
+    {importCsv !== null && <MappingImport project={project} csv={importCsv} locked={locked} onChange={onChange} onClose={() => setImportCsv(null)} />}
+    {browseTagId && browseBase && <div className="modal-backdrop"><section className="modal tag-browse-modal" role="dialog" aria-modal="true" aria-label="Choisir un NodeId OPC UA"><OpcUaBrowser project={browseBase} tag={browseBase.tags.find(tag => tag.id === browseTagId)} disabled={locked || !online || project !== browseBase || state?.status === 'paused'} onClose={() => setBrowseTagId(null)} onSelect={node => { if (!locked && project === browseBase) update(browseTagId, { node_id: node.node_id }); setBrowseTagId(null); }} /></section></div>}
     {permissions && <div className="modal-backdrop"><section className="modal permissions-modal" role="dialog" aria-modal="true" aria-labelledby="permissions-title" aria-describedby="permissions-description">
       <div className="modal-heading"><h2 id="permissions-title">Autorisations d’écriture</h2><button className="icon-button" aria-label="Fermer les autorisations" onClick={() => setPermissions(null)}><X size={18} /></button></div>
       <p id="permissions-description">Choisissez les entrées simulées que le banc pourra écrire. Les sorties PLC restent en lecture seule. Cette sélection sera ajoutée au brouillon du projet.</p>
@@ -109,14 +149,17 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
   </section>;
 }
 
-export function ScenariosPanel({ project, state, locked, online, onChange, selectedId, onSelect, onDraftChange, onExport, onImport, pending: fileCommandsPending }: CommonProps & { selectedId: string; onSelect: (id: string) => void; onDraftChange: (draft: ScenarioDraft | null) => void; onExport: (id?: string) => Promise<void>; onImport: (file: File, mode: ScenarioImportMode) => Promise<void>; pending: boolean }) {
+export function ScenariosPanel({ project, state, locked, online, onChange, selectedId, onSelect, onDraftChange, onExport, onImport, pending: fileCommandsPending, initialDraft }: CommonProps & { selectedId: string; onSelect: (id: string) => void; onDraftChange: (draft: ScenarioDraft | null) => void; onExport: (id?: string) => Promise<void>; onImport: (file: File, mode: ScenarioImportMode) => Promise<void>; pending: boolean; initialDraft?: ScenarioDraft | null }) {
   const selected = project.scenarios.find(scenario => scenario.id === selectedId) ?? null;
   const scenarioFileInput = useRef<HTMLInputElement>(null);
   const [importMode, setImportMode] = useState<ScenarioImportMode>('merge');
   const [stepsText, setStepsText] = useState('[]');
   const [jsonError, setJsonError] = useState('');
   const [pending, setPending] = useState(false);
-  useEffect(() => { setStepsText(JSON.stringify(selected?.steps ?? [], null, 2)); setJsonError(''); setPending(false); onDraftChange(null); }, [selected?.id]); // reset only when choosing a different scenario
+  useEffect(() => {
+    const recovered = initialDraft?.scenarioId === selected?.id ? initialDraft ?? null : null;
+    setStepsText(recovered?.text ?? JSON.stringify(selected?.steps ?? [], null, 2)); setJsonError(''); setPending(Boolean(recovered)); onDraftChange(recovered);
+  }, [selected?.id]); // seed on selection/mount only; typing must not reset itself
   const update = (patch: Partial<Scenario>) => { if (selected) onChange(project => ({ ...project, scenarios: project.scenarios.map(scenario => scenario.id === selected.id ? { ...scenario, ...patch } : scenario) })); };
   const add = () => {
     if (pending && !window.confirm('Abandonner les étapes non appliquées ?')) return;
@@ -220,10 +263,16 @@ export function TrendsPanel({ project, state, online, onError, onSnapshot, draft
   </section>;
 }
 
-export function ConnectionPanel({ project, state, locked, onChange, validation, onValidate, catalog }: CommonProps & { validation: Validation | null; onValidate: () => Promise<void>; catalog: CatalogItem[] }) {
+export function ConnectionPanel({ project, state, locked, onChange, validation, onValidate, catalog, focusField }: CommonProps & { validation: Validation | null; onValidate: () => Promise<void>; catalog: CatalogItem[]; focusField?: { field: string; nonce: number } }) {
   const plc = project.plc;
+  const panel = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!focusField || !panel.current) return;
+    const names: Record<string, string> = { endpoint: 'Endpoint OPC UA', expected_application_uri: 'Identité attendue', namespace_uri: 'Namespace URI', approved_virtual_target: 'Nom de la cible', security_policy: 'Politique de sécurité', server_certificate_sha256: 'Empreinte SHA-256', client_certificate: 'Certificat client', client_private_key: 'Clé privée client', username_env: 'Variable d’environnement · utilisateur', password_env: 'Variable d’environnement · mot de passe', timeout_s: 'Délai de réponse', step_ms: 'Pas du modèle', speed: 'Vitesse de simulation', tia_version: 'Version du projet TIA' };
+    focusLabel(panel.current, names[focusField.field.split('.').at(-1)!] ?? 'Version du projet TIA');
+  }, [focusField]);
   const update = (patch: Partial<Project['plc']>) => onChange(project => ({ ...project, plc: { ...project.plc, ...patch } }));
-  return <section className="page-panel connection-page">
+  return <section className="page-panel connection-page" ref={panel}>
     <div className="section-heading"><div><div className="eyebrow">CONFIGURATION DU BANC</div><h2>Connexion et modèle</h2><p>Un seul programme de contrôle, une seule cible virtuelle explicitement approuvée.</p></div><button className="button primary" disabled={locked} onClick={() => void onValidate()}><ShieldCheck size={16} />Valider le projet</button></div>
     <div className="connection-grid"><div className="connection-settings"><h3>Source des commandes PLC</h3><div className="mode-options"><button className={`mode-option ${plc.mode === 'demo' ? 'active' : ''}`} disabled={locked} onClick={() => update({ mode: 'demo' })}><span className="radio-mark" /><div><strong>Démonstration locale</strong><p>Contrôleur de démonstration intégré. Fonctionne sans Siemens.</p></div><span className="badge neutral">DÉMO</span></button><button className={`mode-option ${plc.mode === 'opcua' ? 'active' : ''}`} disabled={locked} onClick={() => onChange(project => ({ ...project, plc: { ...project.plc, mode: 'opcua' }, simulation: { ...project.simulation, speed: 1 } }))}><span className="radio-mark" /><div><strong>PLCSIM Advanced · OPC UA</strong><p>Le programme PLC testé pilote seul le modèle de procédé.</p></div><Wifi size={20} /></button></div>
       <label>Version du projet TIA<select disabled={locked} value={plc.tia_version} onChange={event => update({ tia_version: event.target.value as Project['plc']['tia_version'] })}><option value="V20">TIA Portal V20</option><option value="V21">TIA Portal V21</option></select></label>
