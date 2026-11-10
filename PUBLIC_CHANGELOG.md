@@ -1,6 +1,6 @@
 # Changements publics
 
-## 0.3.0, 9 novembre 2026
+## 0.3.0, 10 novembre 2026
 
 - Accueil avec démonstration manuelle prête à démarrer, création de procédé et reprise du projet. Le premier circuit se commande sans automate ni TIA Portal.
 - Constructeur de transfert avec source, destination et organes en série : aperçu commun des conduites et des paramètres physiques avant application au brouillon.

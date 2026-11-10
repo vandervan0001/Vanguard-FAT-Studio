@@ -87,6 +87,7 @@ test('reprendre un rapport non enregistré puis changer de projet garde son brou
   expect(dialog.message()).toContain('modifications non enregistrées');
   await dialog.accept();
   await creating;
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByLabel('Nom du projet', { exact: true })).toHaveValue('Projet sans observations héritées');
   const next: Project = await (await request.get('/api/project')).json();
   expect(next.id).not.toBe(original.id);
@@ -152,8 +153,13 @@ test('une archive du même projet garde les brouillons séparés par dossier et 
   await page.getByLabel('Nom du projet', { exact: true }).fill('Brouillon du dossier original');
   await expect(page.getByText('Brouillon récupérable sur ce navigateur', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Ouvrir', exact: true }).click();
+  const choosingArchive = page.waitForEvent('filechooser');
+  await page.getByRole('button', { name: 'Restaurer une archive FAT', exact: true }).click();
+  const chooser = await choosingArchive;
   page.once('dialog', dialog => dialog.accept());
-  await page.getByLabel('Archive FAT à restaurer', { exact: true }).setInputFiles({ name: archive.suggestedFilename(), mimeType: 'application/zip', buffer: bytes });
+  const importingArchive = page.waitForResponse(response => response.url().endsWith('/api/project/archive/import') && response.request().method() === 'POST');
+  await chooser.setFiles({ name: archive.suggestedFilename(), mimeType: 'application/zip', buffer: bytes });
+  expect((await importingArchive).ok()).toBeTruthy();
   await expect(page.getByRole('status')).toContainText('nouveau dossier');
   const restoredWorkspace: WorkspaceSummary = await (await request.get('/api/workspace')).json();
   expect(restoredWorkspace.path).not.toBe(originalWorkspace.path);
