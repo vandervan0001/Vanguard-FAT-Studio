@@ -6,7 +6,9 @@ Ce guide décrit le parcours dans l’interface. Pour piloter le même banc avec
 
 ## 1. Installer et ouvrir le banc
 
-Sous Windows, extraire toute la distribution **portable**, puis double-cliquer sur `Start-FAT.cmd`. Python et les dépendances sont inclus. Depuis une copie **source**, installer Python 3.12 x64 ; son lanceur crée `.venv` et installe les dépendances verrouillées. Le navigateur ouvre [http://127.0.0.1:8765](http://127.0.0.1:8765). Garder la fenêtre du serveur ouverte ; `Ctrl+C` dans cette fenêtre arrête le service.
+Sous Windows, extraire toute la distribution **portable**, puis double-cliquer sur `Start-FAT.cmd` ou `Vanguard-FAT-Studio.cmd`. Python et les dépendances sont inclus. La fenêtre du lanceur affiche l’état du service, ouvre le navigateur et permet de retrouver l’interface, d’ouvrir les données ou de quitter. Un second double-clic retrouve la même instance du portable. Le [guide du lanceur](PORTABLE_LAUNCHER.md) décrit l’arrêt, les diagnostics et la mise à jour guidée.
+
+Depuis une copie **source**, installer Python 3.12 x64 ; son lanceur crée `.venv` et installe les dépendances verrouillées. Le navigateur ouvre [http://127.0.0.1:8765](http://127.0.0.1:8765). Dans ce mode console, garder la fenêtre du serveur ouverte ; `Ctrl+C` arrête le service.
 
 Le portable contient `portable-manifest.json`, `runtime/` et `app/`. Le kit source contenant `offline-manifest.json` et `wheelhouse/` vérifie ses fichiers et utilise ses dépendances locales. Garder ces fichiers ensemble. Pour développer, créer une copie source selon [README-CODEX](../README-CODEX.md). Pour les politiques PowerShell, un Python non standard ou l’installation sans Internet, suivre [INSTALLATION.md](INSTALLATION.md).
 
@@ -27,7 +29,9 @@ Le stockage habituel est `%LOCALAPPDATA%\FATStudio` sous Windows et `~/.fat-stud
 | Zone | Utilisation |
 | --- | --- |
 | Bandeau supérieur | Mode de contrôle, temps simulé, démarrer/reprendre, pause, arrêt, réinitialisation |
-| Barre du projet | Nom, nombre d’équipements/variables, état enregistré, nouveau/ouvrir/importer/exporter/enregistrer |
+| Barre du projet | Nom, état enregistré, accueil, annuler/rétablir, nouveau/ouvrir/importer/exporter/enregistrer |
+| **Accueil** | Essayer la démo, créer un procédé ou reprendre le projet courant |
+| **Préparer l’essai** | Vérification du brouillon et accès direct aux équipements, variables ou réglages à corriger |
 | **P&ID** | Dessin, pupitre d’entrées, observation des sorties, sélection et suivi de la FAT |
 | **Variables & mapping** | Types, sens, valeurs, qualités, associations et identifiants PLC/OPC UA |
 | **Scénarios** | Préparation des FAT pas à pas et des séquences automatiques |
@@ -40,6 +44,18 @@ Le nom du mode doit correspondre à l’essai prévu. En **DÉMONSTRATION**, le 
 Pendant un essai en cours, la structure est verrouillée. **Pause** suspend les échanges et rend le constructeur accessible. Sans modification enregistrée, **Reprendre** continue le même essai. **Appliquer en pause** enregistre les modifications, clôture l’ancien essai sans verdict humain et conserve ses preuves ; le projet revient au repos. Un nouveau **Démarrer** ouvre ensuite un nouvel essai. Une pause ne met pas une CPU externe en STOP.
 
 ## 3. Réaliser un premier essai sans Siemens
+
+### Découvrir avec un petit circuit
+
+1. Dans **Accueil**, choisir **Essayer la démo**. Un nouveau projet contient une cuve, une pompe, une vanne et leurs tags locaux. Les projets précédents restent disponibles dans **Ouvrir**.
+2. Cliquer **Démarrer**, puis **Ouvrir la vanne** et **Mettre la pompe en marche** dans le bandeau **Votre premier essai**.
+3. Observer le niveau de la cuve et les retours des équipements. Le contrôleur de démonstration traite les demandes manuelles ; aucun automate ni TIA Portal n’est nécessaire.
+4. Cliquer **Essayer un défaut moteur**. Observer l’arrêt physique de la pompe, puis **Rétablir le moteur**. La demande de marche peut rester active pendant ce défaut : cette démo n’ajoute pas d’interverrouillage métier au programme testé.
+5. Fermer la vanne ou arrêter la pompe depuis le même bandeau, puis **Arrêter l’essai** pour clore l’acquisition. Les tendances et les preuves restent consultables. Aucun verdict FAT humain n’est attribué automatiquement.
+
+L’accueil apparaît à la première ouverture du navigateur et reste accessible par **Accueil**. **Créer mon procédé** ouvre un projet vide ; **Reprendre mon projet** ferme l’accueil et retrouve l’éditeur. **Masquer les indications** retire le bandeau de découverte.
+
+### Explorer le laboratoire complet
 
 1. Dans **Ouvrir**, cliquer **Charger le laboratoire**. Le projet devient **FAT LAB · Banc de transfert** : trois cuves, quatre pompes, huit vannes, instruments et pupitre, soit 36 objets et 75 variables. Enregistrer auparavant tout brouillon utile.
 2. Dans **P&ID**, sélectionner **01 · Alimentation de la cuve source**, puis **Préparer la vue**.
@@ -182,11 +198,11 @@ Dans **Scénarios**, **Exporter tous les scénarios** produit une enveloppe JSON
 ### Dessiner et paramétrer
 
 1. Cliquer **Nouveau**, donner un nom puis **Créer le projet**. Le projet commence vide en démonstration.
-2. Dans **P&ID → Construire**, utiliser **Insérer un circuit de remplissage** pour commencer avec une cuve, une pompe et une vanne. Pour composer un autre procédé, rechercher un équipement dans la bibliothèque, puis cliquer dessus ou le glisser sur le dessin. Les ajouts au clic occupent une place libre et reçoivent un repère disponible.
-3. Déplacer les symboles et utiliser le zoom/panoramique pour organiser la vue. Pour tracer une conduite, sélectionner le premier équipement, choisir le second dans **Relier à**, puis cliquer **Tracer la liaison**. Les points de connexion du dessin restent utilisables.
+2. Dans **P&ID → Construire**, ouvrir **Circuits et transferts** pour insérer un modèle ou relier les équipements existants. Le raccourci **Insérer un circuit de remplissage** reste disponible dans un dessin vide. Pour composer un autre procédé, rechercher un équipement dans la bibliothèque, puis cliquer dessus ou le glisser sur le dessin. Les ajouts au clic occupent une place libre et reçoivent un repère disponible.
+3. Déplacer les symboles et utiliser le zoom/panoramique pour organiser la vue. Pour tracer seulement une conduite graphique, sélectionner le premier équipement, choisir le second dans **Relier à**, puis cliquer **Tracer la liaison**. Les points de connexion du dessin restent utilisables.
 4. Sélectionner un équipement et ouvrir **Lier les tags automate** en haut de ses propriétés. Associer ses rôles aux variables existantes ou créer les tags manquants selon le parcours ci-dessous.
 5. Renseigner les paramètres physiques. Pour les pompes/vannes, choisir la cuve par son nom, le sens et le groupe de débit. Pour un transfert, choisir aussi la **Cuve source du transfert** ; **Source extérieure** signifie qu’aucune autre cuve du modèle n’est débitée.
-6. Enregistrer avec le bouton ou `Ctrl+S` (`Cmd+S` sur macOS), puis valider dans **Connexion**.
+6. Lire les points du panneau **Préparer l’essai**, corriger les champs concernés puis enregistrer avec le bouton ou `Ctrl+S` (`Cmd+S` sur macOS). **Valider** reste accessible dans **Connexion**.
 
 La bibliothèque comprend neuf types : cuve, pompe, pompe à variateur, vanne TOR, vanne modulante, capteur analogique, capteur binaire, bouton/contact et indicateur PLC. Les paramètres et ports disponibles dépendent du type. Le catalogue actif est aussi accessible par l’API pour un assistant.
 
@@ -196,18 +212,62 @@ Les traits sont des connexions visuelles. Les groupes de débit explicitement d�
 
 Un brouillon incomplet peut être enregistré ; les erreurs sémantiques restent visibles et empêchent son démarrage. La limite du format est de 50 équipements et 200 variables par projet.
 
+### Insérer un modèle réutilisable
+
+Dans **Circuits et transferts → Insérer un modèle**, choisir **Remplissage**, **Vidange**, **Transfert entre cuves** ou **Pompe à variateur**. L’aperçu indique les équipements et tags supplémentaires. **Appliquer le circuit** les ajoute au brouillon, y compris dans un projet déjà rempli, avec des repères, identifiants et circuits distincts. Les équipements existants et le mode de connexion sont conservés. Enregistrer après relecture des paramètres et associations.
+
+Chaque modèle prépare ses conduites et les paramètres de son débit. Les tags sont locaux, sans NodeId OPC UA. **Ajouter une trame FAT à relire** prépare trois étapes d’observation : état initial, écoulement, fin de transfert. Adapter leurs instructions et résultats attendus au programme testé. La trame ne contient aucune écriture préparée, aucun contrôle mesurable et aucun verdict.
+
+### Configurer un transfert entre équipements existants
+
+1. Ouvrir **Circuits et transferts → Relier mes équipements**.
+2. Choisir la **Source du transfert**, une cuve existante ou une alimentation extérieure, puis une autre cuve comme **Destination du transfert**.
+3. Cocher les pompes et vannes qui appartiennent au trajet. Les boutons **Avancer** et **Reculer** règlent leur ordre sur le dessin.
+4. Relire l’aperçu. Les organes choisis partageront un circuit en série ; le modèle débitera la source et alimentera la destination. Pour une alimentation extérieure, aucune autre cuve du modèle n’est débitée.
+5. Cliquer **Appliquer le circuit**, puis **Enregistrer**.
+
+Cette opération renseigne ensemble la cuve destination, la cuve source, le sens d’entrée et le groupe de débit. Elle remplace les conduites graphiques physiques qui touchent les organes choisis ; l’aperçu en donne le nombre. Les liaisons d’instruments, débits maximaux, temps de réponse et associations aux tags restent conservés. Si un organe partage déjà son groupe physique avec d’autres, inclure ce groupe entier avant de modifier son trajet. Une cuve ne peut pas être sa propre source.
+
+Le constructeur prépare les circuits pris en charge par le modèle. Il ne déduit pas un réseau hydraulique général à partir des traits, et les liaisons tracées seules par **Relier à** restent graphiques.
+
+### Dupliquer un équipement ou un circuit
+
+Sélectionner un équipement, puis **Dupliquer cet équipement ou son circuit**. Depuis une pompe ou une vanne, l’option **Inclure son circuit, les cuves et les capteurs associés** copie son groupe physique complet, les cuves référencées et les capteurs rattachés. Depuis un autre symbole, la copie concerne ce symbole seul. Relire l’aperçu puis **Appliquer la copie**.
+
+La copie reçoit de nouveaux repères et tags. Ses conduites et références internes sont réorientées vers les éléments copiés. Les références à des équipements restés hors de la copie sont laissées à choisir. Les NodeIds, adresses et symboles PLC des tags copiés sont vides : revoir le mapping avant de connecter un automate. Les scénarios et preuves ne sont pas dupliqués.
+
+### Corriger depuis les diagnostics
+
+Le panneau **Préparer l’essai** vérifie le brouillon sans l’enregistrer ni contacter une CPU. Cliquer sur un point ouvre l’équipement et son rôle, la variable, le scénario ou le réglage concerné. Les conseils de configuration restent repliés. **Configuration locale prête** signifie que les contrôles locaux passent ; en OPC UA, la connexion, les types et les droits réels des nœuds restent à vérifier avant les échanges.
+
+### Annuler et retrouver un brouillon
+
+Les boutons **Annuler la modification** et **Rétablir la modification** agissent sur les changements du projet avant enregistrement. Hors d’un champ de saisie, utiliser aussi `Ctrl+Z` et `Ctrl+Maj+Z` (`Cmd` sur macOS). Dans un champ, les raccourcis restent ceux de la saisie. L’historique de l’éditeur est réinitialisé lors de l’enregistrement ou du remplacement du projet ; il ne remplace pas l’historique des essais.
+
+Le navigateur conserve automatiquement les modifications non enregistrées dans son stockage local. Cette copie est rattachée au dossier FAT, au projet et au document ouvert. Elle ne modifie pas le projet enregistré ni un essai. Si le stockage du navigateur est indisponible, un message propose de télécharger le brouillon.
+
+Après rechargement, **Brouillon retrouvé** permet de reprendre explicitement les modifications, de les télécharger ou de **Continuer sans reprendre**. Choisir avant de poursuivre l’édition. Une révision de projet différente empêche leur application automatique ; conserver la copie et comparer les changements. Les observations et conclusions restent rattachées à leur essai d’origine. La récupération dans le navigateur ne remplace pas une archive `.fat.zip`, et effacer les données du navigateur peut effacer ces brouillons.
+
 ### Lier un équipement aux tags automate
 
 1. Sélectionner l’équipement dans **Construire**, puis **Lier les tags automate**. À gauche figurent ses rôles : commande, retour, défaut, niveau, etc. La mention **requis** distingue les associations nécessaires ; le compteur inclut aussi les rôles facultatifs.
 2. Choisir un rôle. La liste présente seulement les tags dont le sens et le type conviennent. Rechercher par nom, symbole PLC, adresse ou NodeId, puis cliquer le tag voulu. Deux tags de même nom affichent aussi leur identifiant pour pouvoir les distinguer.
 3. Pour aller plus vite, cliquer **Proposer depuis le repère**. Par exemple, la commande de `P-101` peut correspondre à `P101_RunCommand` et son retour à `P101_Running`. Les propositions utilisent les noms et symboles PLC, complètent seulement les rôles libres et exigent une correspondance unique. Relire les associations proposées ; les cas ambigus restent à choisir.
 4. Si le tag n’existe pas, utiliser **Créer un tag BOOL/REAL/…** pour le rôle sélectionné, ou **Créer les tags manquants** pour tous les rôles encore libres. Un choix de type apparaît lorsque le rôle en accepte plusieurs. Les nouveaux tags n’ont pas de NodeId ; ils peuvent être renommés et leurs limites réglées dans **Variables & mapping**.
-5. Pour une connexion OPC UA, déplier **NodeId OPC UA de…** et coller l’identifiant réellement découvert sur le serveur. Cette modification concerne le tag et toutes ses utilisations. Aucun NodeId ni aucune échelle analogique ne sont déduits d’une adresse Siemens. En démonstration, ce champ peut rester vide.
+5. Pour une connexion OPC UA, déplier **NodeId OPC UA de…** et coller l’identifiant réellement découvert. La revue globale décrite ci-dessous permet aussi de choisir ce NodeId sur le serveur après préparation de la cible. Cette modification concerne le tag et toutes ses utilisations. Aucun NodeId ni aucune échelle analogique ne sont déduits d’une adresse Siemens. En démonstration, ce champ peut rester vide.
 6. Cliquer **Appliquer au brouillon**, puis **Enregistrer** dans le projet. **Annuler**, la croix ou Échap abandonne les changements de cette fenêtre, y compris les tags qu’elle venait de préparer.
 
 Une entrée déjà produite par un autre équipement est signalée et ne peut pas être choisie comme second producteur physique. Les commandes PLC restent en lecture seule ; plusieurs équipements peuvent les lire. Les demandes manuelles ne sont pas considérées comme des producteurs physiques. Vérifier les droits d’écriture des entrées dans **Variables & mapping** avant une connexion.
 
 Si le projet change ou devient verrouillé, la sélection reste visible dans la fenêtre et l’application est désactivée. Relire le projet avant de refaire les associations. Le logiciel ne reprend pas automatiquement une opération interrompue. Les listes d’association dans les propriétés restent disponibles pour les modifications ponctuelles.
+
+### Revoir toutes les associations
+
+Dans **Variables & mapping**, ouvrir **Revoir toutes les liaisons aux tags**. Les trois colonnes présentent équipements, rôles et tags compatibles. Le compteur distingue les rôles requis du total des rôles disponibles.
+
+**Proposer pour tous les équipements** complète les correspondances uniques depuis les repères ; les associations déjà renseignées et les cas ambigus restent à relire. Choisir chaque rôle pour modifier sa liaison, ou **Créer les tags manquants de cet équipement** pour préparer ses tags locaux. Un tag d’entrée déjà produit physiquement par un autre rôle est signalé et ne peut pas devenir un second producteur.
+
+**Appliquer les liaisons au brouillon** regroupe les changements de cette revue. **Annuler** les abandonne. Enregistrer ensuite le projet. Les NodeIds peuvent être choisis dans l’explorateur décrit ci-dessous ; cela ne crée aucune autorisation d’écriture ni aucune échelle analogique.
 
 ### Animer un symbole depuis une variable
 
@@ -307,7 +367,11 @@ Les codes de rupture de fil/dépassement dépendent du module, du paramétrage e
 
 **Exporter** dans la barre projet produit l’enveloppe JSON versionnée du projet. **Importer** accepte cette enveloppe ainsi que les anciens projets JSON compatibles ; les champs inconnus sont refusés. Enregistrer avant de remplacer le projet actif.
 
-Dans Variables, **Exporter CSV** produit le mapping ; **Importer CSV** remplace l’ensemble de sa liste de variables. Vérifier les associations et scénarios après remplacement. Le CSV utilise une virgule séparatrice et `true`/`false` pour `writable`. Les dix colonnes historiques restent acceptées ; les exports actuels ajoutent adresses, symboles, conversion et marqueur d’encodage. Le détail est dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
+Dans Variables, **Exporter CSV** produit le mapping. **Importer CSV** ouvre un aperçu et propose par défaut **Fusionner par identifiant et conserver les autres variables**. La fusion met à jour les identifiants présents dans le CSV, ajoute les nouveaux et conserve les autres. **Remplacer la liste des variables** reste un choix explicite. Arrêter l’essai avant de préparer cet import.
+
+Relire les ajouts, modifications et suppressions. La suppression d’une variable utilisée, ou le changement de son sens, type, unité ou conversion analogique, bloque l’application tant que ses consommateurs n’ont pas été revus. **Appliquer l’import au brouillon** conserve le projet enregistré jusqu’à **Enregistrer** ; **Annuler** abandonne l’aperçu. Les associations et scénarios ne sont pas réécrits pour rendre le CSV compatible.
+
+Le CSV utilise une virgule séparatrice et `true`/`false` pour `writable`. Les dix colonnes historiques restent acceptées ; les exports actuels ajoutent adresses, symboles, conversion et marqueur d’encodage. Le détail est dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
 
 ## 8. Injecter un défaut
 
@@ -368,7 +432,7 @@ Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md) pour la préparation native et [ACCEPT
 2. Découvrir endpoint, ApplicationUri, namespace, certificat, NodeIds, types et droits réellement exposés.
 3. Faire autoriser cette cible exacte par le CLI humain `authorize-target`, dans le même dossier de données que le serveur FAT.
 4. Dans **Connexion**, choisir **PLCSIM Advanced · OPC UA** puis remplir les mêmes informations. Les identifiants utilisateur sont référencés par noms de variables d’environnement ; les valeurs secrètes ne vont pas dans le projet.
-5. Dans Variables, associer les NodeIds découverts. Valider le projet. La validation en ligne des nœuds, types et droits intervient au démarrage avant les écritures.
+5. Dans Variables, associer les NodeIds découverts, par saisie ou avec l’explorateur ci-dessous. Valider le projet. La validation en ligne des nœuds, types et droits intervient au démarrage avant les écritures.
 6. Démarrer ; recopier exactement le nom de cible et l’endpoint demandés. Vérifier une commande lue et une mesure écrite avant la campagne.
 
 Pour préparer plusieurs essais sur la même cible, cocher **Autoriser plusieurs essais dans cet onglet** dans la confirmation. **Tout sélectionner** couvre l’essai libre et les scénarios du projet ; décocher ceux à exclure, ou choisir **Garder cet essai uniquement**. **Refuser** annule le démarrage et retire l’accord précédent. Chaque essai se démarre manuellement ; les observations et verdicts restent séparés.
@@ -378,6 +442,14 @@ Le bandeau **Cible autorisée dans cet onglet** affiche la cible et permet de **
 Un projet importé ne peut pas autoriser une cible sur le poste. Le mode OPC UA conserve la vitesse à 1× ; aucune garantie de synchronisation avec le scan PLC n’est déduite du pas choisi.
 
 Le serveur OPC UA générique `scripts/opcua-fixture.py` permet d’essayer le protocole sans Siemens. Son comportement et les démonstrations Python ne constituent pas une qualification PLCSIM ou une validation fonctionnelle du programme Siemens.
+
+### Choisir un NodeId sur le serveur
+
+L’explorateur s’utilise après avoir configuré et autorisé la cible exacte sur le poste, avec l’essai arrêté. Dans la revue globale d’un tag, cliquer **Choisir sur le serveur OPC UA**, relire la cible affichée, puis **Parcourir en lecture seule**. Dans les détails d’une variable, le bouton **Choisir le NodeId sur le serveur** ouvre le même explorateur. La politique locale, l’identité attendue et le certificat sont contrôlés avant l’authentification. Un mapping incomplet peut être exploré pour le compléter.
+
+Ouvrir les dossiers jusqu’à la variable voulue. Le filtre ne porte que sur la page affichée ; utiliser **Page suivante** pour la suite. **Utiliser…** n’est disponible que pour un type scalaire compatible et les droits requis : lecture pour une commande PLC, écriture pour une entrée simulée. Le namespace système 0, les tableaux, structures, références externes et types non pris en charge ne peuvent pas être associés. Les pages contiennent au plus 100 nœuds, avec une limite de 2 000 nœuds par dossier.
+
+L’exploration lit les noms, types et droits, sans écrire de valeur ni démarrer d’essai. Le choix remplit le NodeId dans la revue en cours ; appliquer cette revue puis enregistrer le projet. Une erreur ou un changement de contexte interrompt le parcours ; la reprise est explicite. L’explorateur ne configure pas le serveur OPC UA de TIA et ne qualifie pas une cible Siemens.
 
 ## 12. Travailler avec votre IA
 
@@ -389,10 +461,13 @@ Utiliser le [prompt prêt à copier et le tutoriel isolé](AI_QUICKSTART.md). Le
 
 | Observation | Action |
 | --- | --- |
-| Page inaccessible | Vérifier la fenêtre serveur, son URL/port et le résultat de `doctor`. Ne pas lancer un second serveur sur le même port. |
+| Page inaccessible | Vérifier l’état dans le lanceur, son URL/port et le résultat de `doctor`. Le bouton **Ouvrir FAT Studio** retrouve l’interface. |
 | Anciennes valeurs, service indisponible | Vérifier le serveur ; les commandes sont bloquées tant que la connexion locale n’est pas revenue. |
 | Projet changé dans un autre onglet | Télécharger le brouillon proposé, puis recharger volontairement le projet actif. Un autre onglet et une IA partagent le même serveur. |
-| Démarrage refusé | Lire les diagnostics dans Connexion ; vérifier associations, types, bornes, droits et politique locale. |
+| Démarrage refusé | Cliquer les points de **Préparer l’essai**, puis vérifier les diagnostics de Connexion : associations, types, bornes, droits et politique locale. |
+| Transfert refusé dans le constructeur | Choisir deux cuves distinctes et inclure tous les organes du circuit physique déjà partagé. |
+| Variable CSV refusée | Lire la ligne d’aperçu ; revoir les consommateurs avant de supprimer ou changer le contrat d’un tag utilisé. |
+| Brouillon retrouvé mais reprise indisponible | Comparer la révision du projet et l’essai d’origine ; télécharger le brouillon pour préserver son contenu. |
 | Poussoir inactif | Vérifier qu’un essai tourne, que le tag est `input`, BOOL et autorisé en écriture. |
 | Sortie impossible à forcer | Vérifier le sens : une sortie PLC est lue depuis le contrôleur. Corriger une déclaration erronée uniquement après revue du mapping. |
 | Unité mA/V absente | Vérifier la conversion `signal` de la variable. Le logiciel ne la déduit pas d’une adresse analogique. |

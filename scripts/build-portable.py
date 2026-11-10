@@ -27,6 +27,23 @@ def digest(path: Path) -> str:
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
+def application_identity(root: Path, wheel: Path) -> dict:
+    with zipfile.ZipFile(wheel) as archive:
+        name = next(name for name in archive.namelist() if name.endswith(".dist-info/METADATA") and len(name.split("/")) == 2)
+        package = BytesParser().parsebytes(archive.read(name))
+    result = {"application_version": package["Version"], "source_commit": "", "source_dirty": True}
+    try:
+        revision = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True, text=True).stdout.strip()
+        changed = subprocess.run(["git", "diff", "--name-only", "HEAD"], cwd=root, check=True, capture_output=True, text=True).stdout.splitlines()
+        public = set(selected_files(root, "source"))
+        untracked = subprocess.run(["git", "ls-files", "--others", "--exclude-standard"], cwd=root, check=True,
+                                   capture_output=True, text=True).stdout.splitlines()
+        result.update(source_commit=revision, source_dirty=bool(public.intersection([*changed, *untracked])))
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    return result
+
+
 def locked_wheels(directory: Path, lockfile: Path) -> list[Path]:
     expected = {}
     for line in lockfile.read_text(encoding="utf-8").splitlines():
@@ -117,8 +134,19 @@ def build(args) -> Path:
     (output / "scripts").mkdir(exist_ok=True)
     shutil.copyfile(root / "scripts/portable-launcher.py", output / "launch.py")
     shutil.copyfile(root / "scripts/check-portable.py", output / "scripts/check-portable.py")
+    for name in ("portable_host.py", "portable_window.py", "portable_update.py"):
+        shutil.copyfile(checked_file(root, "scripts/" + name), output / "scripts" / name)
+    # Windows accepts PNG-compressed ICO entries; the original brand bitmap is unchanged.
+    icon = (root / "fat_studio/web/brand/logo_vanguard.png").read_bytes()
+    width, height = struct.unpack(">II", icon[16:24])
+    if not 0 < width <= 256 or not 0 < height <= 256:
+        raise ValueError("Portable icon must fit a 256 px ICO entry")
+    (output / "vanguard.ico").write_bytes(struct.pack("<HHHBBBBHHII", 0, 1, 1, width % 256, height % 256,
+                                                     0, 0, 1, 32, len(icon), 22) + icon)
     (output / "Start-FAT.cmd").write_text(
-        '@echo off\r\nsetlocal\r\n"%~dp0runtime\\python.exe" -B -X utf8 "%~dp0launch.py" %*\r\n'
+        '@echo off\r\nsetlocal\r\nif "%~1"=="" (\r\n'
+        '  start "" "%~dp0runtime\\pythonw.exe" -B -X utf8 "%~dp0launch.py" --gui\r\n'
+        '  exit /b 0\r\n)\r\n"%~dp0runtime\\python.exe" -B -X utf8 "%~dp0launch.py" %*\r\n'
         'if errorlevel 1 (\r\n  echo.\r\n  echo Voir le diagnostic et docs\\INSTALLATION.md.\r\n  pause\r\n)\r\nendlocal\r\n',
         encoding="ascii", newline="")
     (output / "Vanguard-FAT-Studio.cmd").write_text(
@@ -134,6 +162,7 @@ def build(args) -> Path:
             check_content(path.relative_to(output).as_posix(), path.read_bytes())
     manifest = {"schema": 1, "platform": "Windows-x64", "python": lock["version"],
                 "python_archive_sha256": lock["sha256"], "application_wheel_sha256": digest(args.wheel),
+                **application_identity(root, args.wheel),
                 "files": file_manifest(output)}
     (output / "portable-manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     subprocess.run([str(runtime / "python.exe"), "-B", "-X", "utf8", str(output / "launch.py"), "--check"],

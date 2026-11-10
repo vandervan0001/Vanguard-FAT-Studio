@@ -8,11 +8,11 @@ Le portable contient Python officiel **3.12.10 x64**, les dépendances verrouill
 
 1. Extraire **toute** l’archive portable dans un dossier local, par exemple `C:\FAT\Vanguard-FAT-Studio`.
 2. Garder ensemble `Start-FAT.cmd`, `runtime/`, `app/`, `scripts/` et `portable-manifest.json`.
-3. Double-cliquer **Start-FAT.cmd**. Le lanceur vérifie les fichiers avant de charger l’application.
-4. Ouvrir [http://127.0.0.1:8765](http://127.0.0.1:8765) si le navigateur ne s’ouvre pas automatiquement.
-5. Garder la console ouverte. `Ctrl+C` arrête le service. Fermer seulement l’onglet ne termine pas un essai en cours.
+3. Double-cliquer **Start-FAT.cmd**. La fenêtre du lanceur affiche la vérification puis l’état **Prêt** ; le navigateur s’ouvre automatiquement.
+4. Utiliser **Ouvrir FAT Studio** pour retrouver l’interface. Un second double-clic retrouve le service du même portable et du même dossier.
+5. Utiliser **Quitter** dans le lanceur pour fermer le service. Fermer seulement l’onglet ne termine pas un essai en cours. Les lancements avec des arguments explicites gardent une console et l’arrêt par `Ctrl+C`.
 
-Les données sont stockées par défaut dans `%LOCALAPPDATA%\FATStudio`, **hors du runtime**. Le dossier du portable peut être remplacé lors d’une mise à jour sans remplacer vos projets. Conserver néanmoins une [archive de projet](PROJECT_ARCHIVES.md) avant toute mise à jour.
+Les données sont stockées par défaut dans `%LOCALAPPDATA%\FATStudio`, **hors du runtime**. Une mise à jour s’installe dans un nouveau dossier et réutilise les mêmes données. L’ancien portable reste intact. Conserver une [archive de projet](PROJECT_ARCHIVES.md) avant toute mise à jour. Le [guide du lanceur](PORTABLE_LAUNCHER.md) décrit sa fenêtre et la mise à jour guidée.
 
 Dans PowerShell, depuis le dossier du portable :
 
@@ -80,14 +80,14 @@ Cette étape concerne le développeur sur **Windows x64 avec Python 3.12**. Part
 ```powershell
 .\.venv\Scripts\python.exe public_distribution.py check
 .\.venv\Scripts\python.exe -m build --wheel --no-isolation
-.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.2.1-py3-none-any.whl
+.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.3.0-py3-none-any.whl
 .\.venv\Scripts\python.exe -m pip download --disable-pip-version-check --only-binary=:all: --no-deps --dest D:\FAT-Build\wheels -r requirements.lock
-.\.venv\Scripts\python.exe scripts/build-portable.py --wheel dist\vanguard_fat_studio-0.2.1-py3-none-any.whl --wheelhouse D:\FAT-Build\wheels --output D:\Livraison\Vanguard-FAT-Studio-Portable
+.\.venv\Scripts\python.exe scripts/build-portable.py --wheel dist\vanguard_fat_studio-0.3.0-py3-none-any.whl --wheelhouse D:\FAT-Build\wheels --output D:\Livraison\Vanguard-FAT-Studio-Portable
 ```
 
 `build-portable.py` télécharge uniquement l’archive Python officielle épinglée si elle n’est pas déjà fournie avec `--python-archive CHEMIN`. Il vérifie sa taille et son SHA-256 avant extraction. Le dossier des wheels doit contenir exactement les paquets et versions de `requirements.lock`. L’installation utilise ces fichiers avec `--no-index --no-deps` ; les paquets ne sont pas cherchés sur un index pendant l’assemblage. L’archive Python peut aussi être transférée en amont pour une construction hors ligne.
 
-La sélection publique est explicite dans `public-distribution.json`. Le constructeur vérifie la wheel de l’application, copie uniquement les documents autorisés, conserve les licences et les wheels d’origine, puis écrit `portable-manifest.json`. Il exécute ensuite le contrôle de cette livraison avec son propre interpréteur. Un échec laisse une construction incomplète dans sa destination neuve ; ne pas la distribuer.
+La sélection publique est explicite dans `public-distribution.json`. Le constructeur vérifie la wheel de l’application, copie uniquement les documents autorisés, conserve les licences et les wheels d’origine, puis écrit `portable-manifest.json`. Le manifeste conserve la version, l’empreinte de la wheel et le commit source ; une livraison publique doit provenir de sources commitées. Il exécute ensuite le contrôle de cette livraison avec son propre interpréteur. Un échec laisse une construction incomplète dans sa destination neuve ; ne pas la distribuer.
 
 Après construction, tester depuis **un autre dossier**, avec un `PATH` minimal, un dossier de données temporaire et sans dépendance au dépôt source. Le contrôle doit couvrir le service, une séquence de démo, les exports et une restauration d’archive. Seuls les contrôles effectivement exécutés peuvent être annoncés.
 
@@ -105,7 +105,7 @@ L’option `-Engineering` ajoute les dépendances Python verrouillées de l’in
 | --- | --- |
 | Portable incomplet ou modifié | Réextraire toute la livraison dans un nouveau dossier ; conserver les données séparées. |
 | Python introuvable dans les sources | Préciser Python 3.12 x64 avec `setup.ps1 -Python`, ou utiliser la distribution portable. |
-| Page inaccessible | Lire l’URL et le message de la console ; vérifier qu’elle est ouverte. |
+| Page inaccessible | Lire l’état du lanceur et cliquer **Ouvrir FAT Studio** ; pour un lancement console, lire son message. |
 | Port occupé | Identifier le service déjà présent puis choisir un autre port ; ne pas arrêter un processus inconnu. |
 | Dossier de données verrouillé | Identifier le serveur qui l’utilise et travailler dans un autre dossier ou l’arrêter volontairement. |
 | Mauvaise plateforme de wheels | Repréparer un kit pour la plateforme voulue ; ne pas enlever le manifeste. |
@@ -114,6 +114,10 @@ L’option `-Engineering` ajoute les dépendances Python verrouillées de l’in
 Références : [distribution officielle Python 3.12.10](https://www.python.org/downloads/release/python-31210/), [paquet Python embarquable](https://docs.python.org/3.12/using/windows.html#the-embeddable-package), [installation pip depuis des paquets locaux](https://pip.pypa.io/en/stable/user_guide/#installing-from-local-packages).
 
 ## Mettre à jour un portable existant
+
+Depuis 0.3.0, **Mise à jour** dans le lanceur recherche le portable officiel après un clic explicite. Le téléchargement est vérifié puis extrait dans un nouveau dossier. **Utiliser la mise à jour** ferme le service courant avant d’ouvrir la nouvelle copie, avec le même chemin de données et sans reprendre l’essai. Les étapes et limites sont dans [PORTABLE_LAUNCHER.md](PORTABLE_LAUNCHER.md).
+
+Pour passer d’un portable antérieur à 0.3.0, suivre la procédure manuelle ci-dessous.
 
 Les constructions du 7 novembre 2026 conservent la version applicative 0.2.1. La première ajoute les autorisations groupées ; la construction P&ID ajoute le circuit de départ, la bibliothèque filtrable et la fenêtre de liaison des tags automate. Le nom du ZIP, le commit source et le SHA-256 publiés dans la release identifient chaque construction. La version affichée par `/api/health` ne suffit pas à les distinguer.
 
@@ -125,4 +129,4 @@ Les constructions du 7 novembre 2026 conservent la version applicative 0.2.1. La
 
 Pour revenir au portable précédent, arrêter le nouveau serveur puis lancer l’ancien dossier intact avec le dossier de données voulu. Cette mise à jour ne change pas le schéma de stockage ; les archives exportées restent la copie de sauvegarde du projet et de ses essais. Les données ne doivent pas être copiées dans `runtime/`, `app/` ou à l’intérieur du manifeste.
 
-Les notes de release donnent le ZIP courant, son SHA-256, les sources exactes et le reçu des vérifications. Les archives automatiques « Source code » de GitHub suivent le tag historique de la release ; utiliser la référence source indiquée pour reconstruire ce portable.
+Les notes de release donnent le ZIP courant, son SHA-256, les sources exactes et le reçu des vérifications. Le tag `v0.3.0` identifie les sources de cette version. Les archives automatiques « Source code » de l’ancienne release d’aperçu suivent son tag historique ; utiliser la référence source indiquée dans cette ancienne release pour reconstruire ses portables.

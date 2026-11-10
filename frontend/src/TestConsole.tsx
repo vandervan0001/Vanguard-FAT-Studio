@@ -94,7 +94,7 @@ export function AnalogInputs({ project, state, unavailable, onError, onSnapshot 
       const profile = diagnosticProfile(tag, state?.tags[tag.id]);
       return <div className={`analog-control ${state?.tags[tag.id]?.forced ? 'maintained' : ''} ${profile ? 'diagnostic-reading' : ''}`} key={tag.id} data-tag={tag.id}>
       <div className="analog-label"><strong>{tag.name}</strong><span>{tag.data_type}</span></div>
-      <code>{tag.plc_address || tag.plc_symbol || 'Adresse à renseigner'}</code>
+      <code>{tag.plc_address || tag.plc_symbol || (project.plc.mode === 'demo' ? 'Tag local de démonstration' : tag.node_id || 'NodeId à renseigner')}</code>
       <div className="analog-reading">{profile ? <><strong>{diagnosticLabel(profile)}</strong><small>Code du profil</small></> : <>{fmt(displayValue(tag, state?.tags[tag.id]?.value ?? tag.initial_value, tag.signal ? 'engineering' : 'native'), 2)}<small>{tag.signal ? engineeringUnit(tag) : tag.unit || tag.data_type}</small>{tag.signal && signalUnit(tag) !== 'native' && <span className="analog-electrical">{fmt(electricalValue(tag, state?.tags[tag.id]?.value ?? tag.initial_value), 2)} {signalUnit(tag)}</span>}</>}</div>
       {tag.signal && <div className="analog-native">Brut acquis : {fmt(state?.tags[tag.id]?.value ?? tag.initial_value, 2)} {tag.unit || tag.data_type}</div>}
       {state && <ForceField key={`${tag.id}-${tag.signal?.kind ?? 'native'}`} tag={tag} state={state} unavailable={unavailable} onSnapshot={onSnapshot} onError={onError} />}

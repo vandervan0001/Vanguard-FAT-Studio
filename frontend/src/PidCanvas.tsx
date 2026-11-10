@@ -4,7 +4,7 @@ import {
   Handle, Position, MarkerType, useReactFlow, BaseEdge, getSmoothStepPath,
   type Node, type NodeProps, type NodeChange, type EdgeChange, type Connection, type EdgeProps,
 } from '@xyflow/react';
-import { CircleHelp, GripVertical, Plus, Search, Trash2, Unlink, WandSparkles, X, Zap, RotateCcw, PencilRuler, Radio, Link2 } from 'lucide-react';
+import { CircleHelp, Copy, GripVertical, Plus, Route, Search, Trash2, Unlink, WandSparkles, X, Zap, RotateCcw, PencilRuler, Radio, Link2 } from 'lucide-react';
 import { api } from './api';
 import { fmt, uid, type CatalogItem, type Equipment, type EquipmentType, type Project, type Snapshot, type Tag, type Scenario } from './types';
 import { DigitalInputs, AnalogInputs, PlcOutputs } from './TestConsole';
@@ -14,12 +14,14 @@ import { AnimationEditor, animationReading } from './AnimationEditor';
 import { diagnosticLabel, diagnosticProfile, displayValue, engineeringUnit } from './signal';
 import { BindingEditor } from './BindingEditor';
 import { compatibleTag, fillCircuit, freePosition, makeEquipment, missingPortTags } from './pidBuilder';
+import { TransferBuilder } from './TransferBuilder';
 
 type Props = {
   project: Project; state: Snapshot | null; catalog: CatalogItem[]; locked: boolean; online: boolean;
   onChange: (update: (project: Project) => Project) => void;
   onError: (message: string) => void; onSnapshot: (state: Snapshot) => void;
   scenario?: Scenario | null; viewRequest?: number; presentation?: boolean; unavailable?: string;
+  focusRequest?: { equipmentId?: string; port?: string; field?: string; nonce: number };
 };
 type EquipmentNode = Node<{ equipment: Equipment; state: Record<string, unknown>; tags: Snapshot['tags']; faults: Record<string, unknown>; locked: boolean; operating: boolean; highlighted?: boolean; signalTag?: Tag; animationDataType?: Tag['data_type'] }, 'equipment'>;
 
@@ -109,7 +111,7 @@ function ProcessPipe(props: EdgeProps) {
 }
 const edgeTypes = { process: ProcessPipe };
 
-function Canvas({ project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, scenario, viewRequest, presentation }: Props) {
+function Canvas({ project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, scenario, viewRequest, presentation, focusRequest }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
   const [snapToGrid, setSnapToGrid] = useState(true);
@@ -117,9 +119,17 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
   const [showConsoles, setShowConsoles] = useState(false);
   const [librarySearch, setLibrarySearch] = useState('');
   const [fitAdded, setFitAdded] = useState(false);
+  const [circuitMode, setCircuitMode] = useState<'template' | 'transfer' | null>(null);
+  const [inspectorFocus, setInspectorFocus] = useState<Props['focusRequest']>();
   const [measurements, setMeasurements] = useState<Record<string, { width: number; height: number }>>({});
   const canvasRef = useRef<HTMLDivElement>(null);
   const { screenToFlowPosition, fitView } = useReactFlow();
+  useEffect(() => {
+    if (!focusRequest) return;
+    setBuilding(true); setSelectedEdge(null); setSelectedId(focusRequest.equipmentId ?? null); setInspectorFocus(focusRequest);
+    const timer = setTimeout(() => { if (focusRequest.equipmentId) void fitView({ nodes: [{ id: focusRequest.equipmentId }], padding: .8, maxZoom: 1, duration: 200 }); }, 120);
+    return () => clearTimeout(timer);
+  }, [focusRequest?.nonce, fitView]);
   useEffect(() => {
     if (!fitAdded) return;
     const timer = setTimeout(() => { void fitView({ padding: .2, maxZoom: 1, duration: 200 }); setFitAdded(false); }, 90);
@@ -219,7 +229,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
 
   const controls = { project, state, unavailable, onError, onSnapshot };
   const inspector = selected || selectedEdge || building ? <aside className="inspector panel">
-    {selected ? <Inspector key={selected.id} equipment={selected} project={project} state={state} catalog={catalog} locked={locked || !building} online={online} unavailable={unavailable} onChange={onChange} onError={onError} onSnapshot={onSnapshot} showForces={building} onClose={() => setSelectedId(null)} />
+    {selected ? <Inspector key={selected.id} equipment={selected} project={project} state={state} catalog={catalog} locked={locked || !building} online={online} unavailable={unavailable} onChange={onChange} onError={onError} onSnapshot={onSnapshot} focusRequest={inspectorFocus?.equipmentId === selected.id ? inspectorFocus : undefined} showForces={building} onCopied={ids => { setSelectedId(ids[0] ?? null); setFitAdded(true); setInspectorFocus(undefined); }} onClose={() => setSelectedId(null)} />
       : selectedEdge ? <ConnectionInspector project={project} id={selectedEdge} locked={locked || !building} onChange={onChange} onClose={() => setSelectedEdge(null)} />
         : <><div className="panel-title">Propriétés</div><div className="inspector-empty"><ProcessSymbol type="tank" /><h3>Sélectionnez un équipement</h3><p>Ses paramètres, ses variables PLC et ses défauts de simulation apparaîtront ici.</p></div><div className="model-note"><strong>Débits et liaisons</strong><p>Les conduites sont graphiques. Le débit est défini par la cuve cible, le sens et le groupe de débit de chaque pompe ou vanne.</p><p>Dans un même groupe, l’équipement le plus limitant fixe le débit. Les groupes indépendants s’additionnent.</p></div></>}
   </aside> : null;
@@ -231,6 +241,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
         try { const next = fillCircuit(project, catalog); onChange(current => current === project ? next : current); setSelectedId(next.equipment.find(item => item.type === 'pump')!.id); setFitAdded(true); }
         catch (error) { onError(error instanceof Error ? error.message : String(error)); }
       }}>Insérer un circuit de remplissage</button></div>}
+      <div className="circuit-launch"><button className="button compact-button" disabled={locked} onClick={() => setCircuitMode('template')}><Route size={15} />Circuits et transferts</button></div>
       <label className="palette-search"><Search size={14} /><input aria-label="Rechercher un équipement" placeholder="Cuve, pompe, capteur…" value={librarySearch} onChange={event => setLibrarySearch(event.target.value)} /></label>
       <div className="palette-items">
         {catalog.filter(item => `${item.label} ${item.description}`.toLocaleLowerCase().includes(librarySearch.trim().toLocaleLowerCase())).map(item => <button key={item.type} className="palette-item" draggable={!locked && project.equipment.length < 50} disabled={locked || project.equipment.length >= 50}
@@ -250,7 +261,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
       {locked && <div className="editing-locked">{!online ? 'Service indisponible · commandes désactivées' : state?.guided_steps?.at(-1)?.state === 'queued' ? 'STEP en attente du cycle d’échange · I/O temporairement suspendues' : state?.status === 'paused' ? 'Essai en pause · structure figée · reprendre pour les impulsions' : state?.status === 'running' ? 'I/O de test actives · structure figée pour cet essai' : 'Mise à jour du projet en cours'}</div>}
       <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes}
         onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect}
-        onNodeClick={(_, node) => { setSelectedId(node.id); setSelectedEdge(null); }}
+        onNodeClick={(_, node) => { setSelectedId(node.id); setSelectedEdge(null); setInspectorFocus(undefined); }}
         onPaneClick={() => { setSelectedId(null); setSelectedEdge(null); }}
         nodesDraggable={!locked && building} nodesConnectable={!locked && building} deleteKeyCode={locked || !building ? null : ['Backspace', 'Delete']}
         snapToGrid={snapToGrid} snapGrid={[20, 20]} minZoom={.25} maxZoom={2.5}
@@ -269,6 +280,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
 
     {building && inspector}
     {!building && <AnalogInputs {...controls} />}
+    {circuitMode && <TransferBuilder project={project} catalog={catalog} locked={locked} mode={circuitMode} equipmentId={selectedId ?? undefined} onClose={() => setCircuitMode(null)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); setSelectedId(ids[0] ?? null); setSelectedEdge(null); setInspectorFocus(undefined); setFitAdded(true); }} />}
   </div>;
 }
 
@@ -285,13 +297,26 @@ function ConnectionInspector({ project, id, locked, onChange, onClose }: { proje
     </div></>;
 }
 
-function Inspector({ equipment, project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, onClose, showForces = true }: Props & { equipment: Equipment; onClose: () => void; showForces?: boolean }) {
+function Inspector({ equipment, project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, onClose, onCopied, focusRequest, showForces = true }: Props & { equipment: Equipment; onClose: () => void; onCopied: (ids: string[]) => void; showForces?: boolean }) {
   const item = catalog.find(item => item.type === equipment.type);
   const [faultKind, setFaultKind] = useState(FAULTS[equipment.type]?.[0]?.key ?? '');
   const [faultValue, setFaultValue] = useState('');
   const [busy, setBusy] = useState(false);
   const [bindingOpen, setBindingOpen] = useState(false);
   const [connectionTarget, setConnectionTarget] = useState('');
+  const [copyOpen, setCopyOpen] = useState(false);
+  const inspectorBody = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!focusRequest) return;
+    if (focusRequest.port) { setBindingOpen(true); return; }
+    const field = focusRequest.field?.replace(/^params\./, '');
+    if (!field) return;
+    const element = Array.from(inspectorBody.current?.querySelectorAll<HTMLElement>('[data-model-field]') ?? []).find(element => element.dataset.modelField === field);
+    if (!element) return;
+    element.classList.add('focus-target'); element.scrollIntoView({ block: 'nearest' }); element.querySelector<HTMLElement>('input, select')?.focus();
+    const timer = setTimeout(() => element.classList.remove('focus-target'), 2400);
+    return () => { clearTimeout(timer); element.classList.remove('focus-target'); };
+  }, [focusRequest?.nonce]);
   const change = (patch: Partial<Equipment>) => onChange(project => ({ ...project, equipment: project.equipment.map(entry => entry.id === equipment.id ? { ...entry, ...patch } : entry) }));
   const faults = state?.faults[equipment.id] ?? {};
   const waitingForCycle = state?.guided_steps?.at(-1)?.state === 'queued';
@@ -308,7 +333,7 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
   };
   return <>
     <div className="panel-title"><span>{equipment.name}</span><button className="icon-button" onClick={onClose} aria-label="Fermer les propriétés"><X size={16} /></button></div>
-    <div className="inspector-body">
+    <div className="inspector-body" ref={inspectorBody}>
       <span className="type-label">{item?.label ?? TYPE_LABELS[equipment.type]}</span>
       <label>Nom / repère<input disabled={locked} value={equipment.name} onChange={event => change({ name: event.target.value })} /></label>
       {item && <div className="binding-launch"><strong>{Object.entries(item.ports).filter(([port, spec]) => project.tags.some(tag => tag.id === equipment.bindings[port] && compatibleTag(tag, spec))).length} / {Object.keys(item.ports).length} rôles associés</strong><p>Choisissez les tags existants ou préparez les tags de cet équipement.</p><button className="button primary full-width" disabled={locked} onClick={() => setBindingOpen(true)}><Link2 size={15} />Lier les tags automate</button></div>}
@@ -327,7 +352,7 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
         const label = (spec?.label ?? key).replace(' (identifiant)', '');
         const isEquipment = key === 'tank_id' || key === 'source_equipment' || key === 'source_tank_id';
         const options = spec?.options;
-        return <label key={key} className={typeof value === 'boolean' ? 'check-label' : ''}>
+        return <label key={key} data-model-field={key} className={typeof value === 'boolean' ? 'check-label' : ''}>
           {typeof value !== 'boolean' && <span>{label}{spec?.unit && <small>{spec.unit}</small>}</span>}
           {typeof value === 'boolean' ? <><input type="checkbox" disabled={locked} checked={value} onChange={event => change({ params: { ...equipment.params, [key]: event.target.checked } })} />{label}</>
             : isEquipment ? <select disabled={locked} value={String(value)} onChange={event => change({ params: { ...equipment.params, [key]: event.target.value } })}><option value="">{key === 'source_tank_id' ? 'Source extérieure' : '— Choisir —'}</option>{project.equipment.filter(entry => entry.id !== equipment.id && (key === 'source_equipment' || entry.type === 'tank')).map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}</select>
@@ -365,9 +390,11 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
         {Object.keys(faults).length > 0 && <div className="active-faults">{Object.keys(faults).map(key => <span key={key}>{FAULTS[equipment.type]?.find(fault => fault.key === key)?.label ?? key}</span>)}</div>}
         {!state?.run_id && <p className="small-muted">Démarrez un essai pour injecter un défaut.</p>}
       </>}
+      <div className="circuit-duplicate"><button className="button compact-button" disabled={locked} onClick={() => setCopyOpen(true)}><Copy size={14} />Dupliquer cet équipement ou son circuit</button></div>
       <div className="inspector-footer"><span className="mono">{equipment.id}</span><button className="danger-text" disabled={locked} onClick={() => { if (window.confirm(`Supprimer ${equipment.name} et ses liaisons graphiques ? Ses tags seront conservés.`)) { onChange(project => ({ ...project, equipment: project.equipment.filter(entry => entry.id !== equipment.id), connections: project.connections.filter(connection => connection.source !== equipment.id && connection.target !== equipment.id) })); onClose(); } }}><Trash2 size={14} />Supprimer</button></div>
     </div>
-    {bindingOpen && item && <BindingEditor project={project} equipment={equipment} item={item} catalog={catalog} locked={locked} onChange={onChange} onClose={() => setBindingOpen(false)} />}
+    {bindingOpen && item && <BindingEditor project={project} equipment={equipment} item={item} catalog={catalog} locked={locked} initialPort={focusRequest?.port} onChange={onChange} onClose={() => setBindingOpen(false)} />}
+    {copyOpen && <TransferBuilder project={project} catalog={catalog} locked={locked} mode="duplicate" equipmentId={equipment.id} onClose={() => setCopyOpen(false)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); onCopied(ids); }} />}
   </>;
 }
 

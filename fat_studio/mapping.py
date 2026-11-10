@@ -4,7 +4,7 @@ import csv
 import io
 import json
 
-from .models import Project, Tag
+from .models import Project, Tag, validate_project
 
 
 LEGACY_FIELDS = ["id", "name", "direction", "data_type", "unit", "initial_value", "min", "max", "node_id", "writable"]
@@ -92,3 +92,47 @@ def _import_mapping(project: Project, content: str) -> Project:
     data = project.model_dump(mode="json")
     data["tags"] = [tag.model_dump(mode="json") for tag in tags]
     return Project.model_validate(data)
+
+
+def preview_mapping(project: Project, content: str, mode: str = "merge") -> dict:
+    """Prepare a reversible CSV change without saving or altering tag consumers."""
+    if mode not in ("merge", "replace"):
+        raise ValueError("Mode d'import attendu : merge ou replace.")
+    incoming = import_mapping(project, content)
+    old = {tag.id: tag for tag in project.tags}
+    supplied = {tag.id: tag for tag in incoming.tags}
+    tags = ([supplied.get(tag.id, tag) for tag in project.tags]
+            + [tag for tag in incoming.tags if tag.id not in old]) if mode == "merge" else incoming.tags
+    if len(tags) > 200:
+        raise ValueError("La fusion dépasserait la limite de 200 variables.")
+    used = {tag_id for equipment in project.equipment for tag_id in equipment.bindings.values()}
+    used.update(equipment.animation.tag_id for equipment in project.equipment if equipment.animation)
+    for scenario in project.scenarios:
+        used.update(scenario.trend_tags)
+        used.update(step.target for step in scenario.steps if step.action in ("force", "release", "expect") and step.target)
+        for step in scenario.fat_steps:
+            used.update(action.target for action in step.actions)
+            used.update(check.target for check in step.checks)
+    changes, errors = [], []
+    resulting = {tag.id: tag for tag in tags}
+    for tag_id in dict.fromkeys([*old, *resulting]):
+        before, after = old.get(tag_id), resulting.get(tag_id)
+        if before == after:
+            continue
+        fields = ([name for name, value in before.model_dump().items()
+                   if after.model_dump()[name] != value] if before and after else [])
+        reasons = []
+        if tag_id in used and after is None:
+            reasons.append("Variable utilisée par un équipement ou un scénario : sa suppression casserait ses références.")
+        changed_contract = sorted(set(fields) & {"direction", "data_type", "unit", "signal"})
+        if tag_id in used and changed_contract:
+            reasons.append("Contrat d'une variable utilisée modifié (" + ", ".join(changed_contract)
+                           + "). Modifiez ses consommateurs explicitement avant cet import.")
+        name = (after or before).name
+        changes.append({"id": tag_id, "name": name, "kind": "added" if before is None else "removed" if after is None else "changed",
+                        "fields": fields, "blocked": bool(reasons), "reasons": reasons})
+        errors.extend(f"{name} : {reason}" for reason in reasons)
+    data = project.model_dump(mode="json")
+    data["tags"] = [tag.model_dump(mode="json") for tag in tags]
+    preview = Project.model_validate(data)
+    return {"project": preview, "changes": changes, "errors": errors, "validation": validate_project(preview)}

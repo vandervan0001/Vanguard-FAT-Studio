@@ -1,0 +1,29 @@
+.modal.global-binding-modal { width: min(1180px, calc(100vw - 32px)); }
+.global-binding-summary { display:flex; gap:18px; flex-wrap:wrap; padding:12px 16px; margin:14px 0; background:#edf4ff; border-radius:8px; color:#234264; }
+.global-binding-grid { display:grid; grid-template-columns:170px 220px minmax(0,1fr); gap:14px; margin-top:16px; }
+.global-binding-grid .binding-roles { max-height:420px; overflow:auto; }
+.global-binding-grid .binding-picker { min-width:0; }
+.global-binding-grid .binding-candidates { max-height:240px; }
+.global-binding-grid .binding-candidates small { overflow-wrap:anywhere; }
+.global-nodeid { display:grid; gap:8px; margin-top:14px; }
+.global-nodeid small { color:#64748b; }
+.modal.mapping-import-modal { width:min(780px,calc(100vw - 32px)); }
+.mapping-preview-list { max-height:350px; overflow:auto; margin:12px 0; }
+.mapping-preview-list article { padding:12px; border-bottom:1px solid #dce4ee; display:grid; gap:5px; overflow-wrap:anywhere; }
+.mapping-preview-list article.blocked { background:#fff1f1; }
+.mapping-preview-list article small { color:#526579; }
+.opcua-browser { padding:16px; background:#f7faff; border:1px solid #d8e5f5; border-radius:10px; }
+.opcua-browser .section-heading { align-items:start; gap:16px; }
+.opcua-browser .mono { overflow-wrap:anywhere; white-space:normal; }
+.opcua-browser-toolbar,.opcua-pagination { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:12px 0; }
+.opcua-browser-toolbar>span { min-width:0; overflow-wrap:anywhere; flex:1; }
+.opcua-node-list { max-height:360px; overflow:auto; margin-top:12px; }
+.opcua-node { display:flex; gap:12px; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #dbe4ef; }
+.opcua-node>div { display:grid; gap:3px; min-width:0; }
+.opcua-node code,.opcua-node small { overflow-wrap:anywhere; }
+.opcua-node small { color:#5a6c80; }
+.opcua-node button { max-width:44%; white-space:normal; }
+.modal.tag-browse-modal { width:min(900px,calc(100vw - 32px)); }
+.quickfix-highlight { outline:3px solid #0055dd; outline-offset:4px; border-radius:4px; }
+@media(max-width:900px){ .global-binding-grid { grid-template-columns:150px minmax(0,1fr); } .global-binding-grid>.binding-picker { grid-column:1 / -1; } .global-binding-grid .binding-roles { max-height:200px; } }
+@media(max-width:600px){ .global-binding-grid { grid-template-columns:1fr; } .global-binding-grid>.binding-picker { grid-column:auto; } .opcua-node { align-items:stretch; flex-direction:column; } .opcua-node button { max-width:100%; } .opcua-browser .section-heading { flex-direction:column; } }

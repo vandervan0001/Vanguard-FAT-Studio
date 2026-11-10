@@ -1,5 +1,11 @@
 # Vanguard FAT Studio : état de reprise
 
+## Version 0.3.0, 9 novembre 2026
+
+L’accueil, la démonstration manuelle sans automate, les circuits et transferts, les diagnostics ciblés, la revue des tags, la fusion CSV, l’exploration OPC UA en lecture seule et la récupération des brouillons sont documentés dans la [note 0.3.0](sessions/2026-11-09-ux-0.3.0.md). Le portable propose une fenêtre Windows pour ouvrir, fermer et préparer une mise à jour dans une nouvelle copie vérifiée.
+
+Consulter le [changelog](../../PUBLIC_CHANGELOG.md), le [guide utilisateur](../USER_GUIDE.md) et le [reçu de la release](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.3.0). Les sources du tag et le manifeste identifient cette livraison. Les paragraphes suivants sont des archives datées ; ils ne décrivent pas l’état actuel d’une machine ou d’un essai. Relire le contexte réel avant toute mutation.
+
 ## Aperçu public, 4 novembre 2026
 
 Le README public présente le banc, le démarrage depuis les sources, la capture de démo, les guides Siemens et IA, et les contributions. Le code original conserve la licence MIT. La publication vise `main` et la [version d’aperçu](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/public-preview-2026-11-04). Le film de lancement affiche la disponibilité sur GitHub et conserve les images de démonstration. Voir la [note de publication](sessions/2026-11-04-vanguard-public-preview.md).

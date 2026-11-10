@@ -1,5 +1,20 @@
 # Changements publics
 
+## 0.3.0, 10 novembre 2026
+
+- Accueil avec démonstration manuelle prête à démarrer, création de procédé et reprise du projet. Le premier circuit se commande sans automate ni TIA Portal.
+- Constructeur de transfert avec source, destination et organes en série : aperçu commun des conduites et des paramètres physiques avant application au brouillon.
+- Modèles de remplissage, vidange, transfert entre cuves et pompe à variateur, ajoutables dans un projet existant. Trame FAT d’observation facultative, à relire et compléter.
+- Duplication d’un équipement ou de son circuit avec nouveaux repères et tags, références internes remappées et identifiants PLC laissés vides.
+- Diagnostics du brouillon avec accès aux équipements, rôles, variables, scénarios ou réglages concernés ; vérification locale distincte de la connexion réelle.
+- Revue de toutes les liaisons aux tags dans une même fenêtre, propositions par repère, compteurs des rôles requis et application groupée.
+- Import CSV avec fusion par identifiant, aperçu des ajouts/modifications/suppressions et refus des changements qui casseraient le contrat d’une variable utilisée. Remplacement complet disponible explicitement.
+- Explorateur OPC UA des métadonnées sur la cible autorisée, avec contrôles d’identité, sélection des types/droits compatibles et aucune écriture de valeur ni démarrage d’essai.
+- Annuler/rétablir dans l’éditeur et copie locale des brouillons dans le navigateur, avec reprise explicite et refus d’une révision périmée. Les observations restent rattachées à leur essai.
+- Lanceur portable Windows avec état du service, réouverture de l’instance existante, arrêt explicite et mise à jour guidée dans une nouvelle copie vérifiée. Projets et historique restent hors du portable.
+
+Les formats de projet et de scénarios restent en version 1.0. Le reçu de la [release 0.3.0](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.3.0) détaille les vérifications du logiciel et du portable. Ces changements ne constituent pas une nouvelle qualification Siemens et n’attribuent aucun verdict FAT humain.
+
 ## Portable P&ID du 7 novembre 2026 (application 0.2.1)
 
 - Circuit de remplissage insérable en un clic dans un P&ID vide : cuve, pompe, vanne, conduites, tags locaux et paramètres du modèle.

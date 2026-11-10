@@ -5,15 +5,15 @@ import { useModalKeyboard } from './useModalKeyboard';
 import { bindingOwners, compatibleTag, makePortTag, missingPortTags, suggestBindings } from './pidBuilder';
 import type { CatalogItem, Equipment, Project, Tag } from './types';
 
-type Props = { project: Project; equipment: Equipment; item: CatalogItem; catalog: CatalogItem[]; locked: boolean;
+type Props = { project: Project; equipment: Equipment; item: CatalogItem; catalog: CatalogItem[]; locked: boolean; initialPort?: string;
   onChange: (update: (project: Project) => Project) => void; onClose: () => void };
 
-export function BindingEditor({ project, equipment, item, catalog, locked, onChange, onClose }: Props) {
+export function BindingEditor({ project, equipment, item, catalog, locked, initialPort, onChange, onClose }: Props) {
   const [base] = useState(project);
   const [bindings, setBindings] = useState({ ...equipment.bindings });
   const [created, setCreated] = useState<Tag[]>([]);
   const [mapping, setMapping] = useState<Record<string, string>>({});
-  const [activePort, setActivePort] = useState(Object.keys(item.ports)[0]);
+  const [activePort, setActivePort] = useState(initialPort && Object.hasOwn(item.ports, initialPort) ? initialPort : Object.keys(item.ports)[0]);
   const [search, setSearch] = useState('');
   const [newType, setNewType] = useState<Tag['data_type']>(item.ports[activePort]?.data_types[0] as Tag['data_type']);
   const [notice, setNotice] = useState('');

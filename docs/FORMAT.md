@@ -26,6 +26,14 @@ Ce brouillon vide est enregistrable ; il ne peut pas démarrer un échange avant
 
 Les symboles PLC, adresses mémoire et NodeIds OPC UA sont distincts. Une adresse `%IW264` ne permet pas de deviner son NodeId. Les entrées sont vues depuis le PLC : le banc leur transmet le procédé simulé. Les sorties PLC sont lues par le banc et ne sont pas forçables. Un import ne crée aucune autorisation de cible du poste.
 
+Les fonctions de construction ajoutées en 0.3.0 conservent le format 1.0. Un transfert préparé par l’interface utilise les champs existants `tank_id`, `source_tank_id`, `role` et `flow_group` des pompes et vannes, en plus des `connections` graphiques. Les modèles et copies produisent des objets ordinaires du projet ; aucun format de modèle séparé n’est requis. Une duplication crée de nouveaux identifiants et laisse vides les NodeIds, adresses et symboles PLC de ses nouveaux tags.
+
+## Mapping CSV et brouillons
+
+Le CSV décrit les tags ; il ne remplace pas le format JSON du projet. L’interface 0.3.0 propose un aperçu de fusion par `id` ou un remplacement explicite de la liste. La fusion conserve les tags absents du CSV. Les références des équipements, animations et scénarios restent inchangées ; l’aperçu refuse la suppression d’un tag utilisé ou un changement de son contrat `direction`, `data_type`, `unit` ou `signal` tant que ses consommateurs n’ont pas été revus. Le schéma CSV et les anciens exports restent compatibles. Le contrat API de l’import historique reste décrit dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
+
+La récupération locale du navigateur est distincte d’un export de projet. Son fichier de secours inclut le contexte de révision et les brouillons de saisie ; il n’est pas une enveloppe `fat-studio/project` à importer telle quelle. Reprendre explicitement un brouillon compatible dans l’interface, puis enregistrer et exporter le projet ou son archive. Un brouillon périmé reste à comparer manuellement ; aucune observation n’est transférée automatiquement vers un autre essai.
+
 ## Scénarios
 
 Un paquet peut contenir une ou plusieurs FAT. Exemple minimal de FAT guidée pour les tags de la démo publique :
