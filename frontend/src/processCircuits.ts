@@ -107,7 +107,12 @@ export function circuitMembers(project: Project, catalog: CatalogItem[], equipme
 }
 
 export function duplicateEquipment(project: Project, catalog: CatalogItem[], equipmentId: string, wholeCircuit: boolean) {
-  const source = wholeCircuit ? circuitMembers(project, catalog, equipmentId) : project.equipment.filter(item => item.id === equipmentId);
+  return copyEquipmentInto(project, catalog, project, equipmentId, wholeCircuit);
+}
+
+/** Insert a reviewed local circuit without copying its PLC configuration. */
+export function copyEquipmentInto(project: Project, catalog: CatalogItem[], origin: Project, equipmentId: string, wholeCircuit: boolean) {
+  const source = wholeCircuit ? circuitMembers(origin, catalog, equipmentId) : origin.equipment.filter(item => item.id === equipmentId);
   if (!source.length) throw new Error('L’équipement à dupliquer n’existe plus.');
   const ids = new Map(source.map(item => [item.id, uid(item.type)]));
   const equipment: Equipment[] = [];
@@ -115,7 +120,7 @@ export function duplicateEquipment(project: Project, catalog: CatalogItem[], equ
   const tagIds = new Map<string, string>();
   const groups = new Map<string, string>();
   const minY = Math.min(...source.map(item => item.position.y));
-  const offset = Math.max(...project.equipment.map(item => item.position.y)) - minY + 340;
+  const offset = project.equipment.length ? Math.max(...project.equipment.map(item => item.position.y)) - minY + 340 : -minY;
   for (const original of source) {
     const name = nextEquipmentName(original.type, [...project.equipment, ...equipment]);
     const params = { ...original.params };
@@ -124,7 +129,7 @@ export function duplicateEquipment(project: Project, catalog: CatalogItem[], equ
     if (isFlowEquipment(original)) { if (!groups.has(key)) groups.set(key, uid('copie')); params.flow_group = groups.get(key)!; }
     const bindings: Record<string, string> = {};
     const cloneTag = (tagId: string) => {
-      const tag = project.tags.find(tag => tag.id === tagId);
+      const tag = origin.tags.find(tag => tag.id === tagId);
       if (!tag) return undefined;
       if (!tagIds.has(tag.id)) {
         const id = uid('tag'); tagIds.set(tag.id, id);
@@ -136,7 +141,7 @@ export function duplicateEquipment(project: Project, catalog: CatalogItem[], equ
     const animationTag = original.animation ? cloneTag(original.animation.tag_id) : undefined;
     equipment.push({ ...original, id: ids.get(original.id)!, name, params, bindings, position: { x: original.position.x, y: original.position.y + offset }, animation: original.animation && animationTag ? { ...original.animation, tag_id: animationTag } : null });
   }
-  const connections = project.connections.filter(line => ids.has(line.source) && ids.has(line.target)).map(line => ({ ...line, id: uid('line'), source: ids.get(line.source)!, target: ids.get(line.target)! }));
+  const connections = origin.connections.filter(line => ids.has(line.source) && ids.has(line.target)).map(line => ({ ...line, id: uid('line'), source: ids.get(line.source)!, target: ids.get(line.target)! }));
   const next = { ...project, equipment: [...project.equipment, ...equipment], tags: [...project.tags, ...tags], connections: [...project.connections, ...connections] };
   checkLimits(next);
   return { project: next, addedEquipment: equipment, addedTags: tags, selectedIds: equipment.map(item => item.id) };

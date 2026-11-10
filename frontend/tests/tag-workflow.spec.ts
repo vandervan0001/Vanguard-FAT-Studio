@@ -42,7 +42,7 @@ function csv(tags: Tag[]) {
 }
 
 async function openCsv(page: Page, content: string) {
-  await page.locator('input[type=file][accept=".csv,text/csv"]').setInputFiles({ name: 'mapping.csv', mimeType: 'text/csv', buffer: Buffer.from(content) });
+  await page.getByLabel('Importer une liste de variables', { exact: true }).setInputFiles({ name: 'mapping.csv', mimeType: 'text/csv', buffer: Buffer.from(content) });
   const modal = page.getByRole('dialog', { name: 'Relire l’import des variables' });
   await expect(modal.getByRole('status')).toContainText('ajout(s)');
   return modal;

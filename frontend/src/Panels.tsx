@@ -9,6 +9,8 @@ import { ScenarioTimeline } from './ScenarioRun';
 import { GuidedScenarioBuilder, newFatStep } from './GuidedScenarioBuilder';
 import { GlobalBindings } from './GlobalBindings';
 import { MappingImport } from './MappingImport';
+import { PasteTags, isCanonicalMappingCsv, readTagTableFile } from './PasteTags';
+import { TargetPicker } from './TargetPicker';
 import { OpcUaBrowser } from './OpcUaBrowser';
 import { fmt, uid, type CatalogItem, type Project, type ReportDraft, type RunResult, type Snapshot, type Tag, type Scenario, type ScenarioDraft, type ScenarioImportMode, type RunSummary, type Validation } from './types';
 
@@ -43,6 +45,8 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
   const [permissionSearch, setPermissionSearch] = useState('');
   const [globalBindings, setGlobalBindings] = useState(false);
   const [importCsv, setImportCsv] = useState<string | null>(null);
+  const [pasteText, setPasteText] = useState<string | null>(null);
+  const importProject = useRef(project); importProject.current = project;
   const [browseTagId, setBrowseTagId] = useState<string | null>(null);
   const [browseBase, setBrowseBase] = useState<Project | null>(null);
   const panel = useRef<HTMLElement>(null);
@@ -80,9 +84,9 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
   };
   return <section className="page-panel" ref={panel}>
     <div className="section-heading"><div><div className="eyebrow">INTERFACE D’ÉCHANGE</div><h2>Variables & mapping PLC</h2><p>Déclarez les variables autorisées et associez-les aux équipements du P&ID.</p></div>
-      <div className="button-row"><button className="button" disabled={!online} onClick={() => void onExport()}><ArrowDownToLine size={16} />Exporter CSV</button><button className="button" disabled={locked} onClick={() => input.current?.click()}><Upload size={16} />Importer CSV</button><button className="button primary" disabled={locked || project.tags.length >= 200} onClick={addTag}><Plus size={16} />Nouvelle variable</button></div>
+      <div className="button-row"><button className="button" disabled={!online} onClick={() => void onExport()}><ArrowDownToLine size={16} />Exporter CSV</button><button className="button" disabled={locked} onClick={() => input.current?.click()}><Upload size={16} />Importer CSV</button><button className="button" disabled={locked} onClick={() => setPasteText('')}>Coller des tags Excel</button><button className="button primary" disabled={locked || project.tags.length >= 200} onClick={addTag}><Plus size={16} />Nouvelle variable</button></div>
     </div>
-    <input ref={input} type="file" accept=".csv,text/csv" hidden onChange={event => { const file = event.target.files?.[0]; if (file && file.size > 2_000_000) onError('Le fichier CSV dépasse 2 Mo.'); else if (file) void file.text().then(setImportCsv).catch(error => onError(String(error))); event.target.value = ''; }} />
+    <input ref={input} type="file" aria-label="Importer une liste de variables" accept=".csv,.tsv,text/csv,text/tab-separated-values" hidden onChange={event => { const file = event.target.files?.[0]; const base = project; if (file && file.size > 2_000_000) onError('Le fichier dépasse 2 Mo.'); else if (file) void readTagTableFile(file).then(text => { if (importProject.current !== base) { onError('Le projet a changé pendant la lecture du fichier. Recommencez l’import dans le projet voulu.'); return; } if (isCanonicalMappingCsv(text)) setImportCsv(text); else setPasteText(text); }).catch(error => onError(String(error))); event.target.value = ''; }} />
     <div className="button-row"><button className="button" disabled={locked || !catalog.length || !project.equipment.length} onClick={() => setGlobalBindings(true)}>Revoir toutes les liaisons aux tags</button></div>
     <div className="information-strip"><ArrowLeftRight size={19} /><div><strong>Entrée PLC</strong> : mesure simulée écrite vers le programme. <strong>Sortie PLC</strong> : commande lue depuis le programme. Le banc ne force jamais une sortie PLC.</div></div>
     <div className="permission-summary"><div><strong>{writableCount} / {inputs.length} entrées autorisées en écriture</strong><p>Préparez les droits de toutes les entrées en une seule revue.</p></div><button className="button" disabled={locked || !inputs.length} onClick={openPermissions}><ShieldCheck size={16} />Autorisations d’écriture</button></div>
@@ -131,6 +135,7 @@ export function VariablesPanel({ project, state, locked, online, unavailable, on
     </div>
     {globalBindings && <GlobalBindings project={project} catalog={catalog} locked={locked} onChange={onChange} onClose={() => setGlobalBindings(false)} />}
     {importCsv !== null && <MappingImport project={project} csv={importCsv} locked={locked} onChange={onChange} onClose={() => setImportCsv(null)} />}
+    {pasteText !== null && <PasteTags project={project} initialText={pasteText} locked={locked} onChange={onChange} onClose={() => setPasteText(null)} />}
     {browseTagId && browseBase && <div className="modal-backdrop"><section className="modal tag-browse-modal" role="dialog" aria-modal="true" aria-label="Choisir un NodeId OPC UA"><OpcUaBrowser project={browseBase} tag={browseBase.tags.find(tag => tag.id === browseTagId)} disabled={locked || !online || project !== browseBase || state?.status === 'paused'} onClose={() => setBrowseTagId(null)} onSelect={node => { if (!locked && project === browseBase) update(browseTagId, { node_id: node.node_id }); setBrowseTagId(null); }} /></section></div>}
     {permissions && <div className="modal-backdrop"><section className="modal permissions-modal" role="dialog" aria-modal="true" aria-labelledby="permissions-title" aria-describedby="permissions-description">
       <div className="modal-heading"><h2 id="permissions-title">Autorisations d’écriture</h2><button className="icon-button" aria-label="Fermer les autorisations" onClick={() => setPermissions(null)}><X size={18} /></button></div>
@@ -278,6 +283,7 @@ export function ConnectionPanel({ project, state, locked, onChange, validation, 
       <label>Version du projet TIA<select disabled={locked} value={plc.tia_version} onChange={event => update({ tia_version: event.target.value as Project['plc']['tia_version'] })}><option value="V20">TIA Portal V20</option><option value="V21">TIA Portal V21</option></select></label>
       <p className="small-muted">Ce choix est enregistré avec le projet et ne convertit aucun projet Siemens. La démonstration reste disponible sans TIA Portal.</p>
       {plc.mode === 'opcua' && <div className="opcua-fields">
+        <TargetPicker project={project} locked={locked} onChange={onChange} />
         <div className="information-strip"><ShieldCheck size={19} /><div>L’adresse virtuelle doit aussi figurer dans la politique locale du poste. Ce projet ne peut pas autoriser une cible à lui seul.</div></div>
         <label>Endpoint OPC UA<input className="mono" disabled={locked} value={plc.endpoint} onChange={event => update({ endpoint: event.target.value })} placeholder="opc.tcp://192.168.0.1:4840" /></label>
         <label>Identité attendue · Application URI<input className="mono" disabled={locked} value={plc.expected_application_uri} onChange={event => update({ expected_application_uri: event.target.value })} /></label>

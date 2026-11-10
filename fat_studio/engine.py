@@ -99,6 +99,9 @@ class ProcessEngine:
         self.values.update(validated)
         self._raw_values.update(validated)
         groups: dict[tuple[str, str, str], list[tuple[str, float]]] = defaultdict(list)
+        # Facts belong to this completed model cycle, not to an inferred PLC
+        # interlock. They do not participate in the hydraulic calculation.
+        device_facts = {}
         for item in self.project.equipment:
             if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
                 continue
@@ -106,6 +109,9 @@ class ProcessEngine:
             state = self.equipment_state[item.id]
             faults = self.faults.get(item.id, {})
             command = self.values[item.bindings["command"]]
+            reasons = []
+            if not command:
+                reasons.append("command_off")
             if item.type in ("pump", "pump_vfd"):
                 tripped = bool(faults.get("motor_trip", False))
                 speed = self.values[item.bindings["speed_command"]] if item.type == "pump_vfd" else 100.0
@@ -115,6 +121,11 @@ class ProcessEngine:
                 state["running"] = state["speed"] > 5 and not tripped
                 state["fault"] = tripped
                 available = p["max_flow_l_s"] * state["speed"] / 100
+                actual = state["speed"]
+                if tripped:
+                    reasons.append("motor_trip")
+                elif item.type == "pump_vfd" and command and target < 100:
+                    reasons.append("speed_setpoint")
             else:
                 target = (100.0 if command else 0.0) if item.type == "valve_onoff" else min(max(float(command), 0.0), 100.0)
                 state["position"] = float(faults["valve_stuck"]) if "valve_stuck" in faults else _lag(state["position"], target, p["response_s"], dt)
@@ -133,6 +144,18 @@ class ProcessEngine:
                 else:
                     fraction = historian_valve.characteristic(p["characteristic"])(opening)
                 available = p["max_flow_l_s"] * fraction
+                actual = state["position"]
+                if state["stuck"]:
+                    reasons.append("valve_stuck")
+                if actual <= 1e-6:
+                    reasons.append("valve_closed")
+                elif actual < 100 - 1e-6:
+                    reasons.append("partial_open")
+            if abs(actual - target) > 1e-6 and not state.get("stuck") and not state.get("fault"):
+                reasons.append("response_pending")
+            device_facts[item.id] = {"command": command, "target_pct": target, "actual_pct": actual,
+                                     "max_flow_l_s": p["max_flow_l_s"], "available_flow_l_s": available,
+                                     "reasons": reasons}
             groups[(p["tank_id"], p["role"], p["flow_group"])].append((item.id, available))
 
         flows = {key: min(capacity for _, capacity in devices) for key, devices in groups.items()}
@@ -156,8 +179,10 @@ class ProcessEngine:
             else:
                 requested_out[tank_id] += flow
         factors = {}
+        source_volumes = {}
         for item in self.project.equipment:
             if item.type == "tank":
+                source_volumes[item.id] = self.equipment_state[item.id]["volume_l"]
                 available = self.equipment_state[item.id]["volume_l"] + external_in[item.id] * dt
                 requested = requested_out[item.id]
                 factors[item.id] = min(1.0, available / (requested * dt)) if requested > 0 else 1.0
@@ -189,8 +214,20 @@ class ProcessEngine:
                 if key[0] != item.id:
                     continue
                 flow = actual_flows[key]
+                source_id = sources[key] or (key[0] if key[1] == "outlet" else "")
+                limiting = [equipment_id for equipment_id, capacity in devices
+                            if math.isclose(capacity, flows[key], rel_tol=1e-9, abs_tol=1e-9)]
                 for equipment_id, _ in devices:
                     self.equipment_state[equipment_id]["flow_l_s"] = flow
+                    self.equipment_state[equipment_id]["flow_diagnostic"] = {
+                        **device_facts[equipment_id], "calculated_at_s": round(self.time_s + dt, 9), "step_s": dt,
+                        "tank_id": key[0], "role": key[1], "group": key[2], "source_tank_id": source_id,
+                        "circuit_equipment_ids": [device_id for device_id, _ in devices],
+                        "limiting_equipment_ids": limiting, "requested_flow_l_s": flows[key], "actual_flow_l_s": flow,
+                        "source_factor": factors[source_id] if source_id else 1.0,
+                        "source_volume_l": source_volumes[source_id] if source_id else None,
+                        "external_supply_l": external_in[source_id] * dt if source_id else None,
+                    }
         self.time_s = round(self.time_s + dt, 9)
         self._publish()
         return {tag.id: self.values[tag.id] for tag in self.project.tags if tag.direction == "input"}
@@ -289,6 +326,7 @@ class ProcessEngine:
         else:
             resolved = value
         self.faults.setdefault(equipment_id, {})[kind] = resolved
+        self._invalidate_flow_diagnostics()
         self._publish()
 
     def clear_fault(self, equipment_id: str, kind: str | None = None) -> None:
@@ -301,7 +339,14 @@ class ProcessEngine:
             if not self.faults.get(equipment_id):
                 self.faults.pop(equipment_id, None)
         if self.validation["valid"]:
+            self._invalidate_flow_diagnostics()
             self._publish()
+
+    def _invalidate_flow_diagnostics(self) -> None:
+        # A fault changed between cycles (possibly while paused). Keep the last
+        # physical state but require a new cycle before explaining its causes.
+        for state in self.equipment_state.values():
+            state.pop("flow_diagnostic", None)
 
 
 class DemoController:

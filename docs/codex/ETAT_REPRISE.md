@@ -1,5 +1,11 @@
 # Vanguard FAT Studio : état de reprise
 
+## Version 0.4.0, 10 novembre 2026
+
+Le collage des tags Excel, l’explication des débits, les cibles habituelles, la bibliothèque personnelle de circuits et la comparaison des brouillons sont décrits dans la [note 0.4.0](sessions/2026-11-10-ux-0.4.0.md). Les actions préparent des brouillons vérifiés ; la politique de cible et les observations FAT restent distinctes.
+
+Consulter le [guide utilisateur](../USER_GUIDE.md), le [changelog](../../PUBLIC_CHANGELOG.md) et le [reçu de la release](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.4.0) pour les vérifications du portable. Les archives suivantes ne décrivent pas l’état actuel d’une machine ou d’un essai.
+
 ## Version 0.3.0, 9 novembre 2026
 
 L’accueil, la démonstration manuelle sans automate, les circuits et transferts, les diagnostics ciblés, la revue des tags, la fusion CSV, l’exploration OPC UA en lecture seule et la récupération des brouillons sont documentés dans la [note 0.3.0](sessions/2026-11-09-ux-0.3.0.md). Le portable propose une fenêtre Windows pour ouvrir, fermer et préparer une mise à jour dans une nouvelle copie vérifiée.

@@ -236,9 +236,32 @@ Sélectionner un équipement, puis **Dupliquer cet équipement ou son circuit**.
 
 La copie reçoit de nouveaux repères et tags. Ses conduites et références internes sont réorientées vers les éléments copiés. Les références à des équipements restés hors de la copie sont laissées à choisir. Les NodeIds, adresses et symboles PLC des tags copiés sont vides : revoir le mapping avant de connecter un automate. Les scénarios et preuves ne sont pas dupliqués.
 
+### Conserver ses propres modèles de circuit
+
+1. Dans **Construire**, sélectionner une pompe ou une vanne puis **Enregistrer ce circuit**.
+2. Donner un nom au modèle et cliquer **Enregistrer dans ma bibliothèque**. Le circuit, ses cuves, ses capteurs et ses conduites sont vérifiés avant l’enregistrement.
+3. Dans ce projet ou un autre, ouvrir **Mes circuits** à côté de **Circuits et transferts**, puis choisir le modèle.
+4. Cliquer **Préparer la copie**, relire son contenu, puis **Appliquer la copie au brouillon**. Revoir les associations aux tags et enregistrer le projet.
+
+La copie reçoit de nouveaux repères et identifiants, avec ses liaisons internes conservées. Les NodeIds, adresses et symboles PLC restent vides. La bibliothèque ne conserve ni connexion automate, ni scénarios, ni preuves d’essais. Un circuit incomplet doit être corrigé avant son enregistrement comme modèle ; les autres erreurs éventuelles du projet destinataire restent visibles dans **Préparer l’essai**.
+
+Les modèles restent dans ce navigateur, à l’adresse locale du banc. La limite est de 20 modèles et 2 Mio pour la bibliothèque. **Exporter la bibliothèque** en télécharge une copie JSON. Pour la retrouver dans un autre navigateur ou sur un autre poste, choisir **Importer une bibliothèque**, relire les modèles proposés puis **Importer ces modèles**. Une copie identique déjà présente est ignorée ; un nom ou un identifiant en conflit bloque l’import sans remplacer l’existant.
+
+Supprimer un modèle conserve ses copies déjà insérées dans les projets. Une archive FAT n’inclut pas la bibliothèque du navigateur : l’exporter séparément avant d’effacer les données du navigateur. Le [format de bibliothèque](FORMAT.md#bibliothèque-personnelle-de-circuits) détaille ses limites.
+
 ### Corriger depuis les diagnostics
 
 Le panneau **Préparer l’essai** vérifie le brouillon sans l’enregistrer ni contacter une CPU. Cliquer sur un point ouvre l’équipement et son rôle, la variable, le scénario ou le réglage concerné. Les conseils de configuration restent repliés. **Configuration locale prête** signifie que les contrôles locaux passent ; en OPC UA, la connexion, les types et les droits réels des nœuds restent à vérifier avant les échanges.
+
+### Comprendre un débit nul ou limité
+
+Pendant un essai, cliquer **Expliquer les débits** en haut du P&ID, puis choisir la pompe ou la vanne à examiner. La fenêtre **Comprendre le débit** présente le dernier cycle calculé, son temps simulé et son pas de calcul. Elle montre la commande reçue, la vitesse ou la position calculée et demandée, puis la capacité disponible de chaque organe du circuit.
+
+Le débit en série suit l’organe limitant ; les circuits indépendants s’additionnent. La fenêtre indique aussi si le liquide disponible à la source limite le transfert, en tenant compte de son alimentation extérieure et des sorties qui partagent ce volume. Une commande d’arrêt, une vanne fermée ou bloquée, un défaut moteur, une consigne réduite ou un temps de réponse encore en cours sont expliqués lorsqu’ils interviennent dans le modèle. Cliquer le nom d’un équipement le retrouve sur le dessin.
+
+En pause ou après arrêt, la fenêtre indique qu’il s’agit du dernier cycle calculé. Au repos, attendre le démarrage d’un essai ; après une modification de modèle ou de défaut, un nouveau cycle peut être nécessaire. Les anciennes valeurs ne sont pas présentées comme un diagnostic actuel si le service est indisponible, si les échanges ont une qualité invalide, si l’essai est en erreur ou si le brouillon du modèle a changé.
+
+Ces explications décrivent le modèle et les commandes qu’il reçoit. Elles ne déduisent pas les interverrouillages internes du programme automate. Une conduite dessinée seule ne crée pas un transfert physique ; les limites du calcul restent celles de [MODEL.md](MODEL.md).
 
 ### Annuler et retrouver un brouillon
 
@@ -246,7 +269,17 @@ Les boutons **Annuler la modification** et **Rétablir la modification** agissen
 
 Le navigateur conserve automatiquement les modifications non enregistrées dans son stockage local. Cette copie est rattachée au dossier FAT, au projet et au document ouvert. Elle ne modifie pas le projet enregistré ni un essai. Si le stockage du navigateur est indisponible, un message propose de télécharger le brouillon.
 
-Après rechargement, **Brouillon retrouvé** permet de reprendre explicitement les modifications, de les télécharger ou de **Continuer sans reprendre**. Choisir avant de poursuivre l’édition. Une révision de projet différente empêche leur application automatique ; conserver la copie et comparer les changements. Les observations et conclusions restent rattachées à leur essai d’origine. La récupération dans le navigateur ne remplace pas une archive `.fat.zip`, et effacer les données du navigateur peut effacer ces brouillons.
+Après rechargement, **Brouillon retrouvé** permet de reprendre explicitement les modifications, de les télécharger ou de **Continuer sans reprendre**. Choisir avant de poursuivre l’édition. Si la révision enregistrée a changé, utiliser la comparaison ci-dessous. Les observations et conclusions restent rattachées à leur essai d’origine. La récupération dans le navigateur ne remplace pas une archive `.fat.zip`, et effacer les données du navigateur peut effacer ces brouillons.
+
+### Comparer un brouillon avec le projet enregistré
+
+Dans **Brouillon retrouvé**, choisir **Comparer les versions**. Chaque changement présente trois valeurs : **Au départ**, **Enregistré maintenant** et **Mon brouillon**. Le logiciel propose les champs modifiés dans le brouillon ; les autres modifications de la version enregistrée sont conservées.
+
+Les champs sans conflit sont présélectionnés. Cocher ou décocher chaque ligne ; un conflit reste décoché jusqu’à votre choix. **Choisir les champs sans conflit** et **Tout décocher** permettent de reprendre la sélection. Cliquer **Reprendre les champs choisis** pour vérifier le résultat, puis **Enregistrer** dans le projet pour le sauvegarder. Une sélection qui ajoute des incohérences, par exemple une liaison sans son tag, est refusée et les champs concernés sont indiqués. Reprendre aussi les éléments liés ou retirer le choix.
+
+La comparaison exige la version de départ conservée avec les nouveaux brouillons. Une ancienne copie qui ne la contient pas reste téléchargeable. Si le projet ou l’essai change pendant la comparaison, fermer la fenêtre et relire le contexte ; le brouillon est conservé.
+
+Le rapport, les observations et le texte d’étapes JSON encore non appliqué restent hors de la fusion. Lorsqu’ils existent, la reprise télécharge une copie complète du brouillon d’origine pour les conserver séparément. La comparaison ne transfère pas de constat ni de verdict FAT vers un autre essai. **Télécharger le brouillon d’origine** reste aussi disponible avant tout choix ; **Annuler** ferme la fenêtre sans reprendre de champ.
 
 ### Lier un équipement aux tags automate
 
@@ -363,11 +396,27 @@ Sans code déclaré, le calcul reste linéaire : 0 mA donne −6 912 comptes et
 
 Les codes de rupture de fil/dépassement dépendent du module, du paramétrage et de l’interface de simulation du PLC. Les valeurs du profil sont à qualifier pour la cible testée. Déclarer un code dans Vanguard FAT Studio ne simule pas le diagnostic matériel complet d’un module Siemens.
 
+### Coller une liste de tags depuis Excel
+
+1. Dans Excel ou un autre tableur, copier les cellules utiles, titres compris. Dans **Variables & mapping**, ouvrir **Coller des tags Excel** et coller le tableau. **Ouvrir un fichier CSV ou TSV** accepte aussi un export texte ; les classeurs `.xlsx` ne sont pas lus directement.
+2. Vérifier **La première ligne contient les titres** et le séparateur, puis cliquer **Analyser le tableau**. La tabulation, le point-virgule et la virgule sont acceptés. Choisir le séparateur explicitement si la détection ne correspond pas au fichier.
+3. Relire chaque correspondance de colonne. Les titres usuels français ou anglais donnent des suggestions modifiables. Choisir **Ignorer cette colonne** pour les données inutiles. **Nom**, **Sens automate** et **Type** sont nécessaires. Sans colonne de sens ou de type, choisir explicitement **Sens commun** ou **Type commun** pour toutes les lignes ; aucune valeur n’est choisie par défaut.
+4. Cliquer **Préparer l’aperçu**, puis relire les lignes, les valeurs initiales, les droits d’écriture et les ajouts/modifications/suppressions. Corriger toute erreur à la ligne indiquée et préparer à nouveau l’aperçu.
+5. Cliquer **Appliquer l’import au brouillon**, puis **Enregistrer**. Le collage ne crée pas les liaisons des équipements : utiliser ensuite **Revoir toutes les liaisons aux tags**.
+
+Le sens se lit depuis l’automate : `input` ou `entrée` pour une entrée simulée, `output` ou `sortie` pour une commande lue depuis le PLC. Les types sont `BOOL`, `INT`, `DINT` et `REAL`. Les nombres acceptent le point ou la virgule décimale, sans séparateur de milliers ; les entiers restent entiers. Les booléens acceptent `true`/`false`, `vrai`/`faux`, `oui`/`non` et `1`/`0`.
+
+Sans colonne **Identifiant (fusion)**, les lignes créent de nouvelles variables, même si un nom existe déjà. Pour mettre à jour des tags existants, reprendre leurs identifiants ; les champs dont les colonnes sont absentes sont conservés. Si une colonne d’identifiant est associée, toutes ses cellules doivent être remplies. Un sens ou un type commun s’applique seulement en l’absence de sa colonne associée : il ne corrige pas les cellules vides d’une colonne conservée.
+
+Une nouvelle variable commence à `false` ou `0` si aucune colonne de valeur initiale n’est associée. Son droit d’écriture reste désactivé sauf valeur explicite dans **Écriture autorisée**. Le revoir ensuite dans **Autorisations d’écriture**, en particulier pour les entrées simulées. Une sortie reste en lecture seule. Le tableau ne permet pas de déduire un NodeId ou une conversion analogique depuis une adresse Siemens.
+
+L’import accepte au plus 200 lignes de données, 30 colonnes et 2 Mo de texte UTF-8. Un fichier est aussi limité à 2 Mo ; UTF-8 et UTF-16 avec marqueur sont acceptés. En cas d’encodage illisible, exporter en CSV UTF-8 ou copier les cellules. Les champs CSV entre guillemets peuvent contenir un séparateur ou un retour à la ligne. Une erreur bloque l’application de tout le tableau. **Annuler** abandonne l’import ; si le projet change, le texte reste visible et copiable avant fermeture.
+
 ### Importer et exporter
 
 **Exporter** dans la barre projet produit l’enveloppe JSON versionnée du projet. **Importer** accepte cette enveloppe ainsi que les anciens projets JSON compatibles ; les champs inconnus sont refusés. Enregistrer avant de remplacer le projet actif.
 
-Dans Variables, **Exporter CSV** produit le mapping. **Importer CSV** ouvre un aperçu et propose par défaut **Fusionner par identifiant et conserver les autres variables**. La fusion met à jour les identifiants présents dans le CSV, ajoute les nouveaux et conserve les autres. **Remplacer la liste des variables** reste un choix explicite. Arrêter l’essai avant de préparer cet import.
+Dans Variables, **Exporter CSV** produit le mapping. Pour un export Vanguard, **Importer CSV** ouvre directement un aperçu et propose par défaut **Fusionner par identifiant et conserver les autres variables**. Un autre tableau CSV/TSV ouvre d’abord la correspondance des colonnes décrite ci-dessus. La fusion met à jour les identifiants présents, ajoute les nouveaux et conserve les autres. **Remplacer la liste des variables** reste un choix explicite. Arrêter l’essai avant de préparer cet import.
 
 Relire les ajouts, modifications et suppressions. La suppression d’une variable utilisée, ou le changement de son sens, type, unité ou conversion analogique, bloque l’application tant que ses consommateurs n’ont pas été revus. **Appliquer l’import au brouillon** conserve le projet enregistré jusqu’à **Enregistrer** ; **Annuler** abandonne l’aperçu. Les associations et scénarios ne sont pas réécrits pour rendre le CSV compatible.
 
@@ -431,7 +480,7 @@ Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md) pour la préparation native et [ACCEPT
 1. Relever les versions Siemens, le firmware, la CPU virtuelle et son adaptateur isolé.
 2. Découvrir endpoint, ApplicationUri, namespace, certificat, NodeIds, types et droits réellement exposés.
 3. Faire autoriser cette cible exacte par le CLI humain `authorize-target`, dans le même dossier de données que le serveur FAT.
-4. Dans **Connexion**, choisir **PLCSIM Advanced · OPC UA** puis remplir les mêmes informations. Les identifiants utilisateur sont référencés par noms de variables d’environnement ; les valeurs secrètes ne vont pas dans le projet.
+4. Dans **Connexion → Mes cibles sur ce poste**, choisir la cible déjà autorisée selon le parcours ci-dessous. La saisie manuelle reste disponible avec le mode **PLCSIM Advanced · OPC UA**. Les identifiants utilisateur sont référencés par noms de variables d’environnement ; les valeurs secrètes ne vont pas dans le projet.
 5. Dans Variables, associer les NodeIds découverts, par saisie ou avec l’explorateur ci-dessous. Valider le projet. La validation en ligne des nœuds, types et droits intervient au démarrage avant les écritures.
 6. Démarrer ; recopier exactement le nom de cible et l’endpoint demandés. Vérifier une commande lue et une mesure écrite avant la campagne.
 
@@ -442,6 +491,19 @@ Le bandeau **Cible autorisée dans cet onglet** affiche la cible et permet de **
 Un projet importé ne peut pas autoriser une cible sur le poste. Le mode OPC UA conserve la vitesse à 1× ; aucune garantie de synchronisation avec le scan PLC n’est déduite du pas choisi.
 
 Le serveur OPC UA générique `scripts/opcua-fixture.py` permet d’essayer le protocole sans Siemens. Son comportement et les démonstrations Python ne constituent pas une qualification PLCSIM ou une validation fonctionnelle du programme Siemens.
+
+### Choisir une cible déjà autorisée
+
+1. Avec l’essai arrêté, ouvrir **Connexion → Mes cibles sur ce poste**, puis **Actualiser les cibles** si la politique du poste vient de changer.
+2. Choisir une **Cible habituelle**. Relire l’adresse, l’identité serveur, la sécurité proposée et l’empreinte de certificat lorsqu’elle est déclarée.
+3. Cliquer **Préparer cette cible**, relire l’aperçu, puis **Utiliser cette cible dans le brouillon**. **Annuler le choix** abandonne cette préparation.
+4. Si nécessaire, compléter les références dans **Certificats et authentification**. Cliquer **Vérifier la connexion en lecture seule**, lire le résultat, puis enregistrer le projet après revue du mapping.
+
+Cette liste vient uniquement de la politique locale du poste. Si elle est vide, autoriser d’abord la cible exacte avec le CLI humain `authorize-target` ; importer un projet ne remplit pas cette autorisation. Une entrée incomplète ou ambiguë indique pourquoi elle ne peut pas être utilisée.
+
+Le choix de cible prépare le mode OPC UA à vitesse réelle. Lors d’un changement d’identité, il efface le namespace et les références d’authentification de l’ancienne cible ; les références déjà exactes pour la même cible sont conservées. Les NodeIds des tags restent présents et doivent être revus pour la cible choisie. La liste ne transmet ni secret ni chemin de clé.
+
+**Vérifier la connexion en lecture seule** contacte la cible affichée et contrôle son identité et son certificat avant l’authentification. Il ne lit pas de valeurs de procédé, n’écrit aucune valeur et ne démarre pas d’essai. Un résultat favorable ne valide pas les NodeIds, types ou droits du mapping : les vérifier au démarrage selon le parcours précédent. Modifier le projet retire le résultat affiché ; un changement pendant la préparation impose de relire la cible.
 
 ### Choisir un NodeId sur le serveur
 
@@ -463,11 +525,14 @@ Utiliser le [prompt prêt à copier et le tutoriel isolé](AI_QUICKSTART.md). Le
 | --- | --- |
 | Page inaccessible | Vérifier l’état dans le lanceur, son URL/port et le résultat de `doctor`. Le bouton **Ouvrir FAT Studio** retrouve l’interface. |
 | Anciennes valeurs, service indisponible | Vérifier le serveur ; les commandes sont bloquées tant que la connexion locale n’est pas revenue. |
-| Projet changé dans un autre onglet | Télécharger le brouillon proposé, puis recharger volontairement le projet actif. Un autre onglet et une IA partagent le même serveur. |
+| Projet changé dans un autre onglet | Conserver le brouillon, puis recharger volontairement le projet actif et utiliser **Comparer les versions**. Un autre onglet et une IA partagent le même serveur. |
 | Démarrage refusé | Cliquer les points de **Préparer l’essai**, puis vérifier les diagnostics de Connexion : associations, types, bornes, droits et politique locale. |
 | Transfert refusé dans le constructeur | Choisir deux cuves distinctes et inclure tous les organes du circuit physique déjà partagé. |
+| Débit nul ou inférieur à la capacité attendue | Ouvrir **Expliquer les débits** et vérifier le cycle affiché, la commande, les organes limitants et la source. La fenêtre décrit le modèle, sans déduire les interverrouillages du PLC. |
 | Variable CSV refusée | Lire la ligne d’aperçu ; revoir les consommateurs avant de supprimer ou changer le contrat d’un tag utilisé. |
-| Brouillon retrouvé mais reprise indisponible | Comparer la révision du projet et l’essai d’origine ; télécharger le brouillon pour préserver son contenu. |
+| Tableau collé incomplet ou mal découpé | Vérifier le séparateur et les correspondances de colonnes. Renseigner le sens et le type, par colonne ou par choix commun explicite. Pour un fichier illisible, exporter en UTF-8 ou copier les cellules. |
+| Brouillon retrouvé mais reprise indisponible | Choisir **Comparer les versions** si une version de départ est disponible. Sinon, télécharger le brouillon pour préserver son contenu ; les notes FAT restent liées à leur essai d’origine. |
+| Modèles personnels absents | Vérifier le navigateur et l’adresse du banc. Importer l’export JSON de la bibliothèque pour la retrouver ailleurs ; une archive FAT ne contient pas ce stockage du navigateur. |
 | Poussoir inactif | Vérifier qu’un essai tourne, que le tag est `input`, BOOL et autorisé en écriture. |
 | Sortie impossible à forcer | Vérifier le sens : une sortie PLC est lue depuis le contrôleur. Corriger une déclaration erronée uniquement après revue du mapping. |
 | Unité mA/V absente | Vérifier la conversion `signal` de la variable. Le logiciel ne la déduit pas d’une adresse analogique. |

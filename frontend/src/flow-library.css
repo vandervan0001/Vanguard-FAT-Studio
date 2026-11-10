@@ -1,0 +1,21 @@
+.modal.flow-modal, .modal.saved-circuit-modal { width: min(880px, calc(100vw - 32px)); max-width: 100%; }
+.workbench .canvas-topline > div { flex-wrap: wrap; flex-shrink: 1; justify-content: flex-end; }
+.flow-summary { display: grid; gap: 6px; padding: 16px; border: 1px solid #c9d8eb; border-radius: 9px; background: #edf4ff; color: #14385f; }
+.flow-summary strong { font-size: 21px; }
+.flow-summary span, .flow-timestamp { font-size: 12px; color: #52677f; }
+.flow-link { border: 0; padding: 2px; font: inherit; color: #0055dd; background: transparent; text-decoration: underline; cursor: pointer; overflow-wrap: anywhere; }
+.flow-device-list { display: grid; gap: 12px; }
+.flow-device-list article { padding: 14px; border: 1px solid #d9e2ed; border-radius: 9px; }
+.flow-device-list article.limiting { border-left: 4px solid #0055dd; }
+.flow-device-list article > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; }
+.flow-device-list article > div span, .flow-device-list article > div small { font-size: 12px; color: #52677f; }
+.flow-device-list dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 8px; }
+.flow-device-list dt { font-size: 11px; color: #52677f; margin-bottom: 4px; }
+.flow-device-list dd { margin: 0; font-weight: 600; color: #14385f; }
+.flow-device-list ul { padding-left: 18px; font-size: 12px; line-height: 1.6; margin-bottom: 0; }
+@media (max-width: 700px) { .flow-device-list dl { grid-template-columns: 1fr; gap: 8px; } }
+.saved-circuit-preview { padding: 16px; margin: 16px 0; background: #f3f7fc; border: 1px solid #d9e2ed; border-radius: 9px; }
+.saved-circuit-preview ul { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
+.saved-circuit-preview li { border: 1px solid #d9e2ed; border-radius: 5px; padding: 5px 8px; background: white; font-size: 12px; }
+.saved-circuit-empty { display: grid; justify-items: center; gap: 8px; padding: 24px; text-align: center; color: #52677f; background: #f7f9fc; border-radius: 9px; }
+.saved-circuit-modal .modal-actions { flex-wrap: wrap; }

@@ -29,6 +29,8 @@ from .demo_lab import demo_lab_project
 from .exchange import ProjectPackage, ScenarioPackage, import_scenarios, project_package, read_project, scenarios_package
 from .archive import capture_archive, export_archive, prepare_archive
 from .mapping import export_mapping, import_mapping, preview_mapping
+from .tabular_mapping import analyze_table, preview_table
+from .known_targets import known_targets, preview_known_target, check_known_target
 from .models import PreparedAction, Project, validate_project
 from .opcua_browser import browse_metadata
 from .reporting import csv_stream, html_report, json_stream
@@ -96,6 +98,34 @@ class MappingRequest(Payload):
 class MappingPreviewRequest(MappingRequest):
     project: Project
     mode: Literal["merge", "replace"] = "merge"
+
+
+class TableRequest(Payload):
+    project: Project
+    text: str = Field(max_length=2_000_000)
+    separator: Literal["auto", "tab", "semicolon", "comma"] = "auto"
+    has_header: bool = True
+
+
+class TableDefaults(Payload):
+    direction: Literal["input", "output"] | None = None
+    data_type: Literal["BOOL", "INT", "DINT", "REAL"] | None = None
+
+
+class TablePreviewRequest(TableRequest):
+    columns: list[str] = Field(max_length=40)
+    mode: Literal["merge", "replace"] = "merge"
+    defaults: TableDefaults = Field(default_factory=TableDefaults)
+
+
+class KnownTargetRequest(Payload):
+    project: Project
+    target_id: str = Field(min_length=1, max_length=100)
+
+
+class ConnectionCheckRequest(Payload):
+    project: Project
+    confirmation: str = Field(min_length=1, max_length=1100)
 
 
 class BrowseRequest(Payload):
@@ -485,6 +515,34 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     async def mapping_preview(body: MappingPreviewRequest, request: Request):
         guard_preview(request, body.project, idle=True)
         return preview_mapping(body.project, body.csv, body.mode)
+
+    @app.post("/api/mapping/table/analyze")
+    async def table_analyze(body: TableRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        return analyze_table(body.text, body.separator, body.has_header)
+
+    @app.post("/api/mapping/table/preview")
+    async def table_preview(body: TablePreviewRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        return preview_table(body.project, body.text, body.columns, body.separator, body.has_header, body.mode,
+                             body.defaults.model_dump(exclude_none=True))
+
+    @app.get("/api/connection/targets")
+    async def connection_targets():
+        return known_targets(app.state.policy)
+
+    @app.post("/api/connection/targets/preview")
+    async def target_preview(body: KnownTargetRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        return preview_known_target(body.project, app.state.policy, body.target_id)
+
+    @app.post("/api/connection/check")
+    async def connection_check(body: ConnectionCheckRequest, request: Request):
+        guard_preview(request, body.project, idle=True)
+        try:
+            return await check_known_target(body.project, app.state.policy, body.confirmation)
+        except (TimeoutError, OSError, ConnectionError) as exc:
+            raise HTTPException(400, "Vérification interrompue. Vérifiez la cible puis relancez volontairement la connexion.") from exc
 
     @app.post("/api/opcua/browse")
     async def opcua_browse(body: BrowseRequest, request: Request):

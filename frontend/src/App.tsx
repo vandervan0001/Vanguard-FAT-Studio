@@ -6,6 +6,7 @@ import { Home, Undo2, Redo2 } from 'lucide-react';
 import { Welcome, FirstRunGuide } from './Welcome';
 import { Readiness, type Correction } from './Readiness';
 import { acknowledgeDraft, draftTab, readDraft, writeDraft, removeDraft, type LocalDraft } from './draftStore';
+import { DraftComparison } from './DraftComparison';
 import { fillCircuit } from './pidBuilder';
 import './ux.css';
 import PidCanvas from './PidCanvas';
@@ -63,6 +64,7 @@ export default function App() {
   const [workspaceScope, setWorkspaceScope] = useState('');
   const [storageReady, setStorageReady] = useState(false);
   const [recovery, setRecovery] = useState<LocalDraft | null>(null);
+  const [compareRecovery, setCompareRecovery] = useState(false);
   const [storageError, setStorageError] = useState('');
   const [draftStored, setDraftStored] = useState(false);
   const [editorTab] = useState(draftTab);
@@ -117,6 +119,7 @@ export default function App() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     setInitializing(true);
+    setCompareRecovery(false);
     const boot = async () => {
       try {
         await initSession(controller.signal);
@@ -191,7 +194,7 @@ export default function App() {
     if (!storageReady || initializing || !workspaceScope || !project || recovery) return;
     try {
       if (dirty || scenarioPending || reportPending) {
-        writeDraft({ version: 1, scope: workspaceScope, revision: getProjectRevision(), updatedAt: new Date().toISOString(), project, projectDirty: dirty, scenario: scenarioDraft, report: reportDraft, observations: guidedObservations, tab: editorTab });
+        writeDraft({ version: 1, scope: workspaceScope, revision: getProjectRevision(), updatedAt: new Date().toISOString(), project, baseProject: savedProject.current ? JSON.parse(savedProject.current) as Project : undefined, projectDirty: dirty, scenario: scenarioDraft, report: reportDraft, observations: guidedObservations, tab: editorTab });
         setDraftStored(true);
       } else { removeDraft(workspaceScope, project.id, editorTab); setDraftStored(false); }
       setStorageError('');
@@ -258,7 +261,7 @@ export default function App() {
   }, [saveProject, editorDisabled, scenarioPending, busy]);
 
   const replaceProject = async (loaded: Project) => {
-    setStorageReady(false); setRecovery(null); setDraftStored(false); setWelcome(false); setFocusRequest(undefined);
+    setStorageReady(false); setRecovery(null); setCompareRecovery(false); setDraftStored(false); setWelcome(false); setFocusRequest(undefined);
     setReportDraft(reportFor(null)); setGuidedObservations({});
     history.current = { past: [], future: [] }; savedProject.current = JSON.stringify(loaded);
     setTargetApproval(null);
@@ -361,6 +364,7 @@ export default function App() {
     if (mode === 'replace' && !window.confirm('Remplacer tous les scénarios de ce projet par ceux du fichier ? Les équipements et variables seront conservés.')) return;
     await saveProject();
     const loaded = await api<Project>('/scenarios/import', 'POST', { package: packaged, mode });
+    savedProject.current = JSON.stringify(loaded); history.current = { past: [], future: [] };
     setProject(loaded); setDirty(false); setValidation(null); setScenarioDraft(null);
     setScenarioId(current => loaded.scenarios.some(scenario => scenario.id === current) ? current : '');
     setScenarioPanelVersion(value => value + 1);
@@ -373,7 +377,7 @@ export default function App() {
     downloadText(JSON.stringify({ format: 'fat-studio/project', version: '1.0', project }, null, 2) + '\n', `${project.id}-brouillon.json`);
   };
   const importMapping = async (csv: string) => {
-    await act(async () => { await saveProject(); const loaded = await api<Project>('/mapping', 'POST', { csv }); setProject(loaded); setDirty(false); setValidation(null); stateRef.current = null; setState(null); await refreshState(); setNotice('Mapping importé et enregistré.'); });
+    await act(async () => { await saveProject(); const loaded = await api<Project>('/mapping', 'POST', { csv }); savedProject.current = JSON.stringify(loaded); history.current = { past: [], future: [] }; setProject(loaded); setDirty(false); setValidation(null); stateRef.current = null; setState(null); await refreshState(); setNotice('Mapping importé et enregistré.'); });
   };
   const chooseScenario = (id: string) => {
     if (editorDisabled) return;
@@ -426,7 +430,12 @@ export default function App() {
 
     <main>
       {storageError && <div className="draft-storage-error" role="alert">{storageError}<button className="text-link" onClick={downloadDraft}>Télécharger mon brouillon</button></div>}
-      {recovery && <section className="draft-recovery" aria-label="Brouillon retrouvé"><div><strong>Brouillon retrouvé</strong><p>{new Date(recovery.updatedAt).toLocaleString('fr-CH')} · {recovery.revision !== getProjectRevision() ? 'Le projet enregistré a changé. Conservez une copie pour comparer les modifications.' : 'Vous pouvez reprendre vos modifications sans changer le projet enregistré.'}</p></div><div className="button-row"><button className="button primary" disabled={locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending || recovery.revision !== getProjectRevision()} onClick={() => void restoreDraft()}>Reprendre le brouillon</button><button className="button" onClick={() => downloadText(JSON.stringify(recovery, null, 2), `${recovery.project.id}-brouillon-complet.json`)}>Télécharger le brouillon</button><button className="button" onClick={() => { try { acknowledgeDraft(recovery); } catch { /* Retained if storage is unavailable. */ } setRecovery(null); }}>Continuer sans reprendre</button></div></section>}
+      {recovery && <section className="draft-recovery" aria-label="Brouillon retrouvé"><div><strong>Brouillon retrouvé</strong><p>{new Date(recovery.updatedAt).toLocaleString('fr-CH')} · {recovery.revision !== getProjectRevision() ? 'Le projet enregistré a changé. Comparez les versions pour choisir les modifications à reprendre.' : 'Vous pouvez reprendre vos modifications sans changer le projet enregistré.'}</p>{!recovery.baseProject && <p>Ce brouillon ancien ne contient pas de version de départ pour la comparaison. Il reste téléchargeable.</p>}</div><div className="button-row"><button className="button primary" disabled={locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending || recovery.revision !== getProjectRevision()} onClick={() => void restoreDraft()}>Reprendre le brouillon</button><button className="button" disabled={!recovery.baseProject || locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending} onClick={() => setCompareRecovery(true)}>Comparer les versions</button><button className="button" onClick={() => downloadText(JSON.stringify(recovery, null, 2), `${recovery.project.id}-brouillon-complet.json`)}>Télécharger le brouillon</button><button className="button" onClick={() => { try { acknowledgeDraft(recovery); } catch { /* Retained if storage is unavailable. */ } setRecovery(null); }}>Continuer sans reprendre</button></div></section>}
+      {compareRecovery && recovery && <DraftComparison project={project} draft={recovery} locked={Boolean(locked || busy || serviceUnavailable || dirty || scenarioPending || reportPending)} onClose={() => setCompareRecovery(false)} onApply={merged => {
+        onChange(() => merged); setDirty(JSON.stringify(merged) !== savedProject.current);
+        try { acknowledgeDraft(recovery); } catch { setStorageError('Le brouillon d’origine est conservé, mais le navigateur n’a pas mémorisé votre choix.'); }
+        setCompareRecovery(false); setRecovery(null); setNotice('Champs repris dans le brouillon. Enregistrez pour les appliquer au projet ; les preuves FAT restent inchangées.');
+      }} />}
       <fieldset className="workspace-scope" disabled={Boolean(recovery)} aria-label="Espace de travail">
       {welcome && <Welcome project={project} disabled={editorDisabled} onDemo={() => void firstDemo()} onCreate={() => { dismissWelcome(); setNewName(''); setProjectsModal('new'); }} onResume={dismissWelcome} onOpen={() => { dismissWelcome(); void openProjects(); }} />}
       {!welcome && guideProject === project.id && project.plc.mode === 'demo' && <FirstRunGuide project={project} state={dirty ? null : state} disabled={busy || serviceUnavailable || dirty} onCommand={(tag_id, value) => void act(async () => { receiveSnapshot(await api<Snapshot>('/force', 'POST', { tag_id, value })); })} onFault={(equipment_id, active) => void act(async () => { receiveSnapshot(await api<Snapshot>(active ? '/fault' : `/fault/${encodeURIComponent(equipment_id)}`, active ? 'POST' : 'DELETE', active ? { equipment_id, kind: 'motor_trip', value: true } : undefined)); })} onDismiss={() => { setGuideProject(''); try { localStorage.removeItem('vanguard:first-demo'); } catch { /* Ignore unavailable preference storage. */ } }} />}
@@ -435,7 +444,7 @@ export default function App() {
       {currentStatus === 'paused' && <div className="pause-edit-banner"><PencilRulerIcon /><span><strong>Essai en pause.</strong> Le P&ID est modifiable. {dirty ? 'Appliquez les modifications pour clore cet essai et en préparer un nouveau. Les preuves précédentes restent conservées.' : 'Reprendre continue cet essai. Enregistrer une modification prépare un nouvel essai.'}</span>{dirty && <button className="button compact-button" disabled={editorDisabled || scenarioPending} onClick={() => void save()}>Appliquer en pause</button>}</div>}
       {activeTab === 'pid' && <>
         <div className="workspace-toolbar"><div className="workspace-label"><span className="small-dot" /><strong>Vue procédé</strong></div><span className="workspace-execution" data-state={serviceUnavailable ? 'error' : currentStatus}>{executionMode} · {executionStatus}</span><div className="workspace-actions"><div className="scenario-selector"><ListChecks size={15} /><label htmlFor="active-scenario">Scénario</label><select id="active-scenario" value={displayedScenarioId} disabled={editorDisabled} onChange={event => chooseScenario(event.target.value)}><option value="">Essai libre</option>{project.scenarios.map(scenario => <option key={scenario.id} value={scenario.id}>{scenario.name}</option>)}</select></div><button className="button presentation-toggle" aria-pressed={presentation} onClick={() => setPresentation(value => !value)}>{presentation ? <Minimize2 size={14} /> : <Maximize2 size={14} />}{presentation ? 'Quitter la présentation' : 'Mode présentation'}</button></div></div>
-        <PidCanvas {...props} catalog={catalog} key={project.id} scenario={activeScenario} viewRequest={viewRequest} presentation={(presentation || (!welcome && guideProject === project.id && project.plc.mode === 'demo')) && currentStatus !== 'paused'} focusRequest={focusRequest?.tab === 'pid' ? focusRequest : undefined} />
+        <PidCanvas {...props} modelDirty={dirty} catalog={catalog} key={project.id} scenario={activeScenario} viewRequest={viewRequest} presentation={(presentation || (!welcome && guideProject === project.id && project.plc.mode === 'demo')) && currentStatus !== 'paused'} focusRequest={focusRequest?.tab === 'pid' ? focusRequest : undefined} />
         <ScenarioRun project={project} state={dirty ? null : state} scenario={activeScenario} online={props.online && !dirty} onSnapshot={receiveSnapshot} onError={setError} observations={guidedObservations} onObservationChange={(key, text) => setGuidedObservations(current => ({ ...current, [key]: text }))} onPrepare={() => { setViewRequest(value => value + 1); setShowLivePanel(true); }} />
         <div className="live-panel-heading"><button onClick={() => setShowLivePanel(value => !value)}><Activity size={16} />Acquisition de l’essai<ChevronDown size={15} className={showLivePanel ? 'rotate-180' : ''} /></button><div>{totalForces > 0 && <span className="forced-counter">{totalForces} forçage{totalForces > 1 ? 's' : ''}</span>}{totalFaults > 0 && <span className="fault-counter">{totalFaults} défaut{totalFaults > 1 ? 's' : ''}</span>}<button className="text-link" onClick={() => changeTab('trends')}>Ouvrir tendances & rapport →</button></div></div>
         {showLivePanel && <div className="live-overview"><div><TrendChart project={project} state={state} compact preferredTags={activeScenario?.trend_tags} /></div><div className="live-events"><div className="live-events-title">Derniers événements</div>{(state?.events ?? []).slice(-4).reverse().map(event => <div key={event.id}><time>{fmt(event.sim_time_s)} s</time><p>{event.message}</p></div>)}{!state?.events.length && <p className="small-muted">Démarrez l’essai pour suivre les actions et les diagnostics.</p>}</div></div>}

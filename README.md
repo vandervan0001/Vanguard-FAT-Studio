@@ -15,7 +15,7 @@ Reliez une CPU virtuelle à un procédé simulé. Envoyez vos entrées, suivez l
 
 ## Essayer sans Siemens
 
-1. Sous Windows, [téléchargez le portable 0.3.0](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.3.0) et extrayez tout le ZIP dans un nouveau dossier. Python est inclus.
+1. Sous Windows, [téléchargez le portable 0.4.0](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.4.0) et extrayez tout le ZIP dans un nouveau dossier. Python est inclus.
 2. Ouvrez le dossier **Vanguard-FAT-Studio**, puis double-cliquez sur **Vanguard-FAT-Studio.cmd**. La démo fonctionne sans automate ni TIA Portal.
 3. Dans [le banc local](http://127.0.0.1:8765), choisissez **Essayer la démo** sur l’accueil, puis **Démarrer**. Ouvrez la vanne, mettez la pompe en marche et observez le niveau. Le bandeau propose aussi un défaut moteur à essayer.
 
@@ -23,11 +23,20 @@ Le premier essai utilise une cuve, une pompe et une vanne. Le laboratoire comple
 
 Pour dessiner votre procédé, ouvrez **Circuits et transferts** dans **P&ID → Construire**. Insérez un modèle ou choisissez les équipements d’un transfert : l’aperçu prépare les conduites et leurs paramètres physiques. Revoyez ensuite les associations aux tags dans une même fenêtre. Les diagnostics ouvrent les champs à corriger ; les modifications peuvent être annulées et les brouillons retrouvés après rechargement. [Parcours détaillé](docs/USER_GUIDE.md#7-créer-le-pid-et-ses-variables)
 
+La version 0.4.0 facilite la préparation et la relecture du banc :
+
+- **Coller des tags Excel** permet de copier un tableau, choisir ses colonnes et relire les variables avant de les ajouter au brouillon.
+- **Expliquer les débits** montre la commande reçue, la position ou la vitesse calculée, l’organe limitant et le liquide disponible à la source, pour le dernier cycle du modèle.
+- **Mes circuits** conserve vos modèles dans le navigateur, avec export et import de la bibliothèque. Chaque insertion crée une copie dont les adresses automate restent à renseigner.
+- **Comparer les versions** aide à reprendre les champs d’un brouillon retrouvé lorsque le projet enregistré a changé, avec un choix explicite pour chaque conflit.
+
 Pour travailler depuis les [sources](https://github.com/vandervan0001/Vanguard-FAT-Studio/archive/refs/heads/main.zip), installez Python 3.12 x64. Le lanceur Windows prépare les dépendances verrouillées au premier démarrage ; sous Linux ou macOS, lancez `bash scripts/start.sh`. Le [guide d’installation](docs/INSTALLATION.md) couvre les mises à jour et les kits hors ligne.
 
 ## Connecter TIA Portal et PLCSIM
 
 Le banc échange en OPC UA avec une cible virtuelle autorisée. Le programme PLC commande le procédé. Le banc lit ses sorties et écrit les entrées simulées déclarées dans le mapping. Sur le P&ID, vous pouvez associer une animation à l’état d’un tag et retrouver la mesure, l’adresse PLC et le NodeId dans la table de variables.
+
+Dans **Connexion → Mes cibles sur ce poste**, reprenez une cible déjà autorisée par la politique locale, puis vérifiez son identité en lecture seule. Le mapping reste à compléter et à vérifier avant un essai. [Choisir une cible](docs/USER_GUIDE.md#choisir-une-cible-déjà-autorisée)
 
 | À tester | Dans le banc |
 | --- | --- |

@@ -58,6 +58,13 @@ test('échanger les scénarios versionnés, refuser les collisions et garder le 
   expect((await (await request.get('/api/project')).json()).scenarios).toEqual([guided]);
   await page.locator('.scenario-list-item').filter({ hasText: guided.name }).click();
   await page.getByLabel('Nom du scénario').fill('Après import, contexte à jour');
+  await expect(page.getByText('Brouillon récupérable sur ce navigateur', { exact: true })).toBeVisible();
+  const draftBase = await page.evaluate(projectId => Object.keys(localStorage)
+    .filter(key => key.startsWith('vanguard:draft:1:') && !key.includes(':ack:'))
+    .map(key => JSON.parse(localStorage.getItem(key)!))
+    .filter(draft => draft.project.id === projectId)
+    .sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt))[0].baseProject, project.id);
+  expect(draftBase.scenarios).toEqual(one.scenarios);
   await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Projet enregistré');
   const final: Project = await (await request.get('/api/project')).json();

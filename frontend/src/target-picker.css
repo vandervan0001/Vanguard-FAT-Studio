@@ -1,0 +1,14 @@
+.target-picker { margin: 14px 0 20px; padding: 18px; border: 1px solid var(--border, #d8e0e8); border-radius: 12px; background: #f6f9fd; }
+.target-picker h3 { margin: 0 0 5px; }
+.target-picker p { line-height: 1.5; }
+.target-picker-heading { display: flex; gap: 15px; align-items: flex-start; justify-content: space-between; }
+.target-picker-heading p { margin: 0 0 12px; color: #54677b; }
+.target-picker-heading > button { flex-shrink: 0; }
+.target-identity dl { display: grid; grid-template-columns: minmax(110px, .35fr) minmax(0, 1fr); gap: 8px 14px; margin: 14px 0; }
+.target-identity dt { color: #54677b; }
+.target-identity dd { margin: 0; overflow-wrap: anywhere; font-family: var(--font-mono, monospace); font-size: 12px; }
+.target-preview { margin-top: 14px; padding: 14px; background: white; border: 1px solid #c9d9ef; border-radius: 8px; }
+.target-check { margin-top: 16px; padding-top: 14px; border-top: 1px solid #d8e0e8; }
+.target-check p { margin-bottom: 0; font-size: 12px; color: #54677b; }
+.target-picker .button-row { flex-wrap: wrap; }
+@media (max-width: 700px) { .target-picker { padding: 12px; } .target-picker-heading { flex-direction: column; } .target-identity dl { grid-template-columns: 1fr; gap: 4px; } .target-identity dd { margin-bottom: 7px; } }

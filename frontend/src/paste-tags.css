@@ -1,0 +1,24 @@
+.modal.paste-tags-modal { width: min(1120px, calc(100vw - 32px)); display: flex; flex-direction: column; overflow: hidden; }
+.paste-tags-scroll { min-height: 0; overflow-y: auto; padding-right: 4px; }
+.paste-tags-scroll > label { display: grid; gap: 8px; }
+.paste-tags-modal > .modal-heading, .paste-tags-modal > .modal-actions, .paste-tags-modal > .small-muted { flex-shrink: 0; }
+.paste-tags-modal > .modal-actions { margin-top: 14px; }
+.paste-tags-modal textarea { width: 100%; resize: vertical; min-height: 110px; white-space: pre; }
+.paste-tags-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin: 14px 0; }
+.paste-tags-toolbar > label:not(.paste-tags-checkbox) { display: grid; gap: 6px; min-width: 180px; }
+.paste-tags-modal label.paste-tags-checkbox { display: flex; flex-direction: row; gap: 8px; align-items: center; padding: 10px 0; }
+.paste-tags-checkbox input { width: auto; flex: 0 0 auto; }
+.paste-tags-columns { margin-top: 18px; padding-top: 12px; border-top: 1px solid #dce4ee; }
+.paste-tags-column-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 12px; }
+.paste-tags-column-grid > label { display: grid; gap: 6px; padding: 10px; background: #f3f7fc; border: 1px solid #dce4ee; border-radius: 8px; min-width: 0; }
+.paste-tags-column-grid small { display: block; color: #526579; overflow-wrap: anywhere; max-height: 65px; overflow: auto; white-space: pre-wrap; }
+.paste-tags-column-grid strong { overflow-wrap: anywhere; }
+.paste-tags-common { padding: 10px 14px; margin-top: 12px; background: #f3f7fc; border: 1px solid #dce4ee; border-radius: 8px; }
+.paste-tags-result-table { max-height: 300px; overflow: auto; margin: 12px 0; border: 1px solid #dce4ee; border-radius: 8px; }
+.paste-tags-result-table table { width: 100%; border-collapse: collapse; min-width: 650px; text-align: left; }
+.paste-tags-result-table th { background: #edf4ff; position: sticky; top: 0; }
+.paste-tags-result-table th, .paste-tags-result-table td { padding: 10px; border-bottom: 1px solid #dce4ee; vertical-align: top; }
+.paste-tags-result-table td { max-width: 320px; overflow-wrap: anywhere; }
+.paste-tags-result-table td small { display: block; margin-top: 4px; color: #526579; }
+.paste-tags-result-table .invalid-row { background: #fff1f1; }
+@media (max-width: 600px) { .paste-tags-column-grid { grid-template-columns: 1fr; } .paste-tags-toolbar { align-items: stretch; flex-direction: column; } }

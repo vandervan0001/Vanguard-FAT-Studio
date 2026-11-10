@@ -28,7 +28,7 @@ Les outils de développement viennent de `requirements-dev.lock`. Pour l’inter
 ```powershell
 .\.venv\Scripts\python.exe public_distribution.py check
 .\.venv\Scripts\python.exe -m build --no-isolation
-.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.3.0-py3-none-any.whl
+.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.4.0-py3-none-any.whl
 ```
 
 L’assemblage Windows portable et le kit source hors ligne sont documentés dans [INSTALLATION.md](docs/INSTALLATION.md). Ils utilisent une destination neuve, des dépendances verrouillées et un manifeste de tailles/SHA-256. Le manifeste contrôle l’intégrité du transfert ; il ne remplace pas la confiance dans l’origine de l’archive.

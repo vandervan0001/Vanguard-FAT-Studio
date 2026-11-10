@@ -11,6 +11,7 @@ export function setProjectContext(projectId: string) {
 }
 export function getProjectContext() { return currentProjectId; }
 export function getProjectRevision() { return currentProjectRevision; }
+export function getRunContext() { return currentRunId; }
 export function setRunContext(runId: string | null) { currentRunId = runId ?? ''; }
 export function getMutationVersion() { return mutationVersion; }
 
@@ -48,7 +49,7 @@ export function api<T>(path: string, method = 'GET', body?: unknown, signal?: Ab
   const request = () => requestApi<T>(path, method, body, signal, context);
   // Draft checks and discovery are context-guarded reads. They must not hide a
   // failed state poll or invalidate a snapshot as if a run command had occurred.
-  const preview = method === 'POST' && ['/validate/preview', '/mapping/preview', '/opcua/browse'].includes(path);
+  const preview = method === 'POST' && ['/validate/preview', '/mapping/preview', '/mapping/table/analyze', '/mapping/table/preview', '/opcua/browse', '/connection/targets/preview', '/connection/check'].includes(path);
   if (method === 'GET' || preview) return request();
   mutationVersion++;
   const result = mutations.then(request, request).finally(() => { mutationVersion++; });
