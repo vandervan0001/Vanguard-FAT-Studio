@@ -15,12 +15,15 @@ import { diagnosticLabel, diagnosticProfile, displayValue, engineeringUnit } fro
 import { BindingEditor } from './BindingEditor';
 import { compatibleTag, fillCircuit, freePosition, makeEquipment, missingPortTags } from './pidBuilder';
 import { TransferBuilder } from './TransferBuilder';
+import { FlowExplanation } from './FlowExplanation';
+import { CircuitLibrary } from './CircuitLibraryDialog';
+import { isFlowEquipment } from './processCircuits';
 
 type Props = {
   project: Project; state: Snapshot | null; catalog: CatalogItem[]; locked: boolean; online: boolean;
   onChange: (update: (project: Project) => Project) => void;
   onError: (message: string) => void; onSnapshot: (state: Snapshot) => void;
-  scenario?: Scenario | null; viewRequest?: number; presentation?: boolean; unavailable?: string;
+  scenario?: Scenario | null; viewRequest?: number; presentation?: boolean; unavailable?: string; modelDirty?: boolean;
   focusRequest?: { equipmentId?: string; port?: string; field?: string; nonce: number };
 };
 type EquipmentNode = Node<{ equipment: Equipment; state: Record<string, unknown>; tags: Snapshot['tags']; faults: Record<string, unknown>; locked: boolean; operating: boolean; highlighted?: boolean; signalTag?: Tag; animationDataType?: Tag['data_type'] }, 'equipment'>;
@@ -111,7 +114,7 @@ function ProcessPipe(props: EdgeProps) {
 }
 const edgeTypes = { process: ProcessPipe };
 
-function Canvas({ project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, scenario, viewRequest, presentation, focusRequest }: Props) {
+function Canvas({ project, state, catalog, locked, online, unavailable, onChange, onError, onSnapshot, scenario, viewRequest, presentation, focusRequest, modelDirty }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
   const [snapToGrid, setSnapToGrid] = useState(true);
@@ -120,6 +123,8 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
   const [librarySearch, setLibrarySearch] = useState('');
   const [fitAdded, setFitAdded] = useState(false);
   const [circuitMode, setCircuitMode] = useState<'template' | 'transfer' | null>(null);
+  const [flowOpen, setFlowOpen] = useState(false);
+  const [savedCircuitsOpen, setSavedCircuitsOpen] = useState(false);
   const [inspectorFocus, setInspectorFocus] = useState<Props['focusRequest']>();
   const [measurements, setMeasurements] = useState<Record<string, { width: number; height: number }>>({});
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -241,7 +246,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
         try { const next = fillCircuit(project, catalog); onChange(current => current === project ? next : current); setSelectedId(next.equipment.find(item => item.type === 'pump')!.id); setFitAdded(true); }
         catch (error) { onError(error instanceof Error ? error.message : String(error)); }
       }}>Insérer un circuit de remplissage</button></div>}
-      <div className="circuit-launch"><button className="button compact-button" disabled={locked} onClick={() => setCircuitMode('template')}><Route size={15} />Circuits et transferts</button></div>
+      <div className="circuit-launch"><button className="button compact-button" disabled={locked} onClick={() => setCircuitMode('template')}><Route size={15} />Circuits et transferts</button><button className="button compact-button" disabled={locked} onClick={() => setSavedCircuitsOpen(true)}>Mes circuits</button></div>
       <label className="palette-search"><Search size={14} /><input aria-label="Rechercher un équipement" placeholder="Cuve, pompe, capteur…" value={librarySearch} onChange={event => setLibrarySearch(event.target.value)} /></label>
       <div className="palette-items">
         {catalog.filter(item => `${item.label} ${item.description}`.toLocaleLowerCase().includes(librarySearch.trim().toLocaleLowerCase())).map(item => <button key={item.type} className="palette-item" draggable={!locked && project.equipment.length < 50} disabled={locked || project.equipment.length >= 50}
@@ -257,7 +262,7 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
 
     <div ref={canvasRef} className="canvas-area" onDragOver={event => { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; }}
       onDrop={event => { event.preventDefault(); const type = event.dataTransfer.getData('application/fat-equipment') as EquipmentType; if (catalog.some(item => item.type === type)) addEquipment(type, screenToFlowPosition({ x: event.clientX, y: event.clientY })); }}>
-      <div className="canvas-topline"><span><span className={`small-dot ${state?.status === 'running' ? 'green' : ''}`} />{building ? 'CONSTRUCTION DU PROCÉDÉ' : project.name.toLocaleUpperCase('fr-CH')}</span><div>{presentation && !building && <button aria-pressed={showConsoles} onClick={() => setShowConsoles(value => !value)}>{showConsoles ? 'Masquer les pupitres' : 'Afficher les pupitres'}</button>}<button className="canvas-mode" disabled={locked} onClick={() => { setBuilding(value => !value); setSelectedId(null); setSelectedEdge(null); }}>{building ? <Radio size={12} /> : <PencilRuler size={12} />}{building ? 'Tester les I/O' : 'Construire'}</button><button onClick={() => fitView({ padding: .12, duration: 200 })}>Vue complète</button></div></div>
+      <div className="canvas-topline"><span><span className={`small-dot ${state?.status === 'running' ? 'green' : ''}`} />{building ? 'CONSTRUCTION DU PROCÉDÉ' : project.name.toLocaleUpperCase('fr-CH')}</span><div>{presentation && !building && <button aria-pressed={showConsoles} onClick={() => setShowConsoles(value => !value)}>{showConsoles ? 'Masquer les pupitres' : 'Afficher les pupitres'}</button>}<button className="canvas-mode" disabled={locked} onClick={() => { setBuilding(value => !value); setSelectedId(null); setSelectedEdge(null); }}>{building ? <Radio size={12} /> : <PencilRuler size={12} />}{building ? 'Tester les I/O' : 'Construire'}</button><button onClick={() => setFlowOpen(true)}>Expliquer les débits</button><button onClick={() => fitView({ padding: .12, duration: 200 })}>Vue complète</button></div></div>
       {locked && <div className="editing-locked">{!online ? 'Service indisponible · commandes désactivées' : state?.guided_steps?.at(-1)?.state === 'queued' ? 'STEP en attente du cycle d’échange · I/O temporairement suspendues' : state?.status === 'paused' ? 'Essai en pause · structure figée · reprendre pour les impulsions' : state?.status === 'running' ? 'I/O de test actives · structure figée pour cet essai' : 'Mise à jour du projet en cours'}</div>}
       <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes}
         onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect}
@@ -278,9 +283,11 @@ function Canvas({ project, state, catalog, locked, online, unavailable, onChange
       <div className="canvas-caption"><span>{visibleEquipment.length} équipements visibles · {edges.length} liaisons</span><span>Modèle de procédé simplifié</span></div>
     </div>
 
+    {flowOpen && <FlowExplanation project={project} state={state} catalog={catalog} equipmentId={selectedId ?? undefined} modelDirty={modelDirty} unavailable={unavailable} onClose={() => setFlowOpen(false)} onFocus={id => { setFlowOpen(false); setSelectedId(id); setSelectedEdge(null); void fitView({ nodes: [{ id }], padding: .8, maxZoom: 1, duration: 200 }); }} />}
     {building && inspector}
     {!building && <AnalogInputs {...controls} />}
     {circuitMode && <TransferBuilder project={project} catalog={catalog} locked={locked} mode={circuitMode} equipmentId={selectedId ?? undefined} onClose={() => setCircuitMode(null)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); setSelectedId(ids[0] ?? null); setSelectedEdge(null); setInspectorFocus(undefined); setFitAdded(true); }} />}
+    {savedCircuitsOpen && <CircuitLibrary project={project} catalog={catalog} locked={locked} mode="browse" onClose={() => setSavedCircuitsOpen(false)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); setSelectedId(ids[0] ?? null); setSelectedEdge(null); setFitAdded(true); }} />}
   </div>;
 }
 
@@ -305,6 +312,7 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
   const [bindingOpen, setBindingOpen] = useState(false);
   const [connectionTarget, setConnectionTarget] = useState('');
   const [copyOpen, setCopyOpen] = useState(false);
+  const [saveCircuitOpen, setSaveCircuitOpen] = useState(false);
   const inspectorBody = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!focusRequest) return;
@@ -390,11 +398,12 @@ function Inspector({ equipment, project, state, catalog, locked, online, unavail
         {Object.keys(faults).length > 0 && <div className="active-faults">{Object.keys(faults).map(key => <span key={key}>{FAULTS[equipment.type]?.find(fault => fault.key === key)?.label ?? key}</span>)}</div>}
         {!state?.run_id && <p className="small-muted">Démarrez un essai pour injecter un défaut.</p>}
       </>}
-      <div className="circuit-duplicate"><button className="button compact-button" disabled={locked} onClick={() => setCopyOpen(true)}><Copy size={14} />Dupliquer cet équipement ou son circuit</button></div>
+      <div className="circuit-duplicate"><button className="button compact-button" disabled={locked} onClick={() => setCopyOpen(true)}><Copy size={14} />Dupliquer cet équipement ou son circuit</button>{isFlowEquipment(equipment) && <button className="button compact-button" disabled={locked} onClick={() => setSaveCircuitOpen(true)}>Enregistrer ce circuit</button>}</div>
       <div className="inspector-footer"><span className="mono">{equipment.id}</span><button className="danger-text" disabled={locked} onClick={() => { if (window.confirm(`Supprimer ${equipment.name} et ses liaisons graphiques ? Ses tags seront conservés.`)) { onChange(project => ({ ...project, equipment: project.equipment.filter(entry => entry.id !== equipment.id), connections: project.connections.filter(connection => connection.source !== equipment.id && connection.target !== equipment.id) })); onClose(); } }}><Trash2 size={14} />Supprimer</button></div>
     </div>
     {bindingOpen && item && <BindingEditor project={project} equipment={equipment} item={item} catalog={catalog} locked={locked} initialPort={focusRequest?.port} onChange={onChange} onClose={() => setBindingOpen(false)} />}
     {copyOpen && <TransferBuilder project={project} catalog={catalog} locked={locked} mode="duplicate" equipmentId={equipment.id} onClose={() => setCopyOpen(false)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); onCopied(ids); }} />}
+    {saveCircuitOpen && <CircuitLibrary project={project} catalog={catalog} locked={locked} mode="save" equipmentId={equipment.id} onClose={() => setSaveCircuitOpen(false)} onApply={(base, next, ids) => { onChange(current => current === base ? next : current); onCopied(ids); }} />}
   </>;
 }
 

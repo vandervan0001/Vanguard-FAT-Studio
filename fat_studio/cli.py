@@ -204,7 +204,7 @@ def _authorize_target(args) -> int:
     entry.update(isolated_virtual_adapter_confirmed=True, allow_insecure=args.allow_insecure)
     policy_path = _data_dir(args) / "machine-policy.json"
     MachinePolicy(policy_path).add(entry)
-    print(f"Cible enregistrée dans {policy_path}. Recopiez les mêmes identifiants dans le projet FAT.")
+    print(f"Cible enregistrée dans {policy_path}. Dans Connexion, utilisez « Mes cibles sur ce poste » pour préparer le projet FAT.")
     return 0
 
 

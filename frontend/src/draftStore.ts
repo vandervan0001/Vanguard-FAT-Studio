@@ -5,6 +5,7 @@ export type LocalDraft = {
   version: 1; scope: string; revision: string; updatedAt: string; project: Project;
   projectDirty: boolean; scenario: ScenarioDraft | null; report: ReportDraft;
   observations: Record<string, string>; tab: string;
+  baseProject?: Project;
 };
 
 export function draftTab(): string {

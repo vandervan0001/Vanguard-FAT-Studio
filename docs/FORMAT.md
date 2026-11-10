@@ -26,13 +26,46 @@ Ce brouillon vide est enregistrable ; il ne peut pas démarrer un échange avant
 
 Les symboles PLC, adresses mémoire et NodeIds OPC UA sont distincts. Une adresse `%IW264` ne permet pas de deviner son NodeId. Les entrées sont vues depuis le PLC : le banc leur transmet le procédé simulé. Les sorties PLC sont lues par le banc et ne sont pas forçables. Un import ne crée aucune autorisation de cible du poste.
 
-Les fonctions de construction ajoutées en 0.3.0 conservent le format 1.0. Un transfert préparé par l’interface utilise les champs existants `tank_id`, `source_tank_id`, `role` et `flow_group` des pompes et vannes, en plus des `connections` graphiques. Les modèles et copies produisent des objets ordinaires du projet ; aucun format de modèle séparé n’est requis. Une duplication crée de nouveaux identifiants et laisse vides les NodeIds, adresses et symboles PLC de ses nouveaux tags.
+Les fonctions de construction ajoutées en 0.3.0 et 0.4.0 conservent le format 1.0. Un transfert préparé par l’interface utilise les champs existants `tank_id`, `source_tank_id`, `role` et `flow_group` des pompes et vannes, en plus des `connections` graphiques. Les modèles insérés et les copies produisent des objets ordinaires du projet. Une duplication crée de nouveaux identifiants et laisse vides les NodeIds, adresses et symboles PLC de ses nouveaux tags. La bibliothèque personnelle possède un export distinct, décrit ci-dessous.
 
-## Mapping CSV et brouillons
+## Mapping CSV et tableaux collés
 
-Le CSV décrit les tags ; il ne remplace pas le format JSON du projet. L’interface 0.3.0 propose un aperçu de fusion par `id` ou un remplacement explicite de la liste. La fusion conserve les tags absents du CSV. Les références des équipements, animations et scénarios restent inchangées ; l’aperçu refuse la suppression d’un tag utilisé ou un changement de son contrat `direction`, `data_type`, `unit` ou `signal` tant que ses consommateurs n’ont pas été revus. Le schéma CSV et les anciens exports restent compatibles. Le contrat API de l’import historique reste décrit dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
+Le CSV décrit les tags ; il ne remplace pas le format JSON du projet. L’interface propose un aperçu de fusion par `id` ou un remplacement explicite de la liste. La fusion conserve les tags absents du CSV. Les références des équipements, animations et scénarios restent inchangées ; l’aperçu refuse la suppression d’un tag utilisé ou un changement de son contrat `direction`, `data_type`, `unit` ou `signal` tant que ses consommateurs n’ont pas été revus. Le schéma CSV et les anciens exports restent compatibles. Le contrat API de l’import historique reste décrit dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
 
-La récupération locale du navigateur est distincte d’un export de projet. Son fichier de secours inclut le contexte de révision et les brouillons de saisie ; il n’est pas une enveloppe `fat-studio/project` à importer telle quelle. Reprendre explicitement un brouillon compatible dans l’interface, puis enregistrer et exporter le projet ou son archive. Un brouillon périmé reste à comparer manuellement ; aucune observation n’est transférée automatiquement vers un autre essai.
+Depuis 0.4.0, le collage de cellules et les fichiers tabulaires passent d’abord par une correspondance de colonnes. Les séparateurs acceptés sont la tabulation, le point-virgule et la virgule, avec choix explicite ou détection automatique. Les champs entre guillemets peuvent contenir le séparateur et des retours à la ligne. Les erreurs désignent la ligne physique où commence l’enregistrement. Les titres français ou anglais suggèrent les colonnes ; ils ne déterminent pas le sens, le type ou l’adresse d’une variable.
+
+Les limites sont de 200 lignes de données, 30 colonnes et 2 000 000 octets de texte UTF-8. Le fichier source est lui aussi limité à 2 000 000 octets. Les fichiers UTF-8 et UTF-16 avec marqueur d’ordre des octets sont acceptés ; un encodage illisible est refusé. Le lecteur traite du texte CSV/TSV, pas les classeurs `.xlsx`.
+
+| Donnée du tableau | Règle |
+| --- | --- |
+| Nom | Colonne obligatoire et valeur non vide pour chaque ligne. |
+| Sens automate | `input`/`entrée` ou `output`/`sortie`. Sans colonne associée, un sens commun peut être choisi explicitement pour toutes les lignes. |
+| Type | `BOOL`, `INT`, `DINT` ou `REAL`. Sans colonne associée, un type commun peut être choisi explicitement pour toutes les lignes. |
+| Identifiant | Une colonne `id` permet la fusion avec les tags existants. Chaque cellule doit alors être renseignée. Sans cette colonne, chaque ligne reçoit un nouvel identifiant visible dans l’aperçu ; les noms ne servent pas de clé de fusion. |
+| Booléen | `true`/`false`, `vrai`/`faux`, `oui`/`non` ou `1`/`0`. |
+| Nombre | Point ou virgule décimale, sans séparateur de milliers. INT et DINT exigent un entier ; les bornes du type et du tag restent contrôlées. |
+| Valeur initiale et écriture | Un nouveau tag commence à `false` ou `0` si la colonne de valeur initiale est absente. `writable` vaut `false` sauf valeur explicite dans la colonne associée ; une sortie ne peut pas être autorisée en écriture. |
+| Champs facultatifs absents | Pour une fusion par identifiant, les champs absents du tableau conservent les valeurs du tag existant. |
+
+Un sens ou un type commun ne remplit pas les cellules vides d’une colonne associée : corriger la colonne, ou l’ignorer puis choisir la valeur commune. Aucune échelle analogique ni aucun NodeId ne sont déduits d’une adresse Siemens. Les erreurs de conversion bloquent l’import entier. L’application validée modifie le brouillon ; l’enregistrement du projet reste une étape séparée.
+
+## Brouillons du navigateur
+
+La récupération locale du navigateur est distincte d’un export de projet. Son fichier de secours inclut le contexte de révision et les brouillons de saisie ; il n’est pas une enveloppe `fat-studio/project` à importer telle quelle. Depuis 0.4.0, il conserve aussi le projet enregistré au départ dans `baseProject`, quand cette base est disponible. Le format de secours reste en version `1` et les anciennes copies restent lisibles.
+
+**Comparer les versions** confronte cette base, les modifications locales et le projet enregistré maintenant. Les champs sans conflit sont présélectionnés ; les conflits exigent un choix individuel. Le serveur vérifie les trois projets puis le résultat choisi. Une sélection qui introduit de nouvelles incohérences est refusée ; un changement de contexte interrompt la reprise. Les modifications retenues rejoignent le brouillon avant enregistrement. Une ancienne copie sans base reste téléchargeable mais ne permet pas cette comparaison.
+
+Le rapport, les observations du testeur et le texte d’étapes JSON non appliqué ne font pas partie de cette fusion. S’ils existent, la reprise télécharge le brouillon complet pour les conserver séparément. Aucune observation ni conclusion n’est transférée vers un autre essai.
+
+## Bibliothèque personnelle de circuits
+
+**Mes circuits** utilise le stockage local du navigateur à l’adresse du banc. La bibliothèque est commune aux projets ouverts à cette adresse, indépendante du dossier de données serveur. Son export `vanguard-mes-circuits.json` est un tableau JSON de modèles ; ce n’est pas une enveloppe de projet.
+
+Chaque modèle contient `version: 1`, `id`, `name`, `createdAt`, `anchorId`, `equipment`, `tags` et `connections`. L’ancrage est une pompe ou une vanne. Les limites sont de 20 modèles, 50 équipements, 200 tags et 200 conduites par modèle, et de 2 Mio pour la bibliothèque ou le fichier importé. Les références extérieures au circuit sont laissées à renseigner ; les NodeIds, adresses et symboles PLC sont effacés lors de la préparation ou de la lecture des modèles. Connexion automate, scénarios et preuves d’essais sont exclus.
+
+L’import vérifie la structure et les nouveaux circuits, puis présente les modèles à ajouter. Une copie identique déjà présente est ignorée ; un nom ou un identifiant en conflit bloque l’ajout sans remplacer les modèles existants. L’application refuse une bibliothèque modifiée entre-temps dans un autre onglet. Insérer un modèle dans un projet passe par un autre aperçu : il crée des repères et identifiants distincts, remappe les références internes puis ajoute la copie au brouillon.
+
+Exporter la bibliothèque séparément pour la transférer ou la sauvegarder. Elle n’est incluse ni dans un projet JSON ni dans son archive `.fat.zip`. Effacer les données du navigateur peut supprimer la bibliothèque locale.
 
 ## Scénarios
 

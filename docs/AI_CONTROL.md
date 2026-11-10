@@ -34,6 +34,24 @@ Le dossier Objets (`i=85`) sert de racine. Les variables du namespace 0, référ
 
 Les pages contiennent au plus 100 entrées ; `offset` avance de 100 jusqu’à 1 900. L’opération est bornée à 20 secondes puis ferme sa connexion. Une erreur conserve le brouillon et demande une nouvelle action volontaire. Les helpers du CLI existant ne changent pas ; découvrir ces routes dans OpenAPI pour les clients HTTP.
 
+## Aperçus supplémentaires depuis 0.4.0
+
+Les routes POST suivantes conservent les mêmes exigences de jeton et de contexte explicite. Elles sont refusées pendant un essai en cours ou en pause. Elles ne sauvegardent aucun projet et ne changent pas la révision attendue.
+
+| Route | Corps JSON | Réponse et limite |
+| --- | --- | --- |
+| `POST /api/mapping/table/analyze` | `project`, `text`, `separator` (`auto`, `tab`, `semicolon`, `comma`), `has_header` | Colonnes, suggestions tirées des titres, lignes et numéros physiques. Texte limité à 2 000 000 caractères, 30 colonnes et 200 lignes de données. |
+| `POST /api/mapping/table/preview` | Même corps, avec `columns` (champ choisi ou chaîne vide pour chaque colonne), `mode`, `defaults` facultatif | Aperçu canonique de fusion/remplacement, erreurs par ligne et projet proposé. `defaults.direction` et `defaults.data_type` sont des choix explicites communs uniquement si la colonne correspondante est absente. Sans identifiant, chaque ligne crée un tag neuf ; aucune fusion par nom. Une erreur empêche l’application du tableau entier. |
+| `GET /api/connection/targets` | Aucun | Identités déjà autorisées par la politique de ce poste, identifiant opaque et disponibilité. Aucun secret ni chemin de clé transmis. Le projet ne peut pas enrichir cette liste. |
+| `POST /api/connection/targets/preview` | `project`, `target_id` | Relit la politique et propose la cible dans un brouillon. Un identifiant devenu périmé est refusé. Les références d’authentification de l’ancienne cible sont effacées ; seules celles déjà exactes pour la même identité et sécurité sont conservées. Les NodeIds restent à vérifier. |
+| `POST /api/connection/check` | `project`, `confirmation` | Connexion explicite avec identité/certificat contrôlés avant authentification, puis fermeture. Aucune valeur de procédé lue ou écrite. `mapping_checked` vaut `false` : ce contrôle ne qualifie pas les tags ni leurs droits. |
+
+Le contrôle de connexion reprend la confirmation exacte `approved_virtual_target + " @ " + endpoint` et le client borné de découverte OPC UA. La préparation d’une cible ne crée aucune autorisation. Les tableaux ne déduisent ni sens, ni type, ni NodeId à partir d’une adresse Siemens ; les champs absents d’un tag existant sont conservés, et une nouvelle variable a l’écriture désactivée par défaut.
+
+Dans l’instantané, `equipment[id].flow_diagnostic` décrit le dernier cycle calculé d’une pompe ou vanne : instant/pas, commande reçue, capacité propre, débit du circuit, organes limitants et disponibilité de la source. Ces faits ne décrivent pas les interverrouillages internes du PLC. Après modification d’un défaut, ils sont invalidés jusqu’au prochain cycle ; à l’arrêt ils sont historiques. Une qualité invalide, un contexte périmé ou un brouillon de modèle modifié interdit de les présenter comme une mesure actuelle. Ce champ supplémentaire ne change pas le format projet 1.0.
+
+La bibliothèque de circuits et les versions de départ des brouillons restent dans le stockage local du navigateur, hors politique machine et preuves FAT. Leur reprise utilise `/validate/preview` ; aucun verdict ni observation humaine n’est transféré automatiquement entre essais. Voir [USER_GUIDE.md](USER_GUIDE.md) pour les choix de comparaison et la copie téléchargeable des notes conservées.
+
 ## CLI pour les assistants
 
 Depuis la racine du dossier, utiliser le Python de son environnement :

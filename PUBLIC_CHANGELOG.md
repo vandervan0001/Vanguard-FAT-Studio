@@ -1,5 +1,15 @@
 # Changements publics
 
+## 0.4.0, 10 novembre 2026
+
+- Collage de cellules Excel et import de tableaux CSV/TSV avec choix du séparateur, correspondance des colonnes modifiable et erreurs par ligne. Le sens et le type restent explicites, avec une valeur commune possible lorsqu’une colonne manque. L’aperçu conserve la fusion par identifiant et les contrôles des tags utilisés ; les nouvelles variables n’autorisent pas l’écriture par défaut.
+- Explication des débits calculés : commande reçue, vitesse ou position, capacité disponible, organe limitant en série et volume disponible dans la source. Le dernier cycle et son pas sont affichés ; les données périmées ou de qualité indisponible ne servent pas de diagnostic actuel. Les interverrouillages internes du PLC ne sont pas déduits.
+- Choix d’une cible déjà autorisée sur le poste, aperçu avant application au brouillon et contrôle de connexion en lecture seule. L’identité et le certificat précèdent l’authentification ; ce contrôle ne lit pas de valeurs de procédé et ne valide pas le mapping.
+- Bibliothèque personnelle de circuits dans le navigateur, avec enregistrement, aperçu, réinsertion et export/import JSON. Les copies reçoivent de nouveaux identifiants, conservent leurs liaisons internes et effacent les NodeIds, adresses et symboles PLC. La connexion, les scénarios et les preuves d’essais sont exclus des modèles.
+- Comparaison d’un brouillon retrouvé avec sa version de départ et le projet enregistré. Les champs sans conflit sont proposés ensemble ; chaque conflit reste à choisir. La reprise est vérifiée puis appliquée au brouillon. Le rapport, les observations et les étapes JSON non appliquées restent dans une copie téléchargée, sans fusion de résultats FAT.
+
+Les formats de projet et de scénarios restent en version 1.0. Le reçu de la [release 0.4.0](https://github.com/vandervan0001/Vanguard-FAT-Studio/releases/tag/v0.4.0) détaille les vérifications du logiciel et du portable. Ces fonctions ne constituent pas une nouvelle qualification Siemens et n’attribuent aucun verdict FAT humain.
+
 ## 0.3.0, 10 novembre 2026
 
 - Accueil avec démonstration manuelle prête à démarrer, création de procédé et reprise du projet. Le premier circuit se commande sans automate ni TIA Portal.

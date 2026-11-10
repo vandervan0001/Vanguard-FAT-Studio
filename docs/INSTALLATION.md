@@ -80,9 +80,9 @@ Cette étape concerne le développeur sur **Windows x64 avec Python 3.12**. Part
 ```powershell
 .\.venv\Scripts\python.exe public_distribution.py check
 .\.venv\Scripts\python.exe -m build --wheel --no-isolation
-.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.3.0-py3-none-any.whl
+.\.venv\Scripts\python.exe public_distribution.py check-wheel dist\vanguard_fat_studio-0.4.0-py3-none-any.whl
 .\.venv\Scripts\python.exe -m pip download --disable-pip-version-check --only-binary=:all: --no-deps --dest D:\FAT-Build\wheels -r requirements.lock
-.\.venv\Scripts\python.exe scripts/build-portable.py --wheel dist\vanguard_fat_studio-0.3.0-py3-none-any.whl --wheelhouse D:\FAT-Build\wheels --output D:\Livraison\Vanguard-FAT-Studio-Portable
+.\.venv\Scripts\python.exe scripts/build-portable.py --wheel dist\vanguard_fat_studio-0.4.0-py3-none-any.whl --wheelhouse D:\FAT-Build\wheels --output D:\Livraison\Vanguard-FAT-Studio-Portable
 ```
 
 `build-portable.py` télécharge uniquement l’archive Python officielle épinglée si elle n’est pas déjà fournie avec `--python-archive CHEMIN`. Il vérifie sa taille et son SHA-256 avant extraction. Le dossier des wheels doit contenir exactement les paquets et versions de `requirements.lock`. L’installation utilise ces fichiers avec `--no-index --no-deps` ; les paquets ne sont pas cherchés sur un index pendant l’assemblage. L’archive Python peut aussi être transférée en amont pour une construction hors ligne.
@@ -129,4 +129,4 @@ Les constructions du 7 novembre 2026 conservent la version applicative 0.2.1. La
 
 Pour revenir au portable précédent, arrêter le nouveau serveur puis lancer l’ancien dossier intact avec le dossier de données voulu. Cette mise à jour ne change pas le schéma de stockage ; les archives exportées restent la copie de sauvegarde du projet et de ses essais. Les données ne doivent pas être copiées dans `runtime/`, `app/` ou à l’intérieur du manifeste.
 
-Les notes de release donnent le ZIP courant, son SHA-256, les sources exactes et le reçu des vérifications. Le tag `v0.3.0` identifie les sources de cette version. Les archives automatiques « Source code » de l’ancienne release d’aperçu suivent son tag historique ; utiliser la référence source indiquée dans cette ancienne release pour reconstruire ses portables.
+Les notes de release donnent le ZIP courant, son SHA-256, les sources exactes et le reçu des vérifications. Le tag `v0.4.0` identifie les sources de cette version. Les archives automatiques « Source code » de l’ancienne release d’aperçu suivent son tag historique ; utiliser la référence source indiquée dans cette ancienne release pour reconstruire ses portables.
