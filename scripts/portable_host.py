@@ -160,9 +160,13 @@ class PortableService:
     def _run(self) -> None:
         listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
-            # No reuse flag: an unrelated listener must never be silently replaced.
             if os.name == "nt":
+                # Windows needs exclusive ownership, not SO_REUSEADDR semantics.
                 listener.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            else:
+                # POSIX TIME_WAIT sockets must not block a deliberate restart.
+                # SO_REUSEPORT is never enabled; an active listener still refuses bind.
+                listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             listener.bind(("127.0.0.1", self.port))
             listener.listen(128)
             from fat_studio.app import create_app

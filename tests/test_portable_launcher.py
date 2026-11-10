@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import os
 from pathlib import Path
 import runpy
 import socket
@@ -157,6 +158,36 @@ def test_quit_closes_active_demo_and_next_process_keeps_samples_without_resuming
     finally:
         next_instance.stop()
         assert next_instance.finished.wait(15)
+
+
+@pytest.mark.skipif(os.name == "nt", reason="POSIX TIME_WAIT reuse is separate from Windows exclusive address ownership")
+def test_restart_after_server_closes_a_keep_alive_connection(service):
+    instance, identity = service
+    with socket.create_connection(("127.0.0.1", instance.port), timeout=5) as peer:
+        peer.sendall(b"GET /api/health HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: keep-alive\r\n\r\n")
+        received = b""
+        while b"\r\n\r\n" not in received:
+            part = peer.recv(4096)
+            assert part, "Service closed before returning health headers"
+            received += part
+            assert len(received) < 65536
+        assert b"200 OK" in received.split(b"\r\n", 1)[0]
+        HOST["owned_request"](instance.record, "stop")
+        assert instance.finished.wait(15)
+        # The server closes first; the old accepted socket enters TIME_WAIT.
+        while peer.recv(4096):
+            pass
+    lease = HOST["InstanceLease"](instance.data)
+    assert lease.acquire()
+    restarted = HOST["PortableService"](instance.root, instance.data, instance.port, lease, identity)
+    restarted.start()
+    try:
+        assert restarted.wait_ready(), restarted.error
+        with urllib.request.urlopen(restarted.url + "/api/state") as response:
+            assert json.load(response)["status"] == "idle"
+    finally:
+        restarted.stop()
+        assert restarted.finished.wait(15)
 
 
 def test_foreign_port_refused_without_creating_application_storage(tmp_path):
