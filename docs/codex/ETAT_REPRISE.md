@@ -2,7 +2,7 @@
 
 ## Publication Git et pack LinkedIn, 11 novembre 2026
 
-Changements publics sélectionnés pour commit/push sur la branche codex/vanguard-fat-studio-brand. Pack prêt avec texte, captures réelles, PDF de présentation, plans PDF/DWG/DXF et crédits. Aucune publication LinkedIn ni fusion sur main. Données et notes privées conservées hors Git. Lire [la note](sessions/2026-11-11-pid-push-linkedin.md) et [le pack](../../media/linkedin/2026-11-11-pid/README.md). Le reçu local du push contient le SHA distant vérifié après envoi.
+Changements publics poussés sur la branche codex/vanguard-fat-studio-brand, livraison fonctionnelle 2049e87. Pack prêt avec texte, captures réelles, PDF de présentation, plans PDF/DWG/DXF et crédits. Aucune publication LinkedIn ni fusion sur main. Données et notes privées conservées hors Git. Lire [la note](sessions/2026-11-11-pid-push-linkedin.md) et [le pack](../../media/linkedin/2026-11-11-pid/README.md). Le reçu local du push contient le SHA distant vérifié après envoi.
 
 
 ## P&ID compacts, couleurs et symboles sourcés, 11 novembre 2026

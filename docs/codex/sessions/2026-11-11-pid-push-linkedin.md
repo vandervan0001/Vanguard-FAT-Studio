@@ -13,3 +13,5 @@ Le commit regroupe les imports/exports P&ID, modèles et bibliothèque, feuilles
 Reprise : vérifier `git status`, `git log -1` et `git ls-remote --heads origin codex/vanguard-fat-studio-brand`. Le prochain acte éditorial est la publication humaine du post et du document choisis. Le logiciel conserve ses limites de reconnaissance des plans, de conformité normative et d'acceptation CAO destinataire.
 
 Premier commit refusé faute d'identité Git configurée ; aucun commit créé lors de cette tentative. L'historique du dépôt emploie Codex avec codex@localhost pour les trois derniers commits. Cette identité d'agent est reprise uniquement par options de commande pour le commit présent, sans changer la configuration globale.
+
+Push fonctionnel confirmé : commit 2049e8733bc6f7f1fc7dd21ae00821132d2b6d94, même SHA sur origin/codex/vanguard-fat-studio-brand. Complément documentaire : ajout des trois notes P&ID historiques référencées et absentes de la sélection initiale ; autres notes privées préservées hors Git. Le pack média comporte 19 fichiers, ZIP local 1,66 Mo, captures et quatre pages PDF relues. Les 91 fichiers produit restent identiques aux empreintes validées.
