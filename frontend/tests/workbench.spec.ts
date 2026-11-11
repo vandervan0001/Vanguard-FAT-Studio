@@ -220,3 +220,157 @@ test('une nouvelle révision du même projet ne remplace pas silencieusement le 
   expect(rejected.status()).toBe(409);
   expect((await (await request.get('/api/project')).json()).name).toBe('Révision enregistrée dans un autre onglet');
 });
+
+
+test('revue groupée des écritures : refus, choix filtré, annulation et sauvegarde', async ({ page, request }, testInfo) => {
+  await boot(page);
+  const original: Project = await (await request.get('/api/project')).json();
+  const inputs = original.tags.filter(tag => tag.direction === 'input');
+  await page.getByRole('button', { name: /^Variables & mapping/ }).click();
+  const open = page.getByRole('button', { name: 'Autorisations d’écriture', exact: true });
+  await open.click();
+  const dialog = page.getByRole('dialog', { name: 'Autorisations d’écriture' });
+  await expect(dialog.getByRole('checkbox')).toHaveCount(inputs.length);
+  await dialog.getByRole('button', { name: 'Tout refuser', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Annuler', exact: true }).click();
+  await expect(page.locator('.permission-summary')).toContainText(`${inputs.length} / ${inputs.length}`);
+  await open.click();
+  await dialog.getByRole('button', { name: 'Tout refuser', exact: true }).click();
+  await dialog.getByLabel('Filtrer les entrées').fill(inputs[0].name);
+  await dialog.getByRole('button', { name: 'Autoriser les résultats', exact: true }).click();
+  await dialog.getByLabel('Filtrer les entrées').fill('');
+  await expect(dialog.getByRole('checkbox').first()).toBeChecked();
+  await expect(dialog.getByRole('checkbox').nth(1)).not.toBeChecked();
+  await dialog.screenshot({ path: testInfo.outputPath('permissions-review.png') });
+  await page.setViewportSize({ width: 768, height: 1000 });
+  await dialog.screenshot({ path: testInfo.outputPath('permissions-review-768.png') });
+  await expect(dialog.getByRole('button', { name: 'Appliquer la sélection', exact: true })).toBeInViewport();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await dialog.getByRole('button', { name: 'Appliquer la sélection', exact: true }).click();
+  await expect(page.locator('.permission-summary')).toContainText(`1 / ${inputs.length}`);
+  // The review only changes the local draft until the normal guarded save.
+  expect((await (await request.get('/api/project')).json()).tags).toEqual(original.tags);
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Projet enregistré');
+  const saved: Project = await (await request.get('/api/project')).json();
+  expect(saved.tags.filter(tag => tag.direction === 'output')).toEqual(original.tags.filter(tag => tag.direction === 'output'));
+  expect(saved.tags.filter(tag => tag.writable)).toHaveLength(1);
+  expect((await (await request.get('/api/validate')).json()).valid).toBe(false);
+  await page.reload();
+  await page.getByRole('button', { name: /^Variables & mapping/ }).click();
+  await expect(page.locator('.permission-summary')).toContainText(`1 / ${inputs.length}`);
+  await open.click();
+  await dialog.getByRole('button', { name: 'Tout autoriser', exact: true }).click();
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(open).toBeFocused();
+  await expect(page.locator('.permission-summary')).toContainText(`1 / ${inputs.length}`);
+  await open.click();
+  await dialog.getByRole('button', { name: 'Tout autoriser', exact: true }).click();
+  await dialog.getByRole('button', { name: 'Appliquer la sélection', exact: true }).click();
+  await page.getByRole('button', { name: 'Enregistrer', exact: true }).click();
+  await expect(page.getByRole('status')).toContainText('Projet enregistré');
+  expect((await (await request.get('/api/validate')).json()).valid).toBe(true);
+  await page.getByRole('button', { name: 'Démarrer', exact: true }).click();
+  await expect(open).toBeDisabled();
+  await page.getByRole('button', { name: 'Arrêter l’essai', exact: true }).click();
+});
+
+// UI contract only: these routes never connect to a PLC or qualify Siemens.
+async function mockTargetReview(page: Page, request: APIRequestContext) {
+  const project: Project = await (await request.get('/api/project')).json();
+  project.plc.mode = 'opcua';
+  project.plc.approved_virtual_target = 'Banc virtuel de test';
+  project.plc.endpoint = 'opc.tcp://127.0.0.1:4840';
+  let current = await snapshot(request);
+  let failNext = false;
+  const starts: Record<string, string>[] = [];
+  await page.route('**/api/project', async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, json: project });
+  });
+  await page.route('**/api/state', route => route.fulfill({ json: { ...current, wall_time: new Date().toISOString() } }));
+  await page.route('**/api/run/start', async route => {
+    const body = route.request().postDataJSON();
+    starts.push(body);
+    if (failNext) { failNext = false; await route.fulfill({ status: 400, json: { detail: 'Connexion refusée (test)' } }); return; }
+    current = { ...current, status: 'running', run_id: `mock-${starts.length}`, scenario: { ...current.scenario, id: body.scenario_id ?? null, state: 'running' } };
+    await route.fulfill({ json: { ...current, wall_time: new Date().toISOString() } });
+  });
+  await page.route('**/api/run/stop', async route => {
+    current = { ...current, status: 'stopped' };
+    await route.fulfill({ json: { ...current, wall_time: new Date().toISOString() } });
+  });
+  return { project, starts, fail: () => { failNext = true; } };
+}
+
+test('accord de cible groupé limité aux scénarios choisis, révocable et perdu au rechargement', async ({ page, request }, testInfo) => {
+  const mock = await mockTargetReview(page, request);
+  await boot(page);
+  const start = page.getByRole('button', { name: 'Démarrer', exact: true });
+  const stop = page.getByRole('button', { name: 'Arrêter l’essai', exact: true });
+  await start.click();
+  const dialog = page.getByRole('dialog', { name: 'Confirmer la cible virtuelle' });
+  await dialog.getByLabel('Recopiez exactement la cible pour confirmer').fill('Banc virtuel de test @ opc.tcp://127.0.0.1:4840');
+  await dialog.getByLabel('Autoriser plusieurs essais dans cet onglet').check();
+  await dialog.getByRole('button', { name: 'Tout sélectionner', exact: true }).click();
+  const excluded = mock.project.scenarios.at(-1)!;
+  await dialog.getByRole('checkbox', { name: excluded.name, exact: true }).uncheck();
+  await dialog.screenshot({ path: testInfo.outputPath('target-review.png') });
+  await page.setViewportSize({ width: 768, height: 1000 });
+  await dialog.screenshot({ path: testInfo.outputPath('target-review-768.png') });
+  await expect(dialog.getByRole('button', { name: 'Connecter et démarrer', exact: true })).toBeInViewport();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await dialog.getByRole('button', { name: 'Connecter et démarrer', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Révoquer l’accord' })).toBeVisible();
+  await stop.click();
+  await start.click();
+  await expect(stop).toBeEnabled();
+  await expect(dialog).not.toBeVisible();
+  expect(mock.starts).toHaveLength(2);
+  expect(mock.starts[1].target_confirmation).toBe(mock.starts[0].target_confirmation);
+  await stop.click();
+  await page.getByLabel('Scénario', { exact: true }).selectOption(excluded.id);
+  await start.click();
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', { name: 'Refuser', exact: true }).click();
+  expect(mock.starts).toHaveLength(2);
+  await expect(page.locator('.target-approval')).not.toBeVisible();
+  await page.getByLabel('Scénario', { exact: true }).selectOption('');
+  await start.click();
+  await dialog.getByLabel('Recopiez exactement la cible pour confirmer').fill('Banc virtuel de test @ opc.tcp://127.0.0.1:4840');
+  await dialog.getByLabel('Autoriser plusieurs essais dans cet onglet').check();
+  await dialog.getByRole('button', { name: 'Connecter et démarrer', exact: true }).click();
+  await stop.click();
+  await page.reload();
+  await start.click();
+  await expect(dialog).toBeVisible();
+  expect(mock.starts).toHaveLength(3);
+});
+
+test('un accord de cible expire après une erreur ou une modification du projet', async ({ page, request }) => {
+  const mock = await mockTargetReview(page, request);
+  await boot(page);
+  const start = page.getByRole('button', { name: 'Démarrer', exact: true });
+  const stop = page.getByRole('button', { name: 'Arrêter l’essai', exact: true });
+  const approve = async () => {
+    await start.click();
+    const dialog = page.getByRole('dialog', { name: 'Confirmer la cible virtuelle' });
+    await dialog.getByLabel('Recopiez exactement la cible pour confirmer').fill('Banc virtuel de test @ opc.tcp://127.0.0.1:4840');
+    await dialog.getByLabel('Autoriser plusieurs essais dans cet onglet').check();
+    await dialog.getByRole('button', { name: 'Connecter et démarrer', exact: true }).click();
+    await expect(page.locator('.target-approval')).toBeVisible();
+    await stop.click();
+  };
+  await approve();
+  mock.fail();
+  await start.click();
+  await expect(page.getByRole('alert')).toContainText('Connexion refusée');
+  await expect(page.locator('.target-approval')).not.toBeVisible();
+  await approve();
+  await page.getByRole('button', { name: 'Révoquer l’accord' }).click();
+  await expect(page.locator('.target-approval')).not.toBeVisible();
+  await approve();
+  await page.getByLabel('Nom du projet').fill('Projet modifié');
+  await expect(page.locator('.target-approval')).not.toBeVisible();
+});

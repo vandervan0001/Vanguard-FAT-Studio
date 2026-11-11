@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowDownLeft, LockKeyhole, Radio, RotateCcw } from 'lucide-react';
 import { api } from './api';
 import { ForceField } from './ForceField';
+import { IoControl, IoPanelStatus, ioBlockReason, READ_ONLY_IO } from './IoAccess';
 import { diagnosticLabel, diagnosticProfile, displayValue, electricalValue, engineeringUnit, signalUnit, tagReference } from './signal';
 import { fmt, type Project, type Snapshot, type Tag } from './types';
 
-type Controls = { project: Project; state: Snapshot | null; online: boolean; onSnapshot: (state: Snapshot) => void; onError: (message: string) => void };
+type Controls = { project: Project; state: Snapshot | null; unavailable?: string; onSnapshot: (state: Snapshot) => void; onError: (message: string) => void };
 
 type ContactKind = 'pushbutton' | 'switch' | 'contact';
 const CONTACT_LABELS: Record<ContactKind, string> = { pushbutton: 'Poussoir', switch: 'Commutateur', contact: 'Contact' };
@@ -19,7 +20,7 @@ export function ContactSymbol({ kind = 'contact', closed = false }: { kind?: Con
   </svg>;
 }
 
-function DigitalButton({ tag, state, online, onSnapshot, onError, label, kind }: Omit<Controls, 'project'> & { tag: Tag; label: string; kind: ContactKind }) {
+function DigitalButton({ tag, state, unavailable, onSnapshot, onError, label, kind }: Omit<Controls, 'project'> & { tag: Tag; label: string; kind: ContactKind }) {
   const [busy, setBusy] = useState(false);
   const busyRef = useRef(false);
   const [pulseUntil, setPulseUntil] = useState(0);
@@ -27,7 +28,8 @@ function DigitalButton({ tag, state, online, onSnapshot, onError, label, kind }:
   const live = state?.tags[tag.id];
   const closed = Boolean(live?.value ?? tag.initial_value);
   const pulsing = state?.pulses ? Boolean(state.pulses[tag.id]) : Boolean(live?.forced && (state?.sim_time_s ?? 0) < pulseUntil);
-  const enabled = online && state?.status === 'running' && state.scenario.state !== 'completed' && state.guided_steps?.at(-1)?.state !== 'queued' && tag.writable;
+  const reason = tag.writable ? ioBlockReason(state, unavailable) : READ_ONLY_IO;
+  const enabled = !reason;
   const cancel = () => { if (timer.current) clearTimeout(timer.current); timer.current = null; };
   useEffect(() => cancel, [state?.run_id, enabled]);
   const send = async (maintain: boolean) => {
@@ -44,6 +46,7 @@ function DigitalButton({ tag, state, online, onSnapshot, onError, label, kind }:
     finally { busyRef.current = false; setBusy(false); }
   };
   return <div className={`digital-control ${live?.forced ? 'maintained' : ''}`} data-tag={tag.id}>
+    <IoControl target={tag.name} reason={reason}>
     <button className={`digital-push ${closed ? 'on' : ''} control-${kind}`} disabled={!enabled || busy}
       aria-label={`${CONTACT_LABELS[kind]} ${tag.name}`} aria-pressed={closed} title={`${tag.name} · ${tagReference(tag)}. Clic : impulsion de 300 ms après la fenêtre de double clic de 550 ms. Double clic : maintenir ou libérer.`}
       onClick={event => { if (event.detail > 1) return; cancel(); if (event.detail === 0) { void send(false); return; } timer.current = setTimeout(() => { timer.current = null; void send(false); }, 550); }}
@@ -53,6 +56,7 @@ function DigitalButton({ tag, state, online, onSnapshot, onError, label, kind }:
       <span className="contact-value"><i className="contact-led" />{closed ? '1' : '0'}</span>
     </button>
     {live?.forced && !pulsing && <button className="release-contact" disabled={!enabled || busy} aria-label={`Libérer le maintien ${tag.name}`} onClick={() => { cancel(); void send(true); }}><LockKeyhole size={11} />Libérer le maintien<RotateCcw size={11} /></button>}
+    </IoControl>
   </div>;
 }
 
@@ -66,22 +70,26 @@ export function DigitalInputs(props: Controls) {
   return <aside className="test-inputs digital-inputs panel" aria-label="Entrées digitales">
     <div className="panel-title"><span><Radio size={14} />Entrées digitales</span><span className="subtle-count">{filter ? `${visible.length} / ` : ''}{tags.length}</span></div>
     <div className="input-filter"><input type="search" aria-label="Filtrer les entrées digitales" placeholder="Repère ou variable…" value={filter} onChange={event => setFilter(event.target.value)} /></div>
-    <div className="input-gesture-guide">{props.state?.guided_steps?.at(-1)?.state === 'queued' ? <strong>STEP en attente du cycle d’échange. Commandes I/O temporairement suspendues.</strong> : <><strong>Clic : impulsion 300 ms</strong><span>Double clic : maintien / libération</span></>}</div>
+    <IoPanelStatus reason={ioBlockReason(props.state, props.unavailable)}>
+      Un clic donne une impulsion de 300 ms. Double-cliquez pour maintenir ou libérer.
+    </IoPanelStatus>
     <div className="digital-controls">{visible.map(tag => <DigitalButton key={tag.id} tag={tag} label={label(tag)} kind={kind(tag)} {...props} />)}</div>
     {tags.length > 0 && !visible.length && <p className="panel-hint">Aucune entrée correspondante.</p>}
     {!tags.length && <p className="panel-hint">Aucune entrée digitale déclarée.</p>}
-    <p className="input-footnote">{props.state?.status !== 'running' ? 'Démarrez ou reprenez l’essai pour actionner les contacts. ' : ''}Le clic souris attend 550 ms pour distinguer un double clic. L’impulsion inverse le contact pendant 300 ms simulées. Le serveur gère son retour, même si la vue se ferme.</p>
+    <p className="input-footnote">Le clic souris attend 550 ms pour distinguer un double clic. L’impulsion inverse le contact pendant 300 ms simulées. Le serveur gère son retour, même si la vue se ferme.</p>
   </aside>;
 }
 
-export function AnalogInputs({ project, state, online, onError, onSnapshot }: Controls) {
+export function AnalogInputs({ project, state, unavailable, onError, onSnapshot }: Controls) {
   const tags = project.tags.filter(tag => tag.direction === 'input' && tag.data_type !== 'BOOL');
   const [filter, setFilter] = useState('');
   const visible = tags.filter(tag => `${tag.id} ${tag.name} ${tagReference(tag)}`.toLocaleLowerCase().includes(filter.toLocaleLowerCase()));
   return <aside className="test-inputs analog-inputs panel" aria-label="Entrées analogiques">
     <div className="panel-title"><span><ArrowDownLeft size={15} />Entrées analogiques</span><span className="subtle-count">{filter ? `${visible.length} / ` : ''}{tags.length}</span></div>
     <div className="input-filter"><input type="search" aria-label="Filtrer les entrées analogiques" placeholder="Repère ou variable…" value={filter} onChange={event => setFilter(event.target.value)} /></div>
-    <p className="panel-hint">Écrire une valeur de test.<br />Libérer pour reprendre la mesure simulée.</p>
+    <IoPanelStatus reason={ioBlockReason(state, unavailable, true)}>
+      {state?.status === 'paused' ? 'Vous pouvez encore forcer une valeur en pause.' : 'Saisissez une valeur puis cliquez sur « Forcer ».'} Libérez-la pour reprendre la mesure simulée.
+    </IoPanelStatus>
     <div className="analog-controls">{visible.map(tag => {
       const profile = diagnosticProfile(tag, state?.tags[tag.id]);
       return <div className={`analog-control ${state?.tags[tag.id]?.forced ? 'maintained' : ''} ${profile ? 'diagnostic-reading' : ''}`} key={tag.id} data-tag={tag.id}>
@@ -89,7 +97,7 @@ export function AnalogInputs({ project, state, online, onError, onSnapshot }: Co
       <code>{tag.plc_address || tag.plc_symbol || 'Adresse à renseigner'}</code>
       <div className="analog-reading">{profile ? <><strong>{diagnosticLabel(profile)}</strong><small>Code du profil</small></> : <>{fmt(displayValue(tag, state?.tags[tag.id]?.value ?? tag.initial_value, tag.signal ? 'engineering' : 'native'), 2)}<small>{tag.signal ? engineeringUnit(tag) : tag.unit || tag.data_type}</small>{tag.signal && signalUnit(tag) !== 'native' && <span className="analog-electrical">{fmt(electricalValue(tag, state?.tags[tag.id]?.value ?? tag.initial_value), 2)} {signalUnit(tag)}</span>}</>}</div>
       {tag.signal && <div className="analog-native">Brut acquis : {fmt(state?.tags[tag.id]?.value ?? tag.initial_value, 2)} {tag.unit || tag.data_type}</div>}
-      {state ? <ForceField key={`${tag.id}-${tag.signal?.kind ?? 'native'}`} tag={tag} state={state} disabled={!online} onSnapshot={onSnapshot} onError={onError} /> : <p className="small-muted">Service en cours de connexion.</p>}
+      {state && <ForceField key={`${tag.id}-${tag.signal?.kind ?? 'native'}`} tag={tag} state={state} unavailable={unavailable} onSnapshot={onSnapshot} onError={onError} />}
       <div className="analog-range">{tag.min == null ? '…' : fmt(tag.min)} à {tag.max == null ? '…' : fmt(tag.max)} {tag.unit}<span>{state?.tags[tag.id]?.forced ? 'FORCÉ' : state?.tags[tag.id]?.quality ?? 'Initial'}</span></div>
     </div>; })}</div>
     {tags.length > 0 && !visible.length && <p className="panel-hint">Aucune entrée correspondante.</p>}

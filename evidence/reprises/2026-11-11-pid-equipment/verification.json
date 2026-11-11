@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-11",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "git_head": "f5ad062cfc9babbd2ab61d22ee55528ad0fc7979",
+  "source_state": "modified; earlier changes preserved; no commit",
+  "python_tests": {
+    "tests": 769,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 5,
+    "passed": 764,
+    "console_duration_s": 264.44,
+    "junit_duration_s": 264.425
+  },
+  "browser_tests": {
+    "passed": 71,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "duration_ms": 221795.723
+  },
+  "library": {
+    "documentary_families": 41,
+    "legacy_workbench_types": 9,
+    "new_physics": false,
+    "hx_terminals": [
+      "primary_in",
+      "primary_out",
+      "secondary_in",
+      "secondary_out"
+    ],
+    "three_way_terminals": [
+      "AB",
+      "A",
+      "B"
+    ],
+    "rotations": [
+      0,
+      90,
+      180,
+      270
+    ]
+  },
+  "coverage": {
+    "native_formats_roundtripped": 10,
+    "geometry_check_without_native_metadata": [
+      "DXF",
+      "DWG R2000"
+    ],
+    "rotated_connections_coordinates_checked": 11,
+    "universal_external_extraction_qualified": false
+  },
+  "package": {
+    "wheel_sha256": "5796a038b502247b606bc75344c611b8456363347607bc6fc6a06ddcdcef8396",
+    "installed_http": "passed",
+    "installed_files_equal_wheel": 66,
+    "product_files_equal_source": 60,
+    "dependency_reuse": true,
+    "clean_windows_qualified": false
+  },
+  "catalogue_demo": {
+    "source": "Virden WWTF",
+    "page": 14,
+    "drawing": "D-016-0",
+    "title": "PROCESS / ALUM / P&ID",
+    "ocr_candidates": 35,
+    "ocr_connections": 0,
+    "selected_objects": 8,
+    "connections_added_during_visual_review": 4,
+    "layout_reorganized": true,
+    "pdf_and_dwg_created": true,
+    "full_automatic_conversion": false
+  },
+  "checks": {
+    "ruff": "passed",
+    "pip_check": "passed",
+    "typecheck_build_bundle": "passed",
+    "frozen_product_hashes": 27
+  },
+  "limits": [
+    "No exhaustive path or symbol-recognition qualification",
+    "Documentary HX and multiway valves have no new thermal/hydraulic model",
+    "Complex Pahala PDFs retain preview/text but extraction remains partial",
+    "DEXPI/Proteus subset; recipient CAD and other platforms unqualified",
+    "Desktop reviewed; narrow-screen layout is not globally qualified"
+  ],
+  "plc_access": false,
+  "human_fat_acceptance": false,
+  "publication": false
+}

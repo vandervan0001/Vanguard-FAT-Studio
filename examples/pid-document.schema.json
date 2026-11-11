@@ -1,0 +1,525 @@
+{
+  "$defs": {
+    "DrawingRevision": {
+      "additionalProperties": false,
+      "properties": {
+        "revision": {
+          "maxLength": 16,
+          "minLength": 1,
+          "title": "Revision",
+          "type": "string"
+        },
+        "date": {
+          "default": "",
+          "maxLength": 10,
+          "title": "Date",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 140,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "drawn_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Drawn By",
+          "type": "string"
+        },
+        "checked_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Checked By",
+          "type": "string"
+        },
+        "approved_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Approved By",
+          "type": "string"
+        }
+      },
+      "required": [
+        "revision",
+        "description"
+      ],
+      "title": "DrawingRevision",
+      "type": "object"
+    },
+    "PidConnection": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "maxLength": 80,
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "maxLength": 80,
+          "title": "Target",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Label",
+          "type": "string"
+        },
+        "service": {
+          "default": "unspecified",
+          "enum": [
+            "unspecified",
+            "cold_supply",
+            "cold_return",
+            "hot_supply",
+            "hot_return",
+            "steam",
+            "condensate",
+            "cooling_water",
+            "instrument_air",
+            "process"
+          ],
+          "title": "Service",
+          "type": "string"
+        },
+        "directed": {
+          "default": false,
+          "title": "Directed",
+          "type": "boolean"
+        },
+        "inferred": {
+          "default": true,
+          "title": "Inferred",
+          "type": "boolean"
+        },
+        "confidence": {
+          "default": 0.5,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "source_port": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Source Port",
+          "type": "string"
+        },
+        "target_port": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Target Port",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target"
+      ],
+      "title": "PidConnection",
+      "type": "object"
+    },
+    "PidDrawingSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "layout_style": {
+          "default": "compact",
+          "enum": [
+            "compact",
+            "full"
+          ],
+          "title": "Layout Style",
+          "type": "string"
+        },
+        "color_mode": {
+          "default": "service",
+          "enum": [
+            "service",
+            "monochrome"
+          ],
+          "title": "Color Mode",
+          "type": "string"
+        },
+        "paper_size": {
+          "default": "A3",
+          "enum": [
+            "A4",
+            "A3",
+            "A2",
+            "A1",
+            "A0"
+          ],
+          "title": "Paper Size",
+          "type": "string"
+        },
+        "orientation": {
+          "default": "landscape",
+          "enum": [
+            "landscape",
+            "portrait"
+          ],
+          "title": "Orientation",
+          "type": "string"
+        },
+        "company": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Company",
+          "type": "string"
+        },
+        "client": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Client",
+          "type": "string"
+        },
+        "project_reference": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Project Reference",
+          "type": "string"
+        },
+        "site": {
+          "default": "",
+          "maxLength": 100,
+          "title": "Site",
+          "type": "string"
+        },
+        "unit": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Unit",
+          "type": "string"
+        },
+        "drawing_title": {
+          "default": "",
+          "maxLength": 160,
+          "title": "Drawing Title",
+          "type": "string"
+        },
+        "document_number": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Document Number",
+          "type": "string"
+        },
+        "revision": {
+          "default": "00",
+          "maxLength": 16,
+          "title": "Revision",
+          "type": "string"
+        },
+        "issue_date": {
+          "default": "",
+          "maxLength": 10,
+          "title": "Issue Date",
+          "type": "string"
+        },
+        "drawn_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Drawn By",
+          "type": "string"
+        },
+        "checked_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Checked By",
+          "type": "string"
+        },
+        "approved_by": {
+          "default": "",
+          "maxLength": 64,
+          "title": "Approved By",
+          "type": "string"
+        },
+        "status": {
+          "default": "draft",
+          "enum": [
+            "draft",
+            "for_review",
+            "for_information",
+            "for_construction",
+            "as_built"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "sheet_number": {
+          "default": 1,
+          "maximum": 999,
+          "minimum": 1,
+          "title": "Sheet Number",
+          "type": "integer"
+        },
+        "sheet_total": {
+          "default": 1,
+          "maximum": 999,
+          "minimum": 1,
+          "title": "Sheet Total",
+          "type": "integer"
+        },
+        "notes": {
+          "default": "",
+          "maxLength": 1200,
+          "title": "Notes",
+          "type": "string"
+        },
+        "revisions": {
+          "items": {
+            "$ref": "#/$defs/DrawingRevision"
+          },
+          "maxItems": 5,
+          "title": "Revisions",
+          "type": "array"
+        },
+        "show_legend": {
+          "default": true,
+          "title": "Show Legend",
+          "type": "boolean"
+        }
+      },
+      "title": "PidDrawingSettings",
+      "type": "object"
+    },
+    "PidEquipment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,79}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "unknown",
+          "maxLength": 80,
+          "title": "Type",
+          "type": "string"
+        },
+        "source_tag": {
+          "default": "",
+          "maxLength": 200,
+          "title": "Source Tag",
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/PidPosition"
+        },
+        "page": {
+          "default": 1,
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Page",
+          "type": "integer"
+        },
+        "confidence": {
+          "default": 0.5,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "provenance": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Provenance",
+          "type": "string"
+        },
+        "review_required": {
+          "default": true,
+          "title": "Review Required",
+          "type": "boolean"
+        },
+        "source_kind": {
+          "default": "",
+          "maxLength": 80,
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "rotation": {
+          "default": 0,
+          "enum": [
+            0,
+            90,
+            180,
+            270
+          ],
+          "title": "Rotation",
+          "type": "integer"
+        },
+        "documentary": {
+          "default": false,
+          "title": "Documentary",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "PidEquipment",
+      "type": "object"
+    },
+    "PidPage": {
+      "additionalProperties": false,
+      "properties": {
+        "number": {
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Number",
+          "type": "integer"
+        },
+        "width": {
+          "default": 1000,
+          "exclusiveMinimum": 0,
+          "maximum": 100000,
+          "title": "Width",
+          "type": "number"
+        },
+        "height": {
+          "default": 700,
+          "exclusiveMinimum": 0,
+          "maximum": 100000,
+          "title": "Height",
+          "type": "number"
+        },
+        "image_data_url": {
+          "default": "",
+          "maxLength": 4000000,
+          "title": "Image Data Url",
+          "type": "string"
+        },
+        "text": {
+          "default": "",
+          "maxLength": 200000,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "number"
+      ],
+      "title": "PidPage",
+      "type": "object"
+    },
+    "PidPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "default": 0,
+          "maximum": 100000,
+          "minimum": -100000,
+          "title": "X",
+          "type": "number"
+        },
+        "y": {
+          "default": 0,
+          "maximum": 100000,
+          "minimum": -100000,
+          "title": "Y",
+          "type": "number"
+        }
+      },
+      "title": "PidPosition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "format": {
+      "const": "fat-studio/pid",
+      "default": "fat-studio/pid",
+      "title": "Format",
+      "type": "string"
+    },
+    "version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "title": {
+      "default": "P&ID importé",
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "source_name": {
+      "default": "",
+      "maxLength": 240,
+      "title": "Source Name",
+      "type": "string"
+    },
+    "source_format": {
+      "default": "json",
+      "maxLength": 40,
+      "title": "Source Format",
+      "type": "string"
+    },
+    "source_sha256": {
+      "default": "",
+      "maxLength": 64,
+      "title": "Source Sha256",
+      "type": "string"
+    },
+    "equipment": {
+      "items": {
+        "$ref": "#/$defs/PidEquipment"
+      },
+      "maxItems": 2000,
+      "title": "Equipment",
+      "type": "array"
+    },
+    "connections": {
+      "items": {
+        "$ref": "#/$defs/PidConnection"
+      },
+      "maxItems": 5000,
+      "title": "Connections",
+      "type": "array"
+    },
+    "pages": {
+      "items": {
+        "$ref": "#/$defs/PidPage"
+      },
+      "maxItems": 20,
+      "title": "Pages",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 300,
+      "title": "Warnings",
+      "type": "array"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "maxProperties": 40,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "drawing": {
+      "$ref": "#/$defs/PidDrawingSettings"
+    }
+  },
+  "title": "PidDocument",
+  "type": "object"
+}

@@ -64,6 +64,8 @@ Choisir une FAT puis cliquer **Préparer la vue** pour cadrer les équipements c
 
 ### Entrées digitales à gauche
 
+À côté du sélecteur de scénario, le bandeau affiche le mode d’essai et son état. Les pupitres indiquent si leurs commandes sont disponibles. Un clic sur une commande grisée affiche la raison à cet endroit, sans envoyer d’écriture. Au repos, démarrez l’essai. En pause, reprenez-le pour actionner les contacts TOR. Un forçage analogique reste possible en pause, puis les échanges reprennent avec l’essai.
+
 Le laboratoire fournit 40 entrées BOOL ; le pupitre liste toutes les variables `input` de type BOOL du projet, y compris celles sans symbole de bouton dans le dessin. L’écriture doit être autorisée pour que la commande soit active.
 
 | Geste | Effet |
@@ -186,7 +188,7 @@ Dans **Scénarios**, **Exporter tous les scénarios** produit une enveloppe JSON
 5. Pour les pompes/vannes, définir explicitement cuve associée, sens et groupe de débit. Pour un transfert, renseigner aussi la cuve source ; ne pas attendre qu’un trait du dessin crée ce bilan.
 6. Enregistrer avec le bouton ou `Ctrl+S` (`Cmd+S` sur macOS), puis valider dans **Connexion**.
 
-La bibliothèque comprend neuf types : cuve, pompe, pompe à variateur, vanne TOR, vanne modulante, capteur analogique, capteur binaire, bouton/contact et indicateur PLC. Les paramètres et ports disponibles dépendent du type. Le catalogue actif est aussi accessible par l’API pour un assistant.
+La bibliothèque comprend onze types de modèles : cuve, pompe, pompe à variateur, vanne TOR, vanne modulante, vanne trois voies, échangeur, capteur analogique, capteur binaire, bouton/contact et indicateur PLC. Elle propose aussi 41 familles documentaires. Les paramètres et ports disponibles dépendent du type. Le catalogue actif est aussi accessible par l’API pour un assistant. Les [modèles trois voies et thermique](PID_SIMULATION.md) déclarent leurs sources, unités et limites ; ils ne sont pas déduits des traits ou des symboles importés.
 
 Les traits sont des connexions visuelles. Les groupes de débit explicitement déclarés fixent le calcul : minimum des capacités des équipements en série, somme des branches indépendantes. Lire [MODEL.md](MODEL.md) pour le bilan de cuve et les limites du modèle. Le P&ID ne calcule pas un réseau hydraulique général.
 
@@ -224,6 +226,10 @@ BOOL attend `true`/`false`, INT un entier 16 bits, DINT un entier 32 bits et REA
 Les adresses absolues sont documentaires. Elles ne sont pas converties en NodeIds et ne pilotent aucun accès direct à la mémoire Siemens. Pour un DB optimisé sans offset absolu, conserver son symbole et laisser l’adresse vide. Un symbole de démonstration ne prouve pas qu’un projet Siemens l’expose. Ne remplir les NodeIds qu’après découverte de la cible réelle ; namespace 0 est interdit.
 
 Le laboratoire utilise des symboles du contrat public `DB_FAT_Demo`. Les adresses et NodeIds d’une copie native doivent venir de son export et de sa découverte réels selon [DEMO_PLC.md](DEMO_PLC.md). Ne pas transposer un offset d’un autre DB ou d’un DB optimisé.
+
+### Préparer les droits d’écriture
+
+Dans **Variables & mapping**, **Autorisations d’écriture** ouvre une revue de toutes les entrées simulées. Utiliser **Tout autoriser**, **Tout refuser** ou cocher chaque entrée. Avec un filtre, les boutons ne changent que les résultats affichés ; les autres choix sont conservés. **Appliquer la sélection** met à jour le brouillon, puis **Enregistrer** sauvegarde le projet avec ses contrôles de contexte habituels. **Annuler** ou Échap conserve les droits précédents. Les sorties PLC restent en lecture seule. Une entrée refusée bloque la validation et le démarrage du projet, conformément au contrat actuel.
 
 ### Déclarer une conversion électrique
 
@@ -285,6 +291,10 @@ Les codes de rupture de fil/dépassement dépendent du module, du paramétrage e
 ### Importer et exporter
 
 **Exporter** dans la barre projet produit l’enveloppe JSON versionnée du projet. **Importer** accepte cette enveloppe ainsi que les anciens projets JSON compatibles ; les champs inconnus sont refusés. Enregistrer avant de remplacer le projet actif.
+
+**Échanges P&ID** ouvre un parcours distinct pour partir d'un PDF, d'un scan, d'un fichier CAO ou d'un graphe. Inspecter le document, choisir les équipements et les connexions, confirmer leurs types, puis préparer un nouveau brouillon. **Appliquer au brouillon** l'affiche dans l'éditeur ; **Enregistrer** le conserve comme nouveau projet. Les paramètres physiques et le mapping PLC restent à renseigner. Le document source interprété reste consultable après rechargement, avec ses avertissements et les objets exclus.
+
+Dans **Exporter le P&ID**, le schéma enregistré s'exporte en SVG, PDF, PNG, DXF, DWG R2000 expérimental, JSON P&ID/graphe, GraphML, CSV ZIP ou draw.io. Les formats sont gratuits et traités localement ; DWG nécessite l'installation séparée de LibreDWG sur le poste. Le catalogue attribué à Scott Duncan fournit des liens publics pour trouver des plans et données de procédé. Le [guide des échanges P&ID](PID_EXCHANGE.md) détaille le parcours, les limites OCR/CAO, les crédits et l'installation DWG.
 
 Dans Variables, **Exporter CSV** produit le mapping ; **Importer CSV** remplace l’ensemble de sa liste de variables. Vérifier les associations et scénarios après remplacement. Le CSV utilise une virgule séparatrice et `true`/`false` pour `writable`. Les dix colonnes historiques restent acceptées ; les exports actuels ajoutent adresses, symboles, conversion et marqueur d’encodage. Le détail est dans [AI_CONTROL.md](AI_CONTROL.md#mapping-et-format-projet).
 
@@ -349,6 +359,10 @@ Suivre [PLCSIM_SETUP.md](PLCSIM_SETUP.md) pour la préparation native et [ACCEPT
 4. Dans **Connexion**, choisir **PLCSIM Advanced · OPC UA** puis remplir les mêmes informations. Les identifiants utilisateur sont référencés par noms de variables d’environnement ; les valeurs secrètes ne vont pas dans le projet.
 5. Dans Variables, associer les NodeIds découverts. Valider le projet. La validation en ligne des nœuds, types et droits intervient au démarrage avant les écritures.
 6. Démarrer ; recopier exactement le nom de cible et l’endpoint demandés. Vérifier une commande lue et une mesure écrite avant la campagne.
+
+Pour préparer plusieurs essais sur la même cible, cocher **Autoriser plusieurs essais dans cet onglet** dans la confirmation. **Tout sélectionner** couvre l’essai libre et les scénarios du projet ; décocher ceux à exclure, ou choisir **Garder cet essai uniquement**. **Refuser** annule le démarrage et retire l’accord précédent. Chaque essai se démarre manuellement ; les observations et verdicts restent séparés.
+
+Le bandeau **Cible autorisée dans cet onglet** affiche la cible et permet de **Révoquer l’accord** pour les prochains démarrages. Révoquer ne coupe pas un essai déjà en cours ; utiliser **Arrêter l’essai** pour cela. L’accord reste en mémoire dans cet onglet : recharger la page, modifier ou remplacer le projet, rencontrer une erreur ou perdre la connexion le retire. Un scénario exclu demande une nouvelle confirmation. Le serveur reçoit toujours la confirmation exacte et vérifie à nouveau politique locale, identité, certificat et mapping à chaque connexion. Cet accord ne crée aucune autorisation de poste et ne se transmet ni aux archives ni au client IA.
 
 Un projet importé ne peut pas autoriser une cible sur le poste. Le mode OPC UA conserve la vitesse à 1× ; aucune garantie de synchronisation avec le scan PLC n’est déduite du pas choisi.
 

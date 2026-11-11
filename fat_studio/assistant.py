@@ -44,9 +44,9 @@ class LocalClient:
             raise ValueError("Chemin de l'API locale invalide.")
         payload = body if isinstance(body, bytes) else None if body is None else json.dumps(body, allow_nan=False, ensure_ascii=False).encode("utf-8")
         request = Request(self.url + path, data=payload, method=method,
-                          headers={**({"Content-Type": "application/zip" if isinstance(body, bytes) else "application/json"} if payload is not None else {}), **(headers or {})})
+                          headers={**({"Content-Type": ("application/octet-stream" if path.startswith("/api/pid/inspect") else "application/zip") if isinstance(body, bytes) else "application/json"} if payload is not None else {}), **(headers or {})})
         try:
-            with self.opener.open(request, timeout=40) as response:
+            with self.opener.open(request, timeout=120 if path.startswith("/api/pid/inspect") else 40) as response:
                 data = response.read()
                 return (data if binary else json.loads(data)), response.headers
         except HTTPError as error:
@@ -109,6 +109,13 @@ class LocalClient:
         atomic_json(self.context_path, updated)
         return result
 
+    def prepare(self, path: str, body) -> dict:
+        """Authenticated passive operation; keep the captured context byte-for-byte."""
+        expected = self.expected_headers()
+        session, _ = self.request("/api/session")
+        result, _ = self.request(path, "POST", body, headers={**expected, "X-FAT-Token": session["token"]})
+        return result
+
 
 def json_value(value: str):
     try:
@@ -124,6 +131,22 @@ def parser() -> argparse.ArgumentParser:
     commands = result.add_subparsers(dest="command", required=True)
     for name in ("context", "health", "state", "project", "catalog", "schema", "validate", "runs", "workspaces", "workspace", "demo", "pilot", "pause", "resume", "stop", "reset"):
         commands.add_parser(name)
+    commands.add_parser("pid-capabilities")
+    commands.add_parser("pid-catalog")
+    pid_inspect = commands.add_parser("pid-inspect")
+    pid_inspect.add_argument("file", type=Path)
+    pid_inspect.add_argument("--pages", default="")
+    pid_inspect.add_argument("--no-ocr", action="store_true")
+    pid_inspect.add_argument("--output", type=Path, required=True)
+    pid_prepare = commands.add_parser("pid-prepare")
+    pid_prepare.add_argument("file", type=Path)
+    pid_prepare.add_argument("--select", action="append", required=True)
+    pid_prepare.add_argument("--types", type=Path)
+    pid_prepare.add_argument("--name", default="P&ID importé")
+    pid_prepare.add_argument("--output", type=Path, required=True)
+    pid_export = commands.add_parser("pid-export")
+    pid_export.add_argument("--format", choices=("svg", "pdf", "png", "dxf", "dwg", "json", "graph", "graphml", "csv", "drawio"), required=True)
+    pid_export.add_argument("--output", type=Path, required=True)
     for name in ("project-export", "scenarios-export", "archive-export"):
         export_file = commands.add_parser(name)
         export_file.add_argument("--output", type=Path, required=True)
@@ -177,6 +200,34 @@ def main(argv=None) -> int:
         command = args.command
         if command == "context":
             data = client.capture()
+        elif command in ("pid-capabilities", "pid-catalog"):
+            data, _ = client.request("/api/pid/" + command.removeprefix("pid-"))
+        elif command in ("pid-inspect", "pid-prepare", "pid-export"):
+            if args.output.exists():
+                raise ValueError("Choisir un nouveau fichier de sortie ; aucun export n'est écrasé.")
+            warnings = []
+            if command == "pid-export":
+                content, _ = client.request("/api/pid/export/" + args.format, headers=client.expected_headers(), binary=True)
+            else:
+                if args.file.stat().st_size > 20 * 1024 * 1024:
+                    raise ValueError("Le fichier P&ID dépasse 20 Mo.")
+                if command == "pid-inspect":
+                    path = "/api/pid/inspect?filename=" + quote(args.file.name, safe="") + "&pages=" + quote(args.pages, safe="")
+                    path += "&ocr=" + ("false" if args.no_ocr else "true")
+                    result = client.prepare(path, args.file.read_bytes())
+                else:
+                    types = json.loads(args.types.read_text(encoding="utf-8-sig")) if args.types else {}
+                    prepared = client.prepare("/api/pid/prepare", {
+                        "document": json.loads(args.file.read_text(encoding="utf-8-sig")),
+                        "selected_ids": args.select, "types": types, "name": args.name,
+                    })
+                    result = {"format": "fat-studio/project", "version": "1.0", "project": prepared["project"]}
+                    warnings = prepared["warnings"]
+                content = json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False).encode("utf-8")
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            with args.output.open("xb") as stream:
+                stream.write(content)
+            data = dict(output=str(args.output), bytes=len(content), warnings=warnings)
         elif command in ("health", "state", "project", "catalog", "schema", "validate", "runs", "workspaces", "workspace"):
             data, _ = client.request("/api/" + command)
         elif command in ("project-export", "scenarios-export", "archive-export"):

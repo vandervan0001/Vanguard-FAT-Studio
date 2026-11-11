@@ -2,7 +2,7 @@
 
 ## Contrat physique
 
-Le moteur représente des cuves à section constante, des alimentations/soutirages à débit paramétré, des actionneurs et des instruments. Les volumes sont en **litres**, les débits en **litres par seconde**, les positions et niveaux en **pour cent**.
+Le moteur représente des cuves à section constante, des alimentations/soutirages à débit paramétré, des actionneurs et des instruments. Les volumes sont en **litres**, les débits en **litres par seconde**, les positions et niveaux en **pour cent**. Les [modèles trois voies et thermique](PID_SIMULATION.md) ajoutent une répartition volumique déclarée et un échangeur à deux volumes mélangés ; les températures sont en °C et les puissances en kW. Les 41 familles documentaires restent sans calcul physique.
 
 À chaque pas de temps, il reçoit une image complète des commandes PLC, calcule l'évolution du procédé et produit les entrées simulées. `ProcessEngine` n'implémente aucune régulation. En mode démonstration, un `DemoController` séparé remplace explicitement le PLC ; l'adaptateur OPC UA utilise exclusivement les commandes lues dans la CPU virtuelle.
 
@@ -26,7 +26,7 @@ Une cuve vide ne délivre pas de liquide inexistant. Le débordement est comptab
 
 ## Connexions et circuits de débit
 
-**Les lignes du P&ID sont graphiques.** Le calcul utilise les propriétés suivantes sur les pompes et vannes :
+**Les lignes du P&ID sont graphiques.** Le calcul utilise les propriétés suivantes sur les pompes et vannes à deux voies :
 
 | Paramètre | Effet |
 | --- | --- |
@@ -60,7 +60,7 @@ Les caractéristiques de vanne proviennent du fichier MIT HistorianSim conservé
 
 ## Instrumentation et valeurs PLC
 
-Un capteur analogique mesure un état d'une cuve, pompe ou vanne : `mesure = source × scale + offset`. Pour INT/DINT, le résultat est arrondi à l'entier le plus proche, les demi-entiers allant vers l'entier pair. Un capteur binaire applique une comparaison à son seuil. Un indicateur affiche une sortie PLC sans agir sur le procédé.
+Un capteur analogique mesure un état d'une cuve, pompe, vanne ou échangeur : `mesure = source × scale + offset`. Pour INT/DINT, le résultat est arrondi à l'entier le plus proche, les demi-entiers allant vers l'entier pair. Un capteur binaire applique une comparaison à son seuil. Un indicateur affiche une sortie PLC sans agir sur le procédé.
 
 | Type | Valeurs acceptées |
 | --- | --- |
@@ -95,6 +95,7 @@ Le débordement cumulé `overflow_l` commence à zéro, mais n'a pas de borne su
 | `out_of_range` | Fournit une valeur explicitement hors des bornes du capteur. |
 | `valve_stuck` | Fige la position actuelle, ou une position donnée entre 0 et 100 %. |
 | `motor_trip` | Coupe la pompe et active son retour de défaut. |
+| `fouling` | Réduit la conductance UA de l'échangeur selon une perte explicitement déclarée de 0 à 100 %. |
 
 Un capteur ne cumule pas simultanément `sensor_stuck` et `out_of_range`. Un forçage manuel a priorité sur le signal défectueux et reste visible. Les qualités enregistrées sont `good`, `forced`, `fault`, `out_of_range`, auxquelles le runtime ajoute l'état de communication lors d'une erreur.
 

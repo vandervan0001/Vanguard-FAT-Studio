@@ -11,10 +11,15 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 from .catalog import CATALOG_BY_TYPE, STATE_FIELDS, parameters
+from .pid_conventions import PidService
+from .pid_models import PidDocument
+from .pid_titleblock import PidDrawingSettings
+from .pid_symbols import PID_SYMBOLS_BY_ID
+from .pid_ports import process_ports
 
 ID_PATTERN = r"^[A-Za-z][A-Za-z0-9_-]{0,79}$"
 Scalar = bool | int | float
-EquipmentType = Literal["tank", "pump", "pump_vfd", "valve_onoff", "valve_control", "analog_sensor", "digital_sensor", "digital_input", "indicator"]
+EquipmentType = Literal["tank", "pump", "pump_vfd", "valve_onoff", "valve_control", "analog_sensor", "digital_sensor", "digital_input", "indicator", "heat_exchanger", "valve_three_way", "pid_symbol"]
 DataType = Literal["BOOL", "INT", "DINT", "REAL"]
 REAL_MAX = 3.4028234663852886e38
 DOUBLE_MAX = 1.7976931348623157e308
@@ -162,6 +167,27 @@ class Equipment(StrictModel):
     params: dict[str, Any] = Field(default_factory=dict, max_length=30)
     bindings: dict[str, str] = Field(default_factory=dict, max_length=16)
     animation: Animation | None = None
+    symbol_kind: str = Field(default="", max_length=80)
+    source_kind: str = Field(default="", max_length=80)
+    rotation: Literal[0, 90, 180, 270] = 0
+
+    @field_validator("rotation", mode="before")
+    @classmethod
+    def orthogonal_rotation(cls, value):
+        if type(value) is not int or value not in (0, 90, 180, 270):
+            raise ValueError("Rotation entière attendue : 0, 90, 180 ou 270 degrés.")
+        return value
+
+    @model_validator(mode="after")
+    def drawing_contract(self):
+        if self.type == "pid_symbol":
+            if self.symbol_kind not in PID_SYMBOLS_BY_ID:
+                raise ValueError("Choisir un symbole P&ID de la bibliothèque documentaire.")
+            if self.bindings:
+                raise ValueError("Un symbole documentaire ne produit aucune variable PLC ; utiliser une animation de lecture.")
+        elif self.symbol_kind:
+            raise ValueError("symbol_kind est réservé aux objets documentaires P&ID.")
+        return self
 
     @field_validator("params")
     @classmethod
@@ -179,7 +205,10 @@ class Connection(StrictModel):
     source: str = Field(pattern=ID_PATTERN)
     target: str = Field(pattern=ID_PATTERN)
     label: str = Field(default="", max_length=200)
+    service: PidService = "unspecified"
     directed: bool = True
+    source_port: str = Field(default="", max_length=80)
+    target_port: str = Field(default="", max_length=80)
 
 
 class ScenarioStep(StrictModel):
@@ -273,6 +302,8 @@ class Project(StrictModel):
     tags: list[Tag] = Field(default_factory=list, max_length=200)
     scenarios: list[Scenario] = Field(default_factory=list, max_length=100)
     plc: PLCConfig = Field(default_factory=PLCConfig)
+    pid_document: PidDocument | None = None
+    pid_drawing: PidDrawingSettings = Field(default_factory=PidDrawingSettings)
 
 
 def _float32(value: int | float) -> float:
@@ -373,6 +404,9 @@ def validate_fault(equipment: Equipment, kind: str, value: Any, tags: dict[str, 
     elif kind == "valve_stuck":
         if value is not None and (type(value) not in (int, float) or not 0 <= value <= 100 or not math.isfinite(value)):
             raise ValueError("La position de vanne bloquée doit être comprise entre 0 et 100 %.")
+    elif kind == "fouling":
+        if type(value) not in (int, float) or not math.isfinite(value) or not 0 <= value <= 100:
+            raise ValueError("L'encrassement exige une perte explicite de conductance UA entre 0 et 100 %.")
     else:
         tag_id = equipment.bindings.get("value")
         if tag_id not in tags:
@@ -392,18 +426,36 @@ def _source_range(source: Equipment, field: str, equipment: dict[str, Equipment]
     p = parameters(source)
     if field in ("level", "level_percent", "speed", "position"):
         return (0, 100)
-    if field in ("high", "low", "running", "fault", "open", "closed", "stuck"):
+    if field in ("high", "low", "running", "fault", "open", "closed", "stuck", "to_a", "to_b", "fouled"):
         return (0, 1)
     if field in ("volume", "volume_l"):
         return (0, p["capacity_l"])
     if field == "capacity_l":
         return (p["capacity_l"], p["capacity_l"])
-    if field == "flow_l_s":
+    if field in ("flow_l_s", "flow_a_l_s", "flow_b_l_s"):
         return (0, p["max_flow_l_s"])
+    if source.type == "heat_exchanger":
+        if field.endswith("temperature_c"):
+            return (-100, 500)
+        if field in ("primary_flow_l_s", "secondary_flow_l_s"):
+            return (0, 100000)
+        if field == "heat_kw":
+            return (-600 * p["ua_kw_k"], 600 * p["ua_kw_k"])
+        if field == "ua_effective_kw_k":
+            return (0, p["ua_kw_k"])
     if field in ("inflow_l_s", "outflow_l_s"):
         role = "inlet" if field == "inflow_l_s" else "outlet"
         groups: dict[str, list[float]] = defaultdict(list)
+        three_way_capacity = 0.0
         for item in equipment.values():
+            if item.type == "valve_three_way":
+                flow = parameters(item)
+                common = flow["common_tank_id"] == source.id
+                branch = source.id in (flow["branch_a_tank_id"], flow["branch_b_tank_id"])
+                if ((flow["mode"] == "diverting" and ((role == "outlet" and common) or (role == "inlet" and branch)))
+                        or (flow["mode"] == "mixing" and ((role == "inlet" and common) or (role == "outlet" and branch)))):
+                    three_way_capacity += flow["max_flow_l_s"]
+                continue
             if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
                 continue
             flow = parameters(item)
@@ -411,7 +463,7 @@ def _source_range(source: Equipment, field: str, equipment: dict[str, Equipment]
                 groups[flow["flow_group"]].append(flow["max_flow_l_s"])
             elif role == "outlet" and flow["role"] == "inlet" and flow.get("source_tank_id") == source.id:
                 groups[f"transfer:{flow['tank_id']}:{flow['flow_group']}"].append(flow["max_flow_l_s"])
-        return (0, sum(min(capacities) for capacities in groups.values()))
+        return (0, sum(min(capacities) for capacities in groups.values()) + three_way_capacity)
     return None
 
 
@@ -531,6 +583,32 @@ def validate_project(project: Project | dict) -> dict:
                     error(path + ".params.source_tank_id", "Le transfert exige une autre cuve source existante.")
                 if params.get("role") != "inlet":
                     error(path + ".params.source_tank_id", "La cuve source s'applique uniquement à un circuit d'entrée.")
+        elif item.type == "valve_three_way":
+            tank_ids = []
+            for name in ("common_tank_id", "branch_a_tank_id", "branch_b_tank_id"):
+                identifier = params.get(name)
+                tank_ids.append(identifier)
+                tank = equipment.get(identifier)
+                if tank is None or tank.type != "tank":
+                    error(path + ".params." + name, "Associez ce piquage à une cuve simulée existante.")
+            if len(set(tank_ids)) != 3:
+                error(path + ".params", "AB, A et B exigent trois cuves distinctes.")
+        elif item.type == "heat_exchanger":
+            for circuit in ("primary", "secondary"):
+                source_id = params.get(circuit + "_flow_equipment", "")
+                if source_id:
+                    source = equipment.get(source_id)
+                    if source is None or source.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control", "valve_three_way"):
+                        error(path + ".params." + circuit + "_flow_equipment", "Choisissez une pompe ou une vanne simulée comme source de débit.")
+                    elif params.get(circuit + "_flow_field") not in STATE_FIELDS[source.type]:
+                        error(path + ".params." + circuit + "_flow_field", "La source ne produit pas ce débit ; choisissez un débit disponible.")
+                    if item.bindings.get(circuit + "_flow_command"):
+                        error(path + ".bindings." + circuit + "_flow_command", "Choisissez une source de débit ou une valeur imposée par PLC, pas les deux.")
+                for suffix, bounds in (("_flow_command", (0, 100000)), ("_inlet_command", (-100, 500))):
+                    tag = tags.get(item.bindings.get(circuit + suffix))
+                    if tag is not None and (type(tag.initial_value) not in (int, float) or not bounds[0] <= tag.initial_value <= bounds[1]):
+                        error(path + ".bindings." + circuit + suffix, f"La condition d'entrée initiale doit être comprise entre {bounds[0]} et {bounds[1]}.")
+            warning(path + ".params", "Modèle thermique à deux volumes mélangés, sans changement de phase. Les débits sont imposés ou associés explicitement ; les lignes ne déterminent aucun débit.")
         elif item.type in ("analog_sensor", "digital_sensor"):
             source = equipment.get(params.get("source_equipment"))
             if source is None:
@@ -565,6 +643,10 @@ def validate_project(project: Project | dict) -> dict:
             error(f"connections.{i}", "La connexion référence un symbole inexistant.")
         if edge.source == edge.target:
             error(f"connections.{i}", "Une connexion doit relier deux symboles distincts.")
+        for endpoint, identifier in (("source", edge.source_port), ("target", edge.target_port)):
+            item = equipment.get(getattr(edge, endpoint))
+            if item is not None and identifier and identifier not in {port["id"] for port in process_ports(item)}:
+                warning(f"connections.{i}.{endpoint}_port", "Piquage conservé mais absent de la bibliothèque ; sa position reste à vérifier.")
     for tag in project.tags:
         if tag.id not in used_tags:
             warning(f"tags.{tag.id}", "Variable non associée à un symbole ; sa valeur initiale reste disponible pour les essais manuels." if tag.direction == "input" else "Sortie PLC lue mais non associée à un symbole.")

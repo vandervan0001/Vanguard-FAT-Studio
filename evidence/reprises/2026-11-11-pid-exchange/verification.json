@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-11",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "git_head": "f5ad062cfc9babbd2ab61d22ee55528ad0fc7979",
+  "working_tree": "modified; pre-existing changes retained; no commit",
+  "python_tests": {
+    "tests": 686,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 5,
+    "passed": 681,
+    "junit_duration_s": 274.278,
+    "console_duration_s": 275.6
+  },
+  "browser_tests": {
+    "expected": 68,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "duration_ms": 187895.74300000002
+  },
+  "static_checks": {
+    "ruff": "passed",
+    "pip_check": "passed",
+    "documentation_local_links": 59,
+    "public_selection": "passed"
+  },
+  "package": {
+    "wheel_sha256": "07d015cf14400b008d70b0d3519adc97ef470d072e8a524bade8dfd856413644",
+    "installed_http": "passed",
+    "roundtrip_formats": 10,
+    "isolated_interpreter": true,
+    "dependency_reuse": true,
+    "clean_machine_qualified": false
+  },
+  "catalogue_trials": [
+    {
+      "source": "pahala.pdf",
+      "page": "9",
+      "ocr": false,
+      "status": "success",
+      "equipment_candidates": 4,
+      "connections": 0,
+      "duration_s": 2.33
+    },
+    {
+      "source": "virden.pdf",
+      "page": "5",
+      "ocr": true,
+      "status": "success",
+      "equipment_candidates": 27,
+      "connections": 0,
+      "duration_s": 11.36
+    }
+  ],
+  "dwg": {
+    "engine": "GNU LibreDWG 0.14",
+    "read_write_roundtrip": "passed",
+    "write_format": "R2000 / AC1015",
+    "entities_retained": 62,
+    "entities_total": 62,
+    "experimental": true,
+    "recipient_cad_qualified": false
+  },
+  "boundaries": {
+    "plc_access": false,
+    "human_fat_verdict_created": false,
+    "paid_ai_required": false,
+    "automatic_file_upload": false,
+    "sealed_deliveries_modified": false
+  },
+  "limits": [
+    "Windows source/wheel checked; dependencies reused, no clean-machine acceptance",
+    "OCR/tag/topology candidates require review; extraction accuracy not benchmarked",
+    "DEXPI/Proteus XML subset; CAD source fidelity and recipient interoperability not certified",
+    "Five Windows symbolic-link privilege skips; junction checks executed"
+  ]
+}

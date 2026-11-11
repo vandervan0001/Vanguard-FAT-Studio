@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .pid_symbols import PID_SYMBOLS
+
 
 def port(label: str, direction: str, types: list[str], unit: str = "", required: bool = False) -> dict:
     return {"label": label, "direction": direction, "data_types": types, "unit": unit, "required": required}
@@ -86,13 +88,83 @@ CATALOG.extend([
         "parameters": {"initial_value": {"label": "État au repos", "type": "boolean"}},
         "ports": {"value": port("Contact vers PLC", "input", ["BOOL"], required=True)}, "faults": [],
     },
+    {
+        "type": "valve_three_way", "label": "Vanne trois voies simulée",
+        "description": "Répartition linéaire entre trois cuves déclarées. 0 % vers B, 100 % vers A ; mélange ou diversion, sans calcul de pression.",
+        "default_params": {"mode": "diverting", "common_tank_id": "", "branch_a_tank_id": "", "branch_b_tank_id": "", "max_flow_l_s": 20.0, "response_s": 0.5, "initial_position_pct": 50.0, "demo_command": 50.0},
+        "parameters": {
+            "mode": {"label": "Fonction", "type": "select", "options": ["diverting", "mixing"]},
+            "common_tank_id": {"label": "Cuve commune AB", "type": "string"},
+            "branch_a_tank_id": {"label": "Cuve de branche A", "type": "string"},
+            "branch_b_tank_id": {"label": "Cuve de branche B", "type": "string"},
+            "max_flow_l_s": number("Débit total nominal AB", 0, 100000, "L/s"),
+            "response_s": number("Constante de réponse", 0, 120, "s"),
+            "initial_position_pct": number("Position initiale vers A", 0, 100, "%"),
+            "demo_command": number("Démo : position vers A", 0, 100, "%"),
+        },
+        "ports": {
+            "command": port("Consigne PLC vers A (0 = B, 100 = A)", "output", ["REAL"], "%", required=True),
+            "position": port("Position simulée vers A", "input", ["REAL"], "%"),
+            "flow_a": port("Débit réel de branche A", "input", ["REAL"], "L/s"),
+            "flow_b": port("Débit réel de branche B", "input", ["REAL"], "L/s"),
+            "feedback_a": port("Fin de course vers A", "input", ["BOOL"]),
+            "feedback_b": port("Fin de course vers B", "input", ["BOOL"]),
+        },
+        "faults": ["valve_stuck"],
+    },
+    {
+        "type": "heat_exchanger", "label": "Échangeur simulé",
+        "description": "Deux volumes parfaitement mélangés échangent de la chaleur par UA. Circuits isolés, fluides monophasiques et conditions d'entrée déclarées.",
+        "default_params": {
+            "primary_inlet_temperature_c": 80.0, "secondary_inlet_temperature_c": 20.0,
+            "primary_flow_l_s": 2.0, "secondary_flow_l_s": 2.0,
+            "primary_volume_l": 20.0, "secondary_volume_l": 20.0,
+            "primary_density_kg_l": 1.0, "secondary_density_kg_l": 1.0,
+            "primary_cp_kj_kg_k": 4.18, "secondary_cp_kj_kg_k": 4.18,
+            "initial_primary_temperature_c": 80.0, "initial_secondary_temperature_c": 20.0,
+            "ua_kw_k": 5.0,
+            "primary_flow_equipment": "", "secondary_flow_equipment": "",
+            "primary_flow_field": "flow_l_s", "secondary_flow_field": "flow_l_s",
+        },
+        "parameters": {
+            "primary_inlet_temperature_c": number("Primaire : température d'entrée", -100, 500, "°C"),
+            "secondary_inlet_temperature_c": number("Secondaire : température d'entrée", -100, 500, "°C"),
+            "primary_flow_l_s": number("Primaire : débit imposé sans source", 0, 100000, "L/s"),
+            "secondary_flow_l_s": number("Secondaire : débit imposé sans source", 0, 100000, "L/s"),
+            "primary_volume_l": number("Primaire : volume interne", 0.001, 1e6, "L"),
+            "secondary_volume_l": number("Secondaire : volume interne", 0.001, 1e6, "L"),
+            "primary_density_kg_l": number("Primaire : masse volumique", 0.01, 20, "kg/L"),
+            "secondary_density_kg_l": number("Secondaire : masse volumique", 0.01, 20, "kg/L"),
+            "primary_cp_kj_kg_k": number("Primaire : capacité thermique massique", 0.01, 100, "kJ/(kg·K)"),
+            "secondary_cp_kj_kg_k": number("Secondaire : capacité thermique massique", 0.01, 100, "kJ/(kg·K)"),
+            "initial_primary_temperature_c": number("Primaire : température initiale", -100, 500, "°C"),
+            "initial_secondary_temperature_c": number("Secondaire : température initiale", -100, 500, "°C"),
+            "ua_kw_k": number("Conductance globale UA", 0, 1e6, "kW/K"),
+            "primary_flow_equipment": {"label": "Primaire : source de débit (facultative)", "type": "string"},
+            "secondary_flow_equipment": {"label": "Secondaire : source de débit (facultative)", "type": "string"},
+            "primary_flow_field": {"label": "Primaire : débit de la source", "type": "select", "options": ["flow_l_s", "flow_a_l_s", "flow_b_l_s"]},
+            "secondary_flow_field": {"label": "Secondaire : débit de la source", "type": "select", "options": ["flow_l_s", "flow_a_l_s", "flow_b_l_s"]},
+        },
+        "ports": {
+            "primary_flow_command": port("Primaire : débit imposé par PLC", "output", ["REAL"], "L/s"),
+            "secondary_flow_command": port("Secondaire : débit imposé par PLC", "output", ["REAL"], "L/s"),
+            "primary_inlet_command": port("Primaire : température d'entrée imposée par PLC", "output", ["REAL"], "°C"),
+            "secondary_inlet_command": port("Secondaire : température d'entrée imposée par PLC", "output", ["REAL"], "°C"),
+            "primary_temperature": port("Primaire : température de sortie simulée", "input", ["REAL"], "°C"),
+            "secondary_temperature": port("Secondaire : température de sortie simulée", "input", ["REAL"], "°C"),
+            "heat": port("Puissance primaire vers secondaire", "input", ["REAL"], "kW"),
+            "primary_flow": port("Primaire : débit simulé", "input", ["REAL"], "L/s"),
+            "secondary_flow": port("Secondaire : débit simulé", "input", ["REAL"], "L/s"),
+        },
+        "faults": ["fouling"],
+    },
 ])
 
 # Optional operator requests are exchange inputs, not physical signal producers.
 # They may share a tag with an explicit pushbutton without duplicating a sensor.
 for _item in CATALOG:
-    if _item["type"] in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
-        _kind = "REAL" if _item["type"] == "valve_control" else "BOOL"
+    if _item["type"] in ("pump", "pump_vfd", "valve_onoff", "valve_control", "valve_three_way"):
+        _kind = "REAL" if _item["type"] in ("valve_control", "valve_three_way") else "BOOL"
         _request = port("Demande manuelle simulée", "input", [_kind], "%" if _kind == "REAL" else "")
         _request["simulated_source"] = False
         _item["ports"]["manual_request"] = _request
@@ -101,6 +173,12 @@ for _item in CATALOG:
             _speed["simulated_source"] = False
             _item["ports"]["manual_speed"] = _speed
 
+CATALOG.append({
+    "type": "pid_symbol", "label": "Symbole P&ID documentaire",
+    "description": "Équipement dessiné avec ses piquages, sans modèle physique ni variable PLC produite.",
+    "default_params": {}, "parameters": {}, "ports": {}, "faults": [],
+    "simulation": False, "symbols": PID_SYMBOLS,
+})
 CATALOG_BY_TYPE = {item["type"]: item for item in CATALOG}
 CATALOG_BY_TYPE["analog_sensor"]["ports"]["scaled_value"] = port("Valeur d'ingénierie lue du PLC", "output", ["REAL"])
 STATE_FIELDS = {
@@ -109,7 +187,10 @@ STATE_FIELDS = {
     "pump_vfd": {"running", "speed", "flow_l_s", "fault"},
     "valve_onoff": {"position", "open", "closed", "flow_l_s", "stuck"},
     "valve_control": {"position", "open", "closed", "flow_l_s", "stuck"},
+    "valve_three_way": {"position", "to_a", "to_b", "flow_l_s", "flow_a_l_s", "flow_b_l_s", "stuck"},
+    "heat_exchanger": {"primary_outlet_temperature_c", "secondary_outlet_temperature_c", "primary_inlet_temperature_c", "secondary_inlet_temperature_c", "primary_flow_l_s", "secondary_flow_l_s", "heat_kw", "ua_effective_kw_k", "fouled"},
     "analog_sensor": {"value"}, "digital_sensor": {"value"}, "indicator": {"value"}, "digital_input": {"value"},
+    "pid_symbol": set(),
 }
 
 

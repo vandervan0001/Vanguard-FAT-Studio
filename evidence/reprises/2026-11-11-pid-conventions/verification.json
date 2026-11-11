@@ -1,0 +1,80 @@
+{
+  "timestamp_utc": "2026-11-11T20:46:28.641064+00:00",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "head": "f5ad062 with uncommitted shared source changes",
+  "python": {
+    "passed": 1150,
+    "skipped_windows_symlink_privilege": 5,
+    "seconds": 297.08
+  },
+  "browser": {
+    "passed": 79,
+    "skipped": 0,
+    "flaky": 0,
+    "seconds": 252.486,
+    "retries": 0
+  },
+  "assets": [
+    "index-FmgYXiOW.js",
+    "index-u2u3JEpo.css"
+  ],
+  "wheel": {
+    "sha256": "4774462c5f8644599cf22270145117bc5a66a9f83c0e8599f2e192fe68a12c59",
+    "entries_checked": 72,
+    "installed_equal_wheel": 71,
+    "product_equal_source": 65
+  },
+  "installed": {
+    "seconds": 34.935,
+    "native_variants": 40,
+    "http_exports": 10,
+    "module_origins_inside_installation": 37,
+    "dependencies_reused": true,
+    "clean_windows_qualification": false
+  },
+  "frozen_product_files_unchanged": 91,
+  "documentary_families": 61,
+  "scoped_cad_geometry_glyphs_and_colours_passed": true,
+  "proprietary_cad_acceptance": false,
+  "outputs": [
+    {
+      "name": "PID-Virden-Alun-A3-Compact-Rev-B.pdf",
+      "bytes": 27375,
+      "sha256": "42849f73cf9c3deea6a5541d1b86c28a8dc14cfd4d169f3ce6c73a8773143339"
+    },
+    {
+      "name": "PID-Virden-Alun-A3-Compact-Rev-B.dwg",
+      "bytes": 28906,
+      "sha256": "d7fe2010421772a4eec2d3b9c9cdd64b3e5bdc2fb3b20f32bc1ae145fd398bdf"
+    },
+    {
+      "name": "PID-Virden-Alun-A3-Compact-Rev-B.dxf",
+      "bytes": 64936,
+      "sha256": "d81bc626aec69ce6145e0e9c53e39b268824438d16eeecb8a4f8de4b65e96eac"
+    },
+    {
+      "name": "PID-Thermique-Services-A3-Rev-B.pdf",
+      "bytes": 27876,
+      "sha256": "3d91260ddd851d6850d77d6e59423475b63bb5c18d3b380df78f67b50053b89d"
+    },
+    {
+      "name": "PID-Thermique-Services-A3-Rev-B.dwg",
+      "bytes": 29793,
+      "sha256": "daedc81cdb16d4794f47996775062fe76acb993d9f6bbf2d794a39366ceced22"
+    },
+    {
+      "name": "PID-Thermique-Services-A3-Rev-B.dxf",
+      "bytes": 73511,
+      "sha256": "03f7731c6781fb1e4aad3409ef92a2defd99cdc390ba351a97548729b0403307"
+    }
+  ],
+  "old_virden_artifacts_unchanged": true,
+  "plc_access": false,
+  "human_fat_verdict_created": false,
+  "limitations": [
+    "Free general symbols and functional examples are not full ISO/ISA certification.",
+    "Recipient CAD requires supplied Geist fonts and unremapped object colours.",
+    "LibreDWG conversion/rendering is not an independent proprietary CAD qualification.",
+    "Historical mobile action-toolbar overflow remains outside this change."
+  ]
+}

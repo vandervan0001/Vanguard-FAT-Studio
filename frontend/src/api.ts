@@ -46,7 +46,9 @@ export function api<T>(path: string, method = 'GET', body?: unknown, signal?: Ab
   // Retain the target of the user's action while queued or refreshing an expired session.
   const context = { projectId: currentProjectId, revision: currentProjectRevision, runId: expectedRunId === undefined ? currentRunId : expectedRunId ?? '' };
   const request = () => requestApi<T>(path, method, body, signal, context);
-  if (method === 'GET') return request();
+  // Passive document parsing must not delay an operator's Stop or input command.
+  const passivePid = method === 'POST' && ['/pid/inspect', '/pid/prepare', '/pid/preview'].includes(path.split('?')[0]);
+  if (method === 'GET' || passivePid) return request();
   mutationVersion++;
   const result = mutations.then(request, request).finally(() => { mutationVersion++; });
   mutations = result.catch(() => undefined);
@@ -57,7 +59,7 @@ async function requestApi<T>(path: string, method: string, body: unknown, signal
   const binary = body instanceof Blob;
   const response = await fetch(`/api${path}`, {
     method, cache: 'no-store', signal,
-    headers: { ...(body !== undefined ? { 'Content-Type': binary ? 'application/zip' : 'application/json' } : {}), ...(method !== 'GET' ? { 'X-FAT-Token': csrfToken } : {}), ...(method !== 'GET' || path === '/project/download' || path === '/scenarios/export' || /^\/scenarios\/[^/]+\/export$/.test(path) ? { 'X-FAT-Project-ID': context.projectId, 'X-FAT-Project-Revision': context.revision, 'X-FAT-Run-ID': context.runId } : {}) },
+    headers: { ...(body !== undefined ? { 'Content-Type': binary ? (path.startsWith('/pid/inspect?') ? 'application/octet-stream' : 'application/zip') : 'application/json' } : {}), ...(method !== 'GET' ? { 'X-FAT-Token': csrfToken } : {}), ...(method !== 'GET' || path === '/project/download' || path === '/scenarios/export' || /^\/scenarios\/[^/]+\/export$/.test(path) ? { 'X-FAT-Project-ID': context.projectId, 'X-FAT-Project-Revision': context.revision, 'X-FAT-Run-ID': context.runId } : {}) },
     ...(body === undefined ? {} : { body: binary ? body : JSON.stringify(body) }),
   });
   // A rejected session has no side effect. Refresh once after a local server restart.
@@ -97,6 +99,10 @@ function downloadBlob(blob: Blob, name: string) {
 
 export async function downloadArchive(name: string): Promise<void> {
   return downloadScoped('/project/archive', name, true);
+}
+
+export function downloadPid(format: string): Promise<void> {
+  return downloadScoped(`/pid/export/${encodeURIComponent(format)}`, `pid.${format}`, true);
 }
 
 async function downloadScoped(path: string, fallbackName: string, requireRevision = false): Promise<void> {

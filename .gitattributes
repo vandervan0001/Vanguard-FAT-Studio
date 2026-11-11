@@ -26,3 +26,14 @@ frontend/public/brand/** -text whitespace=cr-at-eol
 fat_studio/web/brand/** -text whitespace=cr-at-eol
 **/OFL.txt whitespace=cr-at-eol,-blank-at-eol
 evidence/reprises/2026-11-03-public-demo/ui/final/frontend-tests-attempt1.log whitespace=cr-at-eol,-blank-at-eol
+
+# P&ID publication artifacts: preserve exact bytes.
+*.pdf binary
+*.png binary
+*.dwg binary
+*.dxf binary
+*.zip binary
+
+# Keep the licensed upstream texts unchanged, including their final blank line.
+fat_studio/pid_catalog_LICENSE.txt -whitespace
+media/linkedin/2026-11-11-pid/documents/catalogue-CC-BY-4.0.txt -whitespace

@@ -38,7 +38,10 @@ class ProcessEngine:
         self.values = {tag.id: tag.initial_value for tag in self.project.tags}
         self._raw_values = dict(self.values)
         self.qualities = {tag.id: "good" for tag in self.project.tags}
-        self.equipment_state: dict[str, dict] = {}
+        self.equipment_state: dict[str, dict] = {
+            item.id: {"documentary": True, "quality": "not_simulated"}
+            for item in self.project.equipment if item.type == "pid_symbol"
+        }
         self.forces: dict[str, bool | int | float] = {}
         self.faults: dict[str, dict] = {}
         # Incomplete projects are valid editor documents. Their model cannot run.
@@ -55,9 +58,25 @@ class ProcessEngine:
             elif item.type in ("valve_onoff", "valve_control"):
                 position = p["initial_position_pct"]
                 self.equipment_state[item.id] = {"position": position, "open": position >= 99.5, "closed": position <= 0.5, "flow_l_s": 0.0, "stuck": False}
+            elif item.type == "valve_three_way":
+                position = p["initial_position_pct"]
+                self.equipment_state[item.id] = {"position": position, "to_a": position >= 99.5, "to_b": position <= 0.5,
+                                                 "flow_l_s": 0.0, "flow_a_l_s": 0.0, "flow_b_l_s": 0.0, "stuck": False}
+            elif item.type == "heat_exchanger":
+                self.equipment_state[item.id] = {
+                    "primary_outlet_temperature_c": p["initial_primary_temperature_c"],
+                    "secondary_outlet_temperature_c": p["initial_secondary_temperature_c"],
+                }
+            elif item.type == "pid_symbol":
+                self.equipment_state[item.id] = {"documentary": True, "quality": "not_simulated"}
             else:
                 tag_id = item.bindings.get("value")
                 self.equipment_state[item.id] = {"value": self.values.get(tag_id, 0), "quality": "good"}
+        # Every volumetric source exists before a heat exchanger samples it,
+        # irrespective of the order of objects in an imported project.
+        for item in self.project.equipment:
+            if item.type == "heat_exchanger":
+                self.equipment_state[item.id].update(self._heat_boundaries(item))
         self._publish()
 
     def _tank_flags(self, tank_id: str) -> None:
@@ -142,6 +161,20 @@ class ProcessEngine:
             if len(source_ids) > 1:
                 raise ValueError("Un circuit de transfert ne peut avoir plusieurs cuves sources.")
             sources[key] = next(iter(source_ids), "")
+        routes = []
+        for item in self.project.equipment:
+            if item.type != "valve_three_way":
+                continue
+            p = self._params[item.id]
+            state = self.equipment_state[item.id]
+            faults = self.faults.get(item.id, {})
+            target = min(100.0, max(0.0, float(self.values[item.bindings["command"]])))
+            position = float(faults["valve_stuck"]) if "valve_stuck" in faults else _lag(state["position"], target, p["response_s"], dt)
+            state.update(position=position, to_a=position >= 99.5, to_b=position <= 0.5, stuck="valve_stuck" in faults)
+            for branch, fraction in (("a", position / 100), ("b", 1 - position / 100)):
+                common, branch_tank = p["common_tank_id"], p[f"branch_{branch}_tank_id"]
+                source, target_tank = (common, branch_tank) if p["mode"] == "diverting" else (branch_tank, common)
+                routes.append((item.id, branch, source, target_tank, p["max_flow_l_s"] * fraction))
         # A transfer debits its source and credits its destination by the same
         # amount. Availability uses start-of-cycle stock + external supply;
         # incoming transfers are usable next cycle, avoiding an algebraic loop.
@@ -155,6 +188,8 @@ class ProcessEngine:
                 external_in[tank_id] += flow
             else:
                 requested_out[tank_id] += flow
+        for _, _, source, _, flow in routes:
+            requested_out[source] += flow
         factors = {}
         for item in self.project.equipment:
             if item.type == "tank":
@@ -174,6 +209,15 @@ class ProcessEngine:
                 inflows[tank_id] += flow
             else:
                 outflows[tank_id] += flow
+        for equipment_id, branch, source, target_tank, requested in routes:
+            flow = requested * factors[source]
+            outflows[source] += flow
+            inflows[target_tank] += flow
+            self.equipment_state[equipment_id][f"flow_{branch}_l_s"] = flow
+        for item in self.project.equipment:
+            if item.type == "valve_three_way":
+                state = self.equipment_state[item.id]
+                state["flow_l_s"] = state["flow_a_l_s"] + state["flow_b_l_s"]
         for item in self.project.equipment:
             if item.type != "tank":
                 continue
@@ -191,9 +235,59 @@ class ProcessEngine:
                 flow = actual_flows[key]
                 for equipment_id, _ in devices:
                     self.equipment_state[equipment_id]["flow_l_s"] = flow
+        for item in self.project.equipment:
+            if item.type == "heat_exchanger":
+                self._advance_heat(item, dt)
         self.time_s = round(self.time_s + dt, 9)
         self._publish()
         return {tag.id: self.values[tag.id] for tag in self.project.tags if tag.direction == "input"}
+
+    def _heat_boundaries(self, item) -> dict:
+        """Read declared boundaries; drawing connections never supply physics."""
+        p = self._params[item.id]
+        boundaries = {}
+        for side in ("primary", "secondary"):
+            for quantity, field, low, high in (("flow", "flow_l_s", 0, 100000),
+                                                ("inlet", "inlet_temperature_c", -100, 500)):
+                tag_id = item.bindings.get(f"{side}_{quantity}_command")
+                source_id = p.get(f"{side}_flow_equipment") if quantity == "flow" else ""
+                if source_id:
+                    value = self.equipment_state[source_id][p[f"{side}_flow_field"]]
+                else:
+                    value = self.values[tag_id] if tag_id else p[f"{side}_{field}"]
+                if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
+                    raise ValueError(f"Limite de l'échangeur {item.id} : {side}_{field} doit être compris entre {low} et {high}.")
+                boundaries[f"{side}_{field}"] = float(value)
+        return boundaries
+
+    def _refresh_heat_transfer(self, item) -> None:
+        state = self.equipment_state[item.id]
+        lost = self.faults.get(item.id, {}).get("fouling", 0)
+        ua = self._params[item.id]["ua_kw_k"] * (1 - lost / 100)
+        state.update(ua_effective_kw_k=ua, fouled=lost > 0,
+                     heat_kw=ua * (state["primary_outlet_temperature_c"] - state["secondary_outlet_temperature_c"]))
+
+    def _advance_heat(self, item, dt: float) -> None:
+        p = self._params[item.id]
+        state = self.equipment_state[item.id]
+        state.update(self._heat_boundaries(item))
+        self._refresh_heat_transfer(item)
+        primary_capacity = p["primary_volume_l"] * p["primary_density_kg_l"] * p["primary_cp_kj_kg_k"]
+        secondary_capacity = p["secondary_volume_l"] * p["secondary_density_kg_l"] * p["secondary_cp_kj_kg_k"]
+        primary_transport = state["primary_flow_l_s"] * p["primary_density_kg_l"] * p["primary_cp_kj_kg_k"]
+        secondary_transport = state["secondary_flow_l_s"] * p["secondary_density_kg_l"] * p["secondary_cp_kj_kg_k"]
+        a = primary_capacity + dt * primary_transport
+        b = secondary_capacity + dt * secondary_transport
+        exchange = dt * state["ua_effective_kw_k"]
+        primary_rhs = primary_capacity * state["primary_outlet_temperature_c"] + dt * primary_transport * state["primary_inlet_temperature_c"]
+        secondary_rhs = secondary_capacity * state["secondary_outlet_temperature_c"] + dt * secondary_transport * state["secondary_inlet_temperature_c"]
+        # Algebraically expanded determinant avoids cancellation of two UA²
+        # terms at strong coupling. Multiplying by dt avoids C/dt overflow.
+        determinant = a * b + exchange * (a + b)
+        primary = (primary_rhs * b + exchange * (primary_rhs + secondary_rhs)) / determinant
+        secondary = (secondary_rhs * a + exchange * (primary_rhs + secondary_rhs)) / determinant
+        state.update(primary_outlet_temperature_c=primary, secondary_outlet_temperature_c=secondary)
+        self._refresh_heat_transfer(item)
 
     def _publish(self) -> None:
         def emit(item, port, value):
@@ -217,6 +311,16 @@ class ProcessEngine:
             elif item.type in ("valve_onoff", "valve_control"):
                 for port in ("position", "open", "closed"):
                     emit(item, port, state[port])
+            elif item.type == "valve_three_way":
+                for port, field in (("position", "position"), ("flow_a", "flow_a_l_s"), ("flow_b", "flow_b_l_s"),
+                                    ("feedback_a", "to_a"), ("feedback_b", "to_b")):
+                    emit(item, port, state[field])
+            elif item.type == "heat_exchanger":
+                self._refresh_heat_transfer(item)
+                for port, field in (("primary_temperature", "primary_outlet_temperature_c"),
+                                    ("secondary_temperature", "secondary_outlet_temperature_c"),
+                                    ("heat", "heat_kw"), ("primary_flow", "primary_flow_l_s"), ("secondary_flow", "secondary_flow_l_s")):
+                    emit(item, port, state[field])
             elif item.type == "indicator":
                 state["value"] = self.values[item.bindings["value"]]
             elif item.type == "digital_input":
@@ -349,11 +453,13 @@ class DemoController:
             elif level <= p["demo_start_pct"]:
                 self._filling[tank.id] = True
         for item in self.project.equipment:
-            if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control"):
+            if item.type not in ("pump", "pump_vfd", "valve_onoff", "valve_control", "valve_three_way"):
                 continue
             p = self._params[item.id]
             command = p["demo_command"]
-            if p["demo_control"] == "level":
+            if item.type == "valve_three_way":
+                command = values.get(item.bindings.get("manual_request"), command)
+            elif p["demo_control"] == "level":
                 on = self._filling.get(p["tank_id"], False)
                 if p["role"] == "outlet":
                     on = not on

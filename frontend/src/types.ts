@@ -1,13 +1,25 @@
 export type Scalar = number | boolean;
-export type EquipmentType = 'tank' | 'pump' | 'pump_vfd' | 'valve_onoff' | 'valve_control' | 'analog_sensor' | 'digital_sensor' | 'digital_input' | 'indicator';
+export type EquipmentType = 'tank' | 'pump' | 'pump_vfd' | 'valve_onoff' | 'valve_control' | 'analog_sensor' | 'digital_sensor' | 'digital_input' | 'indicator' | 'pid_symbol' | 'heat_exchanger' | 'valve_three_way';
+export type PidRotation = 0 | 90 | 180 | 270;
+export type PidSymbolPort = { id: string; label: string; x: number; y: number; direction: 'in' | 'out' | 'bidirectional' };
+export type PidSymbolShape = {
+  kind: 'rect' | 'ellipse' | 'circle' | 'polyline' | 'polygon';
+  x?: number; y?: number; width?: number; height?: number; radius?: number; rx?: number; ry?: number;
+  points?: number[][]; stroke?: string; fill?: string; stroke_width?: number;
+};
+export type PidSymbolDefinition = { id: string; label: string; category: string; prefix: string; description: string; simulation: false; ports: PidSymbolPort[]; shapes: PidSymbolShape[]; instrument_code?: string; references?: string[]; source?: { name: string; url: string; license: string; commit: string; source_sha256: string; changes: string } };
 export type Parameter = string | number | boolean;
 export type EquipmentAnimation = { tag_id: string; operator: 'eq' | 'ne' | 'gt' | 'ge' | 'lt' | 'le'; value: Scalar; effect: 'highlight' | 'pulse' | 'rotate' | 'level' | 'position'; min: number; max: number; active_color?: string; inactive_color?: string };
 export type Equipment = {
   id: string; type: EquipmentType; name: string; description: string; unit: string;
   position: { x: number; y: number }; params: Record<string, Parameter>; bindings: Record<string, string>;
   animation?: EquipmentAnimation | null;
+  symbol_kind?: string; source_kind?: string; rotation?: PidRotation;
 };
-export type ProcessConnection = { id: string; source: string; target: string; label: string; directed: boolean };
+export type PidService = 'unspecified' | 'cold_supply' | 'cold_return' | 'hot_supply' | 'hot_return' | 'steam' | 'condensate' | 'cooling_water' | 'instrument_air' | 'process';
+export type PidServiceDefinition = { id: PidService; label: string; code: string; color: string };
+export type PidConventions = { services: PidServiceDefinition[]; references: { id: string; title: string; url: string; scope: string }[]; instruments: { code: string; label: string; example: string }[]; notice: string };
+export type ProcessConnection = { id: string; source: string; target: string; label: string; directed: boolean; source_port?: string; target_port?: string; service?: PidService };
 export type Tag = {
   id: string; name: string; direction: 'input' | 'output'; data_type: 'BOOL' | 'INT' | 'DINT' | 'REAL';
   unit: string; initial_value: Scalar; min: number | null; max: number | null; node_id: string; writable: boolean;
@@ -39,6 +51,35 @@ export type Project = {
   schema_version: '1.0'; id: string; name: string; description: string;
   simulation: { step_ms: number; speed: number }; equipment: Equipment[]; connections: ProcessConnection[];
   tags: Tag[]; scenarios: Scenario[]; plc: PLCConfig;
+  pid_document?: PidDocument | null;
+  pid_drawing?: PidDrawingSettings;
+};
+export type DrawingRevision = { revision: string; date: string; description: string; drawn_by: string; checked_by: string; approved_by: string };
+export type PidDrawingSettings = {
+  paper_size: 'A4' | 'A3' | 'A2' | 'A1' | 'A0'; orientation: 'landscape' | 'portrait';
+  company: string; client: string; project_reference: string; site: string; unit: string;
+  drawing_title: string; document_number: string; revision: string; issue_date: string;
+  drawn_by: string; checked_by: string; approved_by: string;
+  status: 'draft' | 'for_review' | 'for_information' | 'for_construction' | 'as_built';
+  sheet_number: number; sheet_total: number; notes: string; revisions: DrawingRevision[]; show_legend: boolean;
+  layout_style?: 'compact' | 'full'; color_mode?: 'service' | 'monochrome';
+};
+export type PidDrawingPreview = { image_data_url: string; width_mm: number; height_mm: number; warnings: string[] };
+export type PidEquipment = { id: string; name: string; type: string; source_tag: string; position: { x: number; y: number }; page: number; confidence: number; provenance: string; review_required: boolean; source_kind?: string; rotation?: PidRotation; documentary?: boolean };
+export type PidConnection = { id: string; source: string; target: string; label: string; directed: boolean; inferred: boolean; confidence: number; source_port?: string; target_port?: string; service?: PidService };
+export type PidDocument = {
+  format: 'fat-studio/pid'; version: '1.0'; title: string; source_name: string; source_format: string; source_sha256: string;
+  equipment: PidEquipment[]; connections: PidConnection[];
+  pages: { number: number; width: number; height: number; image_data_url: string; text: string }[];
+  warnings: string[]; metadata: Record<string, string>;
+  drawing?: PidDrawingSettings;
+};
+export type PidFormat = { format: string; label: string; available: boolean; detail: string };
+export type PidCapabilities = { imports: PidFormat[]; exports: PidFormat[]; limits: { upload_mb: number; max_equipment: number; max_connections: number; max_pages: number }; local_only: boolean; ocr_available?: boolean };
+export type PidCatalog = {
+  source: { name: string; url: string; license: string; revision: string; changes?: string };
+  entries: { id: string; title: string; category: 'pid' | 'timeseries'; description: string; url: string; pages: number | number[] | string; license_note: string }[];
+  notice?: string;
 };
 export type ProjectPackage = { format: 'fat-studio/project'; version: '1.0'; project: Project };
 export type ScenarioPackage = { format: 'fat-studio/scenarios'; version: '1.0'; scenarios: Scenario[]; tag_contracts: Pick<Tag, 'id' | 'direction' | 'data_type' | 'unit' | 'signal'>[]; equipment_contracts: Pick<Equipment, 'id' | 'type'>[] };
@@ -47,6 +88,7 @@ export type CatalogItem = {
   type: EquipmentType; label: string; description: string; default_params: Record<string, Parameter>;
   ports: Record<string, { label: string; direction: 'input' | 'output'; data_types: string[]; required: boolean; unit?: string }>;
   parameters: Record<string, { label: string; type: 'number' | 'string' | 'boolean' | 'select'; min?: number; max?: number; options?: (string | {value: string; label: string})[]; unit?: string }>;
+  symbols?: PidSymbolDefinition[];
 };
 export type Validation = { valid: boolean; errors: { path: string; message: string }[]; warnings: { path: string; message: string }[] };
 export type Event = { id: string | number; timestamp: string; sim_time_s: number; kind: string; message: string; details?: Record<string, unknown> };

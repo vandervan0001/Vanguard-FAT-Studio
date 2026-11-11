@@ -23,6 +23,20 @@ La démo fournit trois cuves, quatre pompes, huit vannes et 75 variables. Le pro
 
 Sous Linux ou macOS, lancez `bash scripts/start.sh` depuis les sources avec Python 3.12. Le [guide d’installation](docs/INSTALLATION.md) couvre aussi la construction du portable Windows et les kits hors ligne.
 
+## Importer et exporter un P&ID
+
+**Échanges P&ID** inspecte les PDF, scans/images, SVG, DXF, DWG via LibreDWG, graphes JSON/GraphML et un sous-ensemble XML DEXPI. Revoyez les objets et connexions, puis préparez un nouveau projet. Les paramètres physiques et le mapping PLC restent à renseigner. Le traitement est local et gratuit, sans clé API.
+
+Exportez le schéma enregistré en SVG, PDF, PNG, DXF, DWG R2000 expérimental, JSON, GraphML, CSV ZIP ou draw.io. LibreDWG s'installe séparément sur le poste. Le catalogue public fournit des liens vers des plans et séries de procédé pour vos essais. [Formats, limites et installation DWG](docs/PID_EXCHANGE.md).
+
+La mise en page d'impression propose les feuilles A4 à A0 avec cartouche compact ou détaillé, numéro de document, révision, dates, folio, notes et historique. Services froid/chaud et utilités sont explicitement affectés aux liaisons, avec couleurs, codes et légende ; le mode noir et blanc conserve leur identification. Un aperçu prépare le rendu avant enregistrement ; PDF et CAO gardent une présentation vectorielle et la mention « Sans échelle ». Les mentions de vérification et d'approbation restent à renseigner. [Préparer une feuille de bureau d'études](docs/PID_PRINTING.md).
+
+Crédits à **Scott Duncan** pour [PID-to-Knowledge-Graph](https://github.com/ScottDuncanAI/PID-to-Knowledge-Graph) (MIT, référence d’ontologie et de format de graphe) et [Public Chemical Manufacturing Datasets](https://github.com/ScottDuncanAI/public-chemical-manufacturing-datasets) (catalogue adapté sous [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)). Merci aussi aux équipes de GNU LibreDWG et des bibliothèques de lecture, rendu et OCR locales. Versions, licences et réutilisation dans les [notices tierces](THIRD_PARTY_NOTICES.md). Les documents externes gardent leurs propres droits.
+
+La bibliothèque propose aussi **61 familles documentaires**, dont échangeurs à quatre piquages, vannes trois/quatre voies et fonctions d'instrumentation FT, PT, LT, TT ou FIC/TIC. Quatre représentations générales sont adaptées de **[pyflowsheet](https://github.com/nukleon84/pyflowsheet)**, de **Jochen Steimel**, sous MIT, révision `8a68f2569a9a977079ece242aa7771b9d53448a8`. [Provenance et adaptations](fat_studio/pid_symbols_PROVENANCE.md), [licence conservée](fat_studio/pid_symbols_pyflowsheet_LICENSE.txt). Le guide cite ISA/ISO/EN sans certification des dessins ni renommage des repères importés. Symboles, rotations et raccordements restent documentaires, sans physique ou signal PLC implicite. [Bibliothèque et portée réelle des tests](docs/PID_COVERAGE.md).
+
+Pour la simulation, une vanne trois voies répartit les volumes entre trois cuves déclarées et un échangeur calcule les températures de deux circuits avec stockage d'énergie et encrassement configurable. Le débit d'une branche peut alimenter explicitement le modèle thermique. Ces deux modèles complètent les neuf types historiques et s'activent par choix explicite. [Contrats et exemple thermique](docs/PID_SIMULATION.md).
+
 ## Connecter TIA Portal et PLCSIM
 
 Le banc échange en OPC UA avec une cible virtuelle autorisée. Le programme PLC commande le procédé. Le banc lit ses sorties et écrit les entrées simulées déclarées dans le mapping. Sur le P&ID, vous pouvez associer une animation à l’état d’un tag et retrouver la mesure, l’adresse PLC et le NodeId dans la table de variables.

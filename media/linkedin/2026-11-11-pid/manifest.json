@@ -1,0 +1,94 @@
+{
+  "files": [
+    {
+      "path": "captures/01-application-services.png",
+      "bytes": 241243,
+      "sha256": "39e433dab7d0b3324ac8baf35e8ebf0f99561ad6b878ae55a7b9eaf539295631"
+    },
+    {
+      "path": "captures/02-mise-en-page.png",
+      "bytes": 313303,
+      "sha256": "1a7f470b53492cafd310d42899aeac635f375f22f08a1581b5c3d7ad6b12bcc1"
+    },
+    {
+      "path": "captures/03-catalogue-credits.png",
+      "bytes": 329267,
+      "sha256": "449d672ae5055212f9566c9988bc99b370b6971dcc2e91d37fde2d872cc9fbb9"
+    },
+    {
+      "path": "captures/04-cartouche-virden.png",
+      "bytes": 50512,
+      "sha256": "603b19b35549cc66d56bc595799d11159fc329e104c7328515e020ea089a0e90"
+    },
+    {
+      "path": "captures/PID-Thermique-Services-A3-Rev-B.png",
+      "bytes": 150108,
+      "sha256": "555142d16ace6ad341dee3337c781f3de438c253e6d6aa0171a198b751191432"
+    },
+    {
+      "path": "captures/PID-Virden-Alun-A3-Compact-Rev-B.png",
+      "bytes": 131846,
+      "sha256": "28f028e7e2759cf7d9da65c2a07dec4957f4af4e53be70987be7a3077535c843"
+    },
+    {
+      "path": "documents/catalogue-CC-BY-4.0.txt",
+      "bytes": 18658,
+      "sha256": "b0795076b6787cb92063ffd73df82a6930705dca321b249e10a9ad5175428fff"
+    },
+    {
+      "path": "documents/PID-Thermique-Services-A3-Rev-B.dwg",
+      "bytes": 29793,
+      "sha256": "daedc81cdb16d4794f47996775062fe76acb993d9f6bbf2d794a39366ceced22"
+    },
+    {
+      "path": "documents/PID-Thermique-Services-A3-Rev-B.dxf",
+      "bytes": 73511,
+      "sha256": "03f7731c6781fb1e4aad3409ef92a2defd99cdc390ba351a97548729b0403307"
+    },
+    {
+      "path": "documents/PID-Thermique-Services-A3-Rev-B.pdf",
+      "bytes": 27876,
+      "sha256": "3d91260ddd851d6850d77d6e59423475b63bb5c18d3b380df78f67b50053b89d"
+    },
+    {
+      "path": "documents/PID-Virden-Alun-A3-Compact-Rev-B.dwg",
+      "bytes": 28906,
+      "sha256": "d7fe2010421772a4eec2d3b9c9cdd64b3e5bdc2fb3b20f32bc1ae145fd398bdf"
+    },
+    {
+      "path": "documents/PID-Virden-Alun-A3-Compact-Rev-B.dxf",
+      "bytes": 64936,
+      "sha256": "d81bc626aec69ce6145e0e9c53e39b268824438d16eeecb8a4f8de4b65e96eac"
+    },
+    {
+      "path": "documents/PID-Virden-Alun-A3-Compact-Rev-B.pdf",
+      "bytes": 27375,
+      "sha256": "42849f73cf9c3deea6a5541d1b86c28a8dc14cfd4d169f3ce6c73a8773143339"
+    },
+    {
+      "path": "documents/pyflowsheet-LICENSE.txt",
+      "bytes": 1071,
+      "sha256": "7531c6bcc185c118554ead3d46f8a487387b2ef9c5e80a98edee554515651d59"
+    },
+    {
+      "path": "documents/Vanguard-PID-CAD-fonts.zip",
+      "bytes": 35146,
+      "sha256": "8a5c1bafb4fadd556bc5e575e3ae4e44a89611d82b1bca571f75573e93182ca8"
+    },
+    {
+      "path": "documents/Vanguard-PID-presentation-LinkedIn.pdf",
+      "bytes": 478286,
+      "sha256": "171abc64bc78e06ae29c84a66c9c1dcf15f87172cf38cf3404185becd41b7516"
+    },
+    {
+      "path": "POST.md",
+      "bytes": 1660,
+      "sha256": "5f1d6a6959977af809cad8e8f4369e5ac9e9d48d9b16111ac459b7981e4be3d3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3438,
+      "sha256": "3d3db7e39b5c9677f4c35ba0c90553c5db994194630072122510a2292481639b"
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "format": "fat-studio/project",
+  "version": "1.0",
+  "project": {
+    "schema_version": "1.0",
+    "id": "pid-thermal-loop",
+    "name": "Boucle thermique · répartition trois voies",
+    "description": "Exemple FAT local : trois cuves volumiques, une vanne de diversion et un échangeur à deux volumes mélangés. La branche A fournit explicitement le débit secondaire ; les cuves ne calculent pas de température. Le primaire est une condition imposée à 80 °C et 2 L/s. Contrôleur de démonstration uniquement, aucune cible PLC.",
+    "simulation": {
+      "step_ms": 100,
+      "speed": 1.0
+    },
+    "equipment": [
+      {
+        "id": "TK_AB",
+        "type": "tank",
+        "name": "TK-101 · Réserve secondaire",
+        "description": "",
+        "unit": "",
+        "position": {
+          "x": 40.0,
+          "y": 250.0
+        },
+        "params": {
+          "capacity_l": 10000.0,
+          "initial_level_pct": 80.0
+        },
+        "bindings": {
+          "level": "reserve_level"
+        },
+        "animation": null,
+        "symbol_kind": "",
+        "source_kind": "",
+        "rotation": 0
+      },
+      {
+        "id": "TK_A",
+        "type": "tank",
+        "name": "TK-102 · Collecte branche A",
+        "description": "",
+        "unit": "",
+        "position": {
+          "x": 1080.0,
+          "y": 140.0
+        },
+        "params": {
+          "capacity_l": 10000.0,
+          "initial_level_pct": 0.0
+        },
+        "bindings": {
+          "level": "a_level"
+        },
+        "animation": null,
+        "symbol_kind": "",
+        "source_kind": "",
+        "rotation": 0
+      },
+      {
+        "id": "TK_B",
+        "type": "tank",
+        "name": "TK-103 · Collecte branche B",
+        "description": "",
+        "unit": "",
+        "position": {
+          "x": 700.0,
+          "y": 520.0
+        },
+        "params": {
+          "capacity_l": 10000.0,
+          "initial_level_pct": 0.0
+        },
+        "bindings": {
+          "level": "b_level"
+        },
+        "animation": null,
+        "symbol_kind": "",
+        "source_kind": "",
+        "rotation": 0
+      },
+      {
+        "id": "V3",
+        "type": "valve_three_way",
+        "name": "TV-101 · Répartition vers A",
+        "description": "",
+        "unit": "",
+        "position": {
+          "x": 350.0,
+          "y": 250.0
+        },
+        "params": {
+          "mode": "diverting",
+          "common_tank_id": "TK_AB",
+          "branch_a_tank_id": "TK_A",
+          "branch_b_tank_id": "TK_B",
+          "max_flow_l_s": 4.0,
+          "response_s": 0.5,
+          "initial_position_pct": 50.0,
+          "demo_command": 50.0
+        },
+        "bindings": {
+          "command": "valve_command",
+          "manual_request": "cooling_demand",
+          "position": "valve_position",
+          "flow_a": "flow_a",
+          "flow_b": "flow_b"
+        },
+        "animation": null,
+        "symbol_kind": "",
+        "source_kind": "",
+        "rotation": 0
+      },
+      {
+        "id": "HX",
+        "type": "heat_exchanger",
+        "name": "HX-101 · Échangeur de démonstration",
+        "description": "Primaire imposé : 80 °C, 2 L/s. Secondaire : entrée 20 °C et débit réel de la branche A de TV-101.",
+        "unit": "",
+        "position": {
+          "x": 700.0,
+          "y": 140.0
+        },
+        "params": {
+          "primary_inlet_temperature_c": 80.0,
+          "secondary_inlet_temperature_c": 20.0,
+          "primary_flow_l_s": 2.0,
+          "secondary_flow_l_s": 0.0,
+          "primary_volume_l": 20.0,
+          "secondary_volume_l": 20.0,
+          "primary_density_kg_l": 1.0,
+          "secondary_density_kg_l": 1.0,
+          "primary_cp_kj_kg_k": 4.18,
+          "secondary_cp_kj_kg_k": 4.18,
+          "initial_primary_temperature_c": 80.0,
+          "initial_secondary_temperature_c": 20.0,
+          "ua_kw_k": 5.0,
+          "secondary_flow_equipment": "V3",
+          "secondary_flow_field": "flow_a_l_s"
+        },
+        "bindings": {
+          "primary_temperature": "primary_temperature",
+          "secondary_temperature": "secondary_temperature",
+          "heat": "heat",
+          "secondary_flow": "coolant_flow"
+        },
+        "animation": null,
+        "symbol_kind": "",
+        "source_kind": "",
+        "rotation": 0
+      }
+    ],
+    "connections": [
+      {
+        "id": "reserve_to_valve",
+        "source": "TK_AB",
+        "target": "V3",
+        "label": "",
+        "directed": true,
+        "source_port": "out",
+        "target_port": "AB"
+      },
+      {
+        "id": "a_to_exchanger",
+        "source": "V3",
+        "target": "HX",
+        "label": "Branche A · source déclarée",
+        "directed": true,
+        "source_port": "A",
+        "target_port": "secondary_in"
+      },
+      {
+        "id": "exchanger_to_collection",
+        "source": "HX",
+        "target": "TK_A",
+        "label": "",
+        "directed": true,
+        "source_port": "secondary_out",
+        "target_port": "in"
+      },
+      {
+        "id": "b_to_collection",
+        "source": "V3",
+        "target": "TK_B",
+        "label": "Branche B",
+        "directed": true,
+        "source_port": "B",
+        "target_port": "in"
+      }
+    ],
+    "tags": [
+      {
+        "id": "cooling_demand",
+        "name": "Demande manuelle vers A",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 50.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "valve_command",
+        "name": "Consigne du contrôleur de démonstration",
+        "direction": "output",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 50.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": false
+      },
+      {
+        "id": "valve_position",
+        "name": "Position réelle vers A",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 50.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "flow_a",
+        "name": "Débit A",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "L/s",
+        "initial_value": 0.0,
+        "min": 0.0,
+        "max": 4.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "flow_b",
+        "name": "Débit B",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "L/s",
+        "initial_value": 0.0,
+        "min": 0.0,
+        "max": 4.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "coolant_flow",
+        "name": "Débit secondaire HX",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "L/s",
+        "initial_value": 0.0,
+        "min": 0.0,
+        "max": 4.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "primary_temperature",
+        "name": "Température sortie primaire",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "°C",
+        "initial_value": 80.0,
+        "min": -100.0,
+        "max": 500.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "secondary_temperature",
+        "name": "Température sortie secondaire",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "°C",
+        "initial_value": 20.0,
+        "min": -100.0,
+        "max": 500.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "heat",
+        "name": "Puissance primaire vers secondaire",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "kW",
+        "initial_value": 300.0,
+        "min": -3000.0,
+        "max": 3000.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "reserve_level",
+        "name": "Niveau réserve",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 80.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "a_level",
+        "name": "Niveau collecte A",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 0.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      },
+      {
+        "id": "b_level",
+        "name": "Niveau collecte B",
+        "direction": "input",
+        "data_type": "REAL",
+        "unit": "%",
+        "initial_value": 0.0,
+        "min": 0.0,
+        "max": 100.0,
+        "node_id": "",
+        "plc_address": "",
+        "plc_symbol": "",
+        "signal": null,
+        "writable": true
+      }
+    ],
+    "scenarios": [
+      {
+        "id": "thermal-routing",
+        "name": "Répartition, refroidissement et encrassement",
+        "description": "Contrôles automatiques du modèle de démonstration. Les observations et la conclusion FAT restent à renseigner par le testeur.",
+        "requirement": "",
+        "preconditions": "Contrôleur local de démonstration sélectionné. Réinitialiser avant un nouvel essai.",
+        "focus_equipment": [
+          "TK_AB",
+          "V3",
+          "HX",
+          "TK_A",
+          "TK_B"
+        ],
+        "trend_tags": [
+          "cooling_demand",
+          "valve_position",
+          "flow_a",
+          "flow_b",
+          "primary_temperature",
+          "secondary_temperature",
+          "heat"
+        ],
+        "execution_mode": "timed",
+        "fat_steps": [],
+        "duration_s": 100.0,
+        "steps": [
+          {
+            "at_s": 0.0,
+            "action": "force",
+            "target": "cooling_demand",
+            "value": 0.0,
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 20.0,
+            "action": "expect",
+            "target": "flow_a",
+            "value": 0.001,
+            "operator": "lt",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 20.0,
+            "action": "force",
+            "target": "cooling_demand",
+            "value": 100.0,
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 60.0,
+            "action": "expect",
+            "target": "flow_a",
+            "value": 4.0,
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 60.0,
+            "action": "expect",
+            "target": "primary_temperature",
+            "value": 79.0,
+            "operator": "lt",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 60.0,
+            "action": "fault",
+            "target": "HX",
+            "value": {
+              "kind": "fouling",
+              "value": 100.0
+            },
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 61.0,
+            "action": "expect",
+            "target": "heat",
+            "value": 0.0,
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 80.0,
+            "action": "clear_fault",
+            "target": "HX",
+            "value": {
+              "kind": "fouling"
+            },
+            "operator": "eq",
+            "tolerance": 0.001,
+            "message": ""
+          },
+          {
+            "at_s": 100.0,
+            "action": "expect",
+            "target": "heat",
+            "value": 0.0,
+            "operator": "gt",
+            "tolerance": 0.001,
+            "message": ""
+          }
+        ]
+      }
+    ],
+    "plc": {
+      "mode": "demo",
+      "demo_controller": "tank_level",
+      "tia_version": "V21",
+      "endpoint": "opc.tcp://127.0.0.1:4840",
+      "expected_application_uri": "",
+      "namespace_uri": "",
+      "security_policy": "None",
+      "server_certificate_sha256": "",
+      "client_certificate": "",
+      "client_private_key": "",
+      "username_env": "",
+      "password_env": "",
+      "approved_virtual_target": "",
+      "timeout_s": 3.0
+    },
+    "pid_document": null,
+    "pid_drawing": {
+      "paper_size": "A3",
+      "orientation": "landscape",
+      "company": "VANGUARD FAT STUDIO · EXEMPLE",
+      "client": "",
+      "project_reference": "EX-THERMAL-2026",
+      "site": "Laboratoire local",
+      "unit": "Circuit de refroidissement",
+      "drawing_title": "Boucle thermique et répartition trois voies",
+      "document_number": "EX-PID-TH-001",
+      "revision": "A",
+      "issue_date": "2026-11-11",
+      "drawn_by": "Préparation assistée",
+      "checked_by": "",
+      "approved_by": "",
+      "status": "draft",
+      "sheet_number": 1,
+      "sheet_total": 1,
+      "notes": "Exemple de simulation locale, avec conditions de procédé déclarées.\nLe débit secondaire reprend explicitement la branche A de TV-101 ; les cuves restent des modèles volumiques.",
+      "revisions": [
+        {
+          "revision": "A",
+          "date": "2026-11-11",
+          "description": "Première mise en page de l’exemple thermique",
+          "drawn_by": "Préparation assistée",
+          "checked_by": "",
+          "approved_by": ""
+        }
+      ],
+      "show_legend": true
+    }
+  }
+}

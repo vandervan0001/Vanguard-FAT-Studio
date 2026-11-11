@@ -1,0 +1,238 @@
+{
+  "date": "2026-11-11",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "head": "f5ad062cfc9babbd2ab61d22ee55528ad0fc7979",
+  "source_state": "dirty; pre-existing changes retained",
+  "scope": [
+    "Declared title-block metadata",
+    "A4-A0 portrait and landscape",
+    "PDF/PNG/DXF/DWG physical sheets",
+    "Passive bounded preview",
+    "Editable CAD sheet mm and PID_SHEET plotting layout",
+    "Native metadata retained in ten formats"
+  ],
+  "python_full": {
+    "command": ".venv/Scripts/python.exe -B -m pytest -q",
+    "passed": 1059,
+    "skipped": 5,
+    "failed": 0,
+    "seconds": 315.53,
+    "skip_reason": "Windows symlink privilege unavailable"
+  },
+  "browser_final": {
+    "command": "npm test (frontend)",
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retries": 0,
+    "seconds": 255.631
+  },
+  "browser_first": {
+    "passed": 76,
+    "failed": 1,
+    "phase": "beforeEach HTTP discovery, before feature assertions",
+    "error": "Two parallel GETs received ECONNRESET",
+    "cause": "not established",
+    "evidence_retained": true,
+    "rerun": "Complete suite after Python finished, no product change or retry added"
+  },
+  "other_checks": [
+    "TypeScript",
+    "Vite",
+    "scripts/build-web.py",
+    "Ruff global",
+    "pip check",
+    "public source/wheel selection",
+    "local links",
+    "git diff --check"
+  ],
+  "assets": [
+    "index-HzS-uWsS.js",
+    "index-4oe-xmsA.css"
+  ],
+  "wheel": {
+    "filename": "vanguard_fat_studio-0.2.1-py3-none-any.whl",
+    "sha256": "f779e20b746fd595d6f3fab094855127939b88a2c35173b467926196d2bee96c",
+    "public_entries": 69,
+    "installed_files_equal_wheel": 68,
+    "product_files_equal_source": 62,
+    "installed_modules": 35,
+    "isolated_interpreter": true,
+    "check_seconds": 19.888,
+    "dependencies_reused": true,
+    "clean_windows_qualified": false,
+    "checks": [
+      "Ten HTTP export/import metadata roundtrips",
+      "PDF physical dimensions and two embedded fonts",
+      "Real DWG units/layers/layout/1:1 plotting",
+      "Bounded passive preview and stale 409",
+      "Current and historical archive title blocks preserved",
+      "Restart and previous projects preserved",
+      "Thermal example 1000 cycles/five assertions, human verdict not_evaluated"
+    ]
+  },
+  "delivered_files": [
+    {
+      "filename": "PID-Thermique-A3-Rev-A.pdf",
+      "format": "pdf",
+      "bytes": 25779,
+      "sha256": "37f535de94bd7b4e14c434eca9f6d396c3963bf1899c989a04eb3e076eab1c55"
+    },
+    {
+      "filename": "PID-Thermique-A3-Rev-A.dwg",
+      "format": "dwg",
+      "bytes": 23054,
+      "sha256": "ea0b92540ca024befae5836fbdf7a47652cc6c92a5f228b5c2c4548a01d06556"
+    },
+    {
+      "filename": "PID-Thermique-A3-Rev-A.dxf",
+      "format": "dxf",
+      "bytes": 63600,
+      "sha256": "913d6619d5a9e9a9c13a73bf039f094bae0941dfd99392c19ce178e37296241a"
+    },
+    {
+      "filename": "PID-Virden-Alun-A3-Rev-A.pdf",
+      "format": "pdf",
+      "bytes": 27255,
+      "sha256": "c378078f3888c8da71dffbce130c62657ba2a7abd339df3966f23668b3499874"
+    },
+    {
+      "filename": "PID-Virden-Alun-A3-Rev-A.dwg",
+      "format": "dwg",
+      "bytes": 26325,
+      "sha256": "30771b36be75ed83fdc2ce7f33d20b678ae6bd0c09856daa8ddf8eba4fefb71a"
+    },
+    {
+      "filename": "PID-Virden-Alun-A3-Rev-A.dxf",
+      "format": "dxf",
+      "bytes": 68866,
+      "sha256": "5c259f35f18094ffe0e768548e9a06d3ddead98e5803df7cef1edf47a34c7849"
+    }
+  ],
+  "independent_artifact_checks": {
+    "status": "passed",
+    "independent_pdf_render": "Bundled Poppler pdftoppm 120 dpi, both PNGs visually inspected",
+    "files": [
+      {
+        "file": "PID-Thermique-A3-Rev-A.pdf",
+        "page_mm": [
+          420.0,
+          297.0
+        ],
+        "author": "VANGUARD FAT STUDIO · EXEMPLE",
+        "title": "Boucle thermique et répartition trois voies"
+      },
+      {
+        "file": "PID-Thermique-A3-Rev-A.dwg",
+        "header": "AC1015",
+        "modelspace_entities": 195,
+        "paper_mm": [
+          420,
+          297
+        ],
+        "layout": "PID_SHEET",
+        "units": "sheet mm"
+      },
+      {
+        "file": "PID-Virden-Alun-A3-Rev-A.pdf",
+        "page_mm": [
+          420.0,
+          297.0
+        ],
+        "author": "VANGUARD FAT STUDIO / EXEMPLE",
+        "title": "VIRDEN / ALUN - EXTRAIT DE REVUE"
+      },
+      {
+        "file": "PID-Virden-Alun-A3-Rev-A.dwg",
+        "header": "AC1015",
+        "modelspace_entities": 220,
+        "paper_mm": [
+          420,
+          297
+        ],
+        "layout": "PID_SHEET",
+        "units": "sheet mm"
+      }
+    ]
+  },
+  "source_service": {
+    "loopback_port": 8765,
+    "previous_service": "absent; no process stopped",
+    "data_folder_reused": true,
+    "two_new_draft_projects": true,
+    "previous_projects_preserved": true,
+    "final_status": "idle",
+    "active_run": null,
+    "connected": false,
+    "current_write_count": 0,
+    "new_runs_started": 0
+  },
+  "source_sha256": {
+    "fat_studio/app.py": "f5cb255df87cc93dfef36cece2e556875a6de1db1a883fd6c0792d9b33a4dcd6",
+    "fat_studio/archive.py": "3a0e4fbab25d9d87f68f08f2aa3e35375c29afb7514120579bcb0a73c5405c7d",
+    "fat_studio/assistant.py": "5d1c442091931783a1b728802fd22203d68957d626db36a470751f932ae3f3dd",
+    "fat_studio/branding.py": "1244208e115dc70b4180ac39e64805fe9b3bb5828f19d3b94968f12650927efd",
+    "fat_studio/catalog.py": "4a867352ad2640a94af92108a303965f7c81597b8074a81764da59c70ba7faea",
+    "fat_studio/cli.py": "9c7d9176313eee250daa4c4e9e99f0b316c2fd134d8af6c1024c7ae812094583",
+    "fat_studio/demo.py": "3b7db1a0962fa13ea025e77380d9a3528fc072478e873fe78fadb0ade1450444",
+    "fat_studio/demo_contract.py": "6a33ce17be3f52e63a741bdc76e94064a36fa2752cdf3e8b802625b83ff06527",
+    "fat_studio/demo_lab.py": "ac9e42aeed10c69f103f61f3e9ae8ad0d43cd2f0d45522fc9928789dd5f019f2",
+    "fat_studio/engine.py": "2d993f337a809ef9cad25168e34512bf515309c4fa41ed02cb5fdb0ca7913856",
+    "fat_studio/exchange.py": "929a1720baa3a52515e2b9b5efffa92069e7555dd8c8ef62305032b339ca438b",
+    "fat_studio/mapping.py": "59fea0409bd64bb1cf4962eebbbd6dc84e045f512837ef3e61e422c216473471",
+    "fat_studio/models.py": "e11144eac587a99d1ab4f39aa5e610e4be22b914bac690e82b49a996cdafa6a8",
+    "fat_studio/pid_api.py": "e68ed1f3533e0c8ee081014f83afa94a8ad28a1f912f9ffa072123dc57361e9d",
+    "fat_studio/pid_cad.py": "e2a6597f95bc103fc491ef63bfba36b4eb044549ec9341c67a54169d6a66a268",
+    "fat_studio/pid_catalog.py": "4d4c006ecd86feebe10c11d2ad13198c7e449c2aa40b124faca91e6856103a99",
+    "fat_studio/pid_exchange.py": "acae9affb166ba1600a1d4b746d162a217dd51980360bb54ec6c14e87a5cb6e6",
+    "fat_studio/pid_export.py": "f35c62b109045fde9dff91031f94eba9b7dc203d8e49e8cd478784744feafe02",
+    "fat_studio/pid_import.py": "699249557ebd006acaed863109bab5bb4633e7ce785b091ba8b63ed1342ac0e4",
+    "fat_studio/pid_models.py": "f9c47aaf6f9b6549f8c0ba7289e37f21d4da988575918beb92bce4b12da939c7",
+    "fat_studio/pid_ocr.py": "fec547613542dd2862ef9d1e949f99642dcfa1cd6cca2a82aa8962eb8dd3a49f",
+    "fat_studio/pid_ports.py": "b8a7043bf550626fac5b47ebcefafa35378557613eb09cb90c8b81b769dbf083",
+    "fat_studio/pid_process.py": "29dd5d4facc82af86cee1e377c8d23f369ff37065ec82d1977505cedf123ac3c",
+    "fat_studio/pid_sheet.py": "6af9ccd98634fbb1a924de0b23fa7f329f31561ca39333f42d9e1c2676a8d9a5",
+    "fat_studio/pid_symbols.py": "52022f47bef14290e1638e2b43f6751420ce530b7fa174e1e36dbb6c7fb1b527",
+    "fat_studio/pid_titleblock.py": "7c0cd39de378814b4389a76962d4376d84fd2489d69babbceeadab304370835a",
+    "fat_studio/pid_worker.py": "da525a4acddae5486509e088bfadd28ad97961516eb8c460cac9eed85e46b4ea",
+    "fat_studio/reporting.py": "5e61d3cfa353ac14a7cd58443936c27c0bddcdb7fa949f5957c29f3cac0b5d92",
+    "fat_studio/runtime.py": "e2015281919f88563c30644066a1a68b72a937ad4d251cc4fdeaee5927f4dd2f",
+    "fat_studio/security.py": "bf164d55479adfd8e455514671297d20b33c7cffb775fb44e3a043e3b6e1cc7c",
+    "fat_studio/storage.py": "69251436f9b2d107ae4c8e53d70d56b121719813bacbb3b8f57a6064090f816a",
+    "fat_studio/workspaces.py": "1c979f2aed3bd1c26c60caa2085e702c995e5724114fc4cfe0679bebdf1a5111",
+    "fat_studio/__init__.py": "4e9f1d7861378b01f755f4c69cafc282193a73461b93e28e0e9078cf51c152af",
+    "fat_studio/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "fat_studio/web/index.html": "a35eb81244b3d06937f80fd80fe5257dd6937f24daafabeb40237550a08d0981",
+    "fat_studio/web/assets/index-4oe-xmsA.css": "073104164c27cd1e9de36f2816715882c745817e80dedde6af86b18b4bf464c5",
+    "fat_studio/web/assets/index-HzS-uWsS.js": "942c06875caee4a0897eb27632465a25e961707e537a3bbd33d71631904c0b4a",
+    "frontend/src/AnimationEditor.tsx": "4f750d3b1256faa520d73df622c2cf1350fab7f74e746573f0d64ebb8291b6e5",
+    "frontend/src/App.tsx": "91b2612a01b5f4c0578fd52015aa0da9694ca3c4908573bfc797cf9ce8dae82f",
+    "frontend/src/ForceField.tsx": "1bd95bd5567b3a1a2a7b48c6478c23049806873a108798ed11463b32cdf7446f",
+    "frontend/src/GuidedRun.tsx": "2e0e90b4273b8673767cb1f49acb5c6affc8efa9921f13fabac1921a58a6d586",
+    "frontend/src/GuidedScenarioBuilder.tsx": "199b53c0c0e85a212193cf60fe265b760798ba88cba7aa1b169e7de7dd6ef15a",
+    "frontend/src/IoAccess.tsx": "0dfc2db4c6190cd9ef990165f4e5488eaedc8f9072ef6f79646af836818cdd68",
+    "frontend/src/main.tsx": "f6889ea0095211010dda5be36d83d4945349f90a32a4eef96296e8c02b642116",
+    "frontend/src/Panels.tsx": "f1c63485867fde4b64c4953a27f93035a7523559886fa157a042ffc7d9018c4e",
+    "frontend/src/PidCanvas.tsx": "7d0f1bb22c70169d18f614f6bb0fb4c1a24f0fce05b4fdce2c46d8bf4b991199",
+    "frontend/src/PidDrawingEditor.tsx": "f0dafb15a12c2c0b043dd405dd4ea76addfd9db0d4d380215096d6b82250e289",
+    "frontend/src/PidExchange.tsx": "c2d3d25bbe1ff5001d612b7bcb139f6506cb7dab9417d96b9130f6e0d93b79f7",
+    "frontend/src/PidSymbolSvg.tsx": "4a90579f43fb890dca445786c656c7972a15df0dd1b707e354a2311d61a16075",
+    "frontend/src/ScenarioRun.tsx": "1faff09a807effc6135c44ee9a9f88fc4a8d0c8cca99fb906273b5cef3e7b294",
+    "frontend/src/TestConsole.tsx": "1d9d14c9c4c83f46409e10da0336ba790ec9010e3cc8715d606bbb61f336ada3",
+    "frontend/src/types.ts": "90f514e7c663471bdde2838b49954ae1fa75c6d41534ba37305b49edbfbcd2fe",
+    "frontend/src/api.ts": "093eeffe3b014af0c4f0876e029147ea8b3b28d15bc7f149cd1d9ff4eee3d429",
+    "frontend/src/pid-exchange.css": "280c8e1a1aaddd991d60af1c208c58c36d9ee733f15b2a2dea4aac01b07e6079",
+    "frontend/src/pid-symbols.css": "4fa06eee3670517016464f22a5cc873131ce8a15d21e9f1390f68c074db7d511"
+  },
+  "limits": [
+    "House drawing template; no complete ISO/ISA conformity claimed",
+    "No verified signature or human FAT verdict",
+    "One folio per file; declared total does not generate other sheets",
+    "DWG R2000 writing experimental",
+    "No proprietary CAD acceptance or physical printer qualification",
+    "No clean Windows/other OS/Siemens/real-time qualification",
+    "Drawing presentation does not establish external P&ID recognition or process validity"
+  ]
+}

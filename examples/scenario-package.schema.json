@@ -18,7 +18,10 @@
             "analog_sensor",
             "digital_sensor",
             "digital_input",
-            "indicator"
+            "indicator",
+            "heat_exchanger",
+            "valve_three_way",
+            "pid_symbol"
           ],
           "title": "Type",
           "type": "string"

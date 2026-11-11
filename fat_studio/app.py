@@ -30,6 +30,8 @@ from .exchange import ProjectPackage, ScenarioPackage, import_scenarios, project
 from .archive import capture_archive, export_archive, prepare_archive
 from .mapping import export_mapping, import_mapping
 from .models import PreparedAction, Project, validate_project
+from .pid_api import install_pid_routes
+from .pid_models import PidDocument
 from .reporting import csv_stream, html_report, json_stream
 from .runtime import RunConflict, Runtime
 from .security import MachinePolicy, TargetDenied
@@ -191,7 +193,8 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
             chunks, size = [], 0
             async for chunk in request.stream():
                 size += len(chunk)
-                limit = (100 if request.url.path == "/api/project/archive/import" else 5) * 1024 * 1024
+                limit = (100 if request.url.path == "/api/project/archive/import" else
+                         20 if request.url.path == "/api/pid/inspect" else 5) * 1024 * 1024
                 if size > limit:
                     return JSONResponse({"detail": f"La requête dépasse {limit // (1024 * 1024)} Mo."}, status_code=413)
                 chunks.append(chunk)
@@ -202,7 +205,14 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
                          or (request.url.path.startswith("/api/runs/") and request.url.path.rsplit("/", 1)[-1] in ("json", "csv", "report")))
         # Archive export pins its read-only snapshot under this same lock in
         # the route, then releases it before compression. Stop remains usable.
-        if (mutation or guarded_read) and request.url.path != "/api/project/archive":
+        passive_pid = request.url.path in ("/api/pid/inspect", "/api/pid/prepare", "/api/pid/preview")
+        if passive_pid:
+            async with app.state.mutations:
+                conflict = context_conflict(request)
+                if conflict is not None:
+                    return conflict
+            response = await call_next(request)
+        elif (mutation or guarded_read) and request.url.path != "/api/project/archive":
             async with app.state.mutations:
                 # Imports and project switches can race another client just like
                 # run commands. Check the captured context while holding the
@@ -266,6 +276,8 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
     async def session():
         return {"token": token}
 
+    install_pid_routes(app, context_conflict)
+
     @app.get("/api/health")
     async def health():
         return {"status": "ok", "version": __version__, "mode": "local-fat", "schema_version": "1.0"}
@@ -306,7 +318,7 @@ def create_app(data_dir: Path | None = None, *, adapter_factory=None) -> FastAPI
 
     @app.get("/api/schemas/{kind}")
     async def exchange_schema(kind: str):
-        schemas = {"project": ProjectPackage, "scenarios": ScenarioPackage}
+        schemas = {"project": ProjectPackage, "scenarios": ScenarioPackage, "pid": PidDocument}
         if kind not in schemas:
             raise HTTPException(404, "Schéma inconnu.")
         return schemas[kind].model_json_schema()

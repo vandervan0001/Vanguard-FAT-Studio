@@ -1,0 +1,14 @@
+# Bibliothèque P&ID et vérification de portée
+
+11 novembre 2026, Windows 11 x64, Python 3.12.10, HEAD `f5ad062cfc9babbd2ab61d22ee55528ad0fc7979` avec modifications de travail conservées. [Reçu synthétique](verification.json).
+
+- Suite Python complète : **764 réussis, cinq ignorés**, zéro échec/erreur, 264,44 s. Les cinq cas demandent le privilège Windows de liens symboliques ; les contrôles de jonctions ont été exécutés.
+- Suite navigateur complète : **71 réussis**, zéro échec/ignoré/flaky, 221,80 s. Typecheck/build/copieur de bundle, Ruff, pip check et politique publique réussis. Bundle `index-40v7MTO4.js` / `index-DWY2VCnU.css`.
+- 41 familles documentaires, quatre rotations, échangeurs à quatre bornes, vannes AB/A/B et quatre voies. Objets inconnus conservés ; aucune nouvelle physique ni variable PLC produite par ces symboles. Un projet documentaire sans variable ne démarre pas de FAT.
+- Dix restaurations natives conservent types, source, rotations et ports. Les contrôles DXF et DWG après retrait des métadonnées vérifient séparément textes, calques et coordonnées de onze raccordements. Une restauration JSON exacte n’est pas une preuve de reconnaissance des formes d’un plan externe.
+- Wheel finale SHA-256 `5796a038b502247b606bc75344c611b8456363347607bc6fc6a06ddcdcef8396`, installée hors sources et exécutée sous `-I` : 66 fichiers installés conformes, 60 fichiers produit égaux aux sources ; dix échanges HTTP sur 42 objets/41 connexions, sauvegarde, refus de démarrage, contexte et redémarrage vérifiés. Dépendances réutilisées, Windows vierge non qualifié.
+- Vrai Virden page 14 : 35 candidats OCR, zéro liaison OCR. Huit objets retenus, quatre liaisons ajoutées à la revue visuelle, disposition réorganisée et PDF/DWG réels produits. Le plan complet n’est pas reconstitué automatiquement. Source, exports et preuves détaillées restent dans le dossier privé de démonstration, hors distribution.
+
+La [couverture documentée](../../../docs/PID_COVERAGE.md) distingue les trois couches : restauration native, géométrie exportée et extraction externe. Les PDF complexes et scans restent partiels, les XML DEXPI/Proteus sont un sous-ensemble, l’écriture DWG est expérimentale. Aucun logiciel CAO propriétaire, autre OS, fidélité universelle ou mobile global qualifié. Aucun accès PLC, verdict humain, kit scellé ou publication pendant ce chantier.
+
+Commandes principales : `. .local/dev-env.ps1`, `python -B -m pytest -q --tb=short`, `python -m ruff check fat_studio integrations tests scripts public_distribution.py build_public.py`, `python -m pip check`, `npm --prefix frontend run build`, `python scripts/build-web.py`, `npm test` depuis frontend, `python public_distribution.py check` et `check-wheel`. Les essais navigateur et HTTP installés utilisent leurs seuls dossiers temporaires et loopback. Les reçus complets et captures restent sous `.local/pid-equipment-2026-11-11/`.

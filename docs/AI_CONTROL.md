@@ -42,6 +42,10 @@ Options globales, à placer avant la commande : `--url URL` (par défaut `http:
 | `workspaces`, `workspace` | Lit les espaces locaux ou l’espace actif |
 | `workspace-open ID` | Ouvre explicitement un espace existant, sans démarrer d’essai |
 | `load-project FICHIER` | Charge un JSON de projet, sans autoriser de cible |
+| `pid-capabilities`, `pid-catalog` | Lit les outils P&ID disponibles ou le catalogue public attribué |
+| `pid-inspect FICHIER [--pages 9,12-14] [--no-ocr] --output DOCUMENT.json` | Inspecte localement un dessin et écrit son document de revue |
+| `pid-prepare DOCUMENT.json --select ID [--select ID] [--types TYPES.json] --name NOM --output PROJET.json` | Prépare un nouveau paquet projet, sans le charger |
+| `pid-export --format FORMAT --output FICHIER` | Exporte le schéma enregistré sous le contexte attendu |
 | `start [--scenario ID] [--target-confirmation TEXTE]` | Ouvre un nouvel essai ; sans scénario, essai libre |
 | `pause`, `resume`, `stop`, `reset` | Commandes du modèle et des échanges FAT |
 | `force --tag ID --value JSON` | Force une entrée dans son type et son unité natives |
@@ -60,6 +64,8 @@ Les valeurs JSON sont strictes : `true` est un booléen, `13824` un entier et `
 ### Contexte conservé par le CLI
 
 `context` sert à choisir explicitement l’état sur lequel travailler. Le fichier contient l’URL et l’identité projet/révision/essai, sans jeton de session, mot de passe ou clé privée. Avant une mutation, le client vérifie ce contexte puis fournit aussi les en-têtes de contexte au serveur. Les gardes du serveur couvrent le changement concurrent survenu entre ces deux opérations pour les routes gardées.
+
+L’interface navigateur peut retenir un accord de cible pour les essais explicitement choisis par le testeur, dans cet onglet et sur cette révision du projet. Cet accord ne modifie ni le contrat HTTP ni le CLI : chaque démarrage OPC UA fournit toujours `target_confirmation` et repasse les contrôles de cible. Il ne constitue aucune autorisation pour un assistant externe de lancer d’autres essais. Voir le [parcours de confirmation dans le guide utilisateur](USER_GUIDE.md#11-raccorder-une-cpu-virtuelle-par-opc-ua).
 
 Après une mutation réussie, le client conserve le contexte renvoyé par cette opération, notamment le nouvel essai de `start`. Une lecture de `state` n’avance jamais cette référence. Sur conflit ou erreur, le client s’arrête sans recapture ni réessai automatique. Lire le projet et l’état, préserver les brouillons, puis recapturer seulement après avoir choisi volontairement la nouvelle situation.
 
@@ -163,6 +169,31 @@ Ces identifiants appartiennent au laboratoire fourni. Pour un autre projet, util
 Pour un export fiable en présence de plusieurs clients, privilégier l’URL avec `run_id` capturé au démarrage. Les exports courants et par `run_id` vérifient le contexte de projet/révision/essai fourni. Une lecture de découverte peut constater un nouvel état sans avancer le baseline ; elle ne remplace pas la garde d’un téléchargement. Chaque export lit un instantané fini. Le résultat global accepte `pass`, `fail`, `not_evaluated` ; sa sauvegarde et l’événement correspondant appartiennent à une même transaction SQLite. Le CLI assistant ne propose pas une conclusion automatique.
 
 Les forçages normaux sont acceptés sur un essai actif, en cours ou en pause, tant que le scénario n’est pas terminé. En pause, ils changent l’image locale ; les échanges attendent une reprise explicite. Une impulsion et l’exécution/observation d’un STEP demandent un essai **en cours**. La pause rend le constructeur accessible. Une sauvegarde **Appliquer en pause** termine l’ancien essai sans modifier sa conclusion humaine et conserve ses preuves ; le projet devient idle et un nouveau démarrage est requis. Une reprise sans modification continue le même essai. Les remplacements de projet restent refusés tant que l’état n’est pas éditable.
+
+## Échanges P&ID passifs
+
+| Méthode et chemin | Corps / résultat |
+| --- | --- |
+| `GET /api/pid/capabilities` | Formats disponibles, OCR, limites et outils LibreDWG du poste |
+| `GET /api/pid/catalog` | Liens publics et descriptions avec auteurs, licences et références épinglées |
+| `GET /api/pid/conventions` | Services, couleurs ACI/codes du projet, guide des fonctions d'instrumentation et références primaires |
+| `GET /api/pid/cad-fonts` | ZIP de polices Geist et licence OFL, sans installation automatique |
+| `POST /api/pid/inspect?filename=plan.pdf&pages=9,12-14&ocr=true` | Octets bruts du fichier ; retourne un document `fat-studio/pid` version `1.0` |
+| `POST /api/pid/prepare` | `document`, `selected_ids`, `types` et `name` ; retourne `project` et `warnings` |
+| `POST /api/pid/preview` | Objet `PidDrawingSettings` ; aperçu PNG borné de la géométrie enregistrée avec la mise en page proposée, sans sauvegarde |
+| `GET /api/pid/export/{format}` | Instantané du dessin actif enregistré ; révision dans `X-FAT-Project-Revision` |
+
+Les POST exigent le jeton local et les en-têtes de contexte du client assistant. Ils ne changent ni le projet actif, ni l'essai, ni le contexte capturé. L'inspection peut se poursuivre pendant un essai ; son lecteur isolé travaille hors du verrou des commandes, avec 90 secondes et 2 Gio au maximum. Un export vérifie le contexte de projet/révision/essai fourni, copie le projet sous verrou, puis génère le fichier hors de ce verrou. Une erreur ou un conflit conserve les fichiers de revue et le contexte attendu.
+
+`selected_ids` contient les identifiants du document réellement inspecté, sans doublon, au plus 50. `types` est un objet associant ces identifiants à des types du catalogue FAT ; les objets dont le type reste inconnu doivent être qualifiés ou écartés. Seules les connexions dont les deux extrémités sont sélectionnées entrent dans le brouillon, au plus 200. Pour écarter une liaison proposée, la retirer explicitement du document soumis à la préparation.
+
+La préparation donne un nouvel identifiant au projet, un contrôleur de démonstration manuel et aucune variable, association PLC ou scénario. Le document interprété reste dans `project.pid_document`. Les valeurs par défaut du catalogue ne sont pas des paramètres extraits du plan. La sortie CLI `pid-prepare` est une enveloppe `fat-studio/project` enregistrée dans le fichier demandé. Son chargement par `load-project` reste une action distincte ; il ne découle pas de l'inspection ou de la préparation.
+
+`pid-export --format` accepte `svg`, `pdf`, `png`, `dxf`, `dwg`, `json`, `graph`, `graphml`, `csv` et `drawio`. `csv` produit un ZIP contenant les deux tables et le document natif. DWG requiert le convertisseur LibreDWG local ; l'écriture R2000 est expérimentale. Les téléchargements existants ne sont pas écrasés. `pid-inspect` et `pid-prepare` ne recapturent pas le contexte ; une lecture de capacités ou du catalogue ne le remplace pas non plus.
+
+Consulter [PID_EXCHANGE.md](PID_EXCHANGE.md) pour les formats, le choix des pages, les crédits et l'installation gratuite de LibreDWG. Un P&ID et ses confiances documentaires ne permettent pas de déduire une adresse PLC, un NodeId, une échelle analogique, une logique de contrôle ou une observation FAT humaine.
+
+Les données de cartouche sont dans `project.pid_drawing`, et dans `drawing` pour un document P&ID natif. [PID_PRINTING.md](PID_PRINTING.md) décrit les formats de feuille, indices, dates et mentions déclaratives. L'aperçu exige jeton local et contexte attendu comme les autres POST passifs. Sa réponse contient `image_data_url`, `width_mm`, `height_mm`, `warnings`, `project_id`, `project_revision` et `saved_geometry: true` ; elle ne remplace jamais le contexte capturé. Le rendu s'effectue hors du verrou des commandes FAT. Après conflit, conserver les réglages préparés et relire ; ne pas recapturer pour les rejouer automatiquement.
 
 ## FAT guidée
 
